@@ -1,0 +1,31 @@
+# microservice specific routes
+
+GET         /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
+
+GET         /language/:lang                              controllers.LanguageSwitchController.switchToLanguage(lang: Language)
+
+GET         /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad
+
+GET         /unauthorised                                controllers.UnauthorisedController.onPageLoad
+
+GET         /technical-difficulties                      controllers.TechnicalDifficultiesController.onPageLoad
+
+GET         /start-journey/duty-deferment/:linkId        controllers.JourneyStartController.dutyDeferment(linkId: String)
+GET         /start-journey/:fileRole                     controllers.JourneyStartController.nonDutyDeferment(fileRole: FileRole)
+
+GET         /request-date                                controllers.HistoricDateRequestPageController.onPageLoad(mode: Mode = NormalMode)
+POST        /request-date                                controllers.HistoricDateRequestPageController.onSubmit(mode: Mode = NormalMode)
+
+GET         /change-request-date                         controllers.HistoricDateRequestPageController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-request-date                         controllers.HistoricDateRequestPageController.onSubmit(mode: Mode = CheckMode)
+
+GET         /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad
+POST        /check-your-answers                          controllers.CheckYourAnswersController.onSubmit
+
+GET         /confirmation                                controllers.ConfirmationPageController.onPageLoad()
+
+GET         /requested/:fileRole                         controllers.HistoricStatementsController.historicStatements(fileRole: FileRole)
+GET         /requested/duty-deferment/:linkId            controllers.HistoricStatementsController.historicStatementsDutyDeferment(linkId: String)
+
+GET         /logout-survey                               controllers.LogoutController.logout
+GET         /logout                                      controllers.LogoutController.logoutNoSurvey

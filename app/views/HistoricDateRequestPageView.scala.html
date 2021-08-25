@@ -1,0 +1,75 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.templates.GovukWrapper
+
+
+@this(
+        main_template: GovukWrapper,
+        formHelper: FormWithCSRF,
+        inputDate: components.inputDate,
+        button: components.button,
+        errorSummary: components.errorSummary,
+        h1: components.h1,
+        p: components.p
+)
+
+
+@(form: Form[_], mode: Mode, fileRole: FileRole, returnUrl: String, maybeDan: Option[String])(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    pageTitle = Some(title(form, messages(s"cf.historic.document.request.${fileRole}.title"))),
+    backLinkUrl = Some(returnUrl),
+    dutyDeferment = fileRole == DutyDefermentStatement
+) {
+    @maybeDan.map{ dan =>
+            @if(fileRole == DutyDefermentStatement) {
+                <span class="govuk-caption-xl" id="eori-heading">
+                    @messages("cf.account.detail.requested.deferment-account-secondary-heading")
+                    @{
+                        dan
+                    }
+                </span>
+            }
+    }
+
+    @formHelper(action = HistoricDateRequestPageController.onSubmit(mode), 'autoComplete -> "off") {
+        @errorSummary(form.errors)
+
+        @h1(s"cf.historic.document.request.heading.${fileRole}")
+        @p(Html(messages("cf.historic.document.request.info-text")))
+
+        @inputDate(
+            form,
+            messages("cf.historic.document.request.from"),
+            hintText = Some(messages("cf.historic.document.request.date.hint")),
+            id = "start",
+            legendAsPageHeading = false,
+            legendHiddenContent = Some(s"cf.historic.document.request.whichStartDate.${fileRole}.hidden")
+        )
+
+        @inputDate(
+            form,
+            messages("cf.historic.document.request.to"),
+            hintText = Some(messages("cf.historic.document.request.date.hint")),
+            id = "end",
+            legendAsPageHeading = false,
+            legendHiddenContent = Some(s"cf.historic.document.request.whichEndDate.${fileRole}.hidden")
+        )
+
+        @button(messages("cf.historic.document.request.continue"))
+    }
+}

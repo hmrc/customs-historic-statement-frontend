@@ -1,0 +1,6 @@
+$govuk-assets-path: "/customs/historic-statement/assets/lib/govuk-frontend/govuk/assets/";
+$hmrc-assets-path: "/customs/historic-statement/assets/lib/hmrc-frontend/hmrc/";
+@import "lib/govuk-frontend/govuk/all";
+@import "lib/hmrc-frontend/hmrc/all";
+
+@import "_language-selection";
