@@ -1,0 +1,59 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.VatViewModel
+@import views.html.templates.GovukWrapper
+@import models.FileFormat.Pdf
+
+@this(
+        mainTemplate: GovukWrapper,
+        download_link: components.download_link,
+        missing_documents_guidance: components.missing_documents_guidance
+)
+
+@(model: VatViewModel, backLink: String)(implicit request: Request[_], messages: Messages)
+
+@histories = @{model.certificatesForAllEoris.indices}
+
+@mainTemplate(pageTitle = Some(messages("cf.import-vat.requested.title")), backLinkUrl = Some(backLink)) {
+
+    <h1 id="requested-import-vat-certificates-heading" class="govuk-heading-xl govuk-!-margin-bottom-3">@messages("cf.import-vat.requested.title")</h1>
+
+    <p class="govuk-body govuk-!-margin-bottom-8" id="available-text">@messages("cf.import-vat.requested.available.text")</p>
+
+    @for(historyIndex <- histories) {
+        @if(model.certificatesForAllEoris(historyIndex).requestedCertificates.nonEmpty) {
+            @if(historyIndex > 0) {
+                <h2 id="historic-eori-@historyIndex" class="govuk-heading-s">@messages("cf.account.details.previous-eori", model.certificatesForAllEoris(historyIndex).eoriHistory.eori)</h2>
+            }
+
+            <dl class="govuk-summary-list statement-list" id="requested-statements-list-@{historyIndex}">
+                @for((statementsOfOneMonth, index) <- model.certificatesForAllEoris(historyIndex).requestedCertificates.sorted.zipWithIndex) {
+                    <div class="govuk-summary-list__row" id="requested-statements-list-@{historyIndex}-row-@{index}">
+                        <dt class="govuk-summary-list__value" id="requested-statements-list-@{historyIndex}-row-@{index}-date-cell">
+                            @{statementsOfOneMonth.formattedMonthYear}
+                        </dt>
+                        <dd class="govuk-summary-list__actions" id="requested-statements-list-@{historyIndex}-row-@{index}-link-cell">
+                            @download_link(statementsOfOneMonth.pdf, Pdf, s"requested-statements-list-${historyIndex}-row-${index}-pdf-download-link", statementsOfOneMonth.formattedMonthYear)
+                        </dd>
+                    </div>
+                }
+            </dl>
+        }
+    }
+
+   @missing_documents_guidance("certificate")
+}

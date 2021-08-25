@@ -1,0 +1,90 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.templates.GovukWrapper
+@import helpers.Formatters.dateAsDayMonthAndYear
+@import models.FileFormat.Pdf
+
+@this(
+        mainTemplate: GovukWrapper,
+        download_link: components.download_link,
+        missing_documents_guidance: components.missing_documents_guidance
+)
+
+
+@(statements: Seq[SecurityStatementsForEori], backLink: String)(implicit request: Request[_], messages: Messages)
+
+@mainTemplate(pageTitle = Some(messages("cf.security-statements.requested.title")), backLinkUrl = Some(backLink)) {
+
+<h1 id="security-statements-heading" class="govuk-heading-xl govuk-!-margin-bottom-3">@messages("cf.security-statements.requested.title")</h1>
+
+<p class="govuk-body govuk-!-margin-bottom-8" id="available-text">@messages("cf.security-statements.requested.available.text")</p>
+
+@for(historyIndex <- statements.indices) {
+    @if(statements(historyIndex).requestedStatements.nonEmpty) {
+        @if(historyIndex > 0) {
+            <h2 id="requested-statements-eori-heading-@{
+                historyIndex
+            }" class="govuk-heading-s govuk-!-margin-bottom-2">
+            @messages("cf.account.details.previous-eori", statements(historyIndex).eoriHistory.eori)
+            </h2>
+        }
+
+        <dl class="govuk-summary-list statement-list" id="requested-statements-list-@{
+            historyIndex
+        }">
+        @for((statementsOfOneMonth, index) <- statements(historyIndex).requestedStatements.sorted.zipWithIndex) {
+            <div class="govuk-summary-list__row" id="requested-statements-list-@{
+                historyIndex
+            }-row-@{
+                index
+            }">
+                <dt class="govuk-summary-list__value" id="requested-statements-list-@{
+                    historyIndex
+                }-row-@{
+                    index
+                }-date-cell">
+                @messages("cf.security-statements.requested.period",
+                    dateAsDayMonthAndYear(statementsOfOneMonth.startDate),
+                    dateAsDayMonthAndYear(statementsOfOneMonth.endDate))
+                </dt>
+                <dd class="govuk-summary-list__actions" id="requested-statements-list-@{
+                    historyIndex
+                }-row-@{
+                    index
+                }-link-cell">
+                @if(statementsOfOneMonth.pdf.isDefined) {
+                    <a class="file-link govuk-link" href="@{
+                        statementsOfOneMonth.pdf.get.downloadURL
+                    }" download
+                    aria-label="@messages("cf.security-statements.requested.download-link.aria-text",
+                        Pdf,
+                        dateAsDayMonthAndYear(statementsOfOneMonth.startDate),
+                        dateAsDayMonthAndYear(statementsOfOneMonth.endDate),
+                        statementsOfOneMonth.pdf.get.formattedSize)">@Pdf <span>
+                        (@statementsOfOneMonth.pdf.get.formattedSize)</span></a>
+                } else {
+                    <span class="file-link">@messages("cf.security-statements.no-statements", Pdf)</span>
+                }
+                </dd>
+            </div>
+        }
+        </dl>
+    }
+}
+
+@missing_documents_guidance("statement")
+}
