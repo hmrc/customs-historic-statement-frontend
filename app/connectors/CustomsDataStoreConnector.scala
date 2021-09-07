@@ -18,14 +18,14 @@ package connectors
 
 import config.FrontendAppConfig
 import models.EoriHistory
-import play.api.{Logger, Logging}
-import play.api.libs.json.{Json, OFormat}
+import play.api.Logging
+import play.api.libs.json._
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent._
 
 class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig,
                                           httpClient: HttpClient)(implicit executionContext: ExecutionContext) extends Logging {
