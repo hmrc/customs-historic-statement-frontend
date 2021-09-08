@@ -17,8 +17,8 @@
 package models
 
 import helpers.Formatters
+import play.api.Logging
 import play.api.libs.json._
-import play.api.{Logger, LoggerLike, Logging}
 
 import java.time.LocalDate
 import scala.collection.immutable.SortedSet

@@ -16,7 +16,7 @@
 
 @import views.components.FooterLinks
 @import uk.gov.hmrc.hmrcfrontend.views.html.components._
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcTrackingConsentSnippet, hmrcReportTechnicalIssueHelper}
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcTrackingConsentSnippet, HmrcReportTechnicalIssueHelper}
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import views.helpers.PageTitle.fullPageTitle
 
@@ -30,11 +30,11 @@
         languageSelection: components.languageSelection,
         appConfig: config.FrontendAppConfig,
         footerLinks: FooterLinks,
-        hmrcReportTechnicalIssue: hmrcReportTechnicalIssue,
+        hmrcReportTechnicalIssue: HmrcReportTechnicalIssue,
         h2: components.h2,
         p: components.p,
         hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
-        hmrcReportTechnicalIssueHelper: hmrcReportTechnicalIssueHelper
+        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
 )
 
 @(pageTitle: Option[String] = None, timeout: Boolean = true, signedInUser: Boolean = true, js: Option[Html] = None, backLink: Boolean = true, backLinkUrl: Option[String] = None, fullWidth: Boolean = false, help: Boolean = true, dutyDeferment: Boolean = false)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
