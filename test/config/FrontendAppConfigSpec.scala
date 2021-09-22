@@ -47,7 +47,7 @@ class FrontendAppConfigSpec extends SpecBase {
       running(app) {
         config.returnLink(
           DutyDefermentStatement,
-          emptyUserAnswers.set(RequestedLinkId, "someLink").success.value) mustBe "http://localhost:9876/customs/payment-records/duty-deferment/someLink"
+          emptyUserAnswers.set(RequestedLinkId, "someLink").success.value) mustBe "http://localhost:9397/customs/duty-deferment/someLink/account"
       }
     }
 
