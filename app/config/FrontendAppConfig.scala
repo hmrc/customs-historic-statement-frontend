@@ -73,7 +73,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   def deleteNotificationUrl(fileRole: FileRole, eori: String): String =
     customsFinancialsApi + s"/eori/$eori/requested-notifications/$fileRole"
 
-  private def dutyDefermentReturnLink(linkId: String): String = configuration.get[String]("urls.dutyDefermentReturn") + linkId
+  private def dutyDefermentReturnLink(linkId: String): String = configuration.get[String]("urls.dutyDefermentReturn") + linkId + "/account"
 
   def returnLink(fileRole: FileRole, userAnswers: UserAnswers): String = {
     fileRole match {
