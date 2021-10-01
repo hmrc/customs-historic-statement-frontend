@@ -56,18 +56,21 @@ service.technical-difficulties.p = Rhowch gynnig arall arni mewn ychydig o funud
 cf.accounts.title=Eich cyfrifon ariannol ar gyfer y tollau
 
 #Historic Document Request
+cf.historic.document.request.review.PostponedVATStatement.title=Rhowch gynnig arall arni yn nes ymlaen.
 cf.historic.document.request.review.C79Certificate.title=Rydych yn gofyn am dystysgrifau TAW mewnforio (C79)
 cf.historic.document.request.review.SecurityStatement.title=Rydych yn gofyn am hysbysiad o ddatganiadau addasu
 cf.historic.document.request.review.DutyDefermentStatement.title=Rydych yn gofyn am ddatganiadau gohirio tollau
 cf.historic.document.request.C79Certificate.title=Pa dystysgrifau TAW mewnforio (C79) sydd eu hangen arnoch?
 cf.historic.document.request.SecurityStatement.title=Pa hysbysiad o ddatganiadau addasu sydd eu hangen arnoch?
 cf.historic.document.request.DutyDefermentStatement.title=Pa ddatganiadau gohirio tollau sydd eu hangen arnoch?
+cf.historic.document.request.PostponedVATStatement.title=Pa ddatganiadau ar gyfer TAW mewnforio ohiriedig sydd eu hangen arnoch?
 cf.historic.document.request.heading.C79Certificate=Pa dystysgrifau TAW mewnforio sydd eu hangen arnoch?
 cf.historic.document.request.heading.PostponedVATStatement=Pa ddatganiadau ar gyfer TAW mewnforio ohiriedig sydd eu hangen arnoch?
 cf.historic.document.request.heading.SecurityStatement=Pa hysbysiad o ddatganiadau addasu sydd eu hangen arnoch?
 cf.historic.document.request.heading.DutyDefermentStatement=Pa ddatganiadau gohirio tollau sydd eu hangen arnoch?
 cf.historic.document.request.dan=Cyfrif:
 cf.historic.document.request.info-text=Gallwch ofyn am hyd at 6 mis o ddatganiadau ym mhob cais.
+cf.historic.document.request.pvat.info-text=Bydd datganiad yn dangos cyfanswm y TAW mewnforio a ohiriwyd ar gyfer y mis blaenorol.
 cf.historic.document.request.continue=Yn eich blaen
 cf.historic.document.request.from=O
 cf.historic.document.request.whichStartDate.C79Certificate=ar gyfer pa ddyddiad dechrau y mae angen tystysgrifau TAW mewnforio arnoch?
@@ -101,7 +104,6 @@ cf.historic.document.request.confirmation.panel-text.DutyDefermentStatement=Daet
 cf.historic.document.request.confirmation.panel-text.C79Certificate=Daeth eich cais am dystysgrifau i law
 cf.historic.document.request.confirmation.panel-text.SecurityStatement=Daeth eich cais am ddatganiadau i law
 cf.historic.document.request.confirmation.panel-text.PostponedVATStatement=Mae’ch cais am ddatganiadau wedi dod i law
-
 cf.historic.document.request.confirmation.C79Certificate.link-text=Yn ôl i dystysgrifau TAW mewnforio (C79)
 cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Yn ôl i ddatganiadau gohirio tollau
 cf.historic.document.request.confirmation.SecurityStatement.link-text=Yn ôl i hysbysiad o ddatganiadau addasu
