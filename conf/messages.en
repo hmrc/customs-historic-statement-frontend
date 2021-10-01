@@ -72,6 +72,7 @@ cf.historic.document.request.heading.SecurityStatement=Which notification of adj
 cf.historic.document.request.heading.DutyDefermentStatement=Which duty deferment statements do you need?
 cf.historic.document.request.dan=Account:
 cf.historic.document.request.info-text=You can ask for up to 6 months of statements in each request.
+cf.historic.document.request.pvat.info-text=A statement will show the total import VAT postponed for the previous month.
 cf.historic.document.request.continue=Continue
 cf.historic.document.request.from=From
 cf.historic.document.request.whichStartDate.C79Certificate=which start date do you need Import VAT certificates?
