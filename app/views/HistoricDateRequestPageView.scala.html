@@ -50,8 +50,11 @@
         @errorSummary(form.errors)
 
         @h1(s"cf.historic.document.request.heading.${fileRole}")
-        @p(Html(messages("cf.historic.document.request.info-text")))
-
+        @if(fileRole == PostponedVATStatement){
+            @p(Html(messages("cf.historic.document.request.pvat.info-text")))
+        } else {
+            @p(Html(messages("cf.historic.document.request.info-text")))
+        }
         @inputDate(
             form,
             messages("cf.historic.document.request.from"),

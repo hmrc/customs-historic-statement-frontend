@@ -17,7 +17,7 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
-import models.{C79Certificate, DutyDefermentStatement, FileRole, SecurityStatement, UserAnswers}
+import models.{C79Certificate, DutyDefermentStatement, FileRole, PostponedVATStatement, SecurityStatement, UserAnswers}
 import pages.RequestedLinkId
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -61,6 +61,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
 
   private lazy val c79ReturnLink: String = configuration.get[String]("urls.c79Return")
   private lazy val adjustmentsReturnLink: String = configuration.get[String]("urls.adjustmentsReturn")
+  private lazy val postponedVatReturnLink: String = configuration.get[String]("urls.postponedVatReturn")
 
   lazy val sdesDutyDefermentStatementListUrl: String = sdesApi + "/files-available/list/DutyDefermentStatement"
   lazy val sdesImportVatCertificateListUrl: String = sdesApi + "/files-available/list/C79Certificate"
@@ -84,6 +85,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
         }
       case C79Certificate => c79ReturnLink
       case SecurityStatement => adjustmentsReturnLink
+      case PostponedVATStatement => postponedVatReturnLink
     }
   }
 
@@ -92,6 +94,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
       case DutyDefermentStatement => throw new RuntimeException("Invalid file role")
       case C79Certificate => c79ReturnLink
       case SecurityStatement => adjustmentsReturnLink
+      case PostponedVATStatement => postponedVatReturnLink
     }
   }
 

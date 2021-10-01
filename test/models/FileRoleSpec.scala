@@ -31,6 +31,9 @@ class FileRoleSpec extends SpecBase {
     "return a JsSuccess for SecurityStatement" in {
       JsString("SecurityStatement").as[FileRole] mustBe SecurityStatement
     }
+    "return a JsSuccess for PostponedVATStatement" in {
+      JsString("PostponedVATStatement").as[FileRole] mustBe PostponedVATStatement
+    }
     "return exception for unknown file role" in {
       intercept[JsResultException] {
         JsString("Unknown").as[FileRole]

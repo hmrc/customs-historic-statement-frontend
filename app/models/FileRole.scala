@@ -24,6 +24,7 @@ sealed abstract class FileRole(val name: String)
 case object DutyDefermentStatement extends FileRole("DutyDefermentStatement")
 case object C79Certificate extends FileRole("C79Certificate")
 case object SecurityStatement extends FileRole("SecurityStatement")
+case object PostponedVATStatement extends FileRole("PostponedVATStatement")
 
 object FileRole {
   implicit val format: Format[FileRole] = new Format[FileRole] {
@@ -32,6 +33,7 @@ object FileRole {
         case JsString("DutyDefermentStatement") => JsSuccess(DutyDefermentStatement)
         case JsString("C79Certificate") => JsSuccess(C79Certificate)
         case JsString("SecurityStatement") => JsSuccess(SecurityStatement)
+        case JsString("PostponedVATStatement") => JsSuccess(PostponedVATStatement)
         case e => JsError(s"Invalid file role: $e")
       }
     }
@@ -45,6 +47,7 @@ object FileRole {
         case "import-vat" => Right(C79Certificate)
         case "duty-deferment" => Right(DutyDefermentStatement)
         case "adjustments" => Right(SecurityStatement)
+        case "postponed-vat" => Right(PostponedVATStatement)
         case fileRole => Left(s"unknown file role: ${fileRole}")
       }
     }
@@ -53,6 +56,7 @@ object FileRole {
         case C79Certificate => "import-vat"
         case DutyDefermentStatement => "duty-deferment"
         case SecurityStatement => "adjustments"
+        case PostponedVATStatement => "postponed-vat"
       }
     }
   }
