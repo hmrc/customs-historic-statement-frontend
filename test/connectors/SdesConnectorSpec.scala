@@ -20,7 +20,7 @@ import base.SpecBase
 import config.FrontendAppConfig
 import models.DDStatementType.Weekly
 import models.FileFormat.Pdf
-import models.{C79Certificate, DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, FileInformation, Metadata, MetadataItem, SecurityStatement, SecurityStatementFile, SecurityStatementFileMetadata, VatCertificateFile, VatCertificateFileMetadata}
+import models.{C79Certificate, DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, FileInformation, Metadata, MetadataItem, PostponedVATStatement, PostponedVatStatementFile, PostponedVatStatementFileMetadata, SecurityStatement, SecurityStatementFile, SecurityStatementFileMetadata, VatCertificateFile, VatCertificateFileMetadata}
 import play.api.http.Status
 import play.api.i18n.Messages
 import play.api.inject.bind
@@ -63,6 +63,17 @@ class SdesConnectorSpec extends SpecBase {
       running(app) {
         val result = await(sdesConnector.getVatCertificates(someEori)(hc))
         result must be(vatCertificateFiles)
+      }
+    }
+
+    "getPostponedVatStatementss" should {
+      "return transformed postponed vat statements" in new Setup {
+        when[Future[HttpResponse]](mockHttp.GET(eqTo(sdesPostponedVatStatementssUrl), any, any)(any, any, any))
+          .thenReturn(Future.successful(HttpResponse(Status.OK, Json.toJson(postponedVatStatementFilesWithUnknownFileTypesSdesResponse).toString())))
+        running(app) {
+          val result = await(sdesConnector.getPostponedVatStatements(someEori)(hc))
+          result must be(postponedVatStatementFiles)
+        }
       }
     }
 
@@ -121,6 +132,25 @@ class SdesConnectorSpec extends SpecBase {
     val securityStatementFiles = List(
       SecurityStatementFile("name_01", "download_url_01", 111L, SecurityStatementFileMetadata(2018, 3, 14, 2018, 3, 23, Pdf, SecurityStatement, someEori, 111L, "checksum_01")),
       SecurityStatementFile("name_01", "download_url_01", 111L, SecurityStatementFileMetadata(2018, 3, 14, 2018, 3, 23, Pdf, SecurityStatement, someEori, 111L, "checksum_01"))
+    )
+
+    val sdesPostponedVatStatementssUrl = "http://localhost:9754/customs-financials-sdes-stub/files-available/list/PostponedVatStatement"
+    val postponedVatStatementsSdesResponse = List(
+      FileInformation("name_04", "download_url_06", 113L, Metadata(List(MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"), MetadataItem("FileType", "pdf"), MetadataItem("FileRole", "PostponedVATStatement"), MetadataItem("DutyPaymentMethod", "Immediate"), MetadataItem("statementRequestID", "a request id")))),
+      FileInformation("name_04", "download_url_04", 114L, Metadata(List(MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "4"), MetadataItem("FileType", "pdf"), MetadataItem("FileRole", "PostponedVATStatement"),MetadataItem("DutyPaymentMethod", "Chief")))),
+      FileInformation("name_03", "download_url_03", 115L, Metadata(List(MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "5"), MetadataItem("FileType", "pdf"), MetadataItem("FileRole", "PostponedVATStatement"), MetadataItem("DutyPaymentMethod", "??")))),
+      FileInformation("name_01", "download_url_01", 1300000L, Metadata(List(MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "6"), MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "PostponedVATStatement"), MetadataItem("DutyPaymentMethod", ""))))
+    )
+    val postponedVatStatementFilesWithUnknownFileTypesSdesResponse = List(
+      FileInformation("name_04", "download_url_06", 111L, Metadata(List(MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"), MetadataItem("FileType", "foo"), MetadataItem("FileRole", "PostponedVATStatement"), MetadataItem("DutyPaymentMethod", "CDS"))))) ++
+      postponedVatStatementsSdesResponse ++
+      List(FileInformation("name_01", "download_url_01", 1300000L, Metadata(List(MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "6"), MetadataItem("FileType", "bar"), MetadataItem("FileRole", "PostponedVATStatement"), MetadataItem("DutyPaymentMethod", "CDS")))))
+
+    val postponedVatStatementFiles = List(
+      PostponedVatStatementFile("name_04", "download_url_06", 113L, PostponedVatStatementFileMetadata(2018, 3, Pdf, PostponedVATStatement, "CDS", Some("a request id"))),
+      PostponedVatStatementFile("name_04", "download_url_04", 114L, PostponedVatStatementFileMetadata(2018, 4, Pdf, PostponedVATStatement, "CHIEF", None)),
+      PostponedVatStatementFile("name_03", "download_url_03", 115L, PostponedVatStatementFileMetadata(2018, 5, Pdf, PostponedVATStatement, "CDS", None)),
+      PostponedVatStatementFile("name_01", "download_url_01", 1300000L, PostponedVatStatementFileMetadata(2018, 6, Pdf, PostponedVATStatement, "CDS", None))
     )
 
     val sdesVatCertificatesUrl = "http://localhost:9754/customs-financials-sdes-stub/files-available/list/C79Certificate"

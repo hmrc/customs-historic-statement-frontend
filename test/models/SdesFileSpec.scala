@@ -30,6 +30,7 @@ class SdesFileSpec extends SpecBase with Matchers {
 
       securityStatementFile2 compare securityStatementFile1 mustBe 1
       vatCertificateFile1 compare vatCertificateFile2 mustBe 0
+      postponedVatStatementFile1 compare postponedVatStatementFile2 mustBe 0
 
       FileFormat.unapply(Pdf).value mustBe "PDF"
 
@@ -85,6 +86,15 @@ class SdesFileSpec extends SpecBase with Matchers {
     val vatCertificateFile2 = VatCertificateFile("file1", "/download", 10, VatCertificateFileMetadata(
       19, 10, Pdf, C79Certificate, None
     ), "123456789")
+
+    val postponedVatStatementFile1 = PostponedVatStatementFile("file1", "/download", 10, PostponedVatStatementFileMetadata(
+      19, 10, Pdf, PostponedVATStatement, "CDS", Some("request id")
+    ), "123456789")
+
+    val postponedVatStatementFile2 = PostponedVatStatementFile("file1", "/download", 10, PostponedVatStatementFileMetadata(
+      19, 10, Pdf, PostponedVATStatement, "CDS", Some("request id")
+    ), "123456789")
+
 
     val dutyDefermentFile1 = DutyDefermentStatementFile(
       s"12345678.123",

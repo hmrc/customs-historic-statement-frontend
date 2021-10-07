@@ -41,27 +41,26 @@ missing_documents_guidance: components.missing_documents_guidance
         @if(model.statementsForAllEoris(historyIndex).requestedStatements.nonEmpty) {
 
             @for((statementsOfOneMonth, index) <- model.statementsForAllEoris(historyIndex).requestedStatements.sorted.zipWithIndex) {
-
-                <h2 class="govuk-heading-m" id="requested-statements-list-@{historyIndex}-row-@{index}-date-cell">
+                <h2 class="govuk-heading-m" id="period-@{statementsOfOneMonth.formattedMonthYear}">
                     @{statementsOfOneMonth.formattedMonthYear}
                 </h2>
-                <ul class="govuk-list" id="requested-statements-list-@{historyIndex}-row-@{index}-link-cell">
-
+                <ul class="govuk-list" id="requested-statements-list-@{historyIndex}-row-@{index}">
                     @if(statementsOfOneMonth.files.nonEmpty) {
-                        @defining(statementsOfOneMonth.files.groupBy(_.metadata.source)){ m =>
-
+                        @defining(statementsOfOneMonth.files.groupBy(_.metadata.source)){ statements =>
                             @for(source <- sources) {
                                 <li>@{
-                                    if(m.get(source).isEmpty) {
+                                    if(statements.get(source).isEmpty) {
                                         messages("cf.account.postponed-vat.missing-file-type", source)
                                     } else {
-                                        downloadLine(m.get(source).get, historyIndex, index, statementsOfOneMonth.formattedMonthYear)
+                                        displayRows(statements(source), historyIndex, index, statementsOfOneMonth.formattedMonthYear)
                                     }
                                 }</li>
                             }
                         }
                     } else {
-                        <li>@{messages("cf.account.postponed-vat.missing-file-month", statementsOfOneMonth.formattedMonth)}</li>
+                        <li id="missing-file-@{statementsOfOneMonth.formattedMonthYear}">
+                            @{messages("cf.account.postponed-vat.missing-file-month", statementsOfOneMonth.formattedMonth)}
+                        </li>
                     }
                 </ul>
             }
@@ -69,12 +68,14 @@ missing_documents_guidance: components.missing_documents_guidance
     }
 }
 
-@downloadLine(files: Seq[PostponedVatStatementFile], historyIndex: Int, index: Int, date: String) = {
-    @download_link(
-    Some(files.head),
-    Pdf,
-    s"${files.head.metadata.source} statement",
-    s"requested-statements-list-${historyIndex}-row-${index}-pdf-download-link",
-    date)
+@displayRows(files: Seq[PostponedVatStatementFile], historyIndex: Int, index: Int, date: String) = {
+    @for(file <- files){
+        @download_link(
+        Some(file),
+        Pdf,
+        s"${file.metadata.source} statement",
+        s"requested-statements-list-${historyIndex}-row-${index}-pdf-download-link",
+        date)
+    }
 }
 
