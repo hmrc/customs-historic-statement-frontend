@@ -44,10 +44,7 @@ unauthorised.eori-link=Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) 
 unauthorised.get-access-info=Os oes gennych rif EORI eisoes, gallwch
 unauthorised.get-access-link=cael mynediad at CDS (yn agor ffenestr neu dab newydd)
 unauthorised.how-to-get-access-info=Sut i gael mynediad at CDS
-unauthorised.process-application-info=Gall gymryd hyd at awr i CThEM brosesu’ch cais.
-unauthorised.already-applied-info=Os ydych eisoes wedi gwneud cais am fynediad at CDS
-unauthorised.status-info=Gallwch
-unauthorised.status-check-info=wirio statws eich cais (yn agor ffenestr neu dab newydd)
+unauthorised.process-application-info=Gall gymryd hyd at ddwy awr i CThEM brosesu’ch cais.
 
 service-technical-difficulties.title = Mae’n ddrwg gennym. Mae anawsterau technegol wedi codi
 service.technical-difficulties.heading = Mae’n ddrwg gennym. Mae anawsterau technegol wedi codi

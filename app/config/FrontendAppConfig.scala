@@ -56,7 +56,6 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   lazy val signOutUrl: String = configuration.get[String]("urls.signOut")
   lazy val registerCdsUrl: String = configuration.get[String]("urls.cdsRegisterUrl")
   lazy val subscribeCdsUrl: String = configuration.get[String]("urls.cdsSubscribeUrl")
-  lazy val applicationStatusCdsUrl: String = configuration.get[String]("urls.applicationStatusUrl")
   lazy val financialsHomepage: String = configuration.get[String]("urls.financialsHomepage")
 
   private lazy val c79ReturnLink: String = configuration.get[String]("urls.c79Return")
