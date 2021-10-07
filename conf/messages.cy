@@ -138,6 +138,11 @@ cf.common.missing-documents-guidance.text2=Cynhyrchir {0} dim ond ar gyfer cyfno
 cf.import-vat.requested.title=Tystysgrifau TAW mewnforio (C79) y gofynnwyd amdanynt
 cf.import-vat.requested.available.text=Mae tystysgrifau y gofynnwyd amdanynt ar gael i’w gweld am 10 diwrnod. Gallwn ddarparu’r rhain ar ffurf PDF yn unig.
 
+# Import Postponed VAT requested statements view
+cf.import-postponed-vat.requested.title=Y datganiadau ar gyfer TAW mewnforio ohiriedig y gofynnoch amdanynt
+cf.import-postponed-vat.requested.available.text=Mae datganiadau y gofynnir amdanynt ar gael i’w gweld am 10 diwrnod. Dim ond ar ffurf PDF y gallwn ddarparu’r rhain.
+cf.account.postponed-vat.missing-file-type=Dim datganiadau {0} ar gael.
+
 cf.account.detail.requested.title=Datganiadau gohirio tollau y gofynnwyd amdanynt
 cf.account.detail.requested-certificates-available-link-text=datganiadau y gofynnwyd amdanynt
 cf.account.detail.requested.deferment-account-secondary-heading=Cyfrif:

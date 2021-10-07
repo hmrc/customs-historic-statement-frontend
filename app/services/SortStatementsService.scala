@@ -18,7 +18,7 @@ package services
 
 import models._
 import play.api.i18n.Messages
-import viewmodels.{VatCertificatesByMonth, VatCertificatesForEori}
+import viewmodels.{PostponedVatStatementsByMonth, PostponedVatStatementsForEori, VatCertificatesByMonth, VatCertificatesForEori}
 
 import javax.inject.{Inject, Singleton}
 
@@ -51,4 +51,12 @@ class SortStatementsService @Inject()() {
       case (current, requested) => VatCertificatesForEori(historicEori, current, requested)
     }
 
+  def sortPostponedVatStatementsForEori(historicEori: EoriHistory, postponedVatStatementsFile: Seq[PostponedVatStatementFile])
+                                (implicit messages: Messages): PostponedVatStatementsForEori =
+    postponedVatStatementsFile.groupBy(_.monthAndYear).map {
+      case (month, filesForMonth) => PostponedVatStatementsByMonth(month, filesForMonth)
+    }.toList
+      .partition(_.files.exists(_.metadata.statementRequestId.isEmpty)) match {
+      case (current, requested) => PostponedVatStatementsForEori(historicEori, current, requested)
+    }
 }

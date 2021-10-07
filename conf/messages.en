@@ -140,6 +140,9 @@ cf.common.missing-documents-guidance.text2={0} are only generated for periods in
 cf.import-vat.requested.title=Requested import VAT certificates (C79)
 cf.import-vat.requested.available.text=Requested certificates are available to view for 10 days. We can only provide these in PDF format.
 
+cf.import-postponed-vat.requested.title=Your requested Postponed import VAT statements
+cf.import-postponed-vat.requested.available.text=Requested statements are available to view for 10 days. We can only provide these in PDF format.
+
 cf.account.detail.requested.title=Requested duty deferment statements
 cf.account.detail.requested-certificates-available-link-text=requested statements
 cf.account.detail.requested.deferment-account-secondary-heading=Account:
@@ -150,6 +153,13 @@ cf.account.detail.period-group={0} to {1} {2}
 cf.account.detail.row.supplementary.info=Supplementary end of month
 cf.account.details.row.excise.info=Excise summary
 cf.account.details.previous-eori=EORI: {0}
+
+
+cf.account.postponed-vat.download-link=Download {0} of {1} ({2})
+cf.account.postponed-vat.missing-file=Unavailable
+cf.account.postponed-vat.missing-file-hidden-text={0} for {1} unavailable
+cf.account.postponed-vat.missing-file-type=No {0} statements available.
+cf.account.postponed-vat.missing-file-month=There were no statements in {0}.
 
 cf.account.vat.download-link=Download {0} of {1} ({2})
 cf.account.vat.missing-file=Unavailable
