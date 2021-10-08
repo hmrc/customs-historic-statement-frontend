@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.HistoricDateRequestPageFormProvider
-import models.{HistoricDates, Mode}
+import models.{C79Certificate, FileRole, HistoricDates, Mode, PostponedVATStatement}
 import navigation.Navigator
 import pages.{AccountNumber, HistoricDateRequestPage}
 import play.api.data.Form
@@ -73,7 +73,7 @@ class HistoricDateRequestPageController @Inject()(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, mode, request.fileRole, backLink, request.userAnswers.get(AccountNumber)))),
         value =>
-          customValidation(value, form) match {
+          customValidation(value, form, request.fileRole) match {
             case Some(formWithErrors) =>
               Future.successful(BadRequest(view(formWithErrors, mode, request.fileRole, backLink, request.userAnswers.get(AccountNumber))))
             case None =>
@@ -85,7 +85,7 @@ class HistoricDateRequestPageController @Inject()(
       )
   }
 
-  def customValidation(dates: HistoricDates, form: Form[HistoricDates])(implicit messages: Messages): Option[Form[HistoricDates]] = {
+  def customValidation(dates: HistoricDates, form: Form[HistoricDates], fileRole: FileRole)(implicit messages: Messages): Option[Form[HistoricDates]] = {
     val maximumNumberOfMonths = 6
 
     def formWithError(message: String): Form[HistoricDates] = {
@@ -118,5 +118,9 @@ class HistoricDateRequestPageController @Inject()(
   private def isDateMoreThanSixTaxYearsOld(requestedDate: LocalDate): Boolean = {
     val dayOfMonthThatTaxYearStartsOn = 6
     minTaxYear.starts.isAfter(requestedDate.withDayOfMonth(dayOfMonthThatTaxYearStartsOn))
+  }
+
+  private def isBeforePVatStartDate(requestedDate: LocalDate): Boolean = {
+    requestedDate.isBefore(LocalDate.of(2021,1,1))
   }
 }

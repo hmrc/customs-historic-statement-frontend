@@ -85,6 +85,8 @@ cf.historic.document.request.whichEndDate.C79Certificate=which end date do you n
 cf.historic.document.request.whichEndDate.SecurityStatement=which end date do you need adjustment statements?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement=which end date do you need deferment statements?
 cf.historic.document.request.date.hint=For example, 3 2019
+cf.historic.document.request.date.pvat.hint=For example, 3 2021
+
 cf.historic.document.request.selected.statements=Selected Statements
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = what end date do you need Import VAT certificates?
@@ -93,6 +95,8 @@ cf.historic.document.request.whichEndDate.SecurityStatement.hidden = what end da
 cf.historic.document.request.whichStartDate.SecurityStatement.hidden = what start date do you need adjustment statements?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement.hidden = what end date do you need deferment statements?
 cf.historic.document.request.whichStartDate.DutyDefermentStatement.hidden = what start date do you need deferment statements?
+cf.historic.document.request.whichEndDate.PostponedVATStatement.hidden = what end date do you need Import postponed VAT certificates?
+cf.historic.document.request.whichStartDate.PostponedVATStatement.hidden = what start date do you need Import postponed VAT certificates?
 
 cf.historic.document.request.review.heading=Request older statements
 cf.historic.document.request.review.submit=Submit your request
@@ -120,6 +124,8 @@ cf.historic.document.request.form.error.date-too-far-in-past=You can only reques
 cf.historic.document.request.form.error.date-too-recent=You can only request statements older than 6 months
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=The to date must be on or after the from date
 cf.historic.document.request.form.error.date-earlier-than-system-start-date=You can only request statements issued since October 2019
+cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=You can only request statements issued since January 2021
+
 cf.historic.document.request.form.error.date-range-too-wide=You can only ask for up to 6 months of statements in each request
 cf.historic.document.request.form.error.start.date-number-invalid=Enter a valid from date
 cf.historic.document.request.form.error.end.date-number-invalid=Enter a valid to date

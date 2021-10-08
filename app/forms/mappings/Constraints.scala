@@ -23,6 +23,7 @@ import java.time.{LocalDate, LocalDateTime, Period}
 trait Constraints {
 
   private lazy val etmpStatementsDate: LocalDate = LocalDate.of(2019, 10, 1)
+  private lazy val pvatStatementsDate: LocalDate = LocalDate.of(2021, 1, 1)
   private lazy val currentDate: LocalDate = LocalDateTime.now().toLocalDate
   private val olderThan = Period.ofMonths(6)
 
@@ -38,6 +39,12 @@ trait Constraints {
   def earlierThanSystemStartDate: Constraint[LocalDate] = Constraint {
     case request if Period.between(request, etmpStatementsDate).toTotalMonths > 0 =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-system-start-date"))
+    case _ => Valid
+  }
+
+  def earlierThanPVATStartDate: Constraint[LocalDate] = Constraint {
+    case request if Period.between(request, pvatStatementsDate).toTotalMonths > 0 =>
+      Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"))
     case _ => Valid
   }
 }
