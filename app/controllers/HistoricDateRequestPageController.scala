@@ -49,14 +49,14 @@ class HistoricDateRequestPageController @Inject()(
                                                    view: HistoricDateRequestPageView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def form: Form[HistoricDates] = formProvider()
+//  def form: Form[HistoricDates] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(HistoricDateRequestPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
+      val preparedForm: Form[HistoricDates] = request.userAnswers.get(HistoricDateRequestPage) match {
+        case None => formProvider(request.fileRole)
+        case Some(value) => formProvider(request.fileRole).fill(value)
       }
 
       val backLink = appConfig.returnLink(request.fileRole, request.userAnswers)
@@ -69,11 +69,11 @@ class HistoricDateRequestPageController @Inject()(
 
       val backLink = appConfig.returnLink(request.fileRole, request.userAnswers)
 
-      form.bindFromRequest().fold(
+      formProvider(request.fileRole).bindFromRequest().fold(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, mode, request.fileRole, backLink, request.userAnswers.get(AccountNumber)))),
         value =>
-          customValidation(value, form, request.fileRole) match {
+          customValidation(value, formProvider(request.fileRole), request.fileRole) match {
             case Some(formWithErrors) =>
               Future.successful(BadRequest(view(formWithErrors, mode, request.fileRole, backLink, request.userAnswers.get(AccountNumber))))
             case None =>

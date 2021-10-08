@@ -16,6 +16,7 @@
 
 package forms.mappings
 
+import models.{FileRole, PostponedVATStatement}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 import java.time.{LocalDate, LocalDateTime, Period}
@@ -42,8 +43,8 @@ trait Constraints {
     case _ => Valid
   }
 
-  def earlierThanPVATStartDate: Constraint[LocalDate] = Constraint {
-    case request if Period.between(request, pvatStatementsDate).toTotalMonths > 0 =>
+  def earlierThanPVATStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
+    case request if (Period.between(request, pvatStatementsDate).toTotalMonths > 0  && fileRole == PostponedVATStatement) =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"))
     case _ => Valid
   }

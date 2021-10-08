@@ -20,6 +20,7 @@ import base.SpecBase
 import models.NormalMode
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.HistoricDateRequestPage
+import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import repositories.SessionRepository
@@ -113,10 +114,21 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
-
     "return BAD_REQUEST when the start date is earlier than system start date" in new Setup {
       val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
         .withFormUrlEncodedBody("start.month" -> "9", "start.year" -> "2019", "end.month" -> "10", "end.year" -> "2019")
+        .withJsonBody(Json.parse("""{ "fileRole":  "C79Certificate"} """))
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST when the start date is earlier than postponed VAT date" in new Setup {
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+        .withFormUrlEncodedBody("start.month" -> "1", "start.year" -> "2021", "end.month" -> "1", "end.year" -> "2021")
+        .withJsonBody(Json.parse("""{ "fileRole":  "PostponedVATStatement"} """))
 
       running(app) {
         val result = route(app, request).value
