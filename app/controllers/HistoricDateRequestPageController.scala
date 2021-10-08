@@ -49,8 +49,6 @@ class HistoricDateRequestPageController @Inject()(
                                                    view: HistoricDateRequestPageView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-//  def form: Form[HistoricDates] = formProvider()
-
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 

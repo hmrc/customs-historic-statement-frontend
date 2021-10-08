@@ -29,7 +29,7 @@ lazy val root = (project in file("."))
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*components.*;.*repositories.*;" +
       ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;.*ControllerConfiguration;" +
       ".*views.*; .*models.Mode; .*Formatters; .*LocalDateFormatter; .*package; .*UserAnswers",
-    ScoverageKeys.coverageMinimum := 98,
+    ScoverageKeys.coverageMinimum := 99,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
     scalacOptions ++= Seq("-feature"),
