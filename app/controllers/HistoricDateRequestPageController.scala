@@ -94,17 +94,20 @@ class HistoricDateRequestPageController @Inject()(
         .fill(dates)
     }
 
-    dates match {
-      case HistoricDates(start, end) if Period.between(start, end).toTotalMonths < 0 =>
+    (dates, fileRole) match {
+      case (HistoricDates(start, end), docType) if (docType == PostponedVATStatement) && (isBeforePVatStartDate(start) || isBeforePVatStartDate(end))  =>
+          Some(formWithError(messages("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"
+        )))
+      case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths < 0 =>
         Some(formWithError("cf.historic.document.request.form.error.to-date-must-be-later-than-from-date"))
-      case HistoricDates(start, end) if Period.between(start, end).toTotalMonths >= maximumNumberOfMonths =>
+      case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths >= maximumNumberOfMonths =>
         Some(formWithError("cf.historic.document.request.form.error.date-range-too-wide"))
-      case HistoricDates(start, end) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
+      case (HistoricDates(start, end), _) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
         Some(formWithError(messages(
           "cf.historic.document.request.form.error.date-too-far-in-past",
           minTaxYear.startYear.toString,
           minTaxYear.finishYear.toString
-        )))
+    )))
       case _ => None
     }
   }
