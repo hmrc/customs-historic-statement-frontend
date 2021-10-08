@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.HistoricDateRequestPageFormProvider
-import models.{C79Certificate, FileRole, HistoricDates, Mode, PostponedVATStatement}
+import models.{FileRole, HistoricDates, Mode, PostponedVATStatement}
 import navigation.Navigator
 import pages.{AccountNumber, HistoricDateRequestPage}
 import play.api.data.Form
@@ -95,7 +95,7 @@ class HistoricDateRequestPageController @Inject()(
     }
 
     (dates, fileRole) match {
-      case (HistoricDates(start, end), docType) if (docType == PostponedVATStatement) && (isBeforePVatStartDate(start) || isBeforePVatStartDate(end))  =>
+      case (HistoricDates(start, end), PostponedVATStatement) if (isBeforePVatStartDate(start) || isBeforePVatStartDate(end))  =>
           Some(formWithError(messages("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"
         )))
       case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths < 0 =>
