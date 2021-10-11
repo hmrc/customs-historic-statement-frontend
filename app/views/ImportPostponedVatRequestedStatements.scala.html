@@ -42,7 +42,7 @@ missing_documents_guidance: components.missing_documents_guidance
 
             @for((statementsOfOneMonth, index) <- model.statementsForAllEoris(historyIndex).requestedStatements.sorted.zipWithIndex) {
                 <div id="requested-@{statementsOfOneMonth.formattedMonthYearAsId}">
-                    <h2 class="govuk-heading-m" id="period-@{statementsOfOneMonth.formattedMonthYear}">
+                    <h2 class="govuk-heading-m" id="period-@{statementsOfOneMonth.formattedMonthYearAsId}">
                         @{statementsOfOneMonth.formattedMonthYear}
                     </h2>
                     <ul class="govuk-list" id="requested-statements-list-@{historyIndex}-row-@{index}">
