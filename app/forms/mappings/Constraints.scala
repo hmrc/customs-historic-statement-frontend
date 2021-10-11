@@ -37,8 +37,8 @@ trait Constraints {
     }
   }
 
-  def earlierThanSystemStartDate: Constraint[LocalDate] = Constraint {
-    case request if Period.between(request, etmpStatementsDate).toTotalMonths > 0 =>
+  def earlierThanSystemStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
+    case request if (Period.between(request, etmpStatementsDate).toTotalMonths > 0 && fileRole != PostponedVATStatement) =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-system-start-date"))
     case _ => Valid
   }
