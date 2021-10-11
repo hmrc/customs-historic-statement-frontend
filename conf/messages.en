@@ -75,13 +75,17 @@ cf.historic.document.request.pvat.info-text=A statement will show the total impo
 cf.historic.document.request.continue=Continue
 cf.historic.document.request.from=From
 cf.historic.document.request.whichStartDate.C79Certificate=which start date do you need Import VAT certificates?
+cf.historic.document.request.whichStartDate.PostponedVATStatement=which start date do you need Import Postponed VAT statements?
 cf.historic.document.request.whichStartDate.SecurityStatement=which start date do you need adjustment statements?
 cf.historic.document.request.whichStartDate.DutyDefermentStatement=which start date do you need deferment statements?
 cf.historic.document.request.to=To
 cf.historic.document.request.whichEndDate.C79Certificate=which end date do you need Import VAT certificates?
+cf.historic.document.request.whichEndDate.PostponedVATStatement=which start date do you need Import Postponed VAT statements?
 cf.historic.document.request.whichEndDate.SecurityStatement=which end date do you need adjustment statements?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement=which end date do you need deferment statements?
 cf.historic.document.request.date.hint=For example, 3 2019
+cf.historic.document.request.date.pvat.hint=For example, 3 2021
+
 cf.historic.document.request.selected.statements=Selected Statements
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = what end date do you need Import VAT certificates?
@@ -90,6 +94,8 @@ cf.historic.document.request.whichEndDate.SecurityStatement.hidden = what end da
 cf.historic.document.request.whichStartDate.SecurityStatement.hidden = what start date do you need adjustment statements?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement.hidden = what end date do you need deferment statements?
 cf.historic.document.request.whichStartDate.DutyDefermentStatement.hidden = what start date do you need deferment statements?
+cf.historic.document.request.whichEndDate.PostponedVATStatement.hidden = what end date do you need Import postponed VAT statements?
+cf.historic.document.request.whichStartDate.PostponedVATStatement.hidden = what start date do you need Import postponed VAT statements?
 
 cf.historic.document.request.review.heading=Request older statements
 cf.historic.document.request.review.submit=Submit your request
@@ -117,6 +123,8 @@ cf.historic.document.request.form.error.date-too-far-in-past=You can only reques
 cf.historic.document.request.form.error.date-too-recent=You can only request statements older than 6 months
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=The to date must be on or after the from date
 cf.historic.document.request.form.error.date-earlier-than-system-start-date=You can only request statements issued since October 2019
+cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=You can only request statements issued since January 2021
+
 cf.historic.document.request.form.error.date-range-too-wide=You can only ask for up to 6 months of statements in each request
 cf.historic.document.request.form.error.start.date-number-invalid=Enter a valid from date
 cf.historic.document.request.form.error.end.date-number-invalid=Enter a valid to date
@@ -137,6 +145,9 @@ cf.common.missing-documents-guidance.text2={0} are only generated for periods in
 cf.import-vat.requested.title=Requested import VAT certificates (C79)
 cf.import-vat.requested.available.text=Requested certificates are available to view for 10 days. We can only provide these in PDF format.
 
+cf.import-postponed-vat.requested.title=Your requested Postponed import VAT statements
+cf.import-postponed-vat.requested.available.text=Requested statements are available to view for 10 days. We can only provide these in PDF format.
+
 cf.account.detail.requested.title=Requested duty deferment statements
 cf.account.detail.requested-certificates-available-link-text=requested statements
 cf.account.detail.requested.deferment-account-secondary-heading=Account:
@@ -147,6 +158,13 @@ cf.account.detail.period-group={0} to {1} {2}
 cf.account.detail.row.supplementary.info=Supplementary end of month
 cf.account.details.row.excise.info=Excise summary
 cf.account.details.previous-eori=EORI: {0}
+
+
+cf.account.postponed-vat.download-link=Download {0} of {1} ({2})
+cf.account.postponed-vat.missing-file=Unavailable
+cf.account.postponed-vat.missing-file-hidden-text={0} for {1} unavailable
+cf.account.postponed-vat.missing-file-type=No {0} statements available.
+cf.account.postponed-vat.missing-file-month=There were no statements in {0}.
 
 cf.account.vat.download-link=Download {0} of {1} ({2})
 cf.account.vat.missing-file=Unavailable

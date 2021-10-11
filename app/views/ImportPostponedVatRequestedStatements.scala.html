@@ -1,0 +1,81 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.templates.GovukWrapper
+@import models.FileFormat.Pdf
+@import viewmodels.PostponedVatViewModel
+@import models.PostponedVatStatementFile
+@import java.time.LocalDate
+
+@this(
+mainTemplate: GovukWrapper,
+download_link: components.download_link2,
+missing_documents_guidance: components.missing_documents_guidance
+)
+
+@(model: PostponedVatViewModel, backLink: String)(implicit request: Request[_], messages: Messages)
+
+@histories = @{model.statementsForAllEoris.indices}
+@sources = @{Seq("CDS", "CHIEF")}
+
+@mainTemplate(pageTitle = Some(messages("cf.import-postponed-vat.requested.title")), backLinkUrl = Some(backLink)) {
+
+    <h1 id="requested-import-postponed-vat-statements-heading" class="govuk-heading-xl govuk-!-margin-bottom-3">@messages("cf.import-postponed-vat.requested.title")</h1>
+
+    <p class="govuk-body govuk-!-margin-bottom-8" id="available-text">@messages("cf.import-postponed-vat.requested.available.text")</p>
+
+    @for(historyIndex <- histories) {
+        @if(model.statementsForAllEoris(historyIndex).requestedStatements.nonEmpty) {
+
+            @for((statementsOfOneMonth, index) <- model.statementsForAllEoris(historyIndex).requestedStatements.sorted.zipWithIndex) {
+                <h2 class="govuk-heading-m" id="period-@{statementsOfOneMonth.formattedMonthYear}">
+                    @{statementsOfOneMonth.formattedMonthYear}
+                </h2>
+                <ul class="govuk-list" id="requested-statements-list-@{historyIndex}-row-@{index}">
+                    @if(statementsOfOneMonth.files.nonEmpty) {
+                        @defining(statementsOfOneMonth.files.groupBy(_.metadata.source)){ statements =>
+                            @for(source <- sources) {
+                                <li>@{
+                                    if(statements.get(source).isEmpty) {
+                                        messages("cf.account.postponed-vat.missing-file-type", source)
+                                    } else {
+                                        displayRows(statements(source), historyIndex, index, statementsOfOneMonth.formattedMonthYear)
+                                    }
+                                }</li>
+                            }
+                        }
+                    } else {
+                        <li id="missing-file-@{statementsOfOneMonth.formattedMonthYear}">
+                            @{messages("cf.account.postponed-vat.missing-file-month", statementsOfOneMonth.formattedMonth)}
+                        </li>
+                    }
+                </ul>
+            }
+        }
+    }
+}
+
+@displayRows(files: Seq[PostponedVatStatementFile], historyIndex: Int, index: Int, date: String) = {
+    @for(file <- files){
+        @download_link(
+        Some(file),
+        Pdf,
+        s"${file.metadata.source} statement",
+        s"requested-statements-list-${historyIndex}-row-${index}-pdf-download-link",
+        date)
+    }
+}
+

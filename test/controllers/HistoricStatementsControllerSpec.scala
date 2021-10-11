@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.{CustomsDataStoreConnector, CustomsFinancialsApiConnector, CustomsSessionCacheConnector, SdesConnector}
 import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileFormat.Pdf
-import models.{C79Certificate, DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, EoriHistory, SecurityStatement, SecurityStatementFile, SecurityStatementFileMetadata, VatCertificateFile, VatCertificateFileMetadata}
+import models.{C79Certificate, DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, EoriHistory, PostponedVATStatement, PostponedVatStatementFile, PostponedVatStatementFileMetadata, SecurityStatement, SecurityStatementFile, SecurityStatementFileMetadata, VatCertificateFile, VatCertificateFileMetadata}
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import play.api.test.Helpers._
@@ -44,6 +44,15 @@ class HistoricStatementsControllerSpec extends SpecBase {
     "return C79 Statements" in new Setup {
       when(mockSdesConnector.getVatCertificates(any)(any)).thenReturn(Future.successful(c79CertificateFiles))
       val request = fakeRequest(GET, controllers.routes.HistoricStatementsController.historicStatements(C79Certificate).url)
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe OK
+      }
+    }
+
+    "return PVAT Statements" in new Setup {
+      when(mockSdesConnector.getPostponedVatStatements(any)(any)).thenReturn(Future.successful(postponedVatStatementFiles))
+      val request = fakeRequest(GET, controllers.routes.HistoricStatementsController.historicStatements(PostponedVATStatement).url)
       running(app) {
         val result = route(app, request).value
         status(result) mustBe OK
@@ -108,6 +117,12 @@ class HistoricStatementsControllerSpec extends SpecBase {
     val c79Certificates_2 = VatCertificateFile("statementfile_00", "download_url_00", 99L,
       VatCertificateFileMetadata(2017, 11, Pdf, C79Certificate,None))
     val c79CertificateFiles = Seq(c79Certificates, c79Certificates_2)
+
+    val postponedVatStatement = PostponedVatStatementFile("statementfile_00", "download_url_00", 99L,
+      PostponedVatStatementFileMetadata(2017, 12, Pdf, PostponedVATStatement, "CDS", None))
+    val postponedVatStatement_2 = PostponedVatStatementFile("statementfile_00", "download_url_00", 99L,
+      PostponedVatStatementFileMetadata(2017, 11, Pdf, PostponedVATStatement, "Chief", Some("a request id")))
+    val postponedVatStatementFiles = Seq(postponedVatStatement, postponedVatStatement_2)
 
     val dutyDeferementFile: DutyDefermentStatementFile = DutyDefermentStatementFile("2018_03_01-08.pdf", "url.pdf", 1024L,
       DutyDefermentStatementFileMetadata(2018, 3, 1, 2018, 3, 8, Pdf, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), someDan, someRequestId))

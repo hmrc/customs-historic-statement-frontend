@@ -17,9 +17,11 @@
 package controllers
 
 import base.SpecBase
-import models.NormalMode
+
+import models.{NormalMode, PostponedVATStatement}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
-import pages.HistoricDateRequestPage
+import pages.{HistoricDateRequestPage, RequestedFileRole}
+
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import repositories.SessionRepository
@@ -113,7 +115,6 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
-
     "return BAD_REQUEST when the start date is earlier than system start date" in new Setup {
       val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
         .withFormUrlEncodedBody("start.month" -> "9", "start.year" -> "2019", "end.month" -> "10", "end.year" -> "2019")
@@ -121,6 +122,34 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, request).value
         status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST when the start date is earlier than postponed VAT date" in new Setup {
+
+      val populatedUserAnswers = emptyUserAnswers.set(RequestedFileRole, PostponedVATStatement).success.value
+      override val app: Application = applicationBuilder(Some(populatedUserAnswers)).build()
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+        .withFormUrlEncodedBody("start.month" -> "12", "start.year" -> "2020", "end.month" -> "1", "end.year" -> "2021")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return Ok when the start date is later than the earliest possible postponed VAT date" in new Setup {
+
+      val populatedUserAnswers = emptyUserAnswers.set(RequestedFileRole, PostponedVATStatement).success.value
+      override val app: Application = applicationBuilder(Some(populatedUserAnswers)).build()
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+        .withFormUrlEncodedBody("start.month" -> "1", "start.year" -> "2021", "end.month" -> "1", "end.year" -> "2021")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
       }
     }
 
@@ -173,7 +202,6 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         status(result) mustBe BAD_REQUEST
       }
     }
-
 
   }
 

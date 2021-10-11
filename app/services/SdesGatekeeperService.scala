@@ -41,6 +41,23 @@ class SdesGatekeeperService() {
     )
   }
 
+  implicit def convertToPostponedVatStatementFile(sdesResponseFile: FileInformation): PostponedVatStatementFile = {
+    val metadata = sdesResponseFile.metadata.asMap
+
+    PostponedVatStatementFile(
+      sdesResponseFile.filename,
+      sdesResponseFile.downloadURL,
+      sdesResponseFile.fileSize,
+      PostponedVatStatementFileMetadata(
+        metadata("PeriodStartYear").toInt,
+        metadata("PeriodStartMonth").toInt,
+        FileFormat(metadata("FileType")),
+        mapFileRole(metadata("FileRole")),
+        mapDutyPaymentMethod(metadata("DutyPaymentMethod")),
+        metadata.get("statementRequestID"))
+      )
+  }
+
   implicit def convertToSecurityStatementFile(sdesResponseFile: FileInformation): SecurityStatementFile = {
     val metadata = sdesResponseFile.metadata.asMap
 
@@ -95,10 +112,17 @@ class SdesGatekeeperService() {
       case "C79Certificate" => C79Certificate
       case "SecurityStatement" => SecurityStatement
       case "DutyDefermentStatement" => DutyDefermentStatement
+      case "PostponedVATStatement" => PostponedVATStatement
       case _ => throw new Exception(s"Unknown file role: $role")
     }
   }
 
+  private def mapDutyPaymentMethod(dutyPaymentMethod: String): String = {
+    dutyPaymentMethod match {
+      case "Chief" => "CHIEF"
+      case _ => "CDS"
+    }
+  }
   private def mapDutyOverLimit(MDGDutyOverLimitResponse: String): Boolean = {
     MDGDutyOverLimitResponse match {
       case "Y" => true

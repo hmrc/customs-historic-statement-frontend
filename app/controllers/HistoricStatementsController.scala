@@ -25,8 +25,8 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.SortStatementsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import viewmodels.{DutyDefermentAccountViewModel, VatViewModel}
-import views.html.{DutyDefermentRequestedStatements, ImportVatRequestedStatements, SecuritiesRequestedStatements}
+import viewmodels.{DutyDefermentAccountViewModel, PostponedVatViewModel, VatViewModel}
+import views.html.{DutyDefermentRequestedStatements, ImportPostponedVatRequestedStatements, ImportVatRequestedStatements, SecuritiesRequestedStatements}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,6 +39,7 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
                                              sessionCacheConnector: CustomsSessionCacheConnector,
                                              sdesConnector: SdesConnector,
                                              importVatView: ImportVatRequestedStatements,
+                                             importPostponedVatView: ImportPostponedVatRequestedStatements,
                                              securitiesView: SecuritiesRequestedStatements,
                                              sortStatementsService: SortStatementsService,
                                              dutyDefermentView: DutyDefermentRequestedStatements)
@@ -50,6 +51,7 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
     fileRole match {
       case SecurityStatement => showHistoricSecurityStatements()
       case C79Certificate => showHistoricC79Statements()
+      case PostponedVATStatement => showHistoricPostponedVatStatements()
       case _ => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
     }
   }
@@ -71,6 +73,17 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
       })
       viewModel = VatViewModel(allCertificates.sorted)
     } yield Ok(importVatView(viewModel, appConfig.returnLink(C79Certificate)))
+  }
+
+  private def showHistoricPostponedVatStatements()(implicit request: IdentifierRequestWithEoriHistory[AnyContent]): Future[Result] = {
+    for {
+      allCertificates <- Future.sequence(request.eoriHistory.map { historicEori =>
+        sdesConnector
+          .getPostponedVatStatements(historicEori.eori)
+          .map(sortStatementsService.sortPostponedVatStatementsForEori(historicEori, _))
+      })
+      viewModel = PostponedVatViewModel(allCertificates.sorted)
+    } yield Ok(importPostponedVatView(viewModel, appConfig.returnLink(PostponedVATStatement)))
   }
 
   private def showHistoricSecurityStatements()(implicit request: IdentifierRequestWithEoriHistory[AnyContent]): Future[Result] = {
@@ -96,7 +109,5 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
       viewModel = DutyDefermentAccountViewModel(dan, allStatements)
     } yield Ok(dutyDefermentView(viewModel, appConfig.returnLink(linkId)))
   }
-
-
 
 }

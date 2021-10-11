@@ -17,7 +17,7 @@
 package forms
 
 import forms.mappings.Mappings
-import models.HistoricDates
+import models.{FileRole, HistoricDates}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 
@@ -25,14 +25,16 @@ import javax.inject.Inject
 
 class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[HistoricDates] = {
+  def apply(fileRole: FileRole): Form[HistoricDates] = {
     Form(mapping(
       "start" -> localDate(
         invalidKey = "cf.historic.document.request.form.error.start.date-number-invalid"
-      ).verifying(earlierThanSystemStartDate),
+      ).verifying(earlierThanSystemStartDate)
+        .verifying(earlierThanPVATStartDate(fileRole)),
       "end" -> localDate(
         invalidKey = "cf.historic.document.request.form.error.end.date-number-invalid"
       ).verifying(tooRecentDate)
+       .verifying(earlierThanPVATStartDate(fileRole))
     )(HistoricDates.apply)(HistoricDates.unapply)
     )
   }

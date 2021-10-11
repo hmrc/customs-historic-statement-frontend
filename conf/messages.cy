@@ -71,13 +71,16 @@ cf.historic.document.request.pvat.info-text=Bydd datganiad yn dangos cyfanswm y 
 cf.historic.document.request.continue=Yn eich blaen
 cf.historic.document.request.from=O
 cf.historic.document.request.whichStartDate.C79Certificate=ar gyfer pa ddyddiad dechrau y mae angen tystysgrifau TAW mewnforio arnoch?
+cf.historic.document.request.whichStartDate.PostponedVATStatement=ar gyfer pa ddyddiad dechrau y mae angen tystysgrifau TAW o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichStartDate.SecurityStatement=ar gyfer pa ddyddiad dechrau y mae angen hysbysiad o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichStartDate.DutyDefermentStatement=Ar gyfer pa ddyddiad dechrau y mae angen datganiadau gohirio tollau arnoch?
 cf.historic.document.request.to=Hyd at
 cf.historic.document.request.whichEndDate.C79Certificate=ar gyfer pa ddyddiad dod i ben y mae angen tystysgrifau TAW mewnforio arnoch?
+cf.historic.document.request.whichEndDate.PostponedVATStatement=ar gyfer pa ddyddiad dod i ben y mae angen tystysgrifau TAW o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.SecurityStatement=ar gyfer pa ddyddiad dod i ben y mae angen hysbysiad o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement=ar gyfer pa ddyddiad dod i ben y mae angen datganiadau gohirio tollau arnoch?
 cf.historic.document.request.date.hint=Er enghraifft, 3 2019
+cf.historic.document.request.date.pvat.hint=Er enghraifft, 3 2021
 cf.historic.document.request.selected.statements=Datganiadau dewisol
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?
@@ -86,6 +89,8 @@ cf.historic.document.request.whichEndDate.SecurityStatement.hidden = pa ddyddiad
 cf.historic.document.request.whichStartDate.SecurityStatement.hidden = pa ddyddiad dechrau sydd ei angen arnoch ar gyfer datganiadau addasu?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer datganiadau gohirio?
 cf.historic.document.request.whichStartDate.DutyDefermentStatement.hidden = pa ddyddiad dechrau sydd ei angen arnoch ar gyfer datganiadau gohirio?
+cf.historic.document.request.whichEndDate.PostponedVATStatement.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer datganiadau TAW mewnforio?
+cf.historic.document.request.whichStartDate.PostponedVATStatement.hidden = pa ddyddiad dechrau sydd ei angen arnoch ar gyfer datganiadau TAW mewnforio?
 
 cf.historic.document.request.review.heading=Gofyn am ddatganiadau hŷn
 cf.historic.document.request.review.submit=Cyflwyno’ch cais
@@ -113,6 +118,7 @@ cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn a
 cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am ddatganiadau sy’n hŷn na 6 mis
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’
 cf.historic.document.request.form.error.date-earlier-than-system-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Hydref 2019
+cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ionawr 2021
 cf.historic.document.request.form.error.date-range-too-wide=Gallwch ond gofyn am hyd at 6 mis o ddatganiadau ym mhob cais
 cf.historic.document.request.form.error.start.date-number-invalid=Nodwch ddyddiad ‘o’ dilys
 cf.historic.document.request.form.error.end.date-number-invalid=Nodwch ddyddiad ‘hyd at’ dilys
@@ -134,6 +140,11 @@ cf.common.missing-documents-guidance.text2=Cynhyrchir {0} dim ond ar gyfer cyfno
 # Import VAT requested statements view
 cf.import-vat.requested.title=Tystysgrifau TAW mewnforio (C79) y gofynnwyd amdanynt
 cf.import-vat.requested.available.text=Mae tystysgrifau y gofynnwyd amdanynt ar gael i’w gweld am 10 diwrnod. Gallwn ddarparu’r rhain ar ffurf PDF yn unig.
+
+# Import Postponed VAT requested statements view
+cf.import-postponed-vat.requested.title=Y datganiadau ar gyfer TAW mewnforio ohiriedig y gofynnoch amdanynt
+cf.import-postponed-vat.requested.available.text=Mae datganiadau y gofynnir amdanynt ar gael i’w gweld am 10 diwrnod. Dim ond ar ffurf PDF y gallwn ddarparu’r rhain.
+cf.account.postponed-vat.missing-file-type=Dim datganiadau {0} ar gael.
 
 cf.account.detail.requested.title=Datganiadau gohirio tollau y gofynnwyd amdanynt
 cf.account.detail.requested-certificates-available-link-text=datganiadau y gofynnwyd amdanynt

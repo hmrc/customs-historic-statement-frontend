@@ -183,3 +183,20 @@ case class VatCertificateFileMetadata(periodStartYear: Int,
                                       fileRole: FileRole,
                                       statementRequestId: Option[String]) extends SdesFileMetadata {
 }
+
+case class PostponedVatStatementFile(filename: String, downloadURL: String, size: Long, metadata: PostponedVatStatementFileMetadata, eori: String = "")
+  extends Ordered[PostponedVatStatementFile] with SdesFile {
+
+  val formattedSize: String = Formatters.fileSize(size)
+
+  // TODO perhaps include dates in the ordering...?
+  def compare(that: PostponedVatStatementFile): Int = that.metadata.fileFormat.compare(metadata.fileFormat)
+}
+
+case class PostponedVatStatementFileMetadata(periodStartYear: Int,
+                                               periodStartMonth: Int,
+                                               fileFormat: FileFormat,
+                                               fileRole: FileRole,
+                                               source: String,
+                                               statementRequestId: Option[String]) extends SdesFileMetadata {
+}
