@@ -36,6 +36,8 @@ case class PostponedVatStatementsByMonth(date: LocalDate, files: Seq[PostponedVa
   extends Ordered[PostponedVatStatementsByMonth] {
 
   val formattedMonthYear: String = Formatters.dateAsMonthAndYear(date)
+  val formattedMonthYearAsId: String = Formatters.dateAsMonthAndYearAsId(date)
+
   val formattedMonth: String = Formatters.dateAsMonth(date)
   val pdf: Option[PostponedVatStatementFile] = files.find(_.fileFormat == Pdf)
 
