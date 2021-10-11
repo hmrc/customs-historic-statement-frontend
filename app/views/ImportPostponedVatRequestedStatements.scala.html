@@ -41,28 +41,30 @@ missing_documents_guidance: components.missing_documents_guidance
         @if(model.statementsForAllEoris(historyIndex).requestedStatements.nonEmpty) {
 
             @for((statementsOfOneMonth, index) <- model.statementsForAllEoris(historyIndex).requestedStatements.sorted.zipWithIndex) {
-                <h2 class="govuk-heading-m" id="period-@{statementsOfOneMonth.formattedMonthYear}">
-                    @{statementsOfOneMonth.formattedMonthYear}
-                </h2>
-                <ul class="govuk-list" id="requested-statements-list-@{historyIndex}-row-@{index}">
-                    @if(statementsOfOneMonth.files.nonEmpty) {
-                        @defining(statementsOfOneMonth.files.groupBy(_.metadata.source)){ statements =>
-                            @for(source <- sources) {
-                                <li>@{
-                                    if(statements.get(source).isEmpty) {
-                                        messages("cf.account.postponed-vat.missing-file-type", source)
-                                    } else {
-                                        displayRows(statements(source), historyIndex, index, statementsOfOneMonth.formattedMonthYear)
-                                    }
-                                }</li>
+                <div id="requested-@{statementsOfOneMonth.formattedMonthYearAsId}">
+                    <h2 class="govuk-heading-m" id="period-@{statementsOfOneMonth.formattedMonthYear}">
+                        @{statementsOfOneMonth.formattedMonthYear}
+                    </h2>
+                    <ul class="govuk-list" id="requested-statements-list-@{historyIndex}-row-@{index}">
+                        @if(statementsOfOneMonth.files.nonEmpty) {
+                            @defining(statementsOfOneMonth.files.groupBy(_.metadata.source)){ statements =>
+                                @for(source <- sources) {
+                                    <li>@{
+                                        if(statements.get(source).isEmpty) {
+                                            messages("cf.account.postponed-vat.missing-file-type", source)
+                                        } else {
+                                            displayRows(statements(source), historyIndex, index, statementsOfOneMonth.formattedMonthYear)
+                                        }
+                                    }</li>
+                                }
                             }
+                        } else {
+                            <li id="missing-file-@{statementsOfOneMonth.formattedMonthYear}">
+                                @{messages("cf.account.postponed-vat.missing-file-month", statementsOfOneMonth.formattedMonth)}
+                            </li>
                         }
-                    } else {
-                        <li id="missing-file-@{statementsOfOneMonth.formattedMonthYear}">
-                            @{messages("cf.account.postponed-vat.missing-file-month", statementsOfOneMonth.formattedMonth)}
-                        </li>
-                    }
-                </ul>
+                    </ul>
+                </div>
             }
         }
     }
