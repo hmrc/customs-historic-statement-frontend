@@ -66,7 +66,7 @@ class SdesConnectorSpec extends SpecBase {
       }
     }
 
-    "getPostponedVatStatementss" should {
+    "getPostponedVatStatements" should {
       "return transformed postponed vat statements" in new Setup {
         when[Future[HttpResponse]](mockHttp.GET(eqTo(sdesPostponedVatStatementssUrl), any, any)(any, any, any))
           .thenReturn(Future.successful(HttpResponse(Status.OK, Json.toJson(postponedVatStatementFilesWithUnknownFileTypesSdesResponse).toString())))
@@ -134,7 +134,7 @@ class SdesConnectorSpec extends SpecBase {
       SecurityStatementFile("name_01", "download_url_01", 111L, SecurityStatementFileMetadata(2018, 3, 14, 2018, 3, 23, Pdf, SecurityStatement, someEori, 111L, "checksum_01"))
     )
 
-    val sdesPostponedVatStatementssUrl = "http://localhost:9754/customs-financials-sdes-stub/files-available/list/PostponedVatStatement"
+    val sdesPostponedVatStatementssUrl = "http://localhost:9754/customs-financials-sdes-stub/files-available/list/PostponedVATStatement"
     val postponedVatStatementsSdesResponse = List(
       FileInformation("name_04", "download_url_06", 113L, Metadata(List(MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"), MetadataItem("FileType", "pdf"), MetadataItem("FileRole", "PostponedVATStatement"), MetadataItem("DutyPaymentMethod", "Immediate"), MetadataItem("statementRequestID", "a request id")))),
       FileInformation("name_04", "download_url_04", 114L, Metadata(List(MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "4"), MetadataItem("FileType", "pdf"), MetadataItem("FileRole", "PostponedVATStatement"),MetadataItem("DutyPaymentMethod", "Chief")))),
