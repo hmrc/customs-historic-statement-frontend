@@ -56,7 +56,8 @@ trait SpecBase extends AnyWordSpecLike with MockitoSugar with OptionValues with 
 
   protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
-      .configure("auditing.enabled" -> false)
+      .configure("auditing.enabled" -> false,
+        "play.filters.csp.nonce.enabled" -> false)
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to[FakeIdentifierAction],
