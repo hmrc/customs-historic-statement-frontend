@@ -16,12 +16,12 @@
 
 package pages
 
-import models.HistoricDates
+import models.{FileRole, HistoricDates}
 import play.api.libs.json.JsPath
 
-case object HistoricDateRequestPage extends QuestionPage[HistoricDates] {
+case class HistoricDateRequestPage(fileRole: FileRole) extends QuestionPage[HistoricDates] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ fileRole.name \ toString
 
   override def toString: String = "historicDateRequestPage"
 }

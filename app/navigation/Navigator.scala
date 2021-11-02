@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 class Navigator @Inject()() {
 
   private def normalRoutes(fileRole: FileRole): Page => UserAnswers => Call = {
-    case HistoricDateRequestPage => _ => routes.CheckYourAnswersController.onPageLoad(fileRole)
+    case HistoricDateRequestPage(fileRole) => _ => routes.CheckYourAnswersController.onPageLoad(fileRole)
     case _ => _ => routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole)
   }
 

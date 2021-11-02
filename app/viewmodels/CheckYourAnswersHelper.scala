@@ -28,7 +28,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
 
   def rows(fileRole: FileRole): Seq[SummaryListRow] = {
     Seq(
-      historicDatesRow(userAnswers.get(HistoricDateRequestPage), fileRole)
+      historicDatesRow(userAnswers.get(HistoricDateRequestPage(fileRole)), fileRole)
     ).flatten
   }
 

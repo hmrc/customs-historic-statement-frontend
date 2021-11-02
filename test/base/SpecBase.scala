@@ -17,7 +17,7 @@
 package base
 
 import controllers.actions._
-import models.{HistoricDates, UserAnswers}
+import models.{C79Certificate, HistoricDates, UserAnswers}
 import org.mockito.scalatest.MockitoSugar
 import org.scalatest.OptionValues
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
@@ -46,7 +46,7 @@ trait SpecBase extends AnyWordSpecLike with MockitoSugar with OptionValues with 
   def populatedUserAnswers =
     emptyUserAnswers
       .set(AccountNumber, "123").success.value
-      .set(HistoricDateRequestPage, HistoricDates(LocalDate.of(2019, 10, 1), LocalDate.of(2019, 10, 1))).success.value
+      .set(HistoricDateRequestPage(C79Certificate), HistoricDates(LocalDate.of(2019, 10, 1), LocalDate.of(2019, 10, 1))).success.value
 
   def fakeRequest(method: String = "", path: String = ""): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(method, path).withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]

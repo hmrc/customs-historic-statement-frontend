@@ -52,7 +52,7 @@ class HistoricDateRequestPageController @Inject()(
   def onPageLoad(mode: Mode, fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm: Form[HistoricDates] = request.userAnswers.get(HistoricDateRequestPage) match {
+      val preparedForm: Form[HistoricDates] = request.userAnswers.get(HistoricDateRequestPage(fileRole)) match {
         case None => formProvider(fileRole)
         case Some(value) => formProvider(fileRole).fill(value)
       }
@@ -76,9 +76,9 @@ class HistoricDateRequestPageController @Inject()(
               Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink, request.userAnswers.get(AccountNumber))))
             case None =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(HistoricDateRequestPage, value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(HistoricDateRequestPage(fileRole), value))
                 _ <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(HistoricDateRequestPage, mode, updatedAnswers, fileRole))
+              } yield Redirect(navigator.nextPage(HistoricDateRequestPage(fileRole), mode, updatedAnswers, fileRole))
           }
       )
   }

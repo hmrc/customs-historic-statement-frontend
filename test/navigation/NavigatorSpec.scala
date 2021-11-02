@@ -34,13 +34,13 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go from HistoricDateRequest to CheckYourAnswers" in {
-        navigator.nextPage(HistoricDateRequestPage, NormalMode, emptyUserAnswers, C79Certificate) mustBe routes.CheckYourAnswersController.onPageLoad(C79Certificate)
+        navigator.nextPage(HistoricDateRequestPage(C79Certificate), NormalMode, emptyUserAnswers, C79Certificate) mustBe routes.CheckYourAnswersController.onPageLoad(C79Certificate)
       }
     }
 
     "in Check mode" must {
       "go to CheckYourAnswers from any page" in {
-        navigator.nextPage(HistoricDateRequestPage, CheckMode, emptyUserAnswers, C79Certificate) mustBe routes.CheckYourAnswersController.onPageLoad(C79Certificate)
+        navigator.nextPage(HistoricDateRequestPage(C79Certificate), CheckMode, emptyUserAnswers, C79Certificate) mustBe routes.CheckYourAnswersController.onPageLoad(C79Certificate)
       }
     }
   }

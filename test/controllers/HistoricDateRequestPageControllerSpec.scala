@@ -31,7 +31,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
 
   "onPageLoad" should {
     "return OK when there is no pre-populated data in the user answers" in {
-      val app = applicationBuilder(Some(populatedUserAnswers.remove(HistoricDateRequestPage).success.value)).build()
+      val app = applicationBuilder(Some(populatedUserAnswers.remove(HistoricDateRequestPage(C79Certificate)).success.value)).build()
       val request = fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, C79Certificate).url)
       running(app) {
         val result = route(app, request).value

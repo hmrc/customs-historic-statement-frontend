@@ -35,7 +35,7 @@ object HistoricDocumentRequest {
 
   def fromRequest(fileRole: FileRole)(implicit request: DataRequest[AnyContent]): Option[HistoricDocumentRequest] = {
     for {
-      dates <- request.userAnswers.get(HistoricDateRequestPage)
+      dates <- request.userAnswers.get(HistoricDateRequestPage(fileRole))
       accountNumber = request.userAnswers.get(AccountNumber)
     } yield HistoricDocumentRequest(fileRole, dates.start, dates.end, accountNumber)
   }
