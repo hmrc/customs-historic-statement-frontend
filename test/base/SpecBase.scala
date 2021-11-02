@@ -17,14 +17,14 @@
 package base
 
 import controllers.actions._
-import models.{C79Certificate, HistoricDates, UserAnswers}
+import models.{HistoricDates, UserAnswers}
 import org.mockito.scalatest.MockitoSugar
 import org.scalatest.OptionValues
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import pages.{AccountNumber, HistoricDateRequestPage, RequestedFileRole}
+import pages.{AccountNumber, HistoricDateRequestPage}
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
@@ -46,7 +46,6 @@ trait SpecBase extends AnyWordSpecLike with MockitoSugar with OptionValues with 
   def populatedUserAnswers =
     emptyUserAnswers
       .set(AccountNumber, "123").success.value
-      .set(RequestedFileRole, C79Certificate).success.value
       .set(HistoricDateRequestPage, HistoricDates(LocalDate.of(2019, 10, 1), LocalDate.of(2019, 10, 1))).success.value
 
   def fakeRequest(method: String = "", path: String = ""): FakeRequest[AnyContentAsEmpty.type] =

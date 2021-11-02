@@ -17,7 +17,7 @@
 package models
 
 import models.requests.DataRequest
-import pages.{AccountNumber, HistoricDateRequestPage, RequestedFileRole}
+import pages.{AccountNumber, HistoricDateRequestPage}
 import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.AnyContent
 
@@ -33,10 +33,9 @@ case class HistoricDocumentRequest(
 object HistoricDocumentRequest {
   implicit val format: OFormat[HistoricDocumentRequest] = Json.format[HistoricDocumentRequest]
 
-  def fromRequest(implicit request: DataRequest[AnyContent]): Option[HistoricDocumentRequest] = {
+  def fromRequest(fileRole: FileRole)(implicit request: DataRequest[AnyContent]): Option[HistoricDocumentRequest] = {
     for {
       dates <- request.userAnswers.get(HistoricDateRequestPage)
-      fileRole <- request.userAnswers.get(RequestedFileRole)
       accountNumber = request.userAnswers.get(AccountNumber)
     } yield HistoricDocumentRequest(fileRole, dates.start, dates.end, accountNumber)
   }

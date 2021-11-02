@@ -18,7 +18,6 @@ package controllers.actions
 
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import pages.RequestedFileRole
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 

@@ -19,7 +19,7 @@ package controllers
 import connectors.CustomsSessionCacheConnector
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.{DutyDefermentStatement, FileRole, NormalMode, UserAnswers}
-import pages.{AccountNumber, RequestedFileRole, RequestedLinkId}
+import pages.{AccountNumber, RequestedLinkId}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController

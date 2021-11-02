@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.CustomsFinancialsApiConnector
 import models.C79Certificate
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
-import pages.{AccountNumber, RequestedFileRole}
+import pages.AccountNumber
 import play.api.inject
 import play.api.test.Helpers._
 
@@ -54,8 +54,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
 
     "redirect to Technical difficulties if the user answers aren't populated" in {
       val app = applicationBuilder(userAnswers = Some(
-        emptyUserAnswers.set(AccountNumber, "123").success.value
-          .set(RequestedFileRole, C79Certificate).success.value)).build()
+        emptyUserAnswers.set(AccountNumber, "123").success.value)).build()
       running(app) {
         val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
         val result = route(app, request).value
