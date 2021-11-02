@@ -32,10 +32,8 @@ class DataRequiredActionImpl @Inject()(implicit val executionContext: ExecutionC
       case None =>
         Future.successful(Left(Redirect(routes.SessionExpiredController.onPageLoad())))
       case Some(data) =>
-        data.get(RequestedFileRole) match {
-          case Some(fileRole) => Future.successful(Right(DataRequest(request.request, request.internalId, data, fileRole, request.eori)))
-          case None => Future.successful(Left(Redirect(routes.SessionExpiredController.onPageLoad())))
-        }
+        Future.successful(Right(DataRequest(request.request, request.internalId, data, request.eori)))
+
     }
   }
 }

@@ -39,7 +39,7 @@ class JourneyStartControllerSpec extends SpecBase {
         val request = fakeRequest(GET, routes.JourneyStartController.dutyDeferment("linkId").url).withHeaders(xSessionId -> "something")
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController.onPageLoad(NormalMode).url
+        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController.onPageLoad(NormalMode, DutyDefermentStatement).url
       }
     }
 
@@ -74,7 +74,7 @@ class JourneyStartControllerSpec extends SpecBase {
         val request = fakeRequest(GET, routes.JourneyStartController.nonDutyDeferment(C79Certificate).url)
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController.onPageLoad(NormalMode).url
+        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController.onPageLoad(NormalMode, C79Certificate).url
       }
     }
 
@@ -86,7 +86,7 @@ class JourneyStartControllerSpec extends SpecBase {
         val request = fakeRequest(GET, routes.JourneyStartController.nonDutyDeferment(SecurityStatement).url)
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController.onPageLoad(NormalMode).url
+        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController.onPageLoad(NormalMode, SecurityStatement).url
       }
     }
 

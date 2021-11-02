@@ -32,7 +32,7 @@
 
 @govukLayout(
     pageTitle = Some(messages(s"cf.historic.document.request.review.${fileRole}.title")),
-    backLinkUrl = Some(routes.HistoricDateRequestPageController.onPageLoad(NormalMode).url),
+    backLinkUrl = Some(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url),
     dutyDeferment = fileRole == DutyDefermentStatement
 ) {
 
@@ -52,9 +52,9 @@
 
     @h2("cf.historic.document.request.selected.statements")
 
-    @formHelper(action = routes.CheckYourAnswersController.onSubmit()) {
+    @formHelper(action = routes.CheckYourAnswersController.onSubmit(fileRole)) {
 
-        @summaryList(SummaryList(helper.rows, "govuk-!-margin-bottom-9 govuk-summary-list--wide "))
+        @summaryList(SummaryList(helper.rows(fileRole), "govuk-!-margin-bottom-9 govuk-summary-list--wide "))
 
         @h2("cf.historic.document.request.review.submit")
         @p(Html(messages("cf.historic.document.request.review.response")))

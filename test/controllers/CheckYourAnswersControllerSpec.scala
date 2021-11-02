@@ -32,7 +32,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
   "onPageLoad" should {
     "return Ok" in new Setup {
       running(app) {
-        val request = fakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
+        val request = fakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(C79Certificate).url)
         val result = route(app, request).value
         status(result) mustBe OK
       }
@@ -45,10 +45,10 @@ class CheckYourAnswersControllerSpec extends SpecBase {
         .thenReturn(Future.successful(true))
 
       running(app) {
-        val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
+        val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.ConfirmationPageController.onPageLoad().url
+        redirectLocation(result).value mustBe routes.ConfirmationPageController.onPageLoad(C79Certificate).url
       }
     }
 
@@ -57,7 +57,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
         emptyUserAnswers.set(AccountNumber, "123").success.value
           .set(RequestedFileRole, C79Certificate).success.value)).build()
       running(app) {
-        val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
+        val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
@@ -69,7 +69,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
         .thenReturn(Future.successful(false))
 
       running(app) {
-        val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
+        val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url

@@ -17,7 +17,7 @@
 package viewmodels
 
 import helpers.Formatters
-import models.{CheckMode, HistoricDates, UserAnswers}
+import models.{CheckMode, FileRole, HistoricDates, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -26,13 +26,13 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.Actions
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) extends SummaryListRowHelper {
 
-  def rows: Seq[SummaryListRow] = {
+  def rows(fileRole: FileRole): Seq[SummaryListRow] = {
     Seq(
-      historicDatesRow(userAnswers.get(HistoricDateRequestPage))
+      historicDatesRow(userAnswers.get(HistoricDateRequestPage), fileRole)
     ).flatten
   }
 
-  def historicDatesRow(maybeHistoricDates: Option[HistoricDates]): Option[SummaryListRow] = {
+  def historicDatesRow(maybeHistoricDates: Option[HistoricDates], fileRole: FileRole): Option[SummaryListRow] = {
     maybeHistoricDates.map { historicDates =>
       summaryListRow(
         value = HtmlFormat.escape(
@@ -41,7 +41,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
             Formatters.dateAsMonthAndYear(historicDates.end))
         ).toString,
         actions = Actions(items = Seq(ActionItem(
-          href = controllers.routes.HistoricDateRequestPageController.onPageLoad(CheckMode).url,
+          href = controllers.routes.HistoricDateRequestPageController.onPageLoad(CheckMode, fileRole).url,
           content = span(messages("site.change")),
           visuallyHiddenText = Some(messages("checkYourAnswers.period.change"))
         ))))

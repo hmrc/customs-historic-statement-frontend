@@ -17,11 +17,9 @@
 package controllers
 
 import base.SpecBase
-
-import models.{NormalMode, PostponedVATStatement}
+import models.{C79Certificate, NormalMode, PostponedVATStatement}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.{HistoricDateRequestPage, RequestedFileRole}
-
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import repositories.SessionRepository
@@ -34,7 +32,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
   "onPageLoad" should {
     "return OK when there is no pre-populated data in the user answers" in {
       val app = applicationBuilder(Some(populatedUserAnswers.remove(HistoricDateRequestPage).success.value)).build()
-      val request = fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode).url)
+      val request = fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, C79Certificate).url)
       running(app) {
         val result = route(app, request).value
         status(result) mustBe OK
@@ -43,7 +41,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
 
     "return OK when there is populated data in the user answers" in {
       val app = applicationBuilder(Some(populatedUserAnswers)).build()
-      val request = fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode).url)
+      val request = fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, C79Certificate).url)
       running(app) {
         val result = route(app, request).value
         status(result) mustBe OK
@@ -52,17 +50,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
 
     "return session expired when no user answers provided" in {
       val app = applicationBuilder().build()
-      val request = fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode).url)
-      running(app) {
-        val result = route(app, request).value
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
-      }
-    }
-
-    "return session expired when no fileRole populated in user answers" in {
-      val app = applicationBuilder(Some(emptyUserAnswers)).build()
-      val request = fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode).url)
+      val request = fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, C79Certificate).url)
       running(app) {
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
@@ -75,18 +63,18 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
     "redirect to the check your answers page when valid data has been submitted" in new Setup {
       when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
 
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody("start.month" -> "10", "start.year" -> "2019", "end.month" -> "10", "end.year" -> "2019")
 
       running(app) {
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.CheckYourAnswersController.onPageLoad().url
+        redirectLocation(result).value mustBe routes.CheckYourAnswersController.onPageLoad(C79Certificate).url
       }
     }
 
     "return BAD_REQUEST when the start date is too recent" in new Setup {
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody(
           "start.month" -> earliestMonthInCurrentPeriod.getMonthValue.toString,
           "start.year" -> earliestMonthInCurrentPeriod.getYear.toString,
@@ -102,7 +90,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
     "return OK when the end date is the earliest possible" in new Setup {
       when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
 
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody(
           "start.month" -> lastestMonthInLastPeriod.getMonthValue.toString,
           "start.year" -> lastestMonthInLastPeriod.getYear.toString,
@@ -116,7 +104,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
     }
 
     "return BAD_REQUEST when the start date is earlier than system start date" in new Setup {
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody("start.month" -> "9", "start.year" -> "2019", "end.month" -> "10", "end.year" -> "2019")
 
       running(app) {
@@ -130,8 +118,8 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       val populatedUserAnswers = emptyUserAnswers.set(RequestedFileRole, PostponedVATStatement).success.value
       override val app: Application = applicationBuilder(Some(populatedUserAnswers)).build()
 
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
-        .withFormUrlEncodedBody("start.month" -> "12", "start.year" -> "2020", "end.month" -> "1", "end.year" -> "2021")
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "12", "start.year" -> "2021", "end.month" -> "1", "end.year" -> "2021")
 
       running(app) {
         val result = route(app, request).value
@@ -144,7 +132,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       val populatedUserAnswers = emptyUserAnswers.set(RequestedFileRole, PostponedVATStatement).success.value
       override val app: Application = applicationBuilder(Some(populatedUserAnswers)).build()
 
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody("start.month" -> "1", "start.year" -> "2021", "end.month" -> "1", "end.year" -> "2021")
 
       running(app) {
@@ -154,7 +142,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
     }
 
     "return BAD_REQUEST when invalid data submitted" in new Setup {
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody("start.invalid" -> "10", "start.year" -> "2019", "end.month" -> "10", "end.year" -> "2019")
 
       running(app) {
@@ -164,7 +152,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
     }
 
     "return BAD_REQUEST when the start date is after the end date" in new Setup {
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody("start.month" -> "11", "start.year" -> "2019", "end.month" -> "10", "end.year" -> "2019")
 
       running(app) {
@@ -175,7 +163,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
 
     "return BAD_REQUEST when the requested data exceeds 6 months" in new Setup {
 
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody("start.month" -> "10", "start.year" -> "2019", "end.month" -> "5", "end.year" -> "2020")
 
       running(app) {
@@ -194,7 +182,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         inject.bind[Clock].toInstance(stubClock)
       ).build()
 
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode).url)
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody("start.month" -> "10", "start.year" -> "2019", "end.month" -> "10", "end.year" -> "2019")
 
       running(app) {

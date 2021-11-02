@@ -27,5 +27,4 @@ case class OptionalDataRequest[A](request: Request[A],
 case class DataRequest[A](request: Request[A],
                           internalId: String,
                           userAnswers: UserAnswers,
-                          fileRole: FileRole,
                           eori: String) extends WrappedRequest[A](request)
