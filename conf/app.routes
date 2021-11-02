@@ -1,8 +1,8 @@
 # microservice specific routes
 
-->          /govuk-frontend                               govuk.Routes
+->          /govuk-frontend                              govuk.Routes
 
-->          /hmrc-frontend                                hmrcfrontend.Routes
+->          /hmrc-frontend                               hmrcfrontend.Routes
 
 GET         /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
 
@@ -17,16 +17,16 @@ GET         /technical-difficulties                      controllers.TechnicalDi
 GET         /start-journey/duty-deferment/:linkId        controllers.JourneyStartController.dutyDeferment(linkId: String)
 GET         /start-journey/:fileRole                     controllers.JourneyStartController.nonDutyDeferment(fileRole: FileRole)
 
-GET         /request-date                                controllers.HistoricDateRequestPageController.onPageLoad(mode: Mode = NormalMode)
-POST        /request-date                                controllers.HistoricDateRequestPageController.onSubmit(mode: Mode = NormalMode)
+GET         /:fileRole/request-date                      controllers.HistoricDateRequestPageController.onPageLoad(mode: Mode = NormalMode, fileRole: FileRole)
+POST        /:fileRole/request-date                      controllers.HistoricDateRequestPageController.onSubmit(mode: Mode = NormalMode, fileRole: FileRole)
 
-GET         /change-request-date                         controllers.HistoricDateRequestPageController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-request-date                         controllers.HistoricDateRequestPageController.onSubmit(mode: Mode = CheckMode)
+GET         /:fileRole/change-request-date               controllers.HistoricDateRequestPageController.onPageLoad(mode: Mode = CheckMode, fileRole: FileRole)
+POST        /:fileRole/change-request-date               controllers.HistoricDateRequestPageController.onSubmit(mode: Mode = CheckMode, fileRole: FileRole)
 
-GET         /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad
-POST        /check-your-answers                          controllers.CheckYourAnswersController.onSubmit
+GET         /:fileRole/selected-statements               controllers.CheckYourAnswersController.onPageLoad(fileRole: FileRole)
+POST        /:fileRole/selected-statements               controllers.CheckYourAnswersController.onSubmit(fileRole: FileRole)
 
-GET         /confirmation                                controllers.ConfirmationPageController.onPageLoad()
+GET         /:fileRole/confirmation                      controllers.ConfirmationPageController.onPageLoad(fileRole: FileRole)
 
 GET         /requested/:fileRole                         controllers.HistoricStatementsController.historicStatements(fileRole: FileRole)
 GET         /requested/duty-deferment/:linkId            controllers.HistoricStatementsController.historicStatementsDutyDeferment(linkId: String)

@@ -46,7 +46,7 @@
             }
     }
 
-    @formHelper(action = HistoricDateRequestPageController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = HistoricDateRequestPageController.onSubmit(mode, fileRole), 'autoComplete -> "off") {
         @errorSummary(form.errors)
 
         @h1(s"cf.historic.document.request.heading.${fileRole}")

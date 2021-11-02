@@ -50,7 +50,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
       val appConfig = app.injector.instanceOf[FrontendAppConfig]
 
       running(app) {
-        val request = fakeRequest(GET, routes.ConfirmationPageController.onPageLoad().url)
+        val request = fakeRequest(GET, routes.ConfirmationPageController.onPageLoad(C79Certificate).url)
         val result = route(app, request).value
 
         status(result) mustEqual OK

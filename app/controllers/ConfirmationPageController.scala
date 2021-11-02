@@ -19,6 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import connectors.CustomsDataStoreConnector
 import controllers.actions._
+import models.FileRole
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -39,12 +40,12 @@ class ConfirmationPageController @Inject()(
                                             view: ConfirmationPageView
                                           )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
       for {
         email <- customsDataStoreConnector.getEmail(request.eori)
         _ <- sessionRepository.clear(request.internalId)
-        returnLink = appConfig.returnLink(request.fileRole, request.userAnswers)
-      } yield Ok(view(email, request.fileRole, returnLink))
+        returnLink = appConfig.returnLink(fileRole, request.userAnswers)
+      } yield Ok(view(email, fileRole, returnLink))
   }
 }

@@ -26,19 +26,19 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class Navigator @Inject()() {
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case HistoricDateRequestPage => _ => routes.CheckYourAnswersController.onPageLoad()
-    case _ => _ => routes.HistoricDateRequestPageController.onPageLoad(NormalMode)
+  private def normalRoutes(fileRole: FileRole): Page => UserAnswers => Call = {
+    case HistoricDateRequestPage => _ => routes.CheckYourAnswersController.onPageLoad(fileRole)
+    case _ => _ => routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole)
   }
 
-  private val checkRouteMap: Page => UserAnswers => Call = {
-    case _ => _ => routes.CheckYourAnswersController.onPageLoad()
+  private def checkRouteMap(fileRole: FileRole): Page => UserAnswers => Call = {
+    case _ => _ => routes.CheckYourAnswersController.onPageLoad(fileRole)
   }
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
+  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, fileRole: FileRole): Call = mode match {
     case NormalMode =>
-      normalRoutes(page)(userAnswers)
+      normalRoutes(fileRole)(page)(userAnswers)
     case CheckMode =>
-      checkRouteMap(page)(userAnswers)
+      checkRouteMap(fileRole)(page)(userAnswers)
   }
 }

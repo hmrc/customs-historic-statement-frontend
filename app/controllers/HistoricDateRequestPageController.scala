@@ -49,36 +49,36 @@ class HistoricDateRequestPageController @Inject()(
                                                    view: HistoricDateRequestPageView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode, fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       val preparedForm: Form[HistoricDates] = request.userAnswers.get(HistoricDateRequestPage) match {
-        case None => formProvider(request.fileRole)
-        case Some(value) => formProvider(request.fileRole).fill(value)
+        case None => formProvider(fileRole)
+        case Some(value) => formProvider(fileRole).fill(value)
       }
 
-      val backLink = appConfig.returnLink(request.fileRole, request.userAnswers)
+      val backLink = appConfig.returnLink(fileRole, request.userAnswers)
 
-      Ok(view(preparedForm, mode, request.fileRole, backLink, request.userAnswers.get(AccountNumber)))
+      Ok(view(preparedForm, mode, fileRole, backLink, request.userAnswers.get(AccountNumber)))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode, fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      val backLink = appConfig.returnLink(request.fileRole, request.userAnswers)
+      val backLink = appConfig.returnLink(fileRole, request.userAnswers)
 
-      formProvider(request.fileRole).bindFromRequest().fold(
+      formProvider(fileRole).bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, request.fileRole, backLink, request.userAnswers.get(AccountNumber)))),
+          Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink, request.userAnswers.get(AccountNumber)))),
         value =>
-          customValidation(value, formProvider(request.fileRole), request.fileRole) match {
+          customValidation(value, formProvider(fileRole), fileRole) match {
             case Some(formWithErrors) =>
-              Future.successful(BadRequest(view(formWithErrors, mode, request.fileRole, backLink, request.userAnswers.get(AccountNumber))))
+              Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink, request.userAnswers.get(AccountNumber))))
             case None =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(HistoricDateRequestPage, value))
                 _ <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(HistoricDateRequestPage, mode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(HistoricDateRequestPage, mode, updatedAnswers, fileRole))
           }
       )
   }

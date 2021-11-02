@@ -43,9 +43,8 @@ class JourneyStartController @Inject()(customsSessionCacheConnector: CustomsSess
             for {
               userAnswersAccountNumber <- Future.fromTry(userAnswers.set(AccountNumber, accountNumber))
               userAnswersLinkId <- Future.fromTry(userAnswersAccountNumber.set(RequestedLinkId, linkId))
-              updatedUserAnswers <- Future.fromTry(userAnswersLinkId.set(RequestedFileRole, DutyDefermentStatement))
-              _ <- sessionRepository.set(updatedUserAnswers)
-            } yield Redirect(routes.HistoricDateRequestPageController.onPageLoad(NormalMode))
+              _ <- sessionRepository.set(userAnswersLinkId)
+            } yield Redirect(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, DutyDefermentStatement))
           case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
         }
       case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
@@ -58,9 +57,8 @@ class JourneyStartController @Inject()(customsSessionCacheConnector: CustomsSess
       case _ =>
         val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId))
         for {
-          updatedUserAnswers <- Future.fromTry(userAnswers.set(RequestedFileRole, fileRole))
-          _ <- sessionRepository.set(updatedUserAnswers)
-        } yield Redirect(routes.HistoricDateRequestPageController.onPageLoad(NormalMode))
+          _ <- sessionRepository.set(userAnswers)
+        } yield Redirect(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole))
     }
   }
 }

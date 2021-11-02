@@ -19,7 +19,7 @@ package controllers
 import com.google.inject.Inject
 import connectors.CustomsFinancialsApiConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import models.HistoricDocumentRequest
+import models.{FileRole, HistoricDocumentRequest}
 import pages.AccountNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -39,20 +39,20 @@ class CheckYourAnswersController @Inject()(
                                             customsFinancialsApiConnector: CustomsFinancialsApiConnector
                                           )(implicit execution: ExecutionContext) extends FrontendController(controllerComponents) with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
       val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
       val maybeAccountNumber = request.userAnswers.get(AccountNumber)
-      Ok(view(checkYourAnswersHelper, request.fileRole, maybeAccountNumber))
+      Ok(view(checkYourAnswersHelper, fileRole, maybeAccountNumber))
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
       HistoricDocumentRequest.fromRequest match {
         case Some(value) =>
           customsFinancialsApiConnector.postHistoricDocumentRequest(value).map { successful =>
             if (successful) {
-              Redirect(routes.ConfirmationPageController.onPageLoad())
+              Redirect(routes.ConfirmationPageController.onPageLoad(fileRole))
             } else {
               Redirect(routes.TechnicalDifficultiesController.onPageLoad())
             }
