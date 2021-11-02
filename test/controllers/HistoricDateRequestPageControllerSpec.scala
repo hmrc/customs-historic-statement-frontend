@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import models.{C79Certificate, NormalMode}
+import models.{C79Certificate, NormalMode, PostponedVATStatement}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.HistoricDateRequestPage
 import play.api.test.Helpers._
@@ -116,8 +116,8 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
     "return BAD_REQUEST when the start date is earlier than postponed VAT date" in new Setup {
       override val app: Application = applicationBuilder(Some(populatedUserAnswers)).build()
 
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
-        .withFormUrlEncodedBody("start.month" -> "12", "start.year" -> "2021", "end.month" -> "1", "end.year" -> "2021")
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
+        .withFormUrlEncodedBody("start.month" -> "12", "start.year" -> "2020", "end.month" -> "1", "end.year" -> "2021")
 
       running(app) {
         val result = route(app, request).value
