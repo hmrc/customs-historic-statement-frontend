@@ -14,12 +14,12 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.GovukWrapper
 @import viewmodels.CheckYourAnswersHelper
 @import viewmodels.SummaryList
+@import views.html.templates.Layout
 
 @this(
-        govukLayout: GovukWrapper,
+        layout: Layout,
         button: components.button,
         summaryList: components.summaryList,
         formHelper: FormWithCSRF,
@@ -30,9 +30,9 @@
 
 @(helper: CheckYourAnswersHelper, fileRole: FileRole, maybeDan: Option[String])(implicit request: Request[_], messages: Messages)
 
-@govukLayout(
+@layout(
     pageTitle = Some(messages(s"cf.historic.document.request.review.${fileRole}.title")),
-    backLinkUrl = Some(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url),
+    backLink = Some(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url),
     dutyDeferment = fileRole == DutyDefermentStatement
 ) {
 

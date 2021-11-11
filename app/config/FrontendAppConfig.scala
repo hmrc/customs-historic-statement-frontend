@@ -57,6 +57,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   lazy val registerCdsUrl: String = configuration.get[String]("urls.cdsRegisterUrl")
   lazy val subscribeCdsUrl: String = configuration.get[String]("urls.cdsSubscribeUrl")
   lazy val financialsHomepage: String = configuration.get[String]("urls.financialsHomepage")
+  lazy val helpMakeGovUkBetterUrl: String = configuration.get[String]("urls.helpMakeGovUkBetterUrl")
 
   private lazy val c79ReturnLink: String = configuration.get[String]("urls.c79Return")
   private lazy val adjustmentsReturnLink: String = configuration.get[String]("urls.adjustmentsReturn")

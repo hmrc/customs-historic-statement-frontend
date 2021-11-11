@@ -15,11 +15,11 @@
  *@
 
 @import viewmodels.VatViewModel
-@import views.html.templates.GovukWrapper
 @import models.FileFormat.Pdf
+@import views.html.templates.Layout
 
 @this(
-        mainTemplate: GovukWrapper,
+        layout: Layout,
         download_link: components.download_link,
         missing_documents_guidance: components.missing_documents_guidance
 )
@@ -28,7 +28,7 @@
 
 @histories = @{model.certificatesForAllEoris.indices}
 
-@mainTemplate(pageTitle = Some(messages("cf.import-vat.requested.title")), backLinkUrl = Some(backLink)) {
+@layout(pageTitle = Some(messages("cf.import-vat.requested.title")), backLink = Some(backLink)) {
 
     <h1 id="requested-import-vat-certificates-heading" class="govuk-heading-xl govuk-!-margin-bottom-3">@messages("cf.import-vat.requested.title")</h1>
 

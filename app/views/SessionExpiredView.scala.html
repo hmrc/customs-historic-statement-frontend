@@ -14,18 +14,18 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.GovukWrapper
 @import config.FrontendAppConfig
+@import views.html.templates.Layout
 
 @this(
-main_template: GovukWrapper,
+layout: Layout,
         h1: components.h1,
         button: components.button
 )
 
 @()(implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
 
- @main_template(Some(titleNoForm("session_expired.title")), timeout = false, backLinkUrl = Some(appConfig.financialsHomepage)) {
+ @layout(Some(titleNoForm("session_expired.title")), backLink = Some(appConfig.financialsHomepage)) {
 
   @h1(messages("session_expired.heading"))
 

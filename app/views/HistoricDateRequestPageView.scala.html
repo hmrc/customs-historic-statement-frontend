@@ -14,11 +14,11 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.GovukWrapper
+@import views.html.templates.Layout
 
 
 @this(
-        main_template: GovukWrapper,
+        layout: Layout,
         formHelper: FormWithCSRF,
         inputDate: components.inputDate,
         button: components.button,
@@ -27,12 +27,11 @@
         p: components.p
 )
 
-
 @(form: Form[_], mode: Mode, fileRole: FileRole, returnUrl: String, maybeDan: Option[String])(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@layout(
     pageTitle = Some(title(form, messages(s"cf.historic.document.request.${fileRole}.title"))),
-    backLinkUrl = Some(returnUrl),
+    backLink = Some(returnUrl),
     dutyDeferment = fileRole == DutyDefermentStatement
 ) {
     @maybeDan.map{ dan =>

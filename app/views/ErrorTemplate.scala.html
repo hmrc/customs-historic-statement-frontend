@@ -14,14 +14,16 @@
  * limitations under the License.
  *@
 
+@import views.html.templates.Layout
+
 @this(
-    govuk_wrapper: templates.GovukWrapper,
+    layout: Layout,
         h1:components.h1
 )
 
 @(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
-@govuk_wrapper(Some(titleNoForm(pageTitle)), backLink = false) {
+@layout(Some(titleNoForm(pageTitle))) {
 
     @h1(messages(heading))
 
