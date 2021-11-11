@@ -14,21 +14,20 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.GovukWrapper
 @import config.FrontendAppConfig
+@import views.html.templates.Layout
 @import uk.gov.hmrc.auth.core.retrieve.Email
 
 @this(
-main_template: GovukWrapper
+    layout: Layout
 )
 
 @(email: Option[Email], fileRole: FileRole, returnLink: String)(implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
 
-@main_template(
-    pageTitle = Some(messages("cf.accounts.title")), backLink = false,
+@layout(
+    pageTitle = Some(messages("cf.accounts.title")),
     dutyDeferment = fileRole == DutyDefermentStatement
     ) {
-
     <div class="govuk-panel govuk-panel--confirmation">
         <h1 class="govuk-panel__title govuk-panel__title--confirmation" id="confirmation-text">@messages(s"cf.historic.document.request.confirmation.panel-text.${fileRole.name}")</h1>
     </div>

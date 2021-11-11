@@ -14,20 +14,19 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.GovukWrapper
 @import helpers.Formatters.dateAsDayMonthAndYear
 @import models.FileFormat.Pdf
+@import views.html.templates.Layout
 
 @this(
-        mainTemplate: GovukWrapper,
+        layout: Layout,
         download_link: components.download_link,
         missing_documents_guidance: components.missing_documents_guidance
 )
 
-
 @(statements: Seq[SecurityStatementsForEori], backLink: String)(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(pageTitle = Some(messages("cf.security-statements.requested.title")), backLinkUrl = Some(backLink)) {
+@layout(pageTitle = Some(messages("cf.security-statements.requested.title")), backLink = Some(backLink)) {
 
 <h1 id="security-statements-heading" class="govuk-heading-xl govuk-!-margin-bottom-3">@messages("cf.security-statements.requested.title")</h1>
 

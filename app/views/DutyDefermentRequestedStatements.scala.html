@@ -15,21 +15,21 @@
  *@
 
 @import viewmodels.DutyDefermentAccountViewModel
-@import views.html.templates.GovukWrapper
 @import helpers.Formatters
 @import models.DDStatementType.Supplementary
 @import models.DDStatementType.Excise
 @import models.FileFormat.Pdf
+@import views.html.templates.Layout
 
 @this(
-    mainTemplate: GovukWrapper,
+    layout: Layout,
     missing_documents_guidance: components.missing_documents_guidance,
     duty_deferment_file: components.duty_deferment_file
 )
 
 @(model: DutyDefermentAccountViewModel, backLink: String)( implicit request: Request[_], messages: Messages)
 
-@mainTemplate(pageTitle = Some(messages("cf.account.detail.requested.title")), backLinkUrl = Some(backLink), dutyDeferment = true) {
+@layout(pageTitle = Some(messages("cf.account.detail.requested.title")), backLink = Some(backLink), dutyDeferment = true) {
 
     <span class="govuk-caption-xl" id="eori-heading">
         @messages("cf.account.detail.requested.deferment-account-secondary-heading")

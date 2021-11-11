@@ -14,14 +14,13 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.GovukWrapper
 @import models.FileFormat.Pdf
 @import viewmodels.PostponedVatViewModel
 @import models.PostponedVatStatementFile
-@import java.time.LocalDate
+@import views.html.templates.Layout
 
 @this(
-mainTemplate: GovukWrapper,
+layout: Layout,
 download_link: components.download_link2,
 missing_documents_guidance: components.missing_documents_guidance
 )
@@ -31,7 +30,7 @@ missing_documents_guidance: components.missing_documents_guidance
 @histories = @{model.statementsForAllEoris.indices}
 @sources = @{Seq("CDS", "CHIEF")}
 
-@mainTemplate(pageTitle = Some(messages("cf.import-postponed-vat.requested.title")), backLinkUrl = Some(backLink)) {
+@layout(pageTitle = Some(messages("cf.import-postponed-vat.requested.title")), backLink = Some(backLink)) {
 
     <h1 id="requested-import-postponed-vat-statements-heading" class="govuk-heading-xl govuk-!-margin-bottom-3">@messages("cf.import-postponed-vat.requested.title")</h1>
 
