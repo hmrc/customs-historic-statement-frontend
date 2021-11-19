@@ -64,7 +64,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
+        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad.url
       }
     }
   }
@@ -83,7 +83,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
       val request = fakeRequest(GET, routes.HistoricStatementsController.historicStatementsDutyDeferment("linkId").url).withHeaders("X-Session-Id" -> "sessionId")
       val result = route(app, request).value
       status(result) mustBe SEE_OTHER
-      redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
     }
 
     "return Unauthorised when sessionId is not present" in {
