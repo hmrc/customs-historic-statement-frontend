@@ -26,7 +26,7 @@ class LogoutControllerSpec extends SpecBase {
 
   "logout" should {
     "redirect the user to logout with a continue url of the feedback survey" in new Setup {
-      val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logout().url)
+      val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logout.url)
       running(app) {
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
@@ -37,7 +37,7 @@ class LogoutControllerSpec extends SpecBase {
 
   "logoutNoSurvey" should {
     "redirect the user to logout with no feedback survey continueUrl" in new Setup {
-      val request = fakeRequest(GET, routes.LogoutController.logoutNoSurvey().url)
+      val request = fakeRequest(GET, routes.LogoutController.logoutNoSurvey.url)
       running(app) {
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER

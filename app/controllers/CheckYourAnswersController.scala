@@ -54,10 +54,10 @@ class CheckYourAnswersController @Inject()(
             if (successful) {
               Redirect(routes.ConfirmationPageController.onPageLoad(fileRole))
             } else {
-              Redirect(routes.TechnicalDifficultiesController.onPageLoad())
+              Redirect(routes.TechnicalDifficultiesController.onPageLoad)
             }
           }
-        case None => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+        case None => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
       }
   }
 }

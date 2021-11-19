@@ -59,7 +59,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
         val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
+        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad.url
       }
     }
 
@@ -71,7 +71,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
         val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
+        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad.url
       }
     }
   }

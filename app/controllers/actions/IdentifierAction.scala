@@ -54,9 +54,9 @@ class AuthenticatedIdentifierAction @Inject()(
       case _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue_url" -> Seq(config.loginContinueUrl)))
       case _: InsufficientEnrolments =>
-        Redirect(routes.UnauthorisedController.onPageLoad())
+        Redirect(routes.UnauthorisedController.onPageLoad)
       case _ => {
-        Redirect(routes.TechnicalDifficultiesController.onPageLoad())
+        Redirect(routes.TechnicalDifficultiesController.onPageLoad)
       }
     }
   }
