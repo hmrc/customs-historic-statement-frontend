@@ -81,7 +81,7 @@ cf.historic.document.request.whichEndDate.SecurityStatement=ar gyfer pa ddyddiad
 cf.historic.document.request.whichEndDate.DutyDefermentStatement=ar gyfer pa ddyddiad dod i ben y mae angen datganiadau gohirio tollau arnoch?
 cf.historic.document.request.date.hint=Er enghraifft, 3 2019
 cf.historic.document.request.date.pvat.hint=Er enghraifft, 3 2021
-cf.historic.document.request.selected.statements=Datganiadau dewisol
+cf.historic.document.request.selected.certificates=Tystysgrifau a ddewiswyd
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?
 cf.historic.document.request.whichStartDate.C79Certificate.hidden = pa ddyddiad dechrau sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?
