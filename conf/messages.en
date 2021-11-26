@@ -86,6 +86,7 @@ cf.historic.document.request.whichEndDate.DutyDefermentStatement=which end date 
 cf.historic.document.request.date.hint=For example, 3 2019
 cf.historic.document.request.date.pvat.hint=For example, 3 2021
 
+cf.historic.document.request.selected.statements=Selected statements
 cf.historic.document.request.selected.certificates=Selected certificates
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = what end date do you need Import VAT certificates?
@@ -97,7 +98,8 @@ cf.historic.document.request.whichStartDate.DutyDefermentStatement.hidden = what
 cf.historic.document.request.whichEndDate.PostponedVATStatement.hidden = what end date do you need Import postponed VAT statements?
 cf.historic.document.request.whichStartDate.PostponedVATStatement.hidden = what start date do you need Import postponed VAT statements?
 
-cf.historic.document.request.review.heading=Request older certificates
+cf.historic.document.request.review.certificates.heading=Request older certificates
+cf.historic.document.request.review.heading=Request older statements
 cf.historic.document.request.review.submit=Submit your request
 cf.historic.document.request.review.response=We aim to respond to your request within 48 hours.
 cf.historic.document.request.review.send=Send request
