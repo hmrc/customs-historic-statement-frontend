@@ -82,6 +82,7 @@ cf.historic.document.request.whichEndDate.DutyDefermentStatement=ar gyfer pa ddy
 cf.historic.document.request.date.hint=Er enghraifft, 3 2019
 cf.historic.document.request.date.pvat.hint=Er enghraifft, 3 2021
 cf.historic.document.request.selected.statements=Datganiadau dewisol
+cf.historic.document.request.selected.certificates=Tystysgrifau a ddewiswyd
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?
 cf.historic.document.request.whichStartDate.C79Certificate.hidden = pa ddyddiad dechrau sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?
@@ -92,7 +93,8 @@ cf.historic.document.request.whichStartDate.DutyDefermentStatement.hidden = pa d
 cf.historic.document.request.whichEndDate.PostponedVATStatement.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer datganiadau TAW mewnforio?
 cf.historic.document.request.whichStartDate.PostponedVATStatement.hidden = pa ddyddiad dechrau sydd ei angen arnoch ar gyfer datganiadau TAW mewnforio?
 
-cf.historic.document.request.review.heading=Cais am dystysgrifau hŷn
+cf.historic.document.request.review.heading=Gofyn am ddatganiadau hŷn
+cf.historic.document.request.review.certificates.heading=Cais am dystysgrifau hŷn
 cf.historic.document.request.review.submit=Cyflwyno’ch cais
 cf.historic.document.request.review.response=Ein bwriad yw ateb eich cais cyn pen 48 awr.
 cf.historic.document.request.review.send=Anfon cais
