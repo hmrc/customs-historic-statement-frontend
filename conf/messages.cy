@@ -53,10 +53,10 @@ service.technical-difficulties.p = Rhowch gynnig arall arni mewn ychydig o funud
 cf.accounts.title=Eich cyfrifon ariannol ar gyfer y tollau
 
 #Historic Document Request
-cf.historic.document.request.review.PostponedVATStatement.title=Rhowch gynnig arall arni yn nes ymlaen.
-cf.historic.document.request.review.C79Certificate.title=Rydych yn gofyn am dystysgrifau TAW mewnforio (C79)
-cf.historic.document.request.review.SecurityStatement.title=Rydych yn gofyn am hysbysiad o ddatganiadau addasu
-cf.historic.document.request.review.DutyDefermentStatement.title=Rydych yn gofyn am ddatganiadau gohirio tollau
+cf.historic.document.request.review.PostponedVATStatement.title=Cais am ddatganiadau ar gyfer TAW mewnforio ohiriedig
+cf.historic.document.request.review.C79Certificate.title=Cais am dystysgrifau TAW mewnforio
+cf.historic.document.request.review.SecurityStatement.title=Cais am hysbysiad o ddatganiadau addasu
+cf.historic.document.request.review.DutyDefermentStatement.title=Cais am ddatganiadau gohirio tollau
 cf.historic.document.request.C79Certificate.title=Pa dystysgrifau TAW mewnforio (C79) sydd eu hangen arnoch?
 cf.historic.document.request.SecurityStatement.title=Pa hysbysiad o ddatganiadau addasu sydd eu hangen arnoch?
 cf.historic.document.request.DutyDefermentStatement.title=Pa ddatganiadau gohirio tollau sydd eu hangen arnoch?
@@ -93,8 +93,11 @@ cf.historic.document.request.whichStartDate.DutyDefermentStatement.hidden = pa d
 cf.historic.document.request.whichEndDate.PostponedVATStatement.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer datganiadau TAW mewnforio?
 cf.historic.document.request.whichStartDate.PostponedVATStatement.hidden = pa ddyddiad dechrau sydd ei angen arnoch ar gyfer datganiadau TAW mewnforio?
 
-cf.historic.document.request.review.heading=Gofyn am ddatganiadau hŷn
-cf.historic.document.request.review.certificates.heading=Cais am dystysgrifau hŷn
+cf.historic.document.request.review.SecurityStatement.heading=Cais am hysbysiad o ddatganiadau addasu
+cf.historic.document.request.review.PostponedVATStatement.heading=Cais am ddatganiadau ar gyfer TAW mewnforio ohiriedig
+cf.historic.document.request.review.DutyDefermentStatement.heading=Cais am ddatganiadau gohirio tollau
+cf.historic.document.request.review.C79Certificate.heading=Cais am dystysgrifau TAW mewnforio
+
 cf.historic.document.request.review.submit=Cyflwyno’ch cais
 cf.historic.document.request.review.response=Ein bwriad yw ateb eich cais cyn pen 48 awr.
 cf.historic.document.request.review.send=Anfon cais

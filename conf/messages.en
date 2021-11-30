@@ -57,10 +57,10 @@ service.technical-difficulties.p = Please try again in a few minutes.
 cf.accounts.title=Your customs financial accounts
 
 #Historic Document Request
-cf.historic.document.request.review.PostponedVATStatement.title=You are requesting import Postponed VAT statements
-cf.historic.document.request.review.C79Certificate.title=You are requesting import VAT certificates (C79)
-cf.historic.document.request.review.SecurityStatement.title=You are requesting notification of adjustment statements
-cf.historic.document.request.review.DutyDefermentStatement.title=You are requesting duty deferment statements
+cf.historic.document.request.review.PostponedVATStatement.title=Request postponed import VAT statements
+cf.historic.document.request.review.C79Certificate.title=Request import VAT certificates
+cf.historic.document.request.review.SecurityStatement.title=Request notification of adjustment statements
+cf.historic.document.request.review.DutyDefermentStatement.title=Request duty deferment statements
 cf.historic.document.request.C79Certificate.title=Which import VAT certificates (C79) do you need?
 cf.historic.document.request.SecurityStatement.title=Which notification of adjustment statements do you need?
 cf.historic.document.request.DutyDefermentStatement.title=Which duty deferment statements do you need?
@@ -98,8 +98,11 @@ cf.historic.document.request.whichStartDate.DutyDefermentStatement.hidden = what
 cf.historic.document.request.whichEndDate.PostponedVATStatement.hidden = what end date do you need Import postponed VAT statements?
 cf.historic.document.request.whichStartDate.PostponedVATStatement.hidden = what start date do you need Import postponed VAT statements?
 
-cf.historic.document.request.review.certificates.heading=Request older certificates
-cf.historic.document.request.review.heading=Request older statements
+cf.historic.document.request.review.SecurityStatement.heading=Request notification of adjustment statements
+cf.historic.document.request.review.PostponedVATStatement.heading=Request postponed import VAT statements
+cf.historic.document.request.review.DutyDefermentStatement.heading=Request duty deferment statements
+cf.historic.document.request.review.C79Certificate.heading=Request import VAT certificates
+
 cf.historic.document.request.review.submit=Submit your request
 cf.historic.document.request.review.response=We aim to respond to your request within 48 hours.
 cf.historic.document.request.review.send=Send request
