@@ -54,8 +54,12 @@
         }
     }
 
-
-    @h2("cf.historic.document.request.selected.certificates")
+    @{
+        fileRole match {
+            case C79Certificate => h2("cf.historic.document.request.selected.certificates")
+            case _ => h2("cf.historic.document.request.selected.statements")
+        }
+    }
 
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(fileRole)) {
 
