@@ -19,13 +19,13 @@
 @import views.html.templates.Layout
 
 @this(
-        layout: Layout,
-        button: components.button,
-        summaryList: components.summaryList,
-        formHelper: FormWithCSRF,
-        h1: components.h1,
-        h2: components.h2,
-        p: components.p
+layout: Layout,
+button: components.button,
+summaryList: components.summaryList,
+formHelper: FormWithCSRF,
+h1: components.h1,
+h2: components.h2,
+p: components.p
 )
 
 @(helper: CheckYourAnswersHelper, fileRole: FileRole, maybeDan: Option[String])(implicit request: Request[_], messages: Messages)
@@ -47,12 +47,7 @@
         }
     }
 
-    @{
-        fileRole match {
-            case C79Certificate => h1("cf.historic.document.request.review.certificates.heading")
-            case _ => h1("cf.historic.document.request.review.heading")
-        }
-    }
+    @h1(messages(s"cf.historic.document.request.review.${fileRole}.heading"))
 
     @{
         fileRole match {
