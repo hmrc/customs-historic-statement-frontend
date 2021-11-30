@@ -79,8 +79,8 @@ cf.historic.document.request.whichEndDate.C79Certificate=ar gyfer pa ddyddiad do
 cf.historic.document.request.whichEndDate.PostponedVATStatement=ar gyfer pa ddyddiad dod i ben y mae angen tystysgrifau TAW o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.SecurityStatement=ar gyfer pa ddyddiad dod i ben y mae angen hysbysiad o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement=ar gyfer pa ddyddiad dod i ben y mae angen datganiadau gohirio tollau arnoch?
-cf.historic.document.request.date.hint=Er enghraifft, 3 2019
-cf.historic.document.request.date.pvat.hint=Er enghraifft, 3 2021
+cf.historic.document.request.date.hint=Er enghraifft, 3 2019.
+cf.historic.document.request.date.pvat.hint=Er enghraifft, 3 2021.
 cf.historic.document.request.selected.statements=Datganiadau dewisol
 cf.historic.document.request.selected.certificates=Tystysgrifau a ddewiswyd
 
