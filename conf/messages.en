@@ -117,7 +117,7 @@ cf.historic.document.request.confirmation.panel-text.C79Certificate=We received 
 cf.historic.document.request.confirmation.panel-text.SecurityStatement=We received your request for statements
 cf.historic.document.request.confirmation.panel-text.PostponedVATStatement=We received your request for statements
 cf.historic.document.request.confirmation.C79Certificate.link-text=Back to import VAT certificates (C79)
-cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Back to Duty deferment statements
+cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Back to duty deferment statements
 cf.historic.document.request.confirmation.SecurityStatement.link-text=Back to Notification of adjustment statements
 cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Back to Postponed import VAT account
 cf.historic.document.request.confirmation.body-text.SecurityStatement=We will send an email to {0} when your statements are ready. This will usually be within 48 hours.
@@ -135,7 +135,7 @@ cf.historic.document.request.form.error.start.date-number-invalid=Enter a valid 
 cf.historic.document.request.form.error.end.date-number-invalid=Enter a valid to date
 cf.historic.document.request.link.label.C79Certificate=Back to import VAT certificates (C79)
 cf.historic.document.request.link.label.SecurityStatement=Back to Notification of adjustment statements
-cf.historic.document.request.link.label.DutyDefermentStatement=Back to Duty deferment statements
+cf.historic.document.request.link.label.DutyDefermentStatement=Back to duty deferment statements
 
 cf.security-statements.requested.title=Requested notification of adjustment statements
 cf.security-statements.requested.available.text=Requested statements are available to view for 10 days. We can only provide these in PDF format.
