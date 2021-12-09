@@ -56,7 +56,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(Some(Email("some@email.com")), C79Certificate, "http://localhost:9876/customs/payment-records/import-vat")(request, messages(app), appConfig).toString
+          view(Some(Email("some@email.com")), C79Certificate, "http://localhost:9398/customs/documents/import-vat")(request, messages(app), appConfig).toString
       }
 
     }
