@@ -29,7 +29,7 @@ class FrontendAppConfigSpec extends SpecBase {
       val app = applicationBuilder().build()
       val config = app.injector.instanceOf[FrontendAppConfig]
       running(app){
-        config.returnLink(SecurityStatement, emptyUserAnswers) mustBe "http://localhost:9876/customs/payment-records/adjustments"
+        config.returnLink(SecurityStatement, emptyUserAnswers) mustBe "http://localhost:9398/customs/documents/adjustments"
       }
     }
 
@@ -37,7 +37,7 @@ class FrontendAppConfigSpec extends SpecBase {
       val app = applicationBuilder().build()
       val config = app.injector.instanceOf[FrontendAppConfig]
       running(app) {
-        config.returnLink(C79Certificate, emptyUserAnswers) mustBe "http://localhost:9876/customs/payment-records/import-vat"
+        config.returnLink(C79Certificate, emptyUserAnswers) mustBe "http://localhost:9398/customs/documents/import-vat"
       }
     }
 
@@ -56,7 +56,7 @@ class FrontendAppConfigSpec extends SpecBase {
       val config = app.injector.instanceOf[FrontendAppConfig]
       running(app) {
         intercept[Exception] {
-          config.returnLink(DutyDefermentStatement, emptyUserAnswers) mustBe "http://localhost:9876/customs/payment-records/import-vat"
+          config.returnLink(DutyDefermentStatement, emptyUserAnswers) mustBe "http://localhost:9398/customs/documents/import-vat"
         }.getMessage mustBe "Unable to retrieve linkId"
       }
     }
@@ -66,7 +66,7 @@ class FrontendAppConfigSpec extends SpecBase {
       val config = app.injector.instanceOf[FrontendAppConfig]
       running(app) {
         intercept[Exception] {
-          config.returnLink(DutyDefermentStatement) mustBe "http://localhost:9876/customs/payment-records/import-vat"
+          config.returnLink(DutyDefermentStatement) mustBe "http://localhost:9398/customs/documents/import-vat"
         }.getMessage mustBe "Invalid file role"
       }
     }
