@@ -25,6 +25,7 @@ summaryList: components.summaryList,
 formHelper: FormWithCSRF,
 h1: components.h1,
 h2: components.h2,
+h3: components.h3,
 p: components.p
 )
 
@@ -60,7 +61,7 @@ p: components.p
 
         @summaryList(SummaryList(helper.rows(fileRole), "govuk-!-margin-bottom-9 govuk-summary-list--wide "))
 
-        @h2("cf.historic.document.request.review.submit")
+        @h3("cf.historic.document.request.review.submit")
         @p(Html(messages("cf.historic.document.request.review.response")))
         @button("site.continue")
     }
