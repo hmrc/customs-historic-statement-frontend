@@ -28,9 +28,6 @@ class LanguageSwitchControllerSpec extends SpecBase {
     "set the language to Cymraeg" in {
 
       val application = new GuiceApplicationBuilder()
-        .configure(
-          "microservice.services.features.welsh-translation" -> true
-        )
         .build()
 
       running(application) {
@@ -45,9 +42,6 @@ class LanguageSwitchControllerSpec extends SpecBase {
 
     "set the language to English" in {
       val application = new GuiceApplicationBuilder()
-        .configure(
-          "microservice.services.features.welsh-translation" -> true
-        )
         .build()
 
       running(application) {
@@ -62,9 +56,6 @@ class LanguageSwitchControllerSpec extends SpecBase {
 
     "bad request when an invalid language passed" in {
       val application = new GuiceApplicationBuilder()
-        .configure(
-          "microservice.services.features.welsh-translation" -> true
-        )
         .build()
 
       running(application) {
