@@ -124,6 +124,7 @@ cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am dda
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’
 cf.historic.document.request.form.error.date-earlier-than-system-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Hydref 2019
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ionawr 2021
+cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=Ni allwch nodi dyddiad cyn mis Medi 2019
 cf.historic.document.request.form.error.date-range-too-wide=Gallwch ond gofyn am hyd at 6 mis o ddatganiadau ym mhob cais
 cf.historic.document.request.form.error.start.date-number-invalid=Nodwch ddyddiad ‘o’ dilys
 cf.historic.document.request.form.error.end.date-number-invalid=Nodwch ddyddiad ‘hyd at’ dilys

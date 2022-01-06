@@ -129,6 +129,7 @@ cf.historic.document.request.form.error.date-too-recent=You can only request sta
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=The to date must be on or after the from date
 cf.historic.document.request.form.error.date-earlier-than-system-start-date=You can only request statements issued since October 2019
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=You can only request statements issued since January 2021
+cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=You cannot enter a date before September 2019
 
 cf.historic.document.request.form.error.date-range-too-wide=You can only ask for up to 6 months of statements in each request
 cf.historic.document.request.form.error.start.date-number-invalid=Enter a valid from date
