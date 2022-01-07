@@ -30,7 +30,8 @@ class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
       "start" -> localDate(
         invalidKey = "cf.historic.document.request.form.error.start.date-number-invalid"
       ).verifying(earlierThanSystemStartDate(fileRole))
-        .verifying(earlierThanPVATStartDate(fileRole)),
+        .verifying(earlierThanPVATStartDate(fileRole))
+        .verifying(earlierThanDDStatementStartDate(fileRole)),
       "end" -> localDate(
         invalidKey = "cf.historic.document.request.form.error.end.date-number-invalid"
       ).verifying(tooRecentDate)

@@ -16,7 +16,7 @@
 
 package forms.mappings
 
-import models.{FileRole, PostponedVATStatement}
+import models.{DutyDefermentStatement, FileRole, PostponedVATStatement}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 import java.time.{LocalDate, LocalDateTime, Period}
@@ -25,6 +25,7 @@ trait Constraints {
 
   private lazy val etmpStatementsDate: LocalDate = LocalDate.of(2019, 10, 1)
   private lazy val pvatStatementsDate: LocalDate = LocalDate.of(2021, 1, 1)
+  private lazy val dutyDefermentStatementsDate: LocalDate = LocalDate.of(2019, 9, 1)
   private lazy val currentDate: LocalDate = LocalDateTime.now().toLocalDate
   private val olderThan = Period.ofMonths(6)
 
@@ -38,14 +39,20 @@ trait Constraints {
   }
 
   def earlierThanSystemStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if (Period.between(request, etmpStatementsDate).toTotalMonths > 0 && fileRole != PostponedVATStatement) =>
+    case request if Period.between(request, etmpStatementsDate).toTotalMonths > 0 && fileRole != PostponedVATStatement && fileRole != DutyDefermentStatement =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-system-start-date"))
     case _ => Valid
   }
 
   def earlierThanPVATStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if (Period.between(request, pvatStatementsDate).toTotalMonths > 0  && fileRole == PostponedVATStatement) =>
+    case request if Period.between(request, pvatStatementsDate).toTotalMonths > 0  && fileRole == PostponedVATStatement =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"))
+    case _ => Valid
+  }
+
+  def earlierThanDDStatementStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
+    case request if Period.between(request, dutyDefermentStatementsDate).toTotalMonths > 0  && fileRole == DutyDefermentStatement =>
+      Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date"))
     case _ => Valid
   }
 }
