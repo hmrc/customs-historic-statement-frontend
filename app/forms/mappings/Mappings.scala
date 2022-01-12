@@ -25,6 +25,15 @@ trait Mappings extends Formatters with Constraints {
 
   protected def localDate(
                            invalidKey: String,
+                           emptyStartMonth: String,
+                           emptyStartYear: String,
+                           emptyEndMonth: String,
+                           emptyEndYear: String,
+                           emptyStartDate: String,
+                           emptyEndDate: String,
+                           invalidMonth: String,
+                           invalidYear: String,
                            args: Seq[String] = Seq.empty): FieldMapping[LocalDate] =
-    of(new LocalDateFormatter(invalidKey, args))
+    of(new LocalDateFormatter(invalidKey, emptyStartMonth, emptyStartYear, emptyEndMonth, emptyEndYear,
+      emptyStartDate, emptyEndDate, invalidMonth, invalidYear, args))
 }

@@ -132,6 +132,15 @@ cf.historic.document.request.link.label.C79Certificate=Yn ôl i dystysgrifau TAW
 cf.historic.document.request.link.label.SecurityStatement=Yn ôl i hysbysiad o ddatganiadau addasu
 cf.historic.document.request.link.label.DutyDefermentStatement=Yn ôl i ddatganiadau gohirio tollau
 
+cf.historic.document.request.form.error.start.month.date-number-invalid=Nodwch o ba fis yr ydych am chwilio
+cf.historic.document.request.form.error.start.year.date-number-invalid=Nodwch o ba flwyddyn yr ydych am chwilio
+cf.historic.document.request.form.error.end.month.date-number-invalid=Nodwch hyd at ba fis yr ydych am chwilio
+cf.historic.document.request.form.error.end.year.date-number-invalid=Nodwch hyd at ba flwyddyn rydych am chwilio
+cf.historic.document.request.form.error.start.date-missing=Nodwch o ba fis a blwyddyn yr ydych am chwilio
+cf.historic.document.request.form.error.end.date-missing=Nodwch hyd at ba fis a blwyddyn rydych am chwilio
+cf.historic.document.request.form.error.month.invalid=Nodwch rif rhwng 1 a 12
+cf.historic.document.request.form.error.year.invalid=Nodwch flwyddyn go iawn
+
 # Security Statements requested view
 cf.security-statements.requested.title=Hysbysiad o ddatganiadau addasu y gofynnwyd amdanynt
 cf.security-statements.requested.available.text=Mae datganiadau y gofynnwyd amdanynt ar gael i’w gweld am 10 diwrnod. Gallwn ddarparu’r rhain ar ffurf PDF yn unig.

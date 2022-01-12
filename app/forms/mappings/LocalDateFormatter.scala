@@ -18,12 +18,19 @@ package forms.mappings
 
 import play.api.data.FormError
 import play.api.data.format.Formatter
-
 import java.time.LocalDate
 import scala.util.{Failure, Success, Try}
 
 private[mappings] class LocalDateFormatter(
                                             invalidKey: String,
+                                            emptyStartMonth: String,
+                                            emptyStartYear: String,
+                                            emptyEndMonth: String,
+                                            emptyEndYear: String,
+                                            emptyStartDate: String,
+                                            emptyEndDate: String,
+                                            invalidMonth: String,
+                                            invalidYear: String,
                                             args: Seq[String] = Seq.empty
                                           ) extends Formatter[LocalDate] with Formatters {
 
@@ -39,16 +46,23 @@ private[mappings] class LocalDateFormatter(
 
   private def formatDate(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
 
-    val int = intFormatter(
-      requiredKey = invalidKey,
-      wholeNumberKey = invalidKey,
-      nonNumericKey = invalidKey,
+    val intMonth = intFormatter(
+      requiredKey = invalidMonth,
+      wholeNumberKey = invalidMonth,
+      nonNumericKey = invalidMonth,
+      args
+    )
+
+    val intYear = intFormatter(
+      requiredKey = invalidYear,
+      wholeNumberKey = invalidYear,
+      nonNumericKey = invalidYear,
       args
     )
 
     for {
-      month <- int.bind(s"$key.month", data).right
-      year  <- int.bind(s"$key.year", data).right
+      month <- intMonth.bind(s"$key.month", data).right
+      year  <- intYear.bind(s"$key.year", data).right
       date  <- toDate(key, month, year).right
     } yield date
   }
@@ -60,14 +74,29 @@ private[mappings] class LocalDateFormatter(
         field -> data.get(s"$key.$field").filter(_.nonEmpty)
     }.toMap
 
+    lazy val missingFields = fields
+      .withFilter(_._2.isEmpty)
+      .map(_._1)
+      .toList
+
     fields.count(_._2.isDefined) match {
       case 2 =>
         formatDate(key, data).left.map {
           _.map(_.copy(key = key, args = args))
         }
+      case 1 =>
+        (key, missingFields.head) match {
+        case ("start", "month") => Left(List(FormError(key, emptyStartMonth, args)))
+        case ("start", "year") => Left(List(FormError(key, emptyStartYear, args)))
+        case ("end", "month") => Left(List(FormError(key, emptyEndMonth, args)))
+        case ("end", "year") => Left(List(FormError(key, emptyEndYear, args)))
+      }
       case _ =>
-        Left(List(FormError(key, invalidKey, args)))
-    }
+        (key, missingFields) match {
+          case ("start", List("month", "year")) => Left(List(FormError(key, emptyStartDate, args)))
+          case ("end", List("month","year")) => Left(List(FormError(key, emptyEndDate, args)))
+        }
+      }
   }
 
   override def unbind(key: String, value: LocalDate): Map[String, String] =
