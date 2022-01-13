@@ -27,10 +27,9 @@ class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
   def apply(fileRole: FileRole): Form[HistoricDates] = {
     Form(mapping(
       "start" -> localDate(
-        invalidKey = "cf.historic.document.request.form.error.start.date-number-invalid",
         emptyStartMonth = "cf.historic.document.request.form.error.start.month.date-number-invalid",
         emptyStartYear = "cf.historic.document.request.form.error.start.year.date-number-invalid",
-        emptyEndMonth = "cf.historic.document.request.form.error.end.year.date-number-invalid",
+        emptyEndMonth = "cf.historic.document.request.form.error.end.month.date-number-invalid",
         emptyEndYear = "cf.historic.document.request.form.error.end.year.date-number-invalid",
         emptyStartDate = "cf.historic.document.request.form.error.start.date-missing",
         emptyEndDate = "cf.historic.document.request.form.error.end.date-missing",
@@ -40,9 +39,8 @@ class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
         .verifying(earlierThanPVATStartDate(fileRole))
         .verifying(earlierThanDDStatementStartDate(fileRole)),
       "end" -> localDate(
-        invalidKey = "cf.historic.document.request.form.error.end.date-number-invalid",
-        emptyStartMonth = "cf.historic.document.request.form.error.start.date-number-invalid",
-        emptyStartYear = "cf.historic.document.request.form.error.start.date-number-invalid",
+        emptyStartMonth = "cf.historic.document.request.form.error.start.month.date-number-invalid",
+        emptyStartYear = "cf.historic.document.request.form.error.start.year.date-number-invalid",
         emptyEndMonth = "cf.historic.document.request.form.error.end.month.date-number-invalid",
         emptyEndYear = "cf.historic.document.request.form.error.end.year.date-number-invalid",
         emptyStartDate = "cf.historic.document.request.form.error.start.date-missing",

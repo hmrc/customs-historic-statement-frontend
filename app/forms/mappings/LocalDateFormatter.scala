@@ -22,7 +22,6 @@ import java.time.LocalDate
 import scala.util.{Failure, Success, Try}
 
 private[mappings] class LocalDateFormatter(
-                                            invalidKey: String,
                                             emptyStartMonth: String,
                                             emptyStartYear: String,
                                             emptyEndMonth: String,
@@ -37,14 +36,15 @@ private[mappings] class LocalDateFormatter(
   private val fieldKeys: List[String] = List("month", "year")
 
   private def toDate(key: String, month: Int, year: Int): Either[Seq[FormError], LocalDate] =
-    Try(LocalDate.of(year, month, 1)) match {
-      case Success(date) =>
-        Right(date)
-      case Failure(_) =>
-        key match {
-          case "month" => Left(Seq(FormError(key, invalidMonth, args)))
-          case _ => Left(Seq(FormError(key, invalidYear, args)))
+  validMonth(month) match {
+      case true =>
+        Try(LocalDate.of(year, month, 1)) match {
+          case Success(date) =>
+            Right(date)
+          case Failure(_) =>
+            Left(Seq(FormError(key, invalidYear, args)))
         }
+      case _ => Left(Seq(FormError(key, invalidMonth, args)))
     }
 
   private def formatDate(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
@@ -107,4 +107,8 @@ private[mappings] class LocalDateFormatter(
       s"$key.month" -> value.getMonthValue.toString,
       s"$key.year" -> value.getYear.toString
     )
+
+  private def validMonth(month: Int): Boolean = {
+    month > 0 && month < 13
+  }
 }
