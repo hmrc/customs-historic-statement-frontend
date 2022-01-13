@@ -41,7 +41,10 @@ private[mappings] class LocalDateFormatter(
       case Success(date) =>
         Right(date)
       case Failure(_) =>
-        Left(Seq(FormError(key, invalidKey, args)))
+        key match {
+          case "month" => Left(Seq(FormError(key, invalidMonth, args)))
+          case _ => Left(Seq(FormError(key, invalidYear, args)))
+        }
     }
 
   private def formatDate(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
