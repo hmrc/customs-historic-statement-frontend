@@ -39,19 +39,19 @@ trait Constraints {
   }
 
   def earlierThanSystemStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if Period.between(request, etmpStatementsDate).toTotalMonths > 0 && fileRole != PostponedVATStatement && fileRole != DutyDefermentStatement =>
+    case request if request.isBefore(etmpStatementsDate) && fileRole != PostponedVATStatement && fileRole != DutyDefermentStatement =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-system-start-date"))
     case _ => Valid
   }
 
   def earlierThanPVATStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if Period.between(request, pvatStatementsDate).toTotalMonths > 0  && fileRole == PostponedVATStatement =>
+    case request if request.isBefore(pvatStatementsDate)  && fileRole == PostponedVATStatement =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"))
     case _ => Valid
   }
 
   def earlierThanDDStatementStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if Period.between(request, dutyDefermentStatementsDate).toTotalMonths > 0  && fileRole == DutyDefermentStatement =>
+    case request if request.isBefore(dutyDefermentStatementsDate)  && fileRole == DutyDefermentStatement =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date"))
     case _ => Valid
   }

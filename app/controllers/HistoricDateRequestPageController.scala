@@ -97,13 +97,7 @@ class HistoricDateRequestPageController @Inject()(
         Some(formWithError("cf.historic.document.request.form.error.to-date-must-be-later-than-from-date"))
       case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths >= maximumNumberOfMonths =>
         Some(formWithError("cf.historic.document.request.form.error.date-range-too-wide"))
-      case (HistoricDates(start, end), PostponedVATStatement) if (isBeforePVatStartDate(start) || isBeforePVatStartDate(end))  =>
-        Some(formWithError(messages("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"
-        )))
-      case (HistoricDates(start,end), DutyDefermentStatement) if isBeforeDutyDefermentStartDate(start) =>
-        Some(formWithError(messages("cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date"
-        )))
-      case (HistoricDates(start, end), fileRole) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
+      case (HistoricDates(start, end), _) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
         Some(formWithError(messages(
           "cf.historic.document.request.form.error.date-too-far-in-past",
           minTaxYear.startYear.toString,
@@ -122,13 +116,5 @@ class HistoricDateRequestPageController @Inject()(
   private def isDateMoreThanSixTaxYearsOld(requestedDate: LocalDate): Boolean = {
     val dayOfMonthThatTaxYearStartsOn = 6
     minTaxYear.starts.isAfter(requestedDate.withDayOfMonth(dayOfMonthThatTaxYearStartsOn))
-  }
-
-  private def isBeforePVatStartDate(requestedDate: LocalDate): Boolean = {
-    requestedDate.isBefore(LocalDate.of(2021,1,1))
-  }
-
-  private def isBeforeDutyDefermentStartDate(requestedDate: LocalDate): Boolean = {
-    requestedDate.isBefore(LocalDate.of(2019,9,1))
   }
 }

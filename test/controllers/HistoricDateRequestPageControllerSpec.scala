@@ -17,9 +17,9 @@
 package controllers
 
 import base.SpecBase
-import models.{C79Certificate, DutyDefermentStatement, NormalMode, PostponedVATStatement}
+import models.{C79Certificate, DutyDefermentStatement, NormalMode, PostponedVATStatement, UserAnswers}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
-import pages.HistoricDateRequestPage
+import pages.{HistoricDateRequestPage, RequestedLinkId}
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import repositories.SessionRepository
@@ -138,7 +138,10 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
     }
 
     "return BAD_REQUEST when the start date is earlier than duty deferment date" in new Setup {
-      override val app: Application = applicationBuilder(Some(populatedUserAnswers)).build()
+
+      val userAnswers: UserAnswers = populatedUserAnswers.set(RequestedLinkId, "someId").success.value
+
+      override val app: Application = applicationBuilder(Some(userAnswers)).build()
 
       val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, DutyDefermentStatement).url)
         .withFormUrlEncodedBody("start.month" -> "7", "start.year" -> "2018", "end.month" -> "1", "end.year" -> "2019")
