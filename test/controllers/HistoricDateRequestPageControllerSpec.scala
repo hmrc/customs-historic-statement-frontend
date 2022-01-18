@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package controllers
 
 import base.SpecBase
-import models.{C79Certificate, NormalMode, PostponedVATStatement}
+import models.{C79Certificate, DutyDefermentStatement, NormalMode, PostponedVATStatement, UserAnswers}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
-import pages.HistoricDateRequestPage
+import pages.{HistoricDateRequestPage, RequestedLinkId}
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import repositories.SessionRepository
@@ -134,6 +134,21 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
+      }
+    }
+
+    "return BAD_REQUEST when the start date is earlier than duty deferment date" in new Setup {
+
+      val userAnswers: UserAnswers = populatedUserAnswers.set(RequestedLinkId, "someId").success.value
+
+      override val app: Application = applicationBuilder(Some(userAnswers)).build()
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, DutyDefermentStatement).url)
+        .withFormUrlEncodedBody("start.month" -> "7", "start.year" -> "2018", "end.month" -> "1", "end.year" -> "2019")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
       }
     }
 

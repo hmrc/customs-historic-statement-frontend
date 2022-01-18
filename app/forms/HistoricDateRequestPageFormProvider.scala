@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import forms.mappings.Mappings
 import models.{FileRole, HistoricDates}
 import play.api.data.Form
 import play.api.data.Forms.mapping
-
 import javax.inject.Inject
 
 class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
@@ -28,12 +27,28 @@ class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
   def apply(fileRole: FileRole): Form[HistoricDates] = {
     Form(mapping(
       "start" -> localDate(
-        invalidKey = "cf.historic.document.request.form.error.start.date-number-invalid"
+        emptyStartMonth = "cf.historic.document.request.form.error.start.month.date-number-invalid",
+        emptyStartYear = "cf.historic.document.request.form.error.start.year.date-number-invalid",
+        emptyEndMonth = "cf.historic.document.request.form.error.end.month.date-number-invalid",
+        emptyEndYear = "cf.historic.document.request.form.error.end.year.date-number-invalid",
+        emptyStartDate = "cf.historic.document.request.form.error.start.date-missing",
+        emptyEndDate = "cf.historic.document.request.form.error.end.date-missing",
+        invalidMonth = "cf.historic.document.request.form.error.month.invalid",
+        invalidYear = "cf.historic.document.request.form.error.year.invalid"
       ).verifying(earlierThanSystemStartDate(fileRole))
-        .verifying(earlierThanPVATStartDate(fileRole)),
+        .verifying(earlierThanPVATStartDate(fileRole))
+        .verifying(earlierThanDDStatementStartDate(fileRole)),
       "end" -> localDate(
-        invalidKey = "cf.historic.document.request.form.error.end.date-number-invalid"
+        emptyStartMonth = "cf.historic.document.request.form.error.start.month.date-number-invalid",
+        emptyStartYear = "cf.historic.document.request.form.error.start.year.date-number-invalid",
+        emptyEndMonth = "cf.historic.document.request.form.error.end.month.date-number-invalid",
+        emptyEndYear = "cf.historic.document.request.form.error.end.year.date-number-invalid",
+        emptyStartDate = "cf.historic.document.request.form.error.start.date-missing",
+        emptyEndDate = "cf.historic.document.request.form.error.end.date-missing",
+        invalidMonth = "cf.historic.document.request.form.error.month.invalid",
+        invalidYear = "cf.historic.document.request.form.error.year.invalid"
       ).verifying(tooRecentDate)
+        .verifying(earlierThanPVATStartDate(fileRole))
     )(HistoricDates.apply)(HistoricDates.unapply)
     )
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.HistoricDateRequestPageFormProvider
-import models.{FileRole, HistoricDates, Mode, PostponedVATStatement}
+import models.{FileRole, HistoricDates, Mode, PostponedVATStatement, DutyDefermentStatement}
 import navigation.Navigator
 import pages.{AccountNumber, HistoricDateRequestPage}
 import play.api.data.Form
@@ -97,10 +97,7 @@ class HistoricDateRequestPageController @Inject()(
         Some(formWithError("cf.historic.document.request.form.error.to-date-must-be-later-than-from-date"))
       case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths >= maximumNumberOfMonths =>
         Some(formWithError("cf.historic.document.request.form.error.date-range-too-wide"))
-      case (HistoricDates(start, end), PostponedVATStatement) if (isBeforePVatStartDate(start) || isBeforePVatStartDate(end))  =>
-        Some(formWithError(messages("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"
-        )))
-      case (HistoricDates(start, end), fileRole) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
+      case (HistoricDates(start, end), _) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
         Some(formWithError(messages(
           "cf.historic.document.request.form.error.date-too-far-in-past",
           minTaxYear.startYear.toString,
@@ -119,9 +116,5 @@ class HistoricDateRequestPageController @Inject()(
   private def isDateMoreThanSixTaxYearsOld(requestedDate: LocalDate): Boolean = {
     val dayOfMonthThatTaxYearStartsOn = 6
     minTaxYear.starts.isAfter(requestedDate.withDayOfMonth(dayOfMonthThatTaxYearStartsOn))
-  }
-
-  private def isBeforePVatStartDate(requestedDate: LocalDate): Boolean = {
-    requestedDate.isBefore(LocalDate.of(2021,1,1))
   }
 }

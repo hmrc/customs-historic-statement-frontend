@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,15 @@ import java.time.LocalDate
 trait Mappings extends Formatters with Constraints {
 
   protected def localDate(
-                           invalidKey: String,
+                           emptyStartMonth: String,
+                           emptyStartYear: String,
+                           emptyEndMonth: String,
+                           emptyEndYear: String,
+                           emptyStartDate: String,
+                           emptyEndDate: String,
+                           invalidMonth: String,
+                           invalidYear: String,
                            args: Seq[String] = Seq.empty): FieldMapping[LocalDate] =
-    of(new LocalDateFormatter(invalidKey, args))
+    of(new LocalDateFormatter(emptyStartMonth, emptyStartYear, emptyEndMonth, emptyEndYear,
+      emptyStartDate, emptyEndDate, invalidMonth, invalidYear, args))
 }
