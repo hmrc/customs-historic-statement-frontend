@@ -94,7 +94,7 @@ class HistoricDateRequestPageController @Inject()(
 
     (dates, fileRole) match {
       case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths < 0 =>
-        Some(formWithError("cf.historic.document.request.form.error.to-date-must-be-later-than-from-date"))
+        Some(form.withError("end", "cf.historic.document.request.form.error.to-date-must-be-later-than-from-date").fill(dates))
       case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths >= maximumNumberOfMonths =>
         Some(formWithError("cf.historic.document.request.form.error.date-range-too-wide"))
       case (HistoricDates(start, end), _) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
