@@ -16,6 +16,6 @@
 
 @this()
 
-@(msg: String, id: Option[String] = None, classes: String = "govuk-heading-xl")(implicit messages: Messages)
+@(msg: String, id: Option[String] = None, classes: String = "govuk-link", url: String, ariaLabel: Option[String] = None)(implicit messages: Messages)
 
-<h1 @{id.fold("")(id => s"id=$id")} class="@classes">@messages(msg)</h1>
+<a @{id.fold("")(id => s"id=$id")} href="@url" class="@classes" >@messages(msg)</a>
