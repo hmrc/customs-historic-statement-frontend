@@ -20,9 +20,12 @@
 @import views.html.templates.Layout
 
 @this(
-layout: Layout,
-download_link: components.download_link2,
-missing_documents_guidance: components.missing_documents_guidance
+    layout: Layout,
+    download_link: components.download_link2,
+    missing_documents_guidance: components.missing_documents_guidance,
+    p: components.p,
+    h1: components.h1,
+    h2: components.h2
 )
 
 @(model: PostponedVatViewModel, backLink: String)(implicit request: Request[_], messages: Messages)
@@ -32,18 +35,16 @@ missing_documents_guidance: components.missing_documents_guidance
 
 @layout(pageTitle = Some(messages("cf.import-postponed-vat.requested.title")), backLink = Some(backLink)) {
 
-    <h1 id="requested-import-postponed-vat-statements-heading" class="govuk-heading-xl govuk-!-margin-bottom-3">@messages("cf.import-postponed-vat.requested.title")</h1>
+    @h1(id=Some("requested-import-postponed-vat-statements-heading"), classes="govuk-heading-xl govuk-!-margin-bottom-3", msg=messages("cf.import-postponed-vat.requested.title"))
 
-    <p class="govuk-body govuk-!-margin-bottom-8" id="available-text">@messages("cf.import-postponed-vat.requested.available.text")</p>
+    @p(classes="govuk-body govuk-!-margin-bottom-8", id=Some("available-text"), content=Html(messages("cf.import-postponed-vat.requested.available.text")))
 
     @for(historyIndex <- histories) {
         @if(model.statementsForAllEoris(historyIndex).requestedStatements.nonEmpty) {
 
             @for((statementsOfOneMonth, index) <- model.statementsForAllEoris(historyIndex).requestedStatements.sorted.zipWithIndex) {
                 <div id="requested-@{statementsOfOneMonth.formattedMonthYearAsId}">
-                    <h2 class="govuk-heading-m" id="period-@{statementsOfOneMonth.formattedMonthYearAsId}">
-                        @{statementsOfOneMonth.formattedMonthYear}
-                    </h2>
+                    @h2(msg=statementsOfOneMonth.formattedMonthYear,id=Some(s"period-${statementsOfOneMonth.formattedMonthYearAsId}"))
                     <ul class="govuk-list" id="requested-statements-list-@{historyIndex}-row-@{index}">
                         @if(statementsOfOneMonth.files.nonEmpty) {
                             @defining(statementsOfOneMonth.files.groupBy(_.metadata.source)){ statements =>

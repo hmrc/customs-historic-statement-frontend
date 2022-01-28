@@ -24,7 +24,11 @@
 @this(
     layout: Layout,
     missing_documents_guidance: components.missing_documents_guidance,
-    duty_deferment_file: components.duty_deferment_file
+    duty_deferment_file: components.duty_deferment_file,
+    h1: components.h1,
+    h2: components.h2,
+    p: components.p,
+    p2: components.p2
 )
 
 @(model: DutyDefermentAccountViewModel, backLink: String)( implicit request: Request[_], messages: Messages)
@@ -35,23 +39,25 @@
         @messages("cf.account.detail.requested.deferment-account-secondary-heading")
         @{model.accountNumber}
     </span>
-    <h1 id="requested-statements-heading" class="govuk-heading-xl govuk-!-margin-bottom-3">
-        @messages("cf.account.detail.requested.deferment-account-heading")
-    </h1>
 
-    <p class="govuk-body govuk-!-margin-bottom-8" id="requested-statements-available-text">@messages("cf.account.detail.requested.deferment-account-statements-available.text")</p>
+    @h1(id = Some("requested-statements-heading"),
+        msg = messages("cf.account.detail.requested.deferment-account-heading"),
+        classes = "govuk-heading-xl govuk-!-margin-bottom-3")
+
+
+    @p(classes="govuk-body govuk-!-margin-bottom-8",
+        id=Some("requested-statements-available-text"),
+        content = Html(messages("cf.account.detail.requested.deferment-account-statements-available.text")))
 
     @for(historyIndex <- model.statementsForAllEoris.indices.reverse) {
         @for((group, groupIndex) <- model.statementsForAllEoris(historyIndex).groupsRequested.reverse.zipWithIndex) {
             <div id="requested-statements-list-@{historyIndex}-@{group.year}-@{group.month}" class="statement-list">
 
                 @if(groupIndex == 0) {
-                    <h2 id="historic-eori-@historyIndex" class="govuk-heading-s">@messages("cf.account.details.previous-eori", model.statementsForAllEoris(historyIndex).eoriHistory.eori)</h2>
+                    @h2(id=Some(s"historic-eori-$historyIndex"), classes="govuk-heading-s", msg=messages("cf.account.details.previous-eori", model.statementsForAllEoris(historyIndex).eoriHistory.eori))
                 }
+                @h2(id=Some(s"requested-statements-month-heading-${historyIndex}-${group.year}-${group.month}"), classes="govuk-heading-s", msg=Formatters.dateAsMonthAndYear(group.monthAndYear))
 
-                <h2 id="requested-statements-month-heading-@{historyIndex}-@{group.year}-@{group.month}" class="govuk-heading-s">
-                    @{Formatters.dateAsMonthAndYear(group.monthAndYear)}
-                </h2>
                 <dl class="govuk-summary-list" >
                     @for((period, index) <- group.periods.reverse.zipWithIndex) {
                         <div class="govuk-summary-list__row" id="requested-statements-list-@{historyIndex}-@{group.year}-@{group.month}-row-@{index}">

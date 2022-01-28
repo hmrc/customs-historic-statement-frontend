@@ -22,8 +22,7 @@
     layout: Layout,
     link: components.link,
     p: components.p,
-    h1: components.h1,
-    div: components.div
+    h1: components.h1
 )
 
 @(email: Option[Email], fileRole: FileRole, returnLink: String)(implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
@@ -32,7 +31,6 @@
     pageTitle = Some(messages("cf.accounts.title")),
     dutyDeferment = fileRole == DutyDefermentStatement
     ) {
-
     <div class="govuk-panel govuk-panel--confirmation">
         @h1(messages(s"cf.historic.document.request.confirmation.panel-text.${fileRole.name}"), Some("confirmation-text"), "govuk-panel__title govuk-panel__title--confirmation")
     </div>

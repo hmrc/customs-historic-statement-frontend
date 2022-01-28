@@ -20,6 +20,9 @@
 @this(
 layout: Layout,
         h1: components.h1,
+        p: components.p,
+        link: components.link,
+        link2: components.link2,
         button: components.button
 )
 
@@ -29,9 +32,9 @@ layout: Layout,
 
   @h1(messages("session_expired.heading"))
 
-  <p class="govuk-body">@messages("session_expired.guidance")</p>
+  @p(Html(messages("session_expired.guidance")))
 
-  <a href="@{appConfig.financialsHomepage}" class="govuk-link">@button("session_expired.action")</a>
+  @link2(button("session_expired.action"), url=appConfig.financialsHomepage)
  }
 
 

@@ -14,14 +14,17 @@
  * limitations under the License.
  *@
 
-@this()
+@this(
+  h2: components.h2,
+  p: components.p
+)
 
 @(documentType: String)(implicit messages: Messages)
 
 <div id="missing-documents-guidance" class="govuk-!-padding-top-2">
-    <h2 id="missing-documents-guidance-heading" class="govuk-heading-m govuk-!-margin-top-6">@messages("cf.common.missing-documents-guidance.heading", documentType)</h2>
+    @h2(id=Some("missing-documents-guidance-heading"), classes="govuk-heading-m govuk-!-margin-top-6", msg=messages("cf.common.missing-documents-guidance.heading", documentType))
 
-    <p id="missing-documents-guidance-text1" class="govuk-body" >@messages("cf.common.missing-documents-guidance.text1", s"${documentType.capitalize}s")</p>
+    @p(id=Some("missing-documents-guidance-text1"), content=Html(messages("cf.common.missing-documents-guidance.text1", s"${documentType.capitalize}s")))
 
-    <p id="missing-documents-guidance-text2" class="govuk-body" >@messages("cf.common.missing-documents-guidance.text2", s"${documentType.capitalize}s")</p>
+    @p(id=Some("missing-documents-guidance-text2"), content=Html(messages("cf.common.missing-documents-guidance.text2", s"${documentType.capitalize}s")))
 </div>
