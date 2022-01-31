@@ -22,13 +22,14 @@
         layout: Layout,
         h1: components.h1,
         h2: components.h2,
+        p: components.p,
         hmrcNewTabLink: HmrcNewTabLink
 )
 
 @()(implicit request: Request[_], messages: Messages, appConfig: config.FrontendAppConfig)
 
     @layout(Some(titleNoForm("unauthorised.title")), helpAndSupport = false) {
-        <h1 class="govuk-heading-l">@messages("unauthorised.heading")</h1>
+        @h1(msg=messages("unauthorised.heading"), classes="govuk-heading-l")
         @h2("unauthorised.how-to-get-access-info")
 
         <p class="govuk-body">
@@ -57,7 +58,5 @@
             .
         </p>
 
-        <p class="govuk-body">
-        @messages("unauthorised.process-application-info")
-        </p>
+        @p(Html(messages("unauthorised.process-application-info")))
     }

@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.HistoricDateRequestPageFormProvider
-import models.{FileRole, HistoricDates, Mode, PostponedVATStatement, DutyDefermentStatement}
+import models.{FileRole, HistoricDates, Mode}
 import navigation.Navigator
 import pages.{AccountNumber, HistoricDateRequestPage}
 import play.api.data.Form

@@ -21,7 +21,10 @@
 @this(
         layout: Layout,
         download_link: components.download_link,
-        missing_documents_guidance: components.missing_documents_guidance
+        missing_documents_guidance: components.missing_documents_guidance,
+        h1: components.h1,
+        h2: components.h2,
+        p: components.p
 )
 
 @(model: VatViewModel, backLink: String)(implicit request: Request[_], messages: Messages)
@@ -30,14 +33,18 @@
 
 @layout(pageTitle = Some(messages("cf.import-vat.requested.title")), backLink = Some(backLink)) {
 
-    <h1 id="requested-import-vat-certificates-heading" class="govuk-heading-xl govuk-!-margin-bottom-3">@messages("cf.import-vat.requested.title")</h1>
+    @h1(id=Some("requested-import-vat-certificates-heading"), classes="govuk-heading-xl govuk-!-margin-bottom-3", msg=messages("cf.import-vat.requested.title"))
 
-    <p class="govuk-body govuk-!-margin-bottom-8" id="available-text">@messages("cf.import-vat.requested.available.text")</p>
+    @p(classes="govuk-body govuk-!-margin-bottom-8", id=Some("available-text"), content=Html(messages("cf.import-vat.requested.available.text")))
 
     @for(historyIndex <- histories) {
         @if(model.certificatesForAllEoris(historyIndex).requestedCertificates.nonEmpty) {
             @if(historyIndex > 0) {
-                <h2 id="historic-eori-@historyIndex" class="govuk-heading-s">@messages("cf.account.details.previous-eori", model.certificatesForAllEoris(historyIndex).eoriHistory.eori)</h2>
+                @h2(
+                    msg=messages("cf.account.details.previous-eori", model.certificatesForAllEoris(historyIndex).eoriHistory.eori),
+                    id=Some(s"historic-eori-$historyIndex"),
+                    classes="govuk-heading-s",
+                )
             }
 
             <dl class="govuk-summary-list statement-list" id="requested-statements-list-@{historyIndex}">

@@ -21,25 +21,30 @@
 @this(
         layout: Layout,
         download_link: components.download_link,
-        missing_documents_guidance: components.missing_documents_guidance
+        missing_documents_guidance: components.missing_documents_guidance,
+        h1: components.h1,
+        h2: components.h2,
+        p: components.p,
+        link2: components.link2
 )
 
 @(statements: Seq[SecurityStatementsForEori], backLink: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some(messages("cf.security-statements.requested.title")), backLink = Some(backLink)) {
 
-<h1 id="security-statements-heading" class="govuk-heading-xl govuk-!-margin-bottom-3">@messages("cf.security-statements.requested.title")</h1>
 
-<p class="govuk-body govuk-!-margin-bottom-8" id="available-text">@messages("cf.security-statements.requested.available.text")</p>
+@h1(id=Some("security-statements-heading"), classes="govuk-heading-xl govuk-!-margin-bottom-3", msg=messages("cf.security-statements.requested.title"))
+
+@p(classes="govuk-body govuk-!-margin-bottom-8", id=Some("available-text"), content=Html(messages("cf.security-statements.requested.available.text")))
 
 @for(historyIndex <- statements.indices) {
     @if(statements(historyIndex).requestedStatements.nonEmpty) {
         @if(historyIndex > 0) {
-            <h2 id="requested-statements-eori-heading-@{
-                historyIndex
-            }" class="govuk-heading-s govuk-!-margin-bottom-2">
-            @messages("cf.account.details.previous-eori", statements(historyIndex).eoriHistory.eori)
-            </h2>
+
+            @h2(id=Some(s"requested-statements-eori-heading-${historyIndex}"),
+                classes="govuk-heading-s govuk-!-margin-bottom-2",
+                msg= messages("cf.account.details.previous-eori", statements(historyIndex).eoriHistory.eori)
+            )
         }
 
         <dl class="govuk-summary-list statement-list" id="requested-statements-list-@{
