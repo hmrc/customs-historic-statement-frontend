@@ -14,7 +14,6 @@ footer.termsConditions = Terms and conditions
 footer.govukHelp       = Help using GOV.UK
 
 
-date.day = Day
 date.month = Month
 date.year = Year
 
@@ -34,11 +33,8 @@ feedback.before = This is a new service - your
 feedback.link = feedback
 feedback.after = will help us to improve it.
 
-site.back = Back
 site.change = Change
 site.continue = Send request
-site.service_name = customs-historic-statement-frontend
-site.govuk = GOV.UK
 
 # Unauthorised Error
 unauthorised.title=Not registered with CDS
@@ -56,23 +52,36 @@ service.technical-difficulties.p = Please try again in a few minutes.
 
 cf.accounts.title=Your customs financial accounts
 
-#Historic Document Request
+#CheckYourAnswersView
 cf.historic.document.request.review.PostponedVATStatement.title=Request postponed import VAT statements
 cf.historic.document.request.review.C79Certificate.title=Request import VAT certificates
 cf.historic.document.request.review.SecurityStatement.title=Request notification of adjustment statements
 cf.historic.document.request.review.DutyDefermentStatement.title=Request duty deferment statements
+cf.historic.document.request.review.SecurityStatement.heading=Request notification of adjustment statements
+cf.historic.document.request.review.PostponedVATStatement.heading=Request postponed import VAT statements
+cf.historic.document.request.review.DutyDefermentStatement.heading=Request duty deferment statements
+cf.historic.document.request.review.C79Certificate.heading=Request import VAT certificates
+cf.historic.document.request.selected.statements=Selected statements
+cf.historic.document.request.selected.certificates=Selected certificates
+cf.historic.document.request.review.submit=Submit your request
+cf.historic.document.request.review.response=We aim to respond to your request within 48 hours.
+cf.historic.document.request.review.send=Send request
+
+#HistoricDataRequrstPageView
 cf.historic.document.request.C79Certificate.title=Which import VAT certificates (C79) do you need?
 cf.historic.document.request.SecurityStatement.title=Which notification of adjustment statements do you need?
 cf.historic.document.request.DutyDefermentStatement.title=Which duty deferment statements do you need?
 cf.historic.document.request.PostponedVATStatement.title=Which Postponed import VAT statements do you need?
+
 cf.historic.document.request.heading.C79Certificate=Which Import VAT certificates do you need?
 cf.historic.document.request.heading.PostponedVATStatement=Which Postponed import VAT statements do you need?
 cf.historic.document.request.heading.SecurityStatement=Which notification of adjustment statements do you need?
 cf.historic.document.request.heading.DutyDefermentStatement=Which duty deferment statements do you need?
-cf.historic.document.request.dan=Account:
+
 cf.historic.document.request.info-text=You can request duty deferment statements dating back to September 2019.
 cf.historic.document.request.pvat.info-text=A statement will show the total import VAT postponed for the previous month.
 cf.historic.document.request.continue=Continue
+
 cf.historic.document.request.from=From what start date do you need statements?
 cf.historic.document.request.whichStartDate.C79Certificate=which start date do you need Import VAT certificates?
 cf.historic.document.request.whichStartDate.PostponedVATStatement=which start date do you need Import Postponed VAT statements?
@@ -86,9 +95,6 @@ cf.historic.document.request.whichEndDate.DutyDefermentStatement=which end date 
 cf.historic.document.request.date.hint=For example, 3 2019.
 cf.historic.document.request.date.pvat.hint=For example, 3 2021.
 
-cf.historic.document.request.selected.statements=Selected statements
-cf.historic.document.request.selected.certificates=Selected certificates
-
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = what end date do you need Import VAT certificates?
 cf.historic.document.request.whichStartDate.C79Certificate.hidden = what start date do you need Import VAT certificates?
 cf.historic.document.request.whichEndDate.SecurityStatement.hidden = what end date do you need adjustment statements?
@@ -98,20 +104,7 @@ cf.historic.document.request.whichStartDate.DutyDefermentStatement.hidden = what
 cf.historic.document.request.whichEndDate.PostponedVATStatement.hidden = what end date do you need Import postponed VAT statements?
 cf.historic.document.request.whichStartDate.PostponedVATStatement.hidden = what start date do you need Import postponed VAT statements?
 
-cf.historic.document.request.review.SecurityStatement.heading=Request notification of adjustment statements
-cf.historic.document.request.review.PostponedVATStatement.heading=Request postponed import VAT statements
-cf.historic.document.request.review.DutyDefermentStatement.heading=Request duty deferment statements
-cf.historic.document.request.review.C79Certificate.heading=Request import VAT certificates
-
-cf.historic.document.request.review.submit=Submit your request
-cf.historic.document.request.review.response=We aim to respond to your request within 48 hours.
-cf.historic.document.request.review.send=Send request
-
-cf.historic.document.request.sessionId.error.title=Sorry, your request was not sent
-cf.historic.document.request.sessionId.error.heading=Session ID is missing
-cf.historic.document.request.error.heading=Sorry, your request was not sent
-cf.historic.document.request.error.body-text=Try again later.
-cf.historic.document.request.sessionId.error.message=Please re-login to see this page
+#ConfirmationPageView
 cf.historic.document.request.confirmation.panel-text.DutyDefermentStatement=We received your request for statements
 cf.historic.document.request.confirmation.panel-text.C79Certificate=We received your request for certificates
 cf.historic.document.request.confirmation.panel-text.SecurityStatement=We received your request for statements
@@ -124,14 +117,16 @@ cf.historic.document.request.confirmation.body-text.SecurityStatement=We will se
 cf.historic.document.request.confirmation.body-text.DutyDefermentStatement=We will send an email to {0} when your statements are ready. This will usually be within 48 hours.
 cf.historic.document.request.confirmation.body-text.C79Certificate=We will send an email to {0} when your certificates are ready. This will usually be within 48 hours.
 cf.historic.document.request.confirmation.body-text.PostponedVATStatement=We will send an email to {0} when your statements are ready. This will usually be within 48 hours.
+
+#HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=You can only request statements from after the {0} to {1} tax year.
 cf.historic.document.request.form.error.date-too-recent=You can only request statements older than 6 months
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=The to date must be on or after the from date
 cf.historic.document.request.form.error.date-earlier-than-system-start-date=You can only request statements issued since October 2019
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=You can only request statements issued since January 2021
 cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=You cannot enter a date before September 2019
-
 cf.historic.document.request.form.error.date-range-too-wide=You can only ask for up to 6 months of statements in each request
+
 cf.historic.document.request.form.error.start.month.date-number-invalid=Enter the month you want to search from
 cf.historic.document.request.form.error.start.year.date-number-invalid=Enter the year you want to search from
 cf.historic.document.request.form.error.end.month.date-number-invalid=Enter the month you want to search to
@@ -141,28 +136,28 @@ cf.historic.document.request.form.error.end.date-missing=Enter the month and yea
 cf.historic.document.request.form.error.month.invalid=Enter a number between 1 and 12
 cf.historic.document.request.form.error.year.invalid=Enter a real year
 
-cf.historic.document.request.link.label.C79Certificate=Back to import VAT certificates (C79)
-cf.historic.document.request.link.label.SecurityStatement=Back to Notification of adjustment statements
-cf.historic.document.request.link.label.DutyDefermentStatement=Back to duty deferment statements
-
+# Security Statements requested view
 cf.security-statements.requested.title=Requested notification of adjustment statements
 cf.security-statements.requested.available.text=Requested statements are available to view for 10 days. We can only provide these in PDF format.
 cf.security-statements.requested.period={0} to {1}
 cf.security-statements.requested.download-link.aria-text=Download {0} for {1} to {2} ({3})
 cf.security-statements.no-statements=There are no statements available to view.
 
+#missing_documents_guidance
 cf.common.missing-documents-guidance.heading=Can’t find the {0} you’re looking for?
 cf.common.missing-documents-guidance.text1={0} for import declarations made in CHIEF are not available in this service.
 cf.common.missing-documents-guidance.text2={0} are only generated for periods in which you imported goods.
 
+# Import VAT requested statements view
 cf.import-vat.requested.title=Requested import VAT certificates (C79)
 cf.import-vat.requested.available.text=Requested certificates are available to view for 10 days. We can only provide these in PDF format.
 
+# Import Postponed VAT requested statements view
 cf.import-postponed-vat.requested.title=Your requested Postponed import VAT statements
 cf.import-postponed-vat.requested.available.text=Requested statements are available to view for 10 days. We can only provide these in PDF format.
 
+# DutyDefermentRequestStatements
 cf.account.detail.requested.title=Requested duty deferment statements
-cf.account.detail.requested-certificates-available-link-text=requested statements
 cf.account.detail.requested.deferment-account-secondary-heading=Account:
 cf.account.detail.requested.deferment-account-heading=Requested duty deferment statements
 cf.account.detail.requested.deferment-account-statements-available.text=Requested statements are available to view for 10 days. We can only provide these in PDF format.
@@ -172,16 +167,16 @@ cf.account.detail.row.supplementary.info=Supplementary end of month
 cf.account.details.row.excise.info=Excise summary
 cf.account.details.previous-eori=EORI: {0}
 
+cf.account.vat.download-link=Download {0} of {1} ({2})
+cf.account.vat.missing-file=Unavailable
+cf.account.vat.missing-file-hidden-text={0} for {1} unavailable
 
+#ImportPostponedVatRequestedStatements
 cf.account.postponed-vat.download-link=Download {0} of {1} ({2})
 cf.account.postponed-vat.missing-file=Unavailable
 cf.account.postponed-vat.missing-file-hidden-text={0} for {1} unavailable
 cf.account.postponed-vat.missing-file-type=No {0} statements available.
 cf.account.postponed-vat.missing-file-month=There were no statements in {0}.
-
-cf.account.vat.download-link=Download {0} of {1} ({2})
-cf.account.vat.missing-file=Unavailable
-cf.account.vat.missing-file-hidden-text={0} for {1} unavailable
 
 date.range = {0} to {1}
 
@@ -190,8 +185,6 @@ help.p1 = If you are having issues, phone 0300 200 3701.
 help.p2 = Open 8am to 6pm, Monday to Friday (closed bank holidays).
 help.duty-deferment.p1=If you are having issues, phone 0300 059 4243.
 help.duty-deferment.p2=Open 9am to 12pm, and 2pm to 4pm Monday to Friday (closed bank holidays).
-
-
 
 #Session Expired
 session_expired.title = For your security, this service has been reset
