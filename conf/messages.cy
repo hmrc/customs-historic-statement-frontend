@@ -1,3 +1,6 @@
+# Site-wide Messages
+# ----------------------------------------------------------
+
 language.cymraeg = Cymraeg
 language.english = English
 language.change.english=Change the language to English
@@ -30,11 +33,8 @@ feedback.before = Gwasanaeth newydd yw hwn – bydd eich
 feedback.link = adborth
 feedback.after = yn ein helpu i’w wella.
 
-site.back = Yn ôl
 site.change = Newid
 site.continue = Anfon cais
-site.service_name = customs-historic-statement-frontend
-site.govuk = GOV.UK
 
 # Unauthorised Error
 unauthorised.title=Heb gofrestru â’r Gwasanaeth Datgan Tollau
@@ -52,23 +52,36 @@ service.technical-difficulties.p = Rhowch gynnig arall arni mewn ychydig o funud
 
 cf.accounts.title=Eich cyfrifon ariannol ar gyfer y tollau
 
-#Historic Document Request
+#CheckYourAnswersView
 cf.historic.document.request.review.PostponedVATStatement.title=Cais am ddatganiadau ar gyfer TAW mewnforio ohiriedig
 cf.historic.document.request.review.C79Certificate.title=Cais am dystysgrifau TAW mewnforio
 cf.historic.document.request.review.SecurityStatement.title=Cais am hysbysiad o ddatganiadau addasu
 cf.historic.document.request.review.DutyDefermentStatement.title=Cais am ddatganiadau gohirio tollau
+cf.historic.document.request.review.SecurityStatement.heading=Cais am hysbysiad o ddatganiadau addasu
+cf.historic.document.request.review.PostponedVATStatement.heading=Cais am ddatganiadau ar gyfer TAW mewnforio ohiriedig
+cf.historic.document.request.review.DutyDefermentStatement.heading=Cais am ddatganiadau gohirio tollau
+cf.historic.document.request.review.C79Certificate.heading=Cais am dystysgrifau TAW mewnforio
+cf.historic.document.request.selected.statements=Datganiadau dewisol
+cf.historic.document.request.selected.certificates=Tystysgrifau a ddewiswyd
+cf.historic.document.request.review.submit=Cyflwyno’ch cais
+cf.historic.document.request.review.response=Ein bwriad yw ateb eich cais cyn pen 48 awr.
+cf.historic.document.request.review.send=Anfon cais
+
+#HistoricDataRequrstPageView
 cf.historic.document.request.C79Certificate.title=Pa dystysgrifau TAW mewnforio (C79) sydd eu hangen arnoch?
 cf.historic.document.request.SecurityStatement.title=Pa hysbysiad o ddatganiadau addasu sydd eu hangen arnoch?
 cf.historic.document.request.DutyDefermentStatement.title=Pa ddatganiadau gohirio tollau sydd eu hangen arnoch?
 cf.historic.document.request.PostponedVATStatement.title=Pa ddatganiadau ar gyfer TAW mewnforio ohiriedig sydd eu hangen arnoch?
+
 cf.historic.document.request.heading.C79Certificate=Pa dystysgrifau TAW mewnforio sydd eu hangen arnoch?
 cf.historic.document.request.heading.PostponedVATStatement=Pa ddatganiadau ar gyfer TAW mewnforio ohiriedig sydd eu hangen arnoch?
 cf.historic.document.request.heading.SecurityStatement=Pa hysbysiad o ddatganiadau addasu sydd eu hangen arnoch?
 cf.historic.document.request.heading.DutyDefermentStatement=Pa ddatganiadau gohirio tollau sydd eu hangen arnoch?
-cf.historic.document.request.dan=Cyfrif:
+
 cf.historic.document.request.info-text=Gallwch wneud cais am ddatganiadau gohirio tollau sy’n dyddio’n ôl i fis Medi 2019
 cf.historic.document.request.pvat.info-text=Bydd datganiad yn dangos cyfanswm y TAW mewnforio a ohiriwyd ar gyfer y mis blaenorol.
 cf.historic.document.request.continue=Yn eich blaen
+
 cf.historic.document.request.from=O ba ddyddiad dechrau y mae angen datganiadau arnoch?
 cf.historic.document.request.whichStartDate.C79Certificate=ar gyfer pa ddyddiad dechrau y mae angen tystysgrifau TAW mewnforio arnoch?
 cf.historic.document.request.whichStartDate.PostponedVATStatement=ar gyfer pa ddyddiad dechrau y mae angen tystysgrifau TAW o ddatganiadau addasu arnoch?
@@ -81,8 +94,6 @@ cf.historic.document.request.whichEndDate.SecurityStatement=ar gyfer pa ddyddiad
 cf.historic.document.request.whichEndDate.DutyDefermentStatement=ar gyfer pa ddyddiad dod i ben y mae angen datganiadau gohirio tollau arnoch?
 cf.historic.document.request.date.hint=Er enghraifft, 3 2019.
 cf.historic.document.request.date.pvat.hint=Er enghraifft, 3 2021.
-cf.historic.document.request.selected.statements=Datganiadau dewisol
-cf.historic.document.request.selected.certificates=Tystysgrifau a ddewiswyd
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?
 cf.historic.document.request.whichStartDate.C79Certificate.hidden = pa ddyddiad dechrau sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?
@@ -93,20 +104,7 @@ cf.historic.document.request.whichStartDate.DutyDefermentStatement.hidden = pa d
 cf.historic.document.request.whichEndDate.PostponedVATStatement.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer datganiadau TAW mewnforio?
 cf.historic.document.request.whichStartDate.PostponedVATStatement.hidden = pa ddyddiad dechrau sydd ei angen arnoch ar gyfer datganiadau TAW mewnforio?
 
-cf.historic.document.request.review.SecurityStatement.heading=Cais am hysbysiad o ddatganiadau addasu
-cf.historic.document.request.review.PostponedVATStatement.heading=Cais am ddatganiadau ar gyfer TAW mewnforio ohiriedig
-cf.historic.document.request.review.DutyDefermentStatement.heading=Cais am ddatganiadau gohirio tollau
-cf.historic.document.request.review.C79Certificate.heading=Cais am dystysgrifau TAW mewnforio
-
-cf.historic.document.request.review.submit=Cyflwyno’ch cais
-cf.historic.document.request.review.response=Ein bwriad yw ateb eich cais cyn pen 48 awr.
-cf.historic.document.request.review.send=Anfon cais
-
-cf.historic.document.request.sessionId.error.title=Mae’n ddrwg gennym – ni anfonwyd eich cais
-cf.historic.document.request.sessionId.error.heading=Mae Dynodydd Defnyddiwr y Sesiwn ar goll
-cf.historic.document.request.error.heading=Mae’n ddrwg gennym – ni anfonwyd eich cais
-cf.historic.document.request.error.body-text=Rhowch gynnig arall arni yn nes ymlaen.
-cf.historic.document.request.sessionId.error.message=Mewngofnodwch eto i weld y dudalen hon
+#ConfirmationPageView
 cf.historic.document.request.confirmation.panel-text.DutyDefermentStatement=Daeth eich cais am ddatganiadau i law
 cf.historic.document.request.confirmation.panel-text.C79Certificate=Daeth eich cais am dystysgrifau i law
 cf.historic.document.request.confirmation.panel-text.SecurityStatement=Daeth eich cais am ddatganiadau i law
@@ -119,6 +117,8 @@ cf.historic.document.request.confirmation.body-text.SecurityStatement=Byddwn yn 
 cf.historic.document.request.confirmation.body-text.DutyDefermentStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod. Bydd hyn fel arfer cyn pen 48 awr.
 cf.historic.document.request.confirmation.body-text.C79Certificate=Byddwn yn anfon e-bost at {0} pan fydd eich tystysgrifau yn barod. Bydd hyn fel arfer cyn pen 48 awr.
 cf.historic.document.request.confirmation.body-text.PostponedVATStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau’n barod. Bydd hyn fel arfer cyn pen 48 awr.
+
+#HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau o ar ôl blwyddyn dreth {0} i {1}.
 cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am ddatganiadau sy’n hŷn na 6 mis
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’
@@ -126,9 +126,6 @@ cf.historic.document.request.form.error.date-earlier-than-system-start-date=Gall
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ionawr 2021
 cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=Ni allwch nodi dyddiad cyn mis Medi 2019
 cf.historic.document.request.form.error.date-range-too-wide=Gallwch ond gofyn am hyd at 6 mis o ddatganiadau ym mhob cais
-cf.historic.document.request.link.label.C79Certificate=Yn ôl i dystysgrifau TAW mewnforio (C79)
-cf.historic.document.request.link.label.SecurityStatement=Yn ôl i hysbysiad o ddatganiadau addasu
-cf.historic.document.request.link.label.DutyDefermentStatement=Yn ôl i ddatganiadau gohirio tollau
 
 cf.historic.document.request.form.error.start.month.date-number-invalid=Nodwch o ba fis yr ydych am chwilio
 cf.historic.document.request.form.error.start.year.date-number-invalid=Nodwch o ba flwyddyn yr ydych am chwilio
@@ -146,6 +143,7 @@ cf.security-statements.requested.period={0} i {1}
 cf.security-statements.requested.download-link.aria-text=Lawrlwytho {0} ar gyfer {1} i {2} ({3})
 cf.security-statements.no-statements=Nid oes datganiadau ar gael i’w gweld.
 
+#missing_documents_guidance
 cf.common.missing-documents-guidance.heading=Methu gweld y {0} yr ydych yn edrych amdano?
 cf.common.missing-documents-guidance.text1=Nid yw {0} ar gyfer datganiad mewnforio a wnaed yn CHIEF ar gael yn y gwasanaeth hwn.
 cf.common.missing-documents-guidance.text2=Cynhyrchir {0} dim ond ar gyfer cyfnodau y gwnaethoch fewnforio nwyddau ynddynt.
@@ -157,10 +155,9 @@ cf.import-vat.requested.available.text=Mae tystysgrifau y gofynnwyd amdanynt ar 
 # Import Postponed VAT requested statements view
 cf.import-postponed-vat.requested.title=Y datganiadau ar gyfer TAW mewnforio ohiriedig y gofynnoch amdanynt
 cf.import-postponed-vat.requested.available.text=Mae datganiadau y gofynnir amdanynt ar gael i’w gweld am 10 diwrnod. Dim ond ar ffurf PDF y gallwn ddarparu’r rhain.
-cf.account.postponed-vat.missing-file-type=Dim datganiadau {0} ar gael.
 
+# DutyDefermentRequestStatements
 cf.account.detail.requested.title=Datganiadau gohirio tollau y gofynnwyd amdanynt
-cf.account.detail.requested-certificates-available-link-text=datganiadau y gofynnwyd amdanynt
 cf.account.detail.requested.deferment-account-secondary-heading=Cyfrif:
 cf.account.detail.requested.deferment-account-heading=Datganiadau gohirio tollau y gofynnwyd amdanynt
 cf.account.detail.requested.deferment-account-statements-available.text=Mae datganiadau y gofynnwyd amdanynt ar gael i’w gweld am 10 diwrnod. Gallwn ond darparu’r rhain ar ffurf PDF.
@@ -170,9 +167,17 @@ cf.account.detail.row.supplementary.info=Manylion diwedd mis atodol
 cf.account.details.row.excise.info=Crynodeb o’r ecséis
 cf.account.details.previous-eori=EORI: {0}
 
+#
 cf.account.vat.download-link=Lawrlwytho {0} o {1} ({2})
 cf.account.vat.missing-file=Nid yw ar gael
 cf.account.vat.missing-file-hidden-text=Nid yw {0} ar gyfer {1} ar gael
+
+#ImportPostponedVatRequestedStatements
+cf.account.postponed-vat.download-link=Lawrlwytho {0} o {1} ({2})
+cf.account.postponed-vat.missing-file=Nid yw ar gael
+cf.account.postponed-vat.missing-file-hidden-text=Nid yw {0} ar gyfer {1} ar gael
+cf.account.postponed-vat.missing-file-type=Dim datganiadau {0} ar gael.
+cf.account.postponed-vat.missing-file-month=Nid oedd unrhyw ddatganiadau i mewn {0}.
 
 date.range = {0} i fis {1}
 
