@@ -60,9 +60,7 @@ p: components.p
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(fileRole)) {
 
         @summaryList(SummaryList(helper.rows(fileRole), "govuk-!-margin-bottom-9 govuk-summary-list--wide "))
-
-        @h3("cf.historic.document.request.review.submit")
-        @p(Html(messages("cf.historic.document.request.review.response")))
+        
         @button("site.continue")
     }
 }

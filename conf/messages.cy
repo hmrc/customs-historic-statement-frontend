@@ -34,7 +34,7 @@ feedback.link = adborth
 feedback.after = yn ein helpu i’w wella.
 
 site.change = Newid
-site.continue = Anfon cais
+site.continue = Cadarnhau ac anfon
 
 # Unauthorised Error
 unauthorised.title=Heb gofrestru â’r Gwasanaeth Datgan Tollau
@@ -63,8 +63,6 @@ cf.historic.document.request.review.DutyDefermentStatement.heading=Cais am ddatg
 cf.historic.document.request.review.C79Certificate.heading=Cais am dystysgrifau TAW mewnforio
 cf.historic.document.request.selected.statements=Datganiadau dewisol
 cf.historic.document.request.selected.certificates=Tystysgrifau a ddewiswyd
-cf.historic.document.request.review.submit=Cyflwyno’ch cais
-cf.historic.document.request.review.response=Ein bwriad yw ateb eich cais cyn pen 48 awr.
 cf.historic.document.request.review.send=Anfon cais
 
 #HistoricDataRequrstPageView
@@ -113,10 +111,10 @@ cf.historic.document.request.confirmation.C79Certificate.link-text=Yn ôl i dyst
 cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Yn ôl i ddatganiadau gohirio tollau
 cf.historic.document.request.confirmation.SecurityStatement.link-text=Yn ôl i hysbysiad o ddatganiadau addasu
 cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Yn ôl i’r cyfrif TAW mewnforio ohiriedig
-cf.historic.document.request.confirmation.body-text.SecurityStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod. Bydd hyn fel arfer cyn pen 48 awr.
-cf.historic.document.request.confirmation.body-text.DutyDefermentStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod. Bydd hyn fel arfer cyn pen 48 awr.
-cf.historic.document.request.confirmation.body-text.C79Certificate=Byddwn yn anfon e-bost at {0} pan fydd eich tystysgrifau yn barod. Bydd hyn fel arfer cyn pen 48 awr.
-cf.historic.document.request.confirmation.body-text.PostponedVATStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau’n barod. Bydd hyn fel arfer cyn pen 48 awr.
+cf.historic.document.request.confirmation.body-text.SecurityStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
+cf.historic.document.request.confirmation.body-text.DutyDefermentStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
+cf.historic.document.request.confirmation.body-text.C79Certificate=Byddwn yn anfon e-bost at {0} pan fydd eich tystysgrifau yn barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
+cf.historic.document.request.confirmation.body-text.PostponedVATStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau’n barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau o ar ôl blwyddyn dreth {0} i {1}.
