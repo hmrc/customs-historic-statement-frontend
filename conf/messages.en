@@ -34,7 +34,7 @@ feedback.link = feedback
 feedback.after = will help us to improve it.
 
 site.change = Change
-site.continue = Send request
+site.continue = Confirm and send
 
 # Unauthorised Error
 unauthorised.title=Not registered with CDS
@@ -63,8 +63,6 @@ cf.historic.document.request.review.DutyDefermentStatement.heading=Request duty 
 cf.historic.document.request.review.C79Certificate.heading=Request import VAT certificates
 cf.historic.document.request.selected.statements=Selected statements
 cf.historic.document.request.selected.certificates=Selected certificates
-cf.historic.document.request.review.submit=Submit your request
-cf.historic.document.request.review.response=We aim to respond to your request within 48 hours.
 cf.historic.document.request.review.send=Send request
 
 #HistoricDataRequrstPageView
@@ -113,10 +111,10 @@ cf.historic.document.request.confirmation.C79Certificate.link-text=Back to impor
 cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Back to duty deferment statements
 cf.historic.document.request.confirmation.SecurityStatement.link-text=Back to Notification of adjustment statements
 cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Back to Postponed import VAT account
-cf.historic.document.request.confirmation.body-text.SecurityStatement=We will send an email to {0} when your statements are ready. This will usually be within 48 hours.
-cf.historic.document.request.confirmation.body-text.DutyDefermentStatement=We will send an email to {0} when your statements are ready. This will usually be within 48 hours.
-cf.historic.document.request.confirmation.body-text.C79Certificate=We will send an email to {0} when your certificates are ready. This will usually be within 48 hours.
-cf.historic.document.request.confirmation.body-text.PostponedVATStatement=We will send an email to {0} when your statements are ready. This will usually be within 48 hours.
+cf.historic.document.request.confirmation.body-text.SecurityStatement=We will send an email to {0} when your statements are ready. You can access them from the statements page, usually within 48 hours.
+cf.historic.document.request.confirmation.body-text.DutyDefermentStatement=We will send an email to {0} when your statements are ready. You can access them from the statements page, usually within 48 hours.
+cf.historic.document.request.confirmation.body-text.C79Certificate=We will send an email to {0} when your certificates are ready. You can access them from the statements page, usually within 48 hours.
+cf.historic.document.request.confirmation.body-text.PostponedVATStatement=We will send an email to {0} when your statements are ready. You can access them from the statements page, usually within 48 hours.
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=You can only request statements from after the {0} to {1} tax year.
