@@ -113,7 +113,7 @@ cf.historic.document.request.confirmation.SecurityStatement.link-text=Yn ôl i h
 cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Yn ôl i’r cyfrif TAW mewnforio ohiriedig
 cf.historic.document.request.confirmation.body-text.SecurityStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
 cf.historic.document.request.confirmation.body-text.DutyDefermentStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
-cf.historic.document.request.confirmation.body-text.C79Certificate=Byddwn yn anfon e-bost at {0} pan fydd eich tystysgrifau yn barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
+cf.historic.document.request.confirmation.body-text.C79Certificate=Byddwn yn anfon e-bost at {0} pan fydd eich tystysgrifau yn barod. Gallwch ddod o hyd iddyn nhw ar y dudalen tystysgrifau, fel arfer cyn pen 48 awr.
 cf.historic.document.request.confirmation.body-text.PostponedVATStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau’n barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
 
 #HistoricDataRequestPageView
