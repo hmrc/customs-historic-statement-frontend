@@ -76,16 +76,16 @@ cf.historic.document.request.heading.PostponedVATStatement=Pa ddatganiadau ar gy
 cf.historic.document.request.heading.SecurityStatement=Pa hysbysiad o ddatganiadau addasu sydd eu hangen arnoch?
 cf.historic.document.request.heading.DutyDefermentStatement=Pa ddatganiadau gohirio tollau sydd eu hangen arnoch?
 
-cf.historic.document.request.info-text=Gallwch wneud cais am ddatganiadau gohirio tollau sy’n dyddio’n ôl i fis Medi 2019
+cf.historic.document.request.info-text=Gallwch ofyn am dystysgrifau TAW mewnforio sy’n dyddio’n ôl i fis Hydref 2019.
 cf.historic.document.request.pvat.info-text=Bydd datganiad yn dangos cyfanswm y TAW mewnforio a ohiriwyd ar gyfer y mis blaenorol.
 cf.historic.document.request.continue=Yn eich blaen
 
-cf.historic.document.request.from=O ba ddyddiad dechrau y mae angen datganiadau arnoch?
+cf.historic.document.request.from=O ba ddyddiad dechrau y mae angen tystysgrifau arnoch?
 cf.historic.document.request.whichStartDate.C79Certificate=ar gyfer pa ddyddiad dechrau y mae angen tystysgrifau TAW mewnforio arnoch?
 cf.historic.document.request.whichStartDate.PostponedVATStatement=ar gyfer pa ddyddiad dechrau y mae angen tystysgrifau TAW o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichStartDate.SecurityStatement=ar gyfer pa ddyddiad dechrau y mae angen hysbysiad o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichStartDate.DutyDefermentStatement=Ar gyfer pa ddyddiad dechrau y mae angen datganiadau gohirio tollau arnoch?
-cf.historic.document.request.to=I ba ddyddiad dod i ben y mae angen datganiadau arnoch?
+cf.historic.document.request.to=I ba ddyddiad dod i ben y mae angen tystysgrifau arnoch?
 cf.historic.document.request.whichEndDate.C79Certificate=ar gyfer pa ddyddiad dod i ben y mae angen tystysgrifau TAW mewnforio arnoch?
 cf.historic.document.request.whichEndDate.PostponedVATStatement=ar gyfer pa ddyddiad dod i ben y mae angen tystysgrifau TAW o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.SecurityStatement=ar gyfer pa ddyddiad dod i ben y mae angen hysbysiad o ddatganiadau addasu arnoch?

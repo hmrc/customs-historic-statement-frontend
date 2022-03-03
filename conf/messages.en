@@ -71,21 +71,21 @@ cf.historic.document.request.SecurityStatement.title=Which notification of adjus
 cf.historic.document.request.DutyDefermentStatement.title=Which duty deferment statements do you need?
 cf.historic.document.request.PostponedVATStatement.title=Which Postponed import VAT statements do you need?
 
-cf.historic.document.request.heading.C79Certificate=Which Import VAT certificates do you need?
+cf.historic.document.request.heading.C79Certificate=Which import VAT certificates do you need?
 cf.historic.document.request.heading.PostponedVATStatement=Which Postponed import VAT statements do you need?
 cf.historic.document.request.heading.SecurityStatement=Which notification of adjustment statements do you need?
 cf.historic.document.request.heading.DutyDefermentStatement=Which duty deferment statements do you need?
 
-cf.historic.document.request.info-text=You can request duty deferment statements dating back to September 2019.
+cf.historic.document.request.info-text=You can request import VAT certificates dating back to October 2019.
 cf.historic.document.request.pvat.info-text=A statement will show the total import VAT postponed for the previous month.
 cf.historic.document.request.continue=Continue
 
-cf.historic.document.request.from=From what start date do you need statements?
+cf.historic.document.request.from=From what start date do you need certificates?
 cf.historic.document.request.whichStartDate.C79Certificate=which start date do you need Import VAT certificates?
 cf.historic.document.request.whichStartDate.PostponedVATStatement=which start date do you need Import Postponed VAT statements?
 cf.historic.document.request.whichStartDate.SecurityStatement=which start date do you need adjustment statements?
 cf.historic.document.request.whichStartDate.DutyDefermentStatement=which start date do you need deferment statements?
-cf.historic.document.request.to=To what end date do you need statements?
+cf.historic.document.request.to=To what end date do you need certificates?
 cf.historic.document.request.whichEndDate.C79Certificate=which end date do you need Import VAT certificates?
 cf.historic.document.request.whichEndDate.PostponedVATStatement=which start date do you need Import Postponed VAT statements?
 cf.historic.document.request.whichEndDate.SecurityStatement=which end date do you need adjustment statements?
