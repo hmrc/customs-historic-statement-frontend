@@ -141,7 +141,7 @@ cf.security-statements.requested.period={0} to {1}
 cf.security-statements.requested.download-link.aria-text=Download {0} for {1} to {2} ({3})
 cf.security-statements.no-statements=There are no statements available to view.
 
-#missing_documents_guidance
+# missing_documents_guidance
 cf.common.missing-documents-guidance.heading=Can’t find the {0} you’re looking for?
 cf.common.missing-documents-guidance.text1={0} for import declarations made in CHIEF are not available in this service.
 cf.common.missing-documents-guidance.text2={0} are only generated for periods in which you imported goods.
@@ -184,13 +184,23 @@ help.p2 = Open 8am to 6pm, Monday to Friday (closed bank holidays).
 help.duty-deferment.p1=If you are having issues, phone 0300 059 4243.
 help.duty-deferment.p2=Open 9am to 12pm, and 2pm to 4pm Monday to Friday (closed bank holidays).
 
-#Session Expired
+# Session Expired
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
 session_expired.action = Start again
 
 checkYourAnswers.period.change = statement period
+
+# Page Not Found Error
+
+cf.error.not-found.title=Page not found
+cf.error.not-found.heading=Page not found
+cf.error.not-found.message.address-typed-wrong=If you typed the web address, check it is correct.
+cf.error.not-found.message.address-pasted-wrong=If you pasted the web address, check you copied the entire address.
+cf.error.not-found.message.go-to-home-page-text1=Or you can
+cf.error.not-found.message.go-to-home-page-text2=.
+cf.accounts.view-customs-account=view your customs financial accounts
 
 # Unauthorised Error
 cf.error.unauthorized.title=You are not authorised to view this page
