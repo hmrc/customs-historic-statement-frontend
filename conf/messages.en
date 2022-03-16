@@ -69,10 +69,10 @@ cf.historic.document.request.review.send=Send request
 cf.historic.document.request.C79Certificate.title=Which import VAT certificates (C79) do you need?
 cf.historic.document.request.SecurityStatement.title=Which notification of adjustment statements do you need?
 cf.historic.document.request.DutyDefermentStatement.title=Which duty deferment statements do you need?
-cf.historic.document.request.PostponedVATStatement.title=Which Postponed import VAT statements do you need?
+cf.historic.document.request.PostponedVATStatement.title=Which postponed import VAT statements do you need?
 
 cf.historic.document.request.heading.C79Certificate=Which import VAT certificates do you need?
-cf.historic.document.request.heading.PostponedVATStatement=Which Postponed import VAT statements do you need?
+cf.historic.document.request.heading.PostponedVATStatement=Which postponed import VAT statements do you need?
 cf.historic.document.request.heading.SecurityStatement=Which notification of adjustment statements do you need?
 cf.historic.document.request.heading.DutyDefermentStatement=Which duty deferment statements do you need?
 
