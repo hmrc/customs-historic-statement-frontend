@@ -122,12 +122,18 @@ cf.historic.document.request.confirmation.body-text.PostponedVATStatement=We wil
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=You can only request statements from after the {0} to {1} tax year.
-cf.historic.document.request.form.error.date-too-recent=You can only request statements older than 6 months
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=The to date must be on or after the from date
-cf.historic.document.request.form.error.date-earlier-than-system-start-date=You can only request statements issued since October 2019
+
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=You can only request statements issued since January 2021
 cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=You cannot enter a date before September 2019
+
 cf.historic.document.request.form.error.date-range-too-wide=You can only ask for up to 6 months of statements in each request
+cf.historic.document.request.form.error.date-range-too-wide.c79=You can only ask for up to 6 months of certificates in each request
+cf.historic.document.request.form.error.date-earlier-than-system-start-date=You can only request statements issued since October 2019
+cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79=You can only request certificates issued since October 2019
+cf.historic.document.request.form.error.date-too-recent=You can only request statements older than 6 months
+cf.historic.document.request.form.error.date-too-recent.c79=You can only request certificates older than 6 months
+
 
 cf.historic.document.request.form.error.start.month.date-number-invalid=Enter the month you want to search from
 cf.historic.document.request.form.error.start.year.date-number-invalid=Enter the year you want to search from

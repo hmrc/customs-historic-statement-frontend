@@ -122,12 +122,18 @@ cf.historic.document.request.confirmation.body-text.PostponedVATStatement=Byddwn
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau o ar ôl blwyddyn dreth {0} i {1}.
-cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am ddatganiadau sy’n hŷn na 6 mis
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’
-cf.historic.document.request.form.error.date-earlier-than-system-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Hydref 2019
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ionawr 2021
 cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=Ni allwch nodi dyddiad cyn mis Medi 2019
+
+
 cf.historic.document.request.form.error.date-range-too-wide=Gallwch ond gofyn am hyd at 6 mis o ddatganiadau ym mhob cais
+cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am ddatganiadau sy’n hŷn na 6 mis
+cf.historic.document.request.form.error.date-earlier-than-system-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Hydref 2019
+
+cf.historic.document.request.form.error.date-range-too-wide.c79=Gallwch ofyn am hyd at 6 mis o dystysgrifau yn unig ym mhob cais
+cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79=Gallwch ofyn am dystysgrifau a anfonwyd ers mis Hydref 2019 yn unig
+cf.historic.document.request.form.error.date-too-recent.c79=Gallwch ofyn am dystysgrifau sy’n hŷn na 6 mis yn unig
 
 cf.historic.document.request.form.error.start.month.date-number-invalid=Nodwch o ba fis yr ydych am chwilio
 cf.historic.document.request.form.error.start.year.date-number-invalid=Nodwch o ba flwyddyn yr ydych am chwilio

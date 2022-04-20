@@ -47,7 +47,7 @@ class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
         emptyEndDate = "cf.historic.document.request.form.error.end.date-missing",
         invalidMonth = "cf.historic.document.request.form.error.month.invalid",
         invalidYear = "cf.historic.document.request.form.error.year.invalid"
-      ).verifying(tooRecentDate)
+      ).verifying(tooRecentDate(fileRole))
         .verifying(earlierThanPVATStartDate(fileRole))
     )(HistoricDates.apply)(HistoricDates.unapply)
     )
