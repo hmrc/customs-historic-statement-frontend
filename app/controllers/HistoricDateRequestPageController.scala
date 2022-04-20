@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.HistoricDateRequestPageFormProvider
-import models.{FileRole, HistoricDates, Mode}
+import models.{C79Certificate, FileRole, HistoricDates, Mode}
 import navigation.Navigator
 import pages.{AccountNumber, HistoricDateRequestPage}
 import play.api.data.Form
@@ -95,14 +95,19 @@ class HistoricDateRequestPageController @Inject()(
     (dates, fileRole) match {
       case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths < 0 =>
         Some(form.withError("end", "cf.historic.document.request.form.error.to-date-must-be-later-than-from-date").fill(dates))
-      case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths >= maximumNumberOfMonths =>
-        Some(form.withError("end", "cf.historic.document.request.form.error.date-range-too-wide").fill(dates))
+      case (HistoricDates(start, end), v) if Period.between(start, end).toTotalMonths >= maximumNumberOfMonths =>
+        Some(form.withError("end",
+          if (v == C79Certificate) {
+            "cf.historic.document.request.form.error.date-range-too-wide.c79"
+          } else {
+            "cf.historic.document.request.form.error.date-range-too-wide"
+          }).fill(dates))
       case (HistoricDates(start, end), _) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
         Some(formWithError(messages(
           "cf.historic.document.request.form.error.date-too-far-in-past",
           minTaxYear.startYear.toString,
           minTaxYear.finishYear.toString
-      )))
+        )))
       case _ => None
     }
   }

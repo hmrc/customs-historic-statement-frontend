@@ -16,7 +16,7 @@
 
 package forms.mappings
 
-import models.{DutyDefermentStatement, FileRole, PostponedVATStatement}
+import models.{C79Certificate, DutyDefermentStatement, FileRole, PostponedVATStatement, SecurityStatement}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 import java.time.{LocalDate, LocalDateTime, Period}
@@ -29,19 +29,29 @@ trait Constraints {
   private lazy val currentDate: LocalDate = LocalDateTime.now().toLocalDate
   private val olderThan = Period.ofMonths(6)
 
-  def tooRecentDate: Constraint[LocalDate] = {
+  def tooRecentDate(fileRole: FileRole): Constraint[LocalDate] = {
     Constraint {
       // exclude the current month
       case request if Period.between(request, currentDate.minusMonths(1)).toTotalMonths < olderThan.toTotalMonths =>
-        Invalid(ValidationError("cf.historic.document.request.form.error.date-too-recent"))
+        if (fileRole == C79Certificate){
+          Invalid(ValidationError("cf.historic.document.request.form.error.date-too-recent.c79"))
+        } else { Invalid(ValidationError("cf.historic.document.request.form.error.date-too-recent")) }
       case _ => Valid
     }
   }
 
-  def earlierThanSystemStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if request.isBefore(etmpStatementsDate) && fileRole != PostponedVATStatement && fileRole != DutyDefermentStatement =>
-      Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-system-start-date"))
-    case _ => Valid
+  def earlierThanSystemStartDate(fileRole: FileRole): Constraint[LocalDate] = {
+    val messageKey = fileRole match {
+      case C79Certificate => "cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79"
+      case SecurityStatement => "cf.historic.document.request.form.error.date-earlier-than-system-start-date"
+      case _ => ""
+    }
+
+    Constraint {
+      case request if request.isBefore(etmpStatementsDate) && fileRole != PostponedVATStatement && fileRole != DutyDefermentStatement =>
+      Invalid(ValidationError(messageKey))
+      case _ => Valid
+    }
   }
 
   def earlierThanPVATStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
