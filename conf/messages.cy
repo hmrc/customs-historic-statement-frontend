@@ -129,7 +129,7 @@ cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement
 
 cf.historic.document.request.form.error.date-range-too-wide=Gallwch ond gofyn am hyd at 6 mis o ddatganiadau ym mhob cais
 cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am ddatganiadau sy’n hŷn na 6 mis
-cf.historic.document.request.form.error.date-earlier-than-system-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Hydref 2019
+cf.historic.document.request.form.error.date-earlier-than-system-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Medi 2019
 
 cf.historic.document.request.form.error.date-range-too-wide.c79=Gallwch ofyn am hyd at 6 mis o dystysgrifau yn unig ym mhob cais
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79=Gallwch ofyn am dystysgrifau a anfonwyd ers mis Hydref 2019 yn unig
