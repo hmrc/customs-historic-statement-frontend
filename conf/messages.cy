@@ -79,7 +79,7 @@ cf.historic.document.request.heading.DutyDefermentStatement=Pa ddatganiadau gohi
 cf.historic.document.request.info-text.C79Certificate=Gallwch ofyn am dystysgrifau TAW mewnforio sy’n dyddio’n ôl i fis Hydref 2019.
 cf.historic.document.request.info-text.PostponedVATStatement=Bydd datganiad yn dangos cyfanswm y TAW mewnforio a ohiriwyd ar gyfer y mis blaenorol.
 cf.historic.document.request.info-text.SecurityStatement=Gallwch wneud cais am hysbysiad o ddatganiadau addasu sy’n dyddio’n ôl i fis Hydref 2019.
-cf.historic.document.request.info-text.DutyDefermentStatement=Gallwch wneud cais am ddatganiadau gohirio tollau sy’n dyddio’n ôl i fis Hydref 2019.
+cf.historic.document.request.info-text.DutyDefermentStatement=Gallwch wneud cais am ddatganiadau gohirio tollau sy’n dyddio’n ôl i fis Medi 2019.
 cf.historic.document.request.continue=Yn eich blaen
 
 cf.historic.document.request.from=O ba ddyddiad dechrau y mae angen tystysgrifau arnoch?
@@ -134,6 +134,9 @@ cf.historic.document.request.form.error.date-earlier-than-system-start-date=Gall
 cf.historic.document.request.form.error.date-range-too-wide.c79=Gallwch ofyn am hyd at 6 mis o dystysgrifau yn unig ym mhob cais
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79=Gallwch ofyn am dystysgrifau a anfonwyd ers mis Hydref 2019 yn unig
 cf.historic.document.request.form.error.date-too-recent.c79=Gallwch ofyn am dystysgrifau sy’n hŷn na 6 mis yn unig
+
+cf.historic.document.request.form.error.date-earlier-than-system-start-date.dd=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Medi 2019
+cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Hydref 2019
 
 cf.historic.document.request.form.error.start.month.date-number-invalid=Nodwch o ba fis yr ydych am chwilio
 cf.historic.document.request.form.error.start.year.date-number-invalid=Nodwch o ba flwyddyn yr ydych am chwilio

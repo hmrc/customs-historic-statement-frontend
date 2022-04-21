@@ -79,7 +79,7 @@ cf.historic.document.request.heading.DutyDefermentStatement=Which duty deferment
 cf.historic.document.request.info-text.C79Certificate=You can request import VAT certificates dating back to October 2019.
 cf.historic.document.request.info-text.PostponedVATStatement=A statement will show the total import VAT postponed for the previous month.
 cf.historic.document.request.info-text.SecurityStatement=You can request notification of adjustment statements dating back to October 2019.
-cf.historic.document.request.info-text.DutyDefermentStatement=You can request duty deferment statements dating back to October 2019.
+cf.historic.document.request.info-text.DutyDefermentStatement=You can request duty deferment statements dating back to September 2019.
 cf.historic.document.request.continue=Continue
 
 cf.historic.document.request.from=From what start date do you need certificates?
@@ -129,7 +129,8 @@ cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement
 
 cf.historic.document.request.form.error.date-range-too-wide=You can only ask for up to 6 months of statements in each request
 cf.historic.document.request.form.error.date-range-too-wide.c79=You can only ask for up to 6 months of certificates in each request
-cf.historic.document.request.form.error.date-earlier-than-system-start-date=You can only request statements issued since September 2019
+cf.historic.document.request.form.error.date-earlier-than-system-start-date.dd=You can only request statements issued since September 2019
+cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities=You can only request statements issued since October 2019
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79=You can only request certificates issued since October 2019
 cf.historic.document.request.form.error.date-too-recent=You can only request statements older than 6 months
 cf.historic.document.request.form.error.date-too-recent.c79=You can only request certificates older than 6 months

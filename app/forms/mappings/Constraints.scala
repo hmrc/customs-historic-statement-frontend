@@ -43,7 +43,7 @@ trait Constraints {
   def earlierThanSystemStartDate(fileRole: FileRole): Constraint[LocalDate] = {
     val messageKey = fileRole match {
       case C79Certificate => "cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79"
-      case SecurityStatement => "cf.historic.document.request.form.error.date-earlier-than-system-start-date"
+      case SecurityStatement => "cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities"
       case _ => ""
     }
 
