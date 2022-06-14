@@ -21,7 +21,7 @@
 @if(file.isDefined) {
     <a id="@id" class="file-link govuk-link" href="@{
         file.get.downloadURL
-    }" aria-label="@voiceover(fileFormat, period, file.get.formattedSize)" download>@{file.get.metadata.source} statement - @fileFormat <span>
+    }" aria-label="@voiceover(fileFormat, period, file.get.formattedSize, file.get.metadata.source)" download>@{file.get.metadata.source} statement - @fileFormat <span>
         (@file.get.formattedSize)</span></a>
 } else {
     <div id="missing-file-@id">
@@ -34,6 +34,6 @@
 @messages("cf.account.postponed-vat.missing-file-hidden-text", fileFormat, period)
 }
 
-@voiceover(fileFormat: FileFormat, period: String, fileSize: String) = {
-@messages("cf.account.postponed-vat.download-link", fileFormat, period, fileSize)
+@voiceover(fileFormat: FileFormat, period: String, fileSize: String, source: String) = {
+    @messages("cf.account.postponed-vat.download-link", source, fileFormat, period, fileSize)
 }
