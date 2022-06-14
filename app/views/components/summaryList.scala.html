@@ -18,51 +18,24 @@
 
 @this()
 
-@(params: SummaryList)
+@(params: SummaryList)(implicit messages: Messages)
 @import params._
 
-<dl class="@toClasses("govuk-summary-list", classes)"@toAttributes(attributes)>
 @for(row <- rows) {
-    <div class="@toClasses("govuk-summary-list__row", row.classes)">
-        <dt class="@toClasses("govuk-summary-list__value", row.value.classes)">
-        @row.value.content.asHtml
-        </dt>
-        @row.secondValue.fold {
-            @if(anyRowHasActions) {
-                @* Add dummy column to extend border *@
-                <span class="govuk-summary-list__actions"></span>
-            }
-        } { sv =>
-            <dd class="@toClasses("govuk-summary-list__value", sv.classes)">
-            @sv.content.asHtml
+    <dl class="govuk-summary-list govuk-!margin-top-7 govuk-!-padding-bottom-7">
+        <div class="govuk-summary-list__row govuk-!-margin-bottom-9">
+            <dt class="govuk-summary-list__value">
+            @row.value.content.asHtml
+            </dt>
+            <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" href="@row.actions.head.items.head.href">
+                    <span class="govuk-visually-hidden"> @row.actions.head.items.head.visuallyHiddenText</span>
+                    <span> @Html(messages("site.change"))</span>
+                </a>
             </dd>
-        }
-        @if(row.actions.exists(_.items.nonEmpty)) {
-            <dd class="@toClasses("govuk-summary-list__actions", row.actions.map(_.classes).getOrElse(""))">
-            @if(row.actions.exists(_.items.length == 1)) {
-                @row.actions.map { actions => @actionLink(actions.items.head) }
-            } else {
-                <ul class="govuk-summary-list__actions-list">
-                @row.actions.map { actions =>
-                    @for(action <- actions.items) {
-                        <li class="govuk-summary-list__actions-list-item">
-                        @actionLink(action)
-                        </li>
-                    }
-                }
-                </ul>
-            }
-            </dd>
-        } else {
-            @if(anyRowHasActions) {
-                @* Add dummy column to extend border *@
-                <span class="govuk-summary-list__actions"></span>
-            }
-        }
-    </div>
+        </div>
+    </dl>
 }
-</dl>
-
 @actionLink(action: ActionItem) = {
     <a class="@toClasses("govuk-link", action.classes)" href="@action.href"> @actionContent(action)</a>
 }
