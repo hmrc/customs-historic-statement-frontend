@@ -181,7 +181,7 @@ cf.account.vat.missing-file=Unavailable
 cf.account.vat.missing-file-hidden-text={0} for {1} unavailable
 
 #ImportPostponedVatRequestedStatements
-cf.account.postponed-vat.download-link=Download {0} of {1} ({2})
+cf.account.postponed-vat.download-link=Download {0} {1} of {2} ({3})
 cf.account.postponed-vat.missing-file=Unavailable
 cf.account.postponed-vat.missing-file-hidden-text={0} for {1} unavailable
 cf.account.postponed-vat.missing-file-type=No {0} statements available.
