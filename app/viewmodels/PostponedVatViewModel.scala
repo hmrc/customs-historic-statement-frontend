@@ -29,11 +29,14 @@ case class PostponedVatViewModel(statementsForAllEoris: Seq[PostponedVatStatemen
   val hasCurrentStatements: Boolean = statementsForAllEoris.exists(_.currentStatements.nonEmpty)
 }
 
-case class PostponedVatStatementsForEori(eoriHistory: EoriHistory, currentStatements: Seq[PostponedVatStatementsByMonth], requestedStatements: Seq[PostponedVatStatementsByMonth])
-  extends OrderedByEoriHistory[PostponedVatStatementsForEori]
+case class PostponedVatStatementsForEori(eoriHistory: EoriHistory,
+                                         currentStatements: Seq[PostponedVatStatementsByMonth],
+                                         requestedStatements: Seq[PostponedVatStatementsByMonth])
+                                         extends OrderedByEoriHistory[PostponedVatStatementsForEori]
 
-case class PostponedVatStatementsByMonth(date: LocalDate, files: Seq[PostponedVatStatementFile] = Seq.empty)(implicit messages: Messages)
-  extends Ordered[PostponedVatStatementsByMonth] {
+case class PostponedVatStatementsByMonth(date: LocalDate,
+                                         files: Seq[PostponedVatStatementFile] = Seq.empty)(implicit messages: Messages)
+                                         extends Ordered[PostponedVatStatementsByMonth] {
 
   val formattedMonthYear: String = Formatters.dateAsMonthAndYear(date)
   val formattedMonthYearAsId: String = Formatters.dateAsMonthAndYearAsId(date)
