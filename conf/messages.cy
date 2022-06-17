@@ -184,7 +184,7 @@ cf.account.vat.missing-file=Nid yw ar gael
 cf.account.vat.missing-file-hidden-text=Nid yw {0} ar gyfer {1} ar gael
 
 #ImportPostponedVatRequestedStatements
-cf.account.postponed-vat.download-link=Lawrlwytho {0} o {1} ({2})
+cf.account.postponed-vat.download-link=Lawrlwytho datganiad {0} fel {1}, ({2})
 cf.account.postponed-vat.missing-file=Nid yw ar gael
 cf.account.postponed-vat.missing-file-hidden-text=Nid yw {0} ar gyfer {1} ar gael
 cf.account.postponed-vat.missing-file-type=Dim datganiadau {0} ar gael.
