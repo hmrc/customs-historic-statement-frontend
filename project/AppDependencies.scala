@@ -8,7 +8,7 @@ object AppDependencies {
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % "0.71.0",
     "uk.gov.hmrc" %% "logback-json-logger" % "5.1.0",
     "uk.gov.hmrc" %% "play-frontend-hmrc" % "3.32.0-play-28",
-    "uk.gov.hmrc" %% "play-conditional-form-mapping" % "1.11.0-play-28",
+    "uk.gov.hmrc" %% "play-conditional-form-mapping" % "1.12.0-play-28",
     "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % "7.1.0",
     "uk.gov.hmrc" %% "tax-year" % "1.6.0"
   )
