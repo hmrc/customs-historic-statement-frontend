@@ -192,12 +192,6 @@ cf.account.postponed-vat.missing-file-month=Nid oedd unrhyw ddatganiadau i mewn 
 
 date.range = {0} i fis {1}
 
-help.heading = Help a chymorth
-help.p1 = Os ydych yn cael anawsterau, ffoniwch 0300 200 3705.
-help.p2 = Ar agor 08:30 i 17:00 o ddydd Llun i ddydd Gwener (ar gau ar wyliau banc).
-help.duty-deferment.p1=Os ydych yn cael anawsterau, ffoniwch 0300 059 4243.
-help.duty-deferment.p2=Ar agor 09:00 i 12:00, a 14:00 i 16:00, o ddydd Llun i ddydd Gwener (ar gau ar wyliau banc).
-
 #Session Expired
 session_expired.title = Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
 session_expired.heading = Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
