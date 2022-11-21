@@ -190,12 +190,6 @@ cf.account.postponed-vat.missing-file-month=There were no statements in {0}.
 
 date.range = {0} to {1}
 
-help.heading = Help and support
-help.p1 = If you are having issues, phone 0300 200 3701.
-help.p2 = Open 8am to 6pm, Monday to Friday (closed bank holidays).
-help.duty-deferment.p1=If you are having issues, phone 0300 059 4243.
-help.duty-deferment.p2=Open 9am to 12pm, and 2pm to 4pm Monday to Friday (closed bank holidays).
-
 # Session Expired
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
