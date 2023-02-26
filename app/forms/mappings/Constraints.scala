@@ -20,14 +20,16 @@ import models.{C79Certificate, DutyDefermentStatement, FileRole, PostponedVATSta
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 import java.time.{LocalDate, LocalDateTime, Period}
+import play.api.Logger
 
 trait Constraints {
 
   private lazy val etmpStatementsDate: LocalDate = LocalDate.of(2019, 10, 1)
   private lazy val pvatStatementsDate: LocalDate = LocalDate.of(2021, 1, 1)
   private lazy val dutyDefermentStatementsDate: LocalDate = LocalDate.of(2019, 9, 1)
-  private lazy val currentDate: LocalDate = LocalDateTime.now().toLocalDate
   private val olderThan = Period.ofMonths(6)
+
+  def currentDate: LocalDate = LocalDateTime.now().toLocalDate
 
   def tooRecentDate(fileRole: FileRole): Constraint[LocalDate] = {
     Constraint {
