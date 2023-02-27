@@ -20,7 +20,6 @@ import models.{C79Certificate, DutyDefermentStatement, FileRole, PostponedVATSta
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 import java.time.{LocalDate, LocalDateTime, Period}
-import play.api.Logger
 
 trait Constraints {
 
