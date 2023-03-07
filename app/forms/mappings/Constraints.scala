@@ -61,7 +61,8 @@ trait Constraints {
     case _ => Valid
   }
 
-  def earlierThanDDStatementStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
+  def earlierThanDDStatementStartDate(fileRole: FileRole, invalidLength: String): Constraint[LocalDate] = Constraint {
+    case request if request.getYear.toString.length() < 4 => Invalid(invalidLength)
     case request if request.isBefore(dutyDefermentStatementsDate)  && fileRole == DutyDefermentStatement =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date"))
     case _ => Valid
