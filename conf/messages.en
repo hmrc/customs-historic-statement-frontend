@@ -134,6 +134,8 @@ cf.historic.document.request.form.error.date-earlier-than-system-start-date.secu
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79=You can only request certificates issued since October 2019
 cf.historic.document.request.form.error.date-too-recent=You can only request statements older than 6 months
 cf.historic.document.request.form.error.date-too-recent.c79=You can only request certificates older than 6 months
+cf.form.error.year.length = Year must include 4 numbers
+
 
 
 cf.historic.document.request.form.error.start.month.date-number-invalid=Enter the month you want to search from
