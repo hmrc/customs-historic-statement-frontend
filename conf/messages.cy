@@ -146,6 +146,7 @@ cf.historic.document.request.form.error.start.date-missing=Nodwch o ba fis a blw
 cf.historic.document.request.form.error.end.date-missing=Nodwch hyd at ba fis a blwyddyn rydych am chwilio
 cf.historic.document.request.form.error.month.invalid=Nodwch rif rhwng 1 a 12
 cf.historic.document.request.form.error.year.invalid=Nodwch flwyddyn go iawn
+cf.historic.document.request.form.error.year.invalid-length=Mae’n rhaid i’r flwyddyn gynnwys pedwar rhif
 
 # Security Statements requested view
 cf.security-statements.requested.title=Hysbysiad o ddatganiadau addasu y gofynnwyd amdanynt
