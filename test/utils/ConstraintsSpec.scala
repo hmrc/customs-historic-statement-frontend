@@ -18,28 +18,32 @@ package utils
 
 import base.SpecBase
 
-import java.time.{LocalDate, LocalDateTime}
-import org.scalatest.matchers.should.Matchers._
 import forms.mappings.Constraints
-import play.api.data.validation.{Invalid, Valid, ValidationError}
+import play.api.data.validation.Constraints.maxLength
+import play.api.data.validation.{Invalid, Valid}
 
 class ConstraintsSpec extends SpecBase with Constraints {
 
-  "Constraints" should {
+  "yearLength" must {
 
-    "equalToOrBeforeToday" must {
-      "valid if equal to or before today" in new Setup {
-        val result = equalToOrBeforeToday("error.date").apply(ld)
-        result mustBe Valid
-      }
-
-      "invalid if date is in future" in new Setup {
-        val result = equalToOrBeforeToday("error.date").apply(ld.plusYears(1))
-        result mustBe Invalid(List(ValidationError(List("error.date"))))
-      }
+    "return Valid for a string shorter than the allowed length" in {
+      val result = maxLength(4, "error.length")("a" * 3)
+      result mustEqual Valid
     }
-  }
-  trait Setup {
-    def ld: LocalDate = LocalDateTime.now().toLocalDate
+
+    "return Valid for an empty string" in {
+      val result = maxLength(4, "error.length")("")
+      result mustEqual Valid
+    }
+
+    "return Valid for a string equal to the allowed length" in {
+      val result = maxLength(4, "error.length")("a" * 4)
+      result mustEqual Valid
+    }
+
+    "return Invalid for a string longer than the allowed length" in {
+      val result = maxLength(4, "error.length")("a" * 5)
+      result mustEqual Invalid("error.length", 4)
+    }
   }
 }
