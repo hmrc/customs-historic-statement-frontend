@@ -47,7 +47,7 @@ trait Constraints {
     case _ => Valid
   }
 
-  def earlierThanSystemStartDate(fileRole: FileRole): Constraint[LocalDate] = {
+  def earlierThanSystemStartDate(fileRole: FileRole, invalidLength: String): Constraint[LocalDate] = {
     val messageKey = fileRole match {
       case C79Certificate => "cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79"
       case SecurityStatement => "cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities"
@@ -55,6 +55,7 @@ trait Constraints {
     }
 
     Constraint {
+      case request if request.getYear.toString.length() < 4 => Invalid(invalidLength)
       case request if request.isBefore(etmpStatementsDate) && fileRole != PostponedVATStatement && fileRole != DutyDefermentStatement =>
       Invalid(ValidationError(messageKey))
       case _ => Valid
@@ -67,8 +68,7 @@ trait Constraints {
     case _ => Valid
   }
 
-  def earlierThanDDStatementStartDate(fileRole: FileRole, invalidLength: String): Constraint[LocalDate] = Constraint {
-    case request if request.getYear.toString.length() < 4 => Invalid(invalidLength)
+  def earlierThanDDStatementStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
     case request if request.isBefore(dutyDefermentStatementsDate)  && fileRole == DutyDefermentStatement =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date"))
     case _ => Valid
