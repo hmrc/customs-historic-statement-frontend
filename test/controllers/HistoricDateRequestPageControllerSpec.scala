@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import models.{C79Certificate, DutyDefermentStatement, NormalMode, PostponedVATStatement, UserAnswers}
+import models.{C79Certificate, DutyDefermentStatement, NormalMode, PostponedVATStatement, SecurityStatement, UserAnswers}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.{HistoricDateRequestPage, RequestedLinkId}
 import play.api.test.Helpers._
@@ -73,8 +73,22 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
-    "return BAD_REQUEST when the start date is too recent" in new Setup {
+    "return BAD_REQUEST when the start date is too recent for C79" in new Setup {
       val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody(
+          "start.month" -> earliestMonthInCurrentPeriod.getMonthValue.toString,
+          "start.year" -> earliestMonthInCurrentPeriod.getYear.toString,
+          "end.month" -> earliestMonthInCurrentPeriod.getMonthValue.toString,
+          "end.year" -> earliestMonthInCurrentPeriod.getYear.toString)
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST when the start date is too recent for PVAT" in new Setup {
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
         .withFormUrlEncodedBody(
           "start.month" -> earliestMonthInCurrentPeriod.getMonthValue.toString,
           "start.year" -> earliestMonthInCurrentPeriod.getYear.toString,
@@ -103,9 +117,63 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
-    "return BAD_REQUEST when the start date is earlier than system start date" in new Setup {
+    "return BAD_REQUEST when the start date is earlier than system start date for C79" in new Setup {
       val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody("start.month" -> "9", "start.year" -> "2019", "end.month" -> "10", "end.year" -> "2019")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST when the start date is earlier than system start date for securities statement" in new Setup {
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, SecurityStatement).url)
+        .withFormUrlEncodedBody("start.month" -> "9", "start.year" -> "2019", "end.month" -> "10", "end.year" -> "2019")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST when the year is not equals to 4 for C79" in new Setup {
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "9", "start.year" -> "201", "end.month" -> "10", "end.year" -> "2020")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST when the year is not equals to 4 for DutyDeferment statement" in new Setup {
+      val userAnswers: UserAnswers = populatedUserAnswers.set(RequestedLinkId, "someId").success.value
+
+      override val app: Application = applicationBuilder(Some(userAnswers)).build()
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, DutyDefermentStatement).url)
+        .withFormUrlEncodedBody("start.month" -> "7", "start.year" -> "2020", "end.month" -> "1", "end.year" -> "20201")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST when the year is not equals to 4 for Security statement" in new Setup {
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, SecurityStatement).url)
+        .withFormUrlEncodedBody("start.month" -> "9", "start.year" -> "19", "end.month" -> "10", "end.year" -> "2020")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST when the year is not equals to 4 for PVAT statement" in new Setup {
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, SecurityStatement).url)
+        .withFormUrlEncodedBody("start.month" -> "9", "start.year" -> "2021", "end.month" -> "10", "end.year" -> "20211")
 
       running(app) {
         val result = route(app, request).value

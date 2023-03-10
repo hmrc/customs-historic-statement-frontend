@@ -41,13 +41,15 @@ trait Constraints {
     }
   }
 
-  def equalToOrBeforeToday(errorKey: String): Constraint[LocalDate] = Constraint {
-    case request if request.isAfter(currentDate) =>
-      Invalid(ValidationError(errorKey))
-    case _ => Valid
+  def invalidYearLength(fileRole: FileRole): Constraint[LocalDate] = {
+    Constraint {
+      case request if request.getYear.toString.length != 4 && fileRole != PostponedVATStatement =>
+          Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
+      case _ => Valid
+    }
   }
 
-  def earlierThanSystemStartDate(fileRole: FileRole, invalidLength: String): Constraint[LocalDate] = {
+  def earlierThanSystemStartDate(fileRole: FileRole): Constraint[LocalDate] = {
     val messageKey = fileRole match {
       case C79Certificate => "cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79"
       case SecurityStatement => "cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities"
@@ -55,7 +57,8 @@ trait Constraints {
     }
 
     Constraint {
-      case request if request.getYear.toString.length() < 4 => Invalid(invalidLength)
+      case request if request.getYear.toString.length != 4 && fileRole != DutyDefermentStatement && fileRole != PostponedVATStatement =>
+        Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
       case request if request.isBefore(etmpStatementsDate) && fileRole != PostponedVATStatement && fileRole != DutyDefermentStatement =>
       Invalid(ValidationError(messageKey))
       case _ => Valid
@@ -63,12 +66,16 @@ trait Constraints {
   }
 
   def earlierThanPVATStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
+    case request if request.getYear.toString.length != 4 && fileRole == PostponedVATStatement =>
+      Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
     case request if request.isBefore(pvatStatementsDate)  && fileRole == PostponedVATStatement =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"))
     case _ => Valid
   }
 
   def earlierThanDDStatementStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
+    case request if request.getYear.toString.length != 4 && fileRole == DutyDefermentStatement =>
+      Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
     case request if request.isBefore(dutyDefermentStatementsDate)  && fileRole == DutyDefermentStatement =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date"))
     case _ => Valid
