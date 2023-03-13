@@ -73,6 +73,20 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
+    "return ok when the dates are later than earliest possible date for DutyDeferment statement" in new Setup {
+      val userAnswers: UserAnswers = populatedUserAnswers.set(RequestedLinkId, "someId").success.value
+
+      override val app: Application = applicationBuilder(Some(userAnswers)).build()
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, DutyDefermentStatement).url)
+        .withFormUrlEncodedBody("start.month" -> "10", "start.year" -> "2019", "end.month" -> "11", "end.year" -> "2019")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
+      }
+    }
+
     "return BAD_REQUEST when the start date is too recent for C79" in new Setup {
       val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody(
@@ -153,7 +167,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       override val app: Application = applicationBuilder(Some(userAnswers)).build()
 
       val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, DutyDefermentStatement).url)
-        .withFormUrlEncodedBody("start.month" -> "7", "start.year" -> "2020", "end.month" -> "1", "end.year" -> "20201")
+        .withFormUrlEncodedBody("start.month" -> "7", "start.year" -> "200", "end.month" -> "1", "end.year" -> "20201")
 
       running(app) {
         val result = route(app, request).value
@@ -172,7 +186,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
     }
 
     "return BAD_REQUEST when the year is not equals to 4 for PVAT statement" in new Setup {
-      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, SecurityStatement).url)
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
         .withFormUrlEncodedBody("start.month" -> "9", "start.year" -> "2021", "end.month" -> "10", "end.year" -> "20211")
 
       running(app) {
