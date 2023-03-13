@@ -32,19 +32,13 @@ trait Constraints {
 
   def tooRecentDate(fileRole: FileRole): Constraint[LocalDate] = {
     Constraint {
+      case request if request.getYear.toString.length != 4 && fileRole != PostponedVATStatement =>
+        Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
       // exclude the current month
       case request if Period.between(request, currentDate.minusMonths(1)).toTotalMonths < olderThan.toTotalMonths =>
         if (fileRole == C79Certificate){
           Invalid(ValidationError("cf.historic.document.request.form.error.date-too-recent.c79"))
         } else { Invalid(ValidationError("cf.historic.document.request.form.error.date-too-recent")) }
-      case _ => Valid
-    }
-  }
-
-  def invalidYearLength(fileRole: FileRole): Constraint[LocalDate] = {
-    Constraint {
-      case request if request.getYear.toString.length != 4 && fileRole != PostponedVATStatement =>
-          Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
       case _ => Valid
     }
   }
