@@ -32,7 +32,7 @@ trait Constraints {
 
   def tooRecentDate(fileRole: FileRole): Constraint[LocalDate] = {
     Constraint {
-      case request if request.getYear.toString.length != 4 && fileRole != PostponedVATStatement =>
+      case request if request.getYear.toString.length != 4 =>
         Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
       // exclude the current month
       case request if Period.between(request, currentDate.minusMonths(1)).toTotalMonths < olderThan.toTotalMonths =>
