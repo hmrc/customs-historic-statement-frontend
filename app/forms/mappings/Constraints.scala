@@ -32,7 +32,7 @@ trait Constraints {
 
   def tooRecentDate(fileRole: FileRole): Constraint[LocalDate] = {
     Constraint {
-      case request if request.getYear.toString.length != 4 || !request.getYear.toString.matches("[a-zA-Z0-9]+") =>
+      case request if request.getYear.toString.length != 4 || !request.getYear.toString.matches("^[0-9]+") =>
         Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
       // exclude the current month
       case request if Period.between(request, currentDate.minusMonths(1)).toTotalMonths < olderThan.toTotalMonths =>
@@ -51,7 +51,7 @@ trait Constraints {
     }
 
     Constraint {
-      case request if (request.getYear.toString.length != 4 || !request.getYear.toString.matches("[a-zA-Z0-9]+"))
+      case request if (request.getYear.toString.length != 4 || !request.getYear.toString.matches("^[0-9]+"))
         && fileRole != DutyDefermentStatement && fileRole != PostponedVATStatement =>
         Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
       case request if request.isBefore(etmpStatementsDate) && fileRole != PostponedVATStatement && fileRole != DutyDefermentStatement =>
@@ -61,7 +61,7 @@ trait Constraints {
   }
 
   def earlierThanPVATStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if (request.getYear.toString.length != 4  || !request.getYear.toString.matches("[a-zA-Z0-9]+"))
+    case request if (request.getYear.toString.length != 4  || !request.getYear.toString.matches("^[0-9]+"))
       && (fileRole == PostponedVATStatement) =>
       Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
     case request if request.isBefore(pvatStatementsDate)  && fileRole == PostponedVATStatement =>
@@ -70,7 +70,7 @@ trait Constraints {
   }
 
   def earlierThanDDStatementStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if (request.getYear.toString.length != 4 || !request.getYear.toString.matches("[a-zA-Z0-9]+"))
+    case request if (request.getYear.toString.length != 4 || !request.getYear.toString.matches("^[0-9]+"))
       && (fileRole == DutyDefermentStatement) =>
       Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
     case request if request.isBefore(dutyDefermentStatementsDate)  && fileRole == DutyDefermentStatement =>
