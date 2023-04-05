@@ -33,7 +33,7 @@ class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
         emptyEndYear = "cf.historic.document.request.form.error.end.year.date-number-invalid",
         emptyStartDate = "cf.historic.document.request.form.error.start.date-missing",
         emptyEndDate = "cf.historic.document.request.form.error.end.date-missing",
-        invalidMonth = "cf.historic.document.request.form.error.month.invalid",
+        invalidMonth = "cf.historic.document.request.form.error.start.month.invalid",
         invalidYear = "cf.historic.document.request.form.error.year.invalid"
       ).verifying(earlierThanSystemStartDate(fileRole))
         .verifying(earlierThanPVATStartDate(fileRole))
@@ -45,7 +45,7 @@ class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
         emptyEndYear = "cf.historic.document.request.form.error.end.year.date-number-invalid",
         emptyStartDate = "cf.historic.document.request.form.error.start.date-missing",
         emptyEndDate = "cf.historic.document.request.form.error.end.date-missing",
-        invalidMonth = "cf.historic.document.request.form.error.month.invalid",
+        invalidMonth = "cf.historic.document.request.form.error.end.month.invalid",
         invalidYear = "cf.historic.document.request.form.error.year.invalid"
       ).verifying(tooRecentDate(fileRole))
     )(HistoricDates.apply)(HistoricDates.unapply)
