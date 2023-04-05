@@ -144,7 +144,8 @@ cf.historic.document.request.form.error.end.month.date-number-invalid=Nodwch hyd
 cf.historic.document.request.form.error.end.year.date-number-invalid=Nodwch hyd at ba flwyddyn rydych am chwilio
 cf.historic.document.request.form.error.start.date-missing=Nodwch o ba fis a blwyddyn yr ydych am chwilio
 cf.historic.document.request.form.error.end.date-missing=Nodwch hyd at ba fis a blwyddyn rydych am chwilio
-cf.historic.document.request.form.error.month.invalid=Nodwch rif rhwng 1 a 12
+cf.historic.document.request.form.error.start.month.invalid=Mae’n rhaid i’r dyddiad dechrau fod yn ddyddiad go iawn
+cf.historic.document.request.form.error.end.month.invalid=Mae’n rhaid i’r dyddiad dod i ben fod yn ddyddiad go iawn
 cf.historic.document.request.form.error.year.invalid=Nodwch flwyddyn go iawn
 cf.historic.document.request.form.error.year.invalid-length=Mae’n rhaid i’r flwyddyn gynnwys pedwar rhif
 
