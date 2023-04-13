@@ -18,7 +18,6 @@ package models
 
 import play.api.libs.json._
 import queries.{Gettable, Settable}
-import play.api.libs.json._
 import java.time.{Instant, ZoneOffset}
 import java.time.LocalDateTime
 import scala.util.{Failure, Success, Try}
@@ -68,10 +67,10 @@ final case class UserAnswers(
 trait MongoJavatimeFormats {
   outer =>
   final val localDateTimeReads: Reads[LocalDateTime] =
-    Reads.at[String](__ \ "$date")
+    Reads.at[String](__ \ "$date" \ "$numberLong")
       .map(dateTime => Instant.ofEpochMilli(dateTime.toLong).atZone(ZoneOffset.UTC).toLocalDateTime)
   final val localDateTimeWrites: Writes[LocalDateTime] =
-    Writes.at[String](__ \ "$date")
+    Writes.at[String](__ \ "$date" \ "$numberLong")
       .contramap(_.toInstant(ZoneOffset.UTC).toEpochMilli.toString)
   final val localDateTimeFormat: Format[LocalDateTime] =
     Format(localDateTimeReads, localDateTimeWrites)

@@ -86,16 +86,13 @@ class HistoricStatementsControllerSpec extends SpecBase {
       redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
     }
 
-    "return Unauthorised when sessionId is not present" in {
-      val mockDataStoreConnector = mock[CustomsDataStoreConnector]
-      when(mockDataStoreConnector.getAllEoriHistory(any)(any)).thenReturn(Future.successful(Seq.empty))
-      val request = fakeRequest(GET, routes.HistoricStatementsController.historicStatementsDutyDeferment("linkId").url)
-      val app = applicationBuilder().overrides(
-        inject.bind[CustomsDataStoreConnector].toInstance(mockDataStoreConnector)
-      ).build()
+    "return Unauthorised when sessionId is not present" in new Setup{
+      when(mockSessionCacheConnector.getAccountNumber(any, any)(any)).thenReturn(Future.successful(None))
       running(app) {
+        val request = fakeRequest(GET, routes.HistoricStatementsController.historicStatementsDutyDeferment("linkId").url)
         val result = route(app, request).value
-        status(result) mustBe UNAUTHORIZED
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
       }
     }
   }

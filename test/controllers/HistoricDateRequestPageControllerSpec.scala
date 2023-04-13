@@ -115,6 +115,20 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
+    "return BAD_REQUEST when the start date is less than 4 digits for PVAT" in new Setup {
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
+        .withFormUrlEncodedBody(
+          "start.month" -> earliestMonthInCurrentPeriod.getMonthValue.toString,
+          "start.year" -> "201",
+          "end.month" -> earliestMonthInCurrentPeriod.getMonthValue.toString,
+          "end.year" -> earliestMonthInCurrentPeriod.getYear.toString)
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
     "return OK when the end date is the earliest possible" in new Setup {
       when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
 

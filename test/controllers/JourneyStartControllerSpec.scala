@@ -44,6 +44,8 @@ class JourneyStartControllerSpec extends SpecBase {
     }
 
     "redirect to the session expired controller if no session id present" in new Setup {
+      when(mockSessionCacheConnector.getAccountNumber(any, any)(any))
+        .thenReturn(Future.successful(None))
       running(app) {
         val request = fakeRequest(GET, routes.JourneyStartController.dutyDeferment("linkId").url)
         val result = route(app, request).value
