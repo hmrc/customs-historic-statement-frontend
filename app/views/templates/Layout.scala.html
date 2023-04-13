@@ -21,7 +21,6 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcLayout, HmrcReportTechnicalIssueHelper}
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcTimeoutDialog
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.timeoutdialog.TimeoutDialog
-@import views.html.helper.CSPNonce
 @import config.FrontendAppConfig
 
 
@@ -80,7 +79,6 @@
     pageTitle = fullPageTitle,
     serviceUrl = Some(appConfig.financialsHomepage),
     signOutUrl = Some(routes.LogoutController.logout.url),
-    nonce = CSPNonce.get,
     backLinkUrl = backLink,
     additionalHeadBlock = Some(additionalHead),
     phaseBanner = Some(PhaseBanner(tag = Some(Tag(content = Text("BETA"))), content = HtmlContent(phaseBannerContent))),
