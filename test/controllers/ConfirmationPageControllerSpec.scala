@@ -25,6 +25,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.retrieve.Email
 import views.html.ConfirmationPageView
+
 import scala.concurrent.Future
 
 class ConfirmationPageControllerSpec extends SpecBase {
