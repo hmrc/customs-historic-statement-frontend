@@ -74,12 +74,15 @@
                     <a class="file-link govuk-link" href="@{
                         statementsOfOneMonth.pdf.get.downloadURL
                     }" download
-                    aria-label="@messages("cf.security-statements.requested.download-link.aria-text",
-                        Pdf,
-                        dateAsDayMonthAndYear(statementsOfOneMonth.startDate),
-                        dateAsDayMonthAndYear(statementsOfOneMonth.endDate),
-                        statementsOfOneMonth.pdf.get.formattedSize)">@Pdf <span>
-                        (@statementsOfOneMonth.pdf.get.formattedSize)</span></a>
+                    >@Pdf <span>
+                        (@statementsOfOneMonth.pdf.get.formattedSize)</span>
+                         <span class="govuk-visually-hidden"> @messages("cf.security-statements.requested.download-link.aria-text",
+                            Pdf,
+                            dateAsDayMonthAndYear(statementsOfOneMonth.startDate),
+                            dateAsDayMonthAndYear(statementsOfOneMonth.endDate),
+                            statementsOfOneMonth.pdf.get.formattedSize)
+                        </span>
+                    </a>
                 } else {
                     <span class="file-link">@messages("cf.security-statements.no-statements", Pdf)</span>
                 }

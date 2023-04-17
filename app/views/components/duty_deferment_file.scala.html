@@ -30,8 +30,9 @@
     } else {
         <a id="@{idPrefix}-download-link" class="file-link govuk-link" href="@{
             files.head.downloadURL
-        }" aria-label="@{files.head.downloadLinkAriaLabel()}" download>
+        }" download>
             @fileFormat<span> (@{Formatters.fileSize(files.head.size)})</span>
+            <span class="govuk-visually-hidden">@{files.head.downloadLinkAriaLabel()}</span>
         </a>
 
     }
