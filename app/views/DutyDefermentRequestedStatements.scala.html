@@ -27,6 +27,7 @@
     duty_deferment_file: components.duty_deferment_file,
     h1: components.h1,
     h2: components.h2,
+    h3: components.h3,
     p: components.p
 )
 
@@ -55,7 +56,7 @@
                 @if(groupIndex == 0) {
                     @h2(id=Some(s"historic-eori-$historyIndex"), classes="govuk-heading-s", msg=messages("cf.account.details.previous-eori", model.statementsForAllEoris(historyIndex).eoriHistory.eori))
                 }
-                @h2(id=Some(s"requested-statements-month-heading-${historyIndex}-${group.year}-${group.month}"), classes="govuk-heading-s", msg=Formatters.dateAsMonthAndYear(group.monthAndYear))
+                @h3(id=Some(s"requested-statements-month-heading-${historyIndex}-${group.year}-${group.month}"), msg=Formatters.dateAsMonthAndYear(group.monthAndYear))
 
                 <dl class="govuk-summary-list" >
                     @for((period, index) <- group.periods.reverse.zipWithIndex) {
