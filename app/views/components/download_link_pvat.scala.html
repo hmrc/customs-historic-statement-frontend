@@ -21,8 +21,8 @@
 @if(file.isDefined) {
     <a id="@id" class="file-link govuk-link" href="@{
         file.get.downloadURL
-    }" download>@{file.get.metadata.source} statement - @fileFormat <span>
-        (@file.get.formattedSize)</span>
+    }" download>
+        <span>@{file.get.metadata.source} statement - @fileFormat (@file.get.formattedSize)</span>
         <span class="govuk-visually-hidden">@voiceover(fileFormat, period, file.get.formattedSize, file.get.metadata.source)</span>
     </a>
 } else {
