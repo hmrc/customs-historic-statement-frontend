@@ -31,7 +31,7 @@
         <a id="@{idPrefix}-download-link" class="file-link govuk-link" href="@{
             files.head.downloadURL
         }" download>
-            @fileFormat<span> (@{Formatters.fileSize(files.head.size)})</span>
+            <span>@fileFormat (@{Formatters.fileSize(files.head.size)})</span>
             <span class="govuk-visually-hidden">@{files.head.downloadLinkAriaLabel()}</span>
         </a>
 
