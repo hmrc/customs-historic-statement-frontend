@@ -73,9 +73,10 @@
                 @if(statementsOfOneMonth.pdf.isDefined) {
                     <a class="file-link govuk-link" href="@{
                         statementsOfOneMonth.pdf.get.downloadURL
-                    }" download
-                    >@Pdf <span>
-                        (@statementsOfOneMonth.pdf.get.formattedSize)</span>
+                    }" download>
+                        <span>
+                            @Pdf (@statementsOfOneMonth.pdf.get.formattedSize)
+                        </span>
                          <span class="govuk-visually-hidden"> @messages("cf.security-statements.requested.download-link.aria-text",
                             Pdf,
                             dateAsDayMonthAndYear(statementsOfOneMonth.startDate),
