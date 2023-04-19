@@ -73,8 +73,7 @@
                 @if(statementsOfOneMonth.pdf.isDefined) {
                     <a class="file-link govuk-link" href="@{
                         statementsOfOneMonth.pdf.get.downloadURL
-                    }" download
-                    >
+                    }" download>
                         <span>
                             @Pdf (@statementsOfOneMonth.pdf.get.formattedSize)
                         </span>
