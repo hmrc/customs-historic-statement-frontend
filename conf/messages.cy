@@ -1,5 +1,6 @@
 # Site-wide Messages
 # ----------------------------------------------------------
+site.error=Gwall
 
 language.cymraeg = Cymraeg
 language.english = English
