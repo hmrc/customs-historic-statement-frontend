@@ -36,8 +36,13 @@
 @layout(pageTitle = Some(messages("cf.account.detail.requested.title")), backLink = Some(backLink), dutyDeferment = true) {
 
     <h2 class="govuk-caption-xl" id="eori-heading">
-        @messages("cf.account.detail.requested.deferment-account-secondary-heading")
-        @{model.accountNumber}
+        @if(model.isNiAccount) {
+            @messages("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
+            @{model.accountNumber}
+            } else {
+            @messages("cf.account.detail.requested.deferment-account-secondary-heading")
+            @{model.accountNumber}
+          }
     </h2>
 
     @h1(id = Some("requested-statements-heading"),

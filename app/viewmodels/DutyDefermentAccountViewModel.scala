@@ -18,4 +18,4 @@ package viewmodels
 
 import models.DutyDefermentStatementsForEori
 
-case class DutyDefermentAccountViewModel(accountNumber: String, statementsForAllEoris: Seq[DutyDefermentStatementsForEori])
+case class DutyDefermentAccountViewModel(accountNumber: String, statementsForAllEoris: Seq[DutyDefermentStatementsForEori], isNiAccount: Boolean)

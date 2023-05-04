@@ -106,7 +106,7 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
             .getDutyDefermentStatements(historicEori.eori, dan)
             .map(sortStatementsService.sortDutyDefermentStatementsForEori(historicEori, _))
       })
-      viewModel = DutyDefermentAccountViewModel(dan, allStatements)
+      viewModel = DutyDefermentAccountViewModel(dan, allStatements, isNiAccount = false)
     } yield Ok(dutyDefermentView(viewModel, appConfig.returnLink(linkId)))
   }
 
