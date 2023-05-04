@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import connectors.CustomsSessionCacheConnector
+import connectors.{AccountLink, CustomsSessionCacheConnector}
 import models.{C79Certificate, DutyDefermentStatement, NormalMode, SecurityStatement}
 import play.api.test.Helpers._
 import play.api.{Application, inject}
@@ -30,8 +30,8 @@ class JourneyStartControllerSpec extends SpecBase {
 
   "dutyDeferment" should {
     "redirect to the HistoricDateRequestPageController when a valid request has been sent" in new Setup {
-      when(mockSessionCacheConnector.getAccountNumber(any, any)(any))
-        .thenReturn(Future.successful(Some("accountNumber")))
+      when(mockSessionCacheConnector.getAccountLink(any, any)(any))
+        .thenReturn(Future.successful(Some(AccountLink("eori1", "123456", "linkId", "accountStatus", None, false))))
       when(mockSessionRepository.set(any))
         .thenReturn(Future.successful(true))
 
@@ -44,7 +44,7 @@ class JourneyStartControllerSpec extends SpecBase {
     }
 
     "redirect to the session expired controller if no session id present" in new Setup {
-      when(mockSessionCacheConnector.getAccountNumber(any, any)(any))
+      when(mockSessionCacheConnector.getAccountLink(any, any)(any))
         .thenReturn(Future.successful(None))
       running(app) {
         val request = fakeRequest(GET, routes.JourneyStartController.dutyDeferment("linkId").url)
@@ -55,7 +55,7 @@ class JourneyStartControllerSpec extends SpecBase {
     }
 
     "redirect to the session expired controller if no account number found associated to the linkId" in new Setup {
-      when(mockSessionCacheConnector.getAccountNumber(any, any)(any))
+      when(mockSessionCacheConnector.getAccountLink(any, any)(any))
         .thenReturn(Future.successful(None))
 
       running(app) {
@@ -114,12 +114,12 @@ class JourneyStartControllerSpec extends SpecBase {
 
     val mockSessionCacheConnector: CustomsSessionCacheConnector = mock[CustomsSessionCacheConnector]
     val mockSessionRepository: SessionRepository = mock[SessionRepository]
+    val accountLink: AccountLink = mock[AccountLink]
 
     val app: Application = applicationBuilder().overrides(
       inject.bind[CustomsSessionCacheConnector].toInstance(mockSessionCacheConnector),
       inject.bind[SessionRepository].toInstance(mockSessionRepository)
     ).build()
   }
-
 
 }
