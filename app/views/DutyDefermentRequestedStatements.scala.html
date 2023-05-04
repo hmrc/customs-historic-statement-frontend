@@ -35,10 +35,10 @@
 
 @layout(pageTitle = Some(messages("cf.account.detail.requested.title")), backLink = Some(backLink), dutyDeferment = true) {
 
-    <span class="govuk-caption-xl" id="eori-heading">
+    <h2 class="govuk-caption-xl" id="eori-heading">
         @messages("cf.account.detail.requested.deferment-account-secondary-heading")
         @{model.accountNumber}
-    </span>
+    </h2>
 
     @h1(id = Some("requested-statements-heading"),
         msg = messages("cf.account.detail.requested.deferment-account-heading"),
