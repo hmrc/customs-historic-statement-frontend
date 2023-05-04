@@ -171,6 +171,7 @@ cf.import-postponed-vat.requested.available.text=Requested statements are availa
 # DutyDefermentRequestStatements
 cf.account.detail.requested.title=Requested duty deferment statements
 cf.account.detail.requested.deferment-account-secondary-heading=Account:
+cf.account.detail.requested.deferment-account-secondary-heading.NiAccount=Account: (Northern Ireland)
 cf.account.detail.requested.deferment-account-heading=Requested duty deferment statements
 cf.account.detail.requested.deferment-account-statements-available.text=Requested statements are available to view for 10 days. We can only provide these in PDF format.
 

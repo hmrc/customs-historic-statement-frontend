@@ -173,6 +173,7 @@ cf.import-postponed-vat.requested.available.text=Mae datganiadau y gofynnir amda
 # DutyDefermentRequestStatements
 cf.account.detail.requested.title=Datganiadau gohirio tollau y gofynnwyd amdanynt
 cf.account.detail.requested.deferment-account-secondary-heading=Cyfrif:
+cf.account.detail.requested.deferment-account-secondary-heading.NiAccount=Cyfrif: (Gogledd Iwerddon)
 cf.account.detail.requested.deferment-account-heading=Datganiadau gohirio tollau y gofynnwyd amdanynt
 cf.account.detail.requested.deferment-account-statements-available.text=Mae datganiadau y gofynnwyd amdanynt ar gael i’w gweld am 10 diwrnod. Gallwn ond darparu’r rhain ar ffurf PDF.
 

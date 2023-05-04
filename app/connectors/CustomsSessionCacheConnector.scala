@@ -34,6 +34,11 @@ class CustomsSessionCacheConnector @Inject()(
       response => Some(response.accountNumber)
     ).recover { case _ => None }
   }
+
+  def getAccountLink(sessionId: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[AccountLink]] =
+    httpClient.GET[AccountLink](
+      appConfig.sessionCacheUrl(sessionId, linkId)
+    ).map(Some(_)).recover { case _ => None }
 }
 
 case class SessionCacheResponse(accountNumber: String)
@@ -42,4 +47,8 @@ object SessionCacheResponse {
   implicit val format: OFormat[SessionCacheResponse] = Json.format[SessionCacheResponse]
 }
 
+case class AccountLink(eori: String, accountNumber: String, linkId: String, accountStatus: String, accountStatusId: Option[Int], isNiAccount: Boolean)
 
+object AccountLink {
+  implicit val format: OFormat[AccountLink] = Json.format[AccountLink]
+}

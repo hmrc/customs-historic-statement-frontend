@@ -19,7 +19,7 @@ package controllers
 import connectors.CustomsSessionCacheConnector
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.{DutyDefermentStatement, FileRole, NormalMode, UserAnswers}
-import pages.{AccountNumber, RequestedLinkId}
+import pages.{AccountNumber, IsNiAccount, RequestedLinkId}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -37,12 +37,13 @@ class JourneyStartController @Inject()(customsSessionCacheConnector: CustomsSess
   def dutyDeferment(linkId: String): Action[AnyContent] = (identify andThen getData).async { implicit request =>
     hc.sessionId match {
       case Some(sessionId) =>
-        customsSessionCacheConnector.getAccountNumber(sessionId.value, linkId).flatMap {
-          case Some(accountNumber) =>
+        customsSessionCacheConnector.getAccountLink(sessionId.value, linkId).flatMap {
+          case Some(accountLink) =>
             val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId))
             for {
-              userAnswersAccountNumber <- Future.fromTry(userAnswers.set(AccountNumber, accountNumber))
-              userAnswersLinkId <- Future.fromTry(userAnswersAccountNumber.set(RequestedLinkId, linkId))
+              userAnswersAccountNumber <- Future.fromTry(userAnswers.set(AccountNumber, accountLink.accountNumber))
+              userAnswersNiIndicator <- Future.fromTry(userAnswersAccountNumber.set(IsNiAccount, accountLink.isNiAccount))
+              userAnswersLinkId <- Future.fromTry(userAnswersNiIndicator.set(RequestedLinkId, linkId))
               _ <- sessionRepository.set(userAnswersLinkId)
             } yield Redirect(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, DutyDefermentStatement))
           case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
