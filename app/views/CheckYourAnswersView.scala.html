@@ -39,12 +39,12 @@ p: components.p
 
     @maybeDan.map{ dan =>
         @if(fileRole == DutyDefermentStatement) {
-            <span class="govuk-caption-xl" id="eori-heading">
+            <h2 class="govuk-caption-xl" id="eori-heading">
                 @messages("cf.account.detail.requested.deferment-account-secondary-heading")
                 @{
                     dan
                 }
-            </span>
+            </h2>
         }
     }
 
