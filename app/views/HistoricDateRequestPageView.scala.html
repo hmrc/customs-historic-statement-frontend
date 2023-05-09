@@ -27,7 +27,7 @@
         p: components.p
 )
 
-@(form: Form[_], mode: Mode, fileRole: FileRole, returnUrl: String, maybeDan: Option[String])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, fileRole: FileRole, returnUrl: String, maybeDan: Option[String], niIndicator: Option[Boolean])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some(title(form, messages(s"cf.historic.document.request.${fileRole}.title"))),
         backLink = Some(returnUrl),
@@ -38,6 +38,9 @@
                 <h2 class="govuk-caption-xl" id="eori-heading">
                     @messages("cf.account.detail.requested.deferment-account-secondary-heading")
                     @{dan}
+                    @if(niIndicator.getOrElse(false)) {
+                        @messages("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
+                    }
                 </h2>
             }
     }
