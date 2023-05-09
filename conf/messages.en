@@ -63,7 +63,7 @@ cf.historic.document.request.review.PostponedVATStatement.heading=Request postpo
 cf.historic.document.request.review.DutyDefermentStatement.heading=Request duty deferment statements
 cf.historic.document.request.review.C79Certificate.heading=Request import VAT certificates
 cf.historic.document.request.selected.statements=Selected statements
-cf.historic.document.request.selected.certificates=Selected certificates
+cf.historic.document.request.selected.certificates=Selected import VAT certificates
 cf.historic.document.request.review.send=Send request
 
 #HistoricDataRequestPageView
