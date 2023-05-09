@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.HistoricDateRequestPageFormProvider
 import models.{C79Certificate, FileRole, HistoricDates, Mode}
 import navigation.Navigator
-import pages.{AccountNumber, HistoricDateRequestPage}
+import pages.{AccountNumber, HistoricDateRequestPage, IsNiAccount}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -58,8 +58,7 @@ class HistoricDateRequestPageController @Inject()(
       }
 
       val backLink = appConfig.returnLink(fileRole, request.userAnswers)
-
-      Ok(view(preparedForm, mode, fileRole, backLink, request.userAnswers.get(AccountNumber)))
+      Ok(view(preparedForm, mode, fileRole, backLink, request.userAnswers.get(AccountNumber), request.userAnswers.get(IsNiAccount)))
   }
 
   def onSubmit(mode: Mode, fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -69,11 +68,13 @@ class HistoricDateRequestPageController @Inject()(
 
       formProvider(fileRole).bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink, request.userAnswers.get(AccountNumber)))),
+          Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink, request.userAnswers.get(AccountNumber),
+            request.userAnswers.get(IsNiAccount)))),
         value =>
           customValidation(value, formProvider(fileRole), fileRole) match {
             case Some(formWithErrors) =>
-              Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink, request.userAnswers.get(AccountNumber))))
+              Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink,
+                request.userAnswers.get(AccountNumber), request.userAnswers.get(IsNiAccount))))
             case None =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(HistoricDateRequestPage(fileRole), value))

@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import connectors.CustomsFinancialsApiConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import models.{FileRole, HistoricDocumentRequest}
-import pages.AccountNumber
+import pages.{AccountNumber, IsNiAccount}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -43,7 +43,8 @@ class CheckYourAnswersController @Inject()(
     implicit request =>
       val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
       val maybeAccountNumber = request.userAnswers.get(AccountNumber)
-      Ok(view(checkYourAnswersHelper, fileRole, maybeAccountNumber))
+      val niIndicator = request.userAnswers.get(IsNiAccount)
+      Ok(view(checkYourAnswersHelper, fileRole, maybeAccountNumber, niIndicator))
   }
 
   def onSubmit(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {

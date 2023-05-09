@@ -29,7 +29,7 @@ h3: components.h3,
 p: components.p
 )
 
-@(helper: CheckYourAnswersHelper, fileRole: FileRole, maybeDan: Option[String])(implicit request: Request[_], messages: Messages)
+@(helper: CheckYourAnswersHelper, fileRole: FileRole, maybeDan: Option[String], niIndicator: Option[Boolean])(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = Some(messages(s"cf.historic.document.request.review.${fileRole}.title")),
@@ -44,16 +44,22 @@ p: components.p
                 @{
                     dan
                 }
+                @if(niIndicator.getOrElse(false)) {
+                    @messages("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
+                }
             </h2>
         }
     }
 
     @{
         fileRole match {
-            case C79Certificate => h1(messages(s"cf.historic.document.request.review.selected.certificates"))
-            case _ => { h1(messages(s"cf.historic.document.request.review.${fileRole}.heading"))
-                        h2("cf.historic.document.request.selected.statements") }
+            case C79Certificate => h1("cf.historic.document.request.selected.certificates")
+            case _ => h1(s"cf.historic.document.request.review.${fileRole}.heading")
         }
+    }
+
+    @if(fileRole != C79Certificate) {
+        @h2("cf.historic.document.request.selected.statements")
     }
 
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(fileRole)) {
