@@ -48,7 +48,13 @@ p: components.p
         }
     }
 
-    @h1(messages(s"cf.historic.document.request.selected.certificates"))
+    @{
+        fileRole match {
+            case C79Certificate => h1(messages(s"cf.historic.document.request.review.selected.certificates"))
+            case _ => { h1(messages(s"cf.historic.document.request.review.${fileRole}.heading"))
+                        h2("cf.historic.document.request.selected.statements") }
+        }
+    }
 
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(fileRole)) {
 
