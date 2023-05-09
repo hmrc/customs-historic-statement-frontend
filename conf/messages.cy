@@ -55,15 +55,14 @@ cf.accounts.title=Eich cyfrifon ariannol ar gyfer y tollau
 
 #CheckYourAnswersView
 cf.historic.document.request.review.PostponedVATStatement.title=Cais am ddatganiadau ar gyfer TAW mewnforio ohiriedig
-cf.historic.document.request.review.C79Certificate.title=Cais am dystysgrifau TAW mewnforio
+cf.historic.document.request.review.C79Certificate.title=Tystysgrifau TAW mewnforio sydd wedi’u dewis
 cf.historic.document.request.review.SecurityStatement.title=Cais am hysbysiad o ddatganiadau addasu
 cf.historic.document.request.review.DutyDefermentStatement.title=Cais am ddatganiadau gohirio tollau
 cf.historic.document.request.review.SecurityStatement.heading=Cais am hysbysiad o ddatganiadau addasu
 cf.historic.document.request.review.PostponedVATStatement.heading=Cais am ddatganiadau ar gyfer TAW mewnforio ohiriedig
 cf.historic.document.request.review.DutyDefermentStatement.heading=Cais am ddatganiadau gohirio tollau
-cf.historic.document.request.review.C79Certificate.heading=Cais am dystysgrifau TAW mewnforio
+cf.historic.document.request.review.C79Certificate.heading=Tystysgrifau TAW mewnforio sydd wedi’u dewis
 cf.historic.document.request.selected.statements=Datganiadau dewisol
-cf.historic.document.request.selected.certificates=Tystysgrifau TAW mewnforio sydd wedi’u dewis
 cf.historic.document.request.review.send=Anfon cais
 
 #HistoricDataRequestPageView
