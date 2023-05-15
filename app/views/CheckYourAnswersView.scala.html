@@ -53,10 +53,6 @@ p: components.p
 
     @h1(s"cf.historic.document.request.review.${fileRole}.heading")
 
-    @if(fileRole != C79Certificate) {
-        @h2("cf.historic.document.request.selected.statements")
-    }
-
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(fileRole)) {
 
         @summaryList(SummaryList(helper.rows(fileRole), "govuk-!-margin-bottom-9 govuk-summary-list--wide "))

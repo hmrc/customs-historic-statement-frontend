@@ -54,10 +54,10 @@ service.technical-difficulties.p = Rhowch gynnig arall arni mewn ychydig o funud
 cf.accounts.title=Eich cyfrifon ariannol ar gyfer y tollau
 
 #CheckYourAnswersView
-cf.historic.document.request.review.PostponedVATStatement.title=Cais am ddatganiadau ar gyfer TAW mewnforio ohiriedig
+cf.historic.document.request.review.PostponedVATStatement.title=Datganiadau ar gyfer TAW mewnforio ohiriedig sydd wedi’u dewis
 cf.historic.document.request.review.C79Certificate.title=Tystysgrifau TAW mewnforio sydd wedi’u dewis
-cf.historic.document.request.review.SecurityStatement.title=Cais am hysbysiad o ddatganiadau addasu
-cf.historic.document.request.review.DutyDefermentStatement.title=Cais am ddatganiadau gohirio tollau
+cf.historic.document.request.review.SecurityStatement.title=Hysbysiad o ddatganiadau addasu sydd wedi’u dewis
+cf.historic.document.request.review.DutyDefermentStatement.title=Datganiadau gohirio tollau sydd wedi’u dewis
 cf.historic.document.request.review.SecurityStatement.heading=Hysbysiad o ddatganiadau addasu sydd wedi’u dewis
 cf.historic.document.request.review.PostponedVATStatement.heading=Datganiadau ar gyfer TAW mewnforio ohiriedig sydd wedi’u dewis
 cf.historic.document.request.review.DutyDefermentStatement.heading=Datganiadau gohirio tollau sydd wedi’u dewis

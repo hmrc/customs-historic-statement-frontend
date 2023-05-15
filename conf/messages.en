@@ -54,10 +54,10 @@ service.technical-difficulties.p = Please try again in a few minutes.
 cf.accounts.title=Your customs financial accounts
 
 #CheckYourAnswersView
-cf.historic.document.request.review.PostponedVATStatement.title=Request postponed import VAT statements
+cf.historic.document.request.review.PostponedVATStatement.title=Selected postponed import VAT statements
 cf.historic.document.request.review.C79Certificate.title=Selected import VAT certificates
-cf.historic.document.request.review.SecurityStatement.title=Request notification of adjustment statements
-cf.historic.document.request.review.DutyDefermentStatement.title=Request duty deferment statements
+cf.historic.document.request.review.SecurityStatement.title=Selected notification of adjustment statements
+cf.historic.document.request.review.DutyDefermentStatement.title=Selected duty deferment statements
 cf.historic.document.request.review.SecurityStatement.heading=Selected notification of adjustment statements
 cf.historic.document.request.review.PostponedVATStatement.heading=Selected postponed import VAT statements
 cf.historic.document.request.review.DutyDefermentStatement.heading=Selected duty deferment statements
