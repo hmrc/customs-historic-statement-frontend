@@ -24,8 +24,7 @@
         legendClasses: String = "govuk-fieldset__legend--s",
         id: String = "value",
         hintText: Option[String] = None,
-        legendAsPageHeading: Boolean = true,
-        legendHiddenContent: Option[String])(implicit messages: Messages)
+        legendAsPageHeading: Boolean = true)(implicit messages: Messages)
 
 
 @monthError = @{
@@ -45,9 +44,7 @@
     fieldset = Some(Fieldset(
         legend = Some(
             Legend(
-                content = HtmlContent(messages(legendContent) +
-                        legendHiddenContent.fold("")(key => span(key).toString())
-                ),
+                content = HtmlContent(messages(legendContent)),
                 isPageHeading = legendAsPageHeading,
                 classes = legendClasses
             )
