@@ -58,7 +58,7 @@
                 hintText = Some(messages("cf.historic.document.request.date.pvat.hint")),
                 id = "start",
                 legendAsPageHeading = false,
-                legendHiddenContent = Some(s"cf.historic.document.request.whichStartDate.$fileRole.hidden"))
+            )
 
             @inputDate(
                 form,
@@ -66,7 +66,7 @@
                 hintText = Some(messages("cf.historic.document.request.date.pvat.hint")),
                 id = "end",
                 legendAsPageHeading = false,
-                legendHiddenContent = Some(s"cf.historic.document.request.whichEndDate.$fileRole.hidden"))
+            )
 
         } else {
             @inputDate(
@@ -75,7 +75,7 @@
                 hintText = Some(messages("cf.historic.document.request.date.hint")),
                 id = "start",
                 legendAsPageHeading = false,
-                legendHiddenContent = Some(s"cf.historic.document.request.whichStartDate.$fileRole.hidden"))
+            )
 
             @inputDate(
                 form,
@@ -83,7 +83,7 @@
                 hintText = Some(messages("cf.historic.document.request.date.hint")),
                 id = "end",
                 legendAsPageHeading = false,
-                legendHiddenContent = Some(s"cf.historic.document.request.whichEndDate.$fileRole.hidden"))
+            )
         }
 
         @button(messages("cf.historic.document.request.continue"))
