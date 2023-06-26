@@ -29,7 +29,8 @@
 
 @layout(
     pageTitle = Some(messages("cf.accounts.title")),
-    dutyDeferment = fileRole == DutyDefermentStatement
+    dutyDeferment = fileRole == DutyDefermentStatement,
+    welshToggle = false
     ) {
     <div class="govuk-panel govuk-panel--confirmation">
         @h1(messages(s"cf.historic.document.request.confirmation.panel-text.${fileRole.name}"), Some("confirmation-text"), "govuk-panel__title govuk-panel__title--confirmation")
