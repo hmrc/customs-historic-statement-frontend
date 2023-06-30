@@ -114,7 +114,6 @@ private[mappings] class LocalDateFormatter(
    * invalid year - key.year
    *
    * @param key Input form key
-   * @param day Day value of the input date
    * @param month Month value of the input date
    * @param year Year value of the input date
    * @return Updated form key
@@ -125,7 +124,7 @@ private[mappings] class LocalDateFormatter(
     (month, year) match {
       case (m, _) if m < 1 || m > 12 => s"$key.month"
       case (_, y) if y < 1000 || y > 99999 => s"$key.year"
-      case _ => s"$key.day"
+      case _ => s"$key.month"
     }
 
   /**
@@ -147,7 +146,7 @@ private[mappings] class LocalDateFormatter(
     (monthValue, yearValue) match {
       case (Some(m), _) if m.trim.isEmpty || Try(m.trim.toInt).isFailure => s"$key.month"
       case (_, Some(y)) if y.trim.isEmpty || Try(y.trim.toInt).isFailure => s"$key.year"
-      case _ => s"$key.day"
+      case _ => s"$key.month"
     }
   }
 
