@@ -21,7 +21,7 @@ object FormHelper {
   /**
    * Updates the key as per below validation
    * If key is either start or end and error msg is among future date,etmp date or tax year date
-   *  Updated key - start.day
+   *  Updated key - start.month
    *
    *  If key is either start or end and error msg is of invalid year length
    *   Updated key - start.year
@@ -50,7 +50,7 @@ object FormHelper {
 
     if ((key.equals("start") || key.equals("end"))) {
       if (startDateMsgKeyList.contains(errorMsg) || endDateMsgKeyList.contains(errorMsg))
-        s"$key.day"
+        s"$key.month"
       else
         s"$key.year"
     } else {
