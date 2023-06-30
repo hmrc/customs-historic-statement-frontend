@@ -22,7 +22,7 @@ import base.SpecBase
 class FormHelperSpec extends SpecBase {
   "updateFormErrorKeyForStartAndEndDate" must {
     "append .month in the FormError key when key is either start or end and error msg key is " +
-      "among future date, ETMP or Tax year" in new SetUp {
+      "emptyStartMonthKey, emptyStartYearKey, emptyStartDateKey, invalidStartMonthKey and invalidStartYearKey" in new SetUp {
 
       FormHelper.updateFormErrorKeyForStartAndEndDate()(
         startKey, "cf.historic.document.request.form.error.start.month.date-number-invalid") shouldBe s"$startKey.month"
