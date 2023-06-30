@@ -108,7 +108,7 @@ private[mappings] class LocalDateFormatter(
     )
 
     /**
-   * Updates the FormError key as per valid day, month and year criteria
+   * Updates the FormError key as per valid month and year criteria
    * key is updated as below
    * invalid month - key.month
    * invalid year - key.year
