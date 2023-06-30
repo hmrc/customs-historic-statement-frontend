@@ -20,7 +20,7 @@ import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import base.SpecBase
 
 class FormHelperSpec extends SpecBase {
-  "updateFormErrorKeyForTheMessage" must {
+  "updateFormErrorKeyForStartAndEndDate" must {
     "append .month in the FormError key when key is either start or end and error msg key is " +
       "among future date, ETMP or Tax year" in new SetUp {
 
