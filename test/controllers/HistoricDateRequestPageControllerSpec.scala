@@ -298,6 +298,54 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
+    "return BAD_REQUEST when the start year is left blank" in new Setup {
+      override val app: Application = applicationBuilder(Some(populatedUserAnswers)).build()
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
+        .withFormUrlEncodedBody("start.month" -> "12", "start.year" -> "", "end.month" -> "1", "end.year" -> "2021")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST when the start month is left blank" in new Setup {
+      override val app: Application = applicationBuilder(Some(populatedUserAnswers)).build()
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
+        .withFormUrlEncodedBody("start.month" -> "", "start.year" -> "2021", "end.month" -> "1", "end.year" -> "2021")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST when the end year is left blank" in new Setup {
+      override val app: Application = applicationBuilder(Some(populatedUserAnswers)).build()
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
+        .withFormUrlEncodedBody("start.month" -> "12", "start.year" -> "2021", "end.month" -> "1", "end.year" -> "")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return BAD_REQUEST when the end month is left blank" in new Setup {
+      override val app: Application = applicationBuilder(Some(populatedUserAnswers)).build()
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
+        .withFormUrlEncodedBody("start.month" -> "12", "start.year" -> "2021", "end.month" -> "", "end.year" -> "2021")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
   }
 
   trait Setup {
