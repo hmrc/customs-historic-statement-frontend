@@ -22,6 +22,7 @@ import forms.HistoricDateRequestPageFormProvider
 import models.{C79Certificate, FileRole, HistoricDates, Mode}
 import navigation.Navigator
 import pages.{AccountNumber, HistoricDateRequestPage, IsNiAccount}
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -49,6 +50,8 @@ class HistoricDateRequestPageController @Inject()(
                                                    view: HistoricDateRequestPageView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
+  val log = Logger(this.getClass)
+
   def onPageLoad(mode: Mode, fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
@@ -67,11 +70,14 @@ class HistoricDateRequestPageController @Inject()(
       val backLink = appConfig.returnLink(fileRole, request.userAnswers)
 
       formProvider(fileRole).bindFromRequest().fold(
-        formWithErrors =>
+        formWithErrors =>{
+          logMessageForAnalytics(fileRole, request.eori, formWithErrors.data.getOrElse("start.year", "") + "-" + formWithErrors.data.getOrElse("start.month", ""),
+            formWithErrors.data.getOrElse("end.year", "") + "-" + formWithErrors.data.getOrElse("end.month", ""), formWithErrors.errors.head.message)
           Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink, request.userAnswers.get(AccountNumber),
-            request.userAnswers.get(IsNiAccount)))),
+            request.userAnswers.get(IsNiAccount))))
+        },
         value =>
-          customValidation(value, formProvider(fileRole), fileRole) match {
+          customValidation(value, formProvider(fileRole), fileRole, request.eori) match {
             case Some(formWithErrors) =>
               Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink,
                 request.userAnswers.get(AccountNumber), request.userAnswers.get(IsNiAccount))))
@@ -84,7 +90,8 @@ class HistoricDateRequestPageController @Inject()(
       )
   }
 
-  def customValidation(dates: HistoricDates, form: Form[HistoricDates], fileRole: FileRole)(implicit messages: Messages): Option[Form[HistoricDates]] = {
+  def customValidation(dates: HistoricDates, form: Form[HistoricDates], fileRole: FileRole, eori: String)
+                      (implicit messages: Messages): Option[Form[HistoricDates]] = {
     val maximumNumberOfMonths = 6
 
     def formWithError(message: String): Form[HistoricDates] = {
@@ -95,20 +102,31 @@ class HistoricDateRequestPageController @Inject()(
 
     (dates, fileRole) match {
       case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths < 0 =>
+        logMessageForAnalytics(fileRole, eori, dates.start.toString.dropRight(3), dates.start.toString.dropRight(3),
+          "cf.historic.document.request.form.error.to-date-must-be-later-than-from-date")
         Some(form.withError("end", "cf.historic.document.request.form.error.to-date-must-be-later-than-from-date").fill(dates))
+
       case (HistoricDates(start, end), v) if Period.between(start, end).toTotalMonths >= maximumNumberOfMonths =>
         Some(form.withError("end",
           if (v == C79Certificate) {
+            logMessageForAnalytics(fileRole, eori, dates.start.toString.dropRight(3), dates.start.toString.dropRight(3),
+              "cf.historic.document.request.form.error.date-range-too-wide.c79")
             "cf.historic.document.request.form.error.date-range-too-wide.c79"
           } else {
+            logMessageForAnalytics(fileRole, eori, dates.start.toString.dropRight(3), dates.start.toString.dropRight(3),
+              "cf.historic.document.request.form.error.date-range-too-wide")
             "cf.historic.document.request.form.error.date-range-too-wide"
           }).fill(dates))
+
       case (HistoricDates(start, end), _) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
+        logMessageForAnalytics(fileRole, eori, dates.start.toString.dropRight(3), dates.start.toString.dropRight(3),
+          "cf.historic.document.request.form.error.date-too-far-in-past")
         Some(formWithError(messages(
           "cf.historic.document.request.form.error.date-too-far-in-past",
           minTaxYear.startYear.toString,
           minTaxYear.finishYear.toString
         )))
+
       case _ => None
     }
   }
@@ -123,4 +141,9 @@ class HistoricDateRequestPageController @Inject()(
     val dayOfMonthThatTaxYearStartsOn = 6
     minTaxYear.starts.isAfter(requestedDate.withDayOfMonth(dayOfMonthThatTaxYearStartsOn))
   }
+
+  private def logMessageForAnalytics(fileRole: FileRole, eori: String, startDate: String, endDate: String, errorMessageKey: String)
+                                    (implicit messages: Messages): Unit=
+    log.info(s"$fileRole, Historic statement request service, eori number: $eori, " +
+      s"start date: $startDate, end date: $endDate, error: ${messages(errorMessageKey)}")
 }
