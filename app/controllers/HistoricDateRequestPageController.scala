@@ -144,6 +144,6 @@ class HistoricDateRequestPageController @Inject()(
 
   private def logMessageForAnalytics(fileRole: FileRole, eori: String, startDate: String, endDate: String, errorMessageKey: String)
                                     (implicit messages: Messages): Unit=
-    log.info(s"$fileRole, Historic statement request service, eori number: $eori, " +
+    log.warn(s"$fileRole, Historic statement request service, eori number: $eori, " +
       s"start date: $startDate, end date: $endDate, error: ${messages(errorMessageKey)}")
 }
