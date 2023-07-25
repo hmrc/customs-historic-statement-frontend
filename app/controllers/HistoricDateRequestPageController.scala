@@ -71,14 +71,14 @@ class HistoricDateRequestPageController @Inject()(
 
       formProvider(fileRole).bindFromRequest().fold(
         formWithErrors =>{
-          logMessageForAnalytics(fileRole, request.eori, formWithErrors.data.getOrElse("start.year", "") + "-" + formWithErrors.data.getOrElse("start.month", ""),
-            formWithErrors.data.getOrElse("end.year", "") + "-" + formWithErrors.data.getOrElse("end.month", ""), formWithErrors.errors.head.message)
+          logMessageForAnalytics(fileRole, request.eori, formWithErrors)
           Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink, request.userAnswers.get(AccountNumber),
             request.userAnswers.get(IsNiAccount))))
         },
         value =>
           customValidation(value, formProvider(fileRole), fileRole, request.eori) match {
             case Some(formWithErrors) =>
+              logMessageForAnalytics(fileRole, request.eori, formWithErrors)
               Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink,
                 request.userAnswers.get(AccountNumber), request.userAnswers.get(IsNiAccount))))
             case None =>
@@ -102,25 +102,17 @@ class HistoricDateRequestPageController @Inject()(
 
     (dates, fileRole) match {
       case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths < 0 =>
-        logMessageForAnalytics(fileRole, eori, dates.start.toString.dropRight(3), dates.start.toString.dropRight(3),
-          "cf.historic.document.request.form.error.to-date-must-be-later-than-from-date")
         Some(form.withError("end", "cf.historic.document.request.form.error.to-date-must-be-later-than-from-date").fill(dates))
 
       case (HistoricDates(start, end), v) if Period.between(start, end).toTotalMonths >= maximumNumberOfMonths =>
         Some(form.withError("end",
           if (v == C79Certificate) {
-            logMessageForAnalytics(fileRole, eori, dates.start.toString.dropRight(3), dates.start.toString.dropRight(3),
-              "cf.historic.document.request.form.error.date-range-too-wide.c79")
             "cf.historic.document.request.form.error.date-range-too-wide.c79"
           } else {
-            logMessageForAnalytics(fileRole, eori, dates.start.toString.dropRight(3), dates.start.toString.dropRight(3),
-              "cf.historic.document.request.form.error.date-range-too-wide")
             "cf.historic.document.request.form.error.date-range-too-wide"
           }).fill(dates))
 
       case (HistoricDates(start, end), _) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
-        logMessageForAnalytics(fileRole, eori, dates.start.toString.dropRight(3), dates.start.toString.dropRight(3),
-          "cf.historic.document.request.form.error.date-too-far-in-past")
         Some(formWithError(messages(
           "cf.historic.document.request.form.error.date-too-far-in-past",
           minTaxYear.startYear.toString,
@@ -142,8 +134,15 @@ class HistoricDateRequestPageController @Inject()(
     minTaxYear.starts.isAfter(requestedDate.withDayOfMonth(dayOfMonthThatTaxYearStartsOn))
   }
 
-  private def logMessageForAnalytics(fileRole: FileRole, eori: String, startDate: String, endDate: String, errorMessageKey: String)
-                                    (implicit messages: Messages): Unit=
+  private def logMessageForAnalytics(fileRole: FileRole, eori: String, formWithErrors: Form[HistoricDates])
+                                    (implicit messages: Messages): Unit = {
+    val errorMessages = formWithErrors.errors.map(e => messages(e.message)).mkString(",")
+
+    val startDate = formWithErrors.data.getOrElse("start.year", "") + "-" + formWithErrors.data.getOrElse("start.month", "")
+
+    val endDate = formWithErrors.data.getOrElse("end.year", "") + "-" + formWithErrors.data.getOrElse("end.month", "")
+
     log.warn(s"$fileRole, Historic statement request service, eori number: $eori, " +
-      s"start date: $startDate, end date: $endDate, error: ${messages(errorMessageKey)}")
+      s"start date: $startDate, end date: $endDate, error: $errorMessages")
+  }
 }
