@@ -39,13 +39,15 @@ site.continue = Cadarnhau ac anfon
 
 # Unauthorised Error
 unauthorised.title=Heb gofrestru â’r Gwasanaeth Datgan Tollau
-unauthorised.heading=Er mwyn mynd yn eich blaen, mae angen i chi gael mynediad at y Gwasanaeth Datgan Tollau (CDS)
+unauthorised.heading=I fynd yn eich blaen, mae angen i chi danysgrifio i’r Gwasanaeth Datganiadau Tollau (CDS)
 unauthorised.eori-info=Bydd angen y canlynol arnoch:
 unauthorised.eori-link=Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) (yn agor ffenestr neu dab newydd)
 unauthorised.get-access-info=Os oes gennych rif EORI eisoes, gallwch
 unauthorised.get-access-link=cael mynediad at CDS (yn agor ffenestr neu dab newydd)
-unauthorised.how-to-get-access-info=Sut i gael mynediad at CDS
-unauthorised.process-application-info=Gall gymryd hyd at ddwy awr i CThEM brosesu’ch cais.
+unauthorised.how-to-get-access-info=Os ydych eisoes wedi tanysgrifio i’r CDS
+unauthorised.process-application-info=Gwiriwch eich bod wedi mewngofnodi gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth sy’n gysylltiedig â’ch Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) a’ch cyfrif CDS.
+unauthorised.subscribe-cds.title=Tanysgrifio i’r CDS
+unauthorised.subscribe-cds.link=Tanysgrifio i’r Gwasanaeth Datganiadau Tollau.
 
 service-technical-difficulties.title = Mae’n ddrwg gennym. Mae anawsterau technegol wedi codi
 service.technical-difficulties.heading = Mae’n ddrwg gennym. Mae anawsterau technegol wedi codi
