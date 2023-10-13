@@ -22,8 +22,7 @@ object AppDependencies {
     "com.typesafe.play" %% "play-test" % current,
     "com.vladsch.flexmark" % "flexmark-all" % "0.64.8",
     "org.scalacheck" %% "scalacheck" % "1.17.0",
-    "org.mockito" %% "mockito-scala-scalatest" % "1.17.14",
-    "uk.gov.hmrc" %% "play-frontend-hmrc" % "7.23.0-play-28"
+    "org.mockito" %% "mockito-scala-scalatest" % "1.17.14"
   ).map(_ % Test)
 
   def apply(): Seq[ModuleID] = compile ++ test
