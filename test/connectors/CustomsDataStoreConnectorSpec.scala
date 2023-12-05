@@ -18,12 +18,12 @@ package connectors
 
 import base.SpecBase
 import config.FrontendAppConfig
-import models.EoriHistory
+import models.{EoriHistory, UnverifiedEmail}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.retrieve.Email
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, UpstreamErrorResponse}
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -32,22 +32,22 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
   "getEmail" should {
     "return email address from customs data store" in new Setup {
-      val emailResponse = EmailResponse(Some("a@a.com"), Some("time"))
+      val emailResponse = EmailResponse(Some("a@a.com"), Some("time"), None)
       val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/GB12345/verified-email"
       when[Future[EmailResponse]](mockHttpClient.GET(eqTo(customsDataStoreUrl), any, any)(any, any, any)).thenReturn(Future.successful(emailResponse))
       running(app) {
         val result = await(customsDataStoreConnector.getEmail("GB12345")(hc))
-        result mustBe Some(Email("a@a.com"))
+        result mustBe Right(Email("a@a.com"))
       }
     }
 
     "return None when call to customs data store fails" in new Setup {
-      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/GB12345/verified-email"
-      when[Future[EmailResponse]](mockHttpClient.GET(eqTo(customsDataStoreUrl), any, any)(any, any, any))
-        .thenReturn(Future.failed(new RuntimeException("failed")))
+      when[Future[EmailResponse]](mockHttpClient.GET(any, any, any)(any, any, any)).thenReturn(
+        Future.failed(UpstreamErrorResponse("NoData", 404, 404)))
+
       running(app) {
-        val result = await(customsDataStoreConnector.getEmail("GB12345")(hc))
-        result mustBe None
+       val result = customsDataStoreConnector.getEmail(eori)
+        await(result) mustBe Left(UnverifiedEmail)
       }
     }
   }
@@ -90,11 +90,13 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
   trait Setup {
     val mockHttpClient = mock[HttpClient]
+    val eori = "GB11111"
     val app = applicationBuilder().overrides(
       bind[HttpClient].to(mockHttpClient)
     ).build()
     val mockAppConfig = app.injector.instanceOf[FrontendAppConfig]
     val customsDataStoreConnector = app.injector.instanceOf[CustomsDataStoreConnector]
+    
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 

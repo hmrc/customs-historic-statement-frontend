@@ -43,7 +43,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
           inject.bind[CustomsDataStoreConnector].toInstance(mockDataStoreConnector)
         ).build()
 
-      when(mockDataStoreConnector.getEmail(any)(any)).thenReturn(Future.successful(Some(Email("some@email.com"))))
+      when(mockDataStoreConnector.getEmail(any)(any)).thenReturn(Future.successful(Right(Email("some@email.com"))))
       when(mockSessionRepository.clear(any)).thenReturn(Future.successful(true))
 
       val view = app.injector.instanceOf[ConfirmationPageView]
