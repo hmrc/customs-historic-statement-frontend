@@ -53,7 +53,7 @@ class HistoricDateRequestPageController @Inject()(
 
   val log = Logger(this.getClass)
 
-  def onPageLoad(mode: Mode, fileRole: FileRole): Action[AnyContent] = (identify andThen checkEmailIsVerified andThen getData andThen requireData).async {
+  def onPageLoad(mode: Mode, fileRole: FileRole): Action[AnyContent] = (identify andThen checkEmailIsVerified andThen getData andThen requireData) {
     implicit request =>
 
       val preparedForm: Form[HistoricDates] = request.userAnswers.get(HistoricDateRequestPage(fileRole)) match {

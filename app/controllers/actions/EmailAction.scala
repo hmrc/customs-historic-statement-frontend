@@ -16,7 +16,6 @@
 
 package controllers.actions
 
-import config.FrontendAppConfig
 import models.UnverifiedEmail
 import models.requests.IdentifierRequest
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -28,18 +27,30 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-
-
 @Singleton
-class EmailAction @Inject()(dataStoreService: CustomsDataStoreConnector)(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi) extends ActionFilter[IdentifierRequest] with I18nSupport {
+class EmailAction @Inject() (dataStoreService: CustomsDataStoreConnector)(
+    implicit
+    val executionContext: ExecutionContext,
+    val messagesApi: MessagesApi
+) extends ActionFilter[IdentifierRequest]
+    with I18nSupport {
   def filter[A](request: IdentifierRequest[A]): Future[Option[Result]] = {
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-    dataStoreService.getEmail(request.eori).map {
-      case Left(value) =>
-        value match {
-          case UnverifiedEmail => Some(Redirect(controllers.routes.EmailController.showUnverified()))
-        }
-      case Right(_) => None
-    }.recover { case _ => None } //This will allow users to access the service if ETMP return an error via SUB09
+    implicit val hc: HeaderCarrier =
+      HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    dataStoreService
+      .getEmail(request.eori)
+      .map {
+        case Left(value) =>
+          value match {
+            case UnverifiedEmail =>
+              Some(
+                Redirect(controllers.routes.EmailController.showUnverified())
+              )
+          }
+        case Right(_) => None
+      }
+      .recover { case _ =>
+        None
+      } //This will allow users to access the service if ETMP return an error via SUB09
   }
 }
