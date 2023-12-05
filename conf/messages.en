@@ -237,3 +237,11 @@ month.9 = September
 month.10 = October
 month.11 = November
 month.12 = December
+
+# Verify Your Email Address
+cf.verify.your.email.title=Verify your email address for the Customs Declaration Service
+cf.verify.your.email.heading=Verify your email address for the Customs Declaration Service
+cf.verify.your.email.p1=You need to verify the email address you use for the Customs Declaration Service.
+cf.verify.your.email.p2=Your registered email address is <strong class="bold">{0}</string>.
+cf.verify.your.email.p3=If this is not the email address you want to use, you can also change it using this service.
+cf.verify.your.email.change.button=Verify or change email address

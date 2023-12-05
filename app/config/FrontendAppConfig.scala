@@ -69,6 +69,8 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
 
   lazy val sdesSecurityStatementListUrl: String = sdesApi + "/files-available/list/SecurityStatement"
   lazy val historicDocumentsApiUrl: String = customsFinancialsApi + "/historic-document-request"
+  lazy val emailFrontendUrl: String = configuration.get[String]("microservice.services.customs-email-frontend.url")
+  lazy val fixedDateTime = configuration.get[Boolean]("features.fixed-systemdate-for-tests")
 
   def sessionCacheUrl(sessionId: String, linkId: String): String =
     customsFinancialsSessionCacheUrl + s"/account-link/$sessionId/$linkId"

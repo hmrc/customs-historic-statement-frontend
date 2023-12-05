@@ -17,12 +17,13 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.EoriHistory
+import models._
 import play.api.Logging
+import play.api.http.Status.NOT_FOUND
 import play.api.libs.json._
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, UpstreamErrorResponse}
 
 import javax.inject.Inject
 import scala.concurrent._
@@ -30,12 +31,13 @@ import scala.concurrent._
 class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig,
                                           httpClient: HttpClient)(implicit executionContext: ExecutionContext) extends Logging {
 
-  def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Option[Email]] = {
+  def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
     val dataStoreEndpoint = appConfig.customsDataStore + s"/eori/$eori/verified-email"
-    httpClient.GET[EmailResponse](dataStoreEndpoint).map { response =>
-      response.address.map(Email(_))
+    httpClient.GET[EmailResponse](dataStoreEndpoint).map {
+      case EmailResponse(Some(address), _, None) => Right(Email(address))
+      case _ => Left(UnverifiedEmail)
     }.recover {
-      case _ => None
+      case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
     }
   }
 
@@ -57,7 +59,7 @@ object EoriHistoryResponse {
   implicit val format: OFormat[EoriHistoryResponse] = Json.format[EoriHistoryResponse]
 }
 
-case class EmailResponse(address: Option[String], timestamp: Option[String])
+case class EmailResponse(address: Option[String], timestamp: Option[String], undeliverable: Option[UndeliverableInformation])
 
 object EmailResponse {
   implicit val format: OFormat[EmailResponse] = Json.format[EmailResponse]

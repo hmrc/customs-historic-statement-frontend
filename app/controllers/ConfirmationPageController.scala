@@ -43,9 +43,12 @@ class ConfirmationPageController @Inject()(
   def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
       for {
-        email <- customsDataStoreConnector.getEmail(request.eori)
+        email <- customsDataStoreConnector.getEmail(request.eori).map {
+          case Right(email) => Some(email)
+          case Left(_) => None
+        }.recover { case _ => None }
         _ <- sessionRepository.clear(request.internalId)
         returnLink = appConfig.returnLink(fileRole, request.userAnswers)
       } yield Ok(view(email, fileRole, returnLink))
+    }
   }
-}

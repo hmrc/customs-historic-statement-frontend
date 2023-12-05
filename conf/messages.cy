@@ -239,3 +239,11 @@ month.9 = Medi
 month.10 = Hydref
 month.11 = Tachwedd
 month.12 = Rhagfyr
+
+# Verify Your Email Address
+cf.verify.your.email.title=Cadarnhau’ch cyfeiriad e-bost ar gyfer y Gwasanaeth Datganiadau Tollau
+cf.verify.your.email.heading=Cadarnhau’ch cyfeiriad e-bost ar gyfer y Gwasanaeth Datganiadau Tollau
+cf.verify.your.email.p1=Mae angen i chi gadarnhau’r cyfeiriad e-bost rydych yn ei ddefnyddio ar gyfer y Gwasanaeth Datganiadau Tollau.
+cf.verify.your.email.p2=Eich e-bost cofrestredig yw <strong class="bold">{0}</strong>.
+cf.verify.your.email.p3=Os nad dyma’r cyfeiriad e-bost rydych chi am ei ddefnyddio, gallwch ei newid hefyd gan ddefnyddio’r gwasanaeth hwn.
+cf.verify.your.email.change.button=Dilysu neu newid y cyfeiriad e-bost
