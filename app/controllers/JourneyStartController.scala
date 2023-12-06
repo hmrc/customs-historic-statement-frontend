@@ -17,8 +17,9 @@
 package controllers
 
 import connectors.CustomsSessionCacheConnector
-import controllers.actions.{DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRetrievalAction, IdentifierAction, EmailAction}
 import models.{DutyDefermentStatement, FileRole, NormalMode, UserAnswers}
+
 import pages.{AccountNumber, IsNiAccount, RequestedLinkId}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -29,12 +30,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class JourneyStartController @Inject()(customsSessionCacheConnector: CustomsSessionCacheConnector,
                                        identify: IdentifierAction,
+                                       checkEmailIsVerified: EmailAction,
                                        getData: DataRetrievalAction,
                                        sessionRepository: SessionRepository,
                                        mcc: MessagesControllerComponents)(implicit executionContext: ExecutionContext) extends FrontendController(mcc) {
 
 
-  def dutyDeferment(linkId: String): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+  def dutyDeferment(linkId: String): Action[AnyContent] = (identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
     hc.sessionId match {
       case Some(sessionId) =>
         customsSessionCacheConnector.getAccountLink(sessionId.value, linkId).flatMap {
@@ -52,7 +54,7 @@ class JourneyStartController @Inject()(customsSessionCacheConnector: CustomsSess
     }
   }
 
-  def nonDutyDeferment(fileRole: FileRole): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+  def nonDutyDeferment(fileRole: FileRole): Action[AnyContent] = (identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
     fileRole match {
       case DutyDefermentStatement => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
       case _ =>

@@ -25,25 +25,21 @@ import play.api.test.Helpers.running
 class FrontendAppConfigSpec extends SpecBase {
 
   "returnLink" should {
-    "return the adjustments link if a SecurityStatement FileRole provided" in {
-      val app = applicationBuilder().build()
-      val config = app.injector.instanceOf[FrontendAppConfig]
+    "return the adjustments link if a SecurityStatement FileRole provided" in new Setup {
       running(app){
         config.returnLink(SecurityStatement, emptyUserAnswers) mustBe "http://localhost:9398/customs/documents/adjustments"
       }
     }
+    
 
-    "return the adjustments link if a C79Certificate FileRole provided" in {
-      val app = applicationBuilder().build()
-      val config = app.injector.instanceOf[FrontendAppConfig]
+    "return the adjustments link if a C79Certificate FileRole provided" in new Setup {
       running(app) {
         config.returnLink(C79Certificate, emptyUserAnswers) mustBe "http://localhost:9398/customs/documents/import-vat"
       }
     }
 
-    "return the DutyDeferment link if a DutyDeferment FileRole provided and linkId in user answers" in {
-      val app = applicationBuilder().build()
-      val config = app.injector.instanceOf[FrontendAppConfig]
+    "return the DutyDeferment link if a DutyDeferment FileRole provided and linkId in user answers" in new Setup {
+      
       running(app) {
         config.returnLink(
           DutyDefermentStatement,
@@ -51,9 +47,7 @@ class FrontendAppConfigSpec extends SpecBase {
       }
     }
 
-    "throw an exception if DutyDeferment FileRole and no linkId in user answers" in {
-      val app = applicationBuilder().build()
-      val config = app.injector.instanceOf[FrontendAppConfig]
+    "throw an exception if DutyDeferment FileRole and no linkId in user answers" in new Setup {
       running(app) {
         intercept[Exception] {
           config.returnLink(DutyDefermentStatement, emptyUserAnswers) mustBe "http://localhost:9398/customs/documents/import-vat"
@@ -61,14 +55,17 @@ class FrontendAppConfigSpec extends SpecBase {
       }
     }
 
-    "throw an exception if DutyDeferment fileRole is passed " in {
-      val app = applicationBuilder().build()
-      val config = app.injector.instanceOf[FrontendAppConfig]
+    "throw an exception if DutyDeferment fileRole is passed " in new Setup {
       running(app) {
         intercept[Exception] {
           config.returnLink(DutyDefermentStatement) mustBe "http://localhost:9398/customs/documents/import-vat"
         }.getMessage mustBe "Invalid file role"
       }
     }
+  }
+
+  trait Setup {
+    val app = applicationBuilder().build()
+    val config = app.injector.instanceOf[FrontendAppConfig]
   }
 }
