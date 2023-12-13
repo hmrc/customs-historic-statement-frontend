@@ -35,6 +35,7 @@ class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig,
     val dataStoreEndpoint = appConfig.customsDataStore + s"/eori/$eori/verified-email"
     httpClient.GET[EmailResponse](dataStoreEndpoint).map {
       case EmailResponse(Some(address), _, None) => Right(Email(address))
+      case EmailResponse(Some(email), _, Some(_)) => Left(UndeliverableEmail(email))
       case _ => Left(UnverifiedEmail)
     }.recover {
       case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
