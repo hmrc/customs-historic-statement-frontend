@@ -17,11 +17,12 @@
 package controllers
 
 import connectors.CustomsFinancialsApiConnector
-import models.EmailUnverifiedResponse
+import models.{EmailUnverifiedResponse, EmailVerifiedResponse}
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.inject._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import base.SpecBase
+import org.mockito.ArgumentMatchers
 import play.api.test.Helpers._
 
 import scala.concurrent.Future
@@ -45,6 +46,14 @@ class EmailControllerSpec extends SpecBase {
         status(result) shouldBe OK
       }
     }
+
+    "return undeliverable email response" in new UndeliverableEmailSetup {
+      running(app) {
+        val request = fakeRequest(GET, routes.EmailController.showUndeliverable().url)
+        val result = route(app, request).value
+        status(result) shouldBe OK
+      }
+    }
   }
 
   trait Setup {
@@ -54,7 +63,22 @@ class EmailControllerSpec extends SpecBase {
 
     val response = EmailUnverifiedResponse(Some("unverifiedEmail"))
 
-    when[Future[EmailUnverifiedResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+    when[Future[EmailUnverifiedResponse]](mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/unverified-email-display"), any, any)(any, any, any))
+      .thenReturn(Future.successful(response))
+
+    val app = applicationBuilder().overrides(
+      bind[HttpClient].toInstance(mockHttpClient)
+    ).build()
+  }
+
+  trait UndeliverableEmailSetup {
+    val expectedResult = Some("undeliverableEmail")
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+    private val mockHttpClient = mock[HttpClient]
+
+    val response = EmailVerifiedResponse(Some("undeliverableEmail"))
+
+    when[Future[EmailVerifiedResponse]](mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/email-display"), any, any)(any, any, any))
       .thenReturn(Future.successful(response))
 
     val app = applicationBuilder().overrides(
