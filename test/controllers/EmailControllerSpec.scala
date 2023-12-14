@@ -60,18 +60,12 @@ class EmailControllerSpec extends SpecBase {
       }
     }
 
-    "return undeliverable email response" in {
-
-      val mockHttpClient = mock[HttpClient]
+    "display undeliverable email response" in new Setup{
 
       when[Future[EmailVerifiedResponse]](
         mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/email-display"), any, any)
         (any, any, any))
         .thenReturn(Future.successful(EmailVerifiedResponse(Some("undeliverableEmail"))))
-
-      val app = applicationBuilder().overrides(
-        bind[HttpClient].toInstance(mockHttpClient)
-      ).build()
 
       running(app) {
         val request = fakeRequest(GET, routes.EmailController.showUndeliverable().url)
