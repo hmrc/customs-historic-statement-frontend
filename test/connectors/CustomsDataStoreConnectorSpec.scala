@@ -42,9 +42,16 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
     }
 
     "return undeliverable email address from customs data store" in new Setup {
-      val emailResponse = EmailResponse(Some("noresponse@email.com"), Some("time"), Some(UndeliverableInformation("subject-example","ex-event-id-01","ex-group-id-01")))
+
+      val emailResponse = EmailResponse(Some("noresponse@email.com"),
+                          Some("time"),
+                          Some(UndeliverableInformation("subject-example","ex-event-id-01","ex-group-id-01")))
+
       val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/GB12346/verified-email"
-      when[Future[EmailResponse]](mockHttpClient.GET(eqTo(customsDataStoreUrl), any, any)(any, any, any)).thenReturn(Future.successful(emailResponse))
+
+      when[Future[EmailResponse]](mockHttpClient.GET(eqTo(customsDataStoreUrl), any, any)(any, any, any))
+        .thenReturn(Future.successful(emailResponse))
+
       running(app) {
         val result = await(customsDataStoreConnector.getEmail("GB12346")(hc))
         result mustBe Left(UndeliverableEmail("noresponse@email.com"))

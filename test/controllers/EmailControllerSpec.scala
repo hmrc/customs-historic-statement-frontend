@@ -30,7 +30,14 @@ import scala.concurrent.Future
 class EmailControllerSpec extends SpecBase {
 
   "EmailController" must {
+
     "return unverified email" in new Setup {
+
+      when[Future[EmailUnverifiedResponse]](
+        mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/unverified-email-display"), any, any)
+        (any, any, any))
+        .thenReturn(Future.successful(response))
+
       running(app) {
         val connector = app.injector.instanceOf[CustomsFinancialsApiConnector]
 
@@ -40,6 +47,12 @@ class EmailControllerSpec extends SpecBase {
     }
 
     "return unverified email response" in new Setup {
+
+      when[Future[EmailUnverifiedResponse]](
+        mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/unverified-email-display"), any, any)
+        (any, any, any))
+        .thenReturn(Future.successful(response))
+
       running(app) {
         val request = fakeRequest(GET, routes.EmailController.showUnverified().url)
         val result = route(app, request).value
@@ -71,14 +84,9 @@ class EmailControllerSpec extends SpecBase {
   trait Setup {
     val expectedResult = Some("unverifiedEmail")
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    private val mockHttpClient = mock[HttpClient]
+    implicit val mockHttpClient = mock[HttpClient]
 
     val response = EmailUnverifiedResponse(Some("unverifiedEmail"))
-
-    when[Future[EmailUnverifiedResponse]](
-        mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/unverified-email-display"), any, any)
-        (any, any, any))
-      .thenReturn(Future.successful(response))
 
     val app = applicationBuilder().overrides(
       bind[HttpClient].toInstance(mockHttpClient)
