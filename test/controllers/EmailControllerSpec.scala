@@ -47,7 +47,19 @@ class EmailControllerSpec extends SpecBase {
       }
     }
 
-    "return undeliverable email response" in new UndeliverableEmailSetup {
+    "return undeliverable email response" in {
+
+      val mockHttpClient = mock[HttpClient]
+
+      when[Future[EmailVerifiedResponse]](
+        mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/email-display"), any, any)
+        (any, any, any))
+        .thenReturn(Future.successful(EmailVerifiedResponse(Some("undeliverableEmail"))))
+
+      val app = applicationBuilder().overrides(
+        bind[HttpClient].toInstance(mockHttpClient)
+      ).build()
+
       running(app) {
         val request = fakeRequest(GET, routes.EmailController.showUndeliverable().url)
         val result = route(app, request).value
@@ -63,7 +75,9 @@ class EmailControllerSpec extends SpecBase {
 
     val response = EmailUnverifiedResponse(Some("unverifiedEmail"))
 
-    when[Future[EmailUnverifiedResponse]](mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/unverified-email-display"), any, any)(any, any, any))
+    when[Future[EmailUnverifiedResponse]](
+        mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/unverified-email-display"), any, any)
+        (any, any, any))
       .thenReturn(Future.successful(response))
 
     val app = applicationBuilder().overrides(
@@ -71,18 +85,4 @@ class EmailControllerSpec extends SpecBase {
     ).build()
   }
 
-  trait UndeliverableEmailSetup {
-    val expectedResult = Some("undeliverableEmail")
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-    private val mockHttpClient = mock[HttpClient]
-
-    val response = EmailVerifiedResponse(Some("undeliverableEmail"))
-
-    when[Future[EmailVerifiedResponse]](mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/email-display"), any, any)(any, any, any))
-      .thenReturn(Future.successful(response))
-
-    val app = applicationBuilder().overrides(
-      bind[HttpClient].toInstance(mockHttpClient)
-    ).build()
-  }
 }

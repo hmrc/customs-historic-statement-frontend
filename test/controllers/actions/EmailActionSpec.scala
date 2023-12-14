@@ -86,6 +86,7 @@ class EmailActionSpec extends SpecBase {
 
     val emailAction: EmailAction = app.injector.instanceOf[EmailAction]
 
-    val authenticatedRequest: IdentifierRequest[AnyContentAsEmpty.type] = IdentifierRequest(FakeRequest("GET", "/"), "EORINumber", "GB123456789012")
+    val authenticatedRequest: IdentifierRequest[AnyContentAsEmpty.type] =
+      IdentifierRequest(FakeRequest("GET", "/"), "EORINumber", "GB123456789012")
   }
 }

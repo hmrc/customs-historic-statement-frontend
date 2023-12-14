@@ -23,8 +23,8 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.{Logger, LoggerLike}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import views.html.email.undeliverable_email
 import views.html.verify_your_email
-import views.html.undeliverable_email
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
