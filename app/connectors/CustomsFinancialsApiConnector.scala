@@ -17,7 +17,7 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.{FileRole, HistoricDocumentRequest, EmailUnverifiedResponse}
+import models.{EmailUnverifiedResponse, EmailVerifiedResponse, FileRole, HistoricDocumentRequest}
 import play.api.http.Status.NO_CONTENT
 import play.mvc.Http.Status
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -46,4 +46,7 @@ class CustomsFinancialsApiConnector @Inject()(
   def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
     httpClient.GET[EmailUnverifiedResponse](appConfig.customsFinancialsApi + "/subscriptions/unverified-email-display").map( res => res.unVerifiedEmail)
   }
+
+  def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] =
+    httpClient.GET[EmailVerifiedResponse](appConfig.customsFinancialsApi + "/subscriptions/email-display")
 }

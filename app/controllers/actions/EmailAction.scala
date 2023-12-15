@@ -16,7 +16,7 @@
 
 package controllers.actions
 
-import models.UnverifiedEmail
+import models.{EmailResponses, UndeliverableEmail, UnverifiedEmail}
 import models.requests.IdentifierRequest
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results._
@@ -24,6 +24,7 @@ import play.api.mvc.{ActionFilter, Result}
 import connectors.CustomsDataStoreConnector
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -40,17 +41,18 @@ class EmailAction @Inject() (dataStoreService: CustomsDataStoreConnector)(
     dataStoreService
       .getEmail(request.eori)
       .map {
-        case Left(value) =>
-          value match {
-            case UnverifiedEmail =>
-              Some(
-                Redirect(controllers.routes.EmailController.showUnverified())
-              )
-          }
+        case Left(value) => checkEmailResponseAndRedirect(value)
         case Right(_) => None
       }
       .recover { case _ =>
         None
       } //This will allow users to access the service if ETMP return an error via SUB09
+  }
+
+  private def checkEmailResponseAndRedirect(value: EmailResponses): Option[Result] = {
+    value match {
+      case UnverifiedEmail => Some(Redirect(controllers.routes.EmailController.showUnverified()))
+      case UndeliverableEmail(_) => Some(Redirect(controllers.routes.EmailController.showUndeliverable()))
+    }
   }
 }
