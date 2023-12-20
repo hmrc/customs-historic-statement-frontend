@@ -25,6 +25,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ConfirmationPageView
+import viewmodels.CheckYourAnswersHelper
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -37,6 +38,7 @@ class ConfirmationPageController @Inject()(
                                             sessionRepository: SessionRepository,
                                             customsDataStoreConnector: CustomsDataStoreConnector,
                                             val controllerComponents: MessagesControllerComponents,
+                                            checkYourAnswers: CheckYourAnswersHelper,
                                             view: ConfirmationPageView
                                           )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
 
@@ -49,6 +51,6 @@ class ConfirmationPageController @Inject()(
         }.recover { case _ => None }
         _ <- sessionRepository.clear(request.internalId)
         returnLink = appConfig.returnLink(fileRole, request.userAnswers)
-      } yield Ok(view(email, fileRole, returnLink))
+      } yield Ok(view(email, fileRole, returnLink, checkYourAnswers))
     }
   }

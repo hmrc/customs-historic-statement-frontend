@@ -17,6 +17,7 @@
 @import config.FrontendAppConfig
 @import views.html.templates.Layout
 @import uk.gov.hmrc.auth.core.retrieve.Email
+@import viewmodels.CheckYourAnswersHelper
 
 @this(
     layout: Layout,
@@ -25,7 +26,8 @@
     h1: components.h1
 )
 
-@(email: Option[Email], fileRole: FileRole, returnLink: String)(implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
+@(email: Option[Email], fileRole: FileRole, returnLink: String, helper: CheckYourAnswersHelper)(
+    implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
 
 @layout(
     pageTitle = Some(messages("cf.accounts.title")),
@@ -33,11 +35,25 @@
     welshToggle = false
     ) {
     <div class="govuk-panel govuk-panel--confirmation">
-        @h1(messages(s"cf.historic.document.request.confirmation.panel-text.${fileRole.name}"), Some("confirmation-text"), "govuk-panel__title govuk-panel__title--confirmation")
+        @h1(messages(s"cf.historic.document.request.confirmation.panel-text.${fileRole.name}"),
+            Some("confirmation-text"), "govuk-panel__title govuk-panel__title--confirmation")
+
+        <p>
+            @helper.dateRows(fileRole)
+        </p>
+
     </div>
 
-    @email.map{ addr => <p id="email-confirmation" class="govuk-body">@messages(s"cf.historic.document.request.confirmation.body-text.${fileRole.name}", addr.value) </p>}
+    <p id="email-confirmation-subheader" class="govuk-heading-s">
+        @messages(s"cf.historic.document.request.confirmation.subheader-text.${fileRole.name}")
+    </p>
+
+    @email.map{ addr => <p id="email-confirmation" class="govuk-body">@messages(
+        s"cf.historic.document.request.confirmation.body-text.${fileRole.name}", addr.value) </p>}
+
+    <p id="email-confirmation-subheader" class="govuk-body">
+        @messages(s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}")
+    </p>
 
     @p(link(messages(s"cf.historic.document.request.confirmation.${fileRole.name}.link-text"), location = returnLink))
-
 }
