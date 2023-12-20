@@ -38,12 +38,12 @@ class ConfirmationPageController @Inject()(
                                             sessionRepository: SessionRepository,
                                             customsDataStoreConnector: CustomsDataStoreConnector,
                                             val controllerComponents: MessagesControllerComponents,
-                                            checkYourAnswers: CheckYourAnswersHelper,
                                             view: ConfirmationPageView
                                           )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
+      val dates = new CheckYourAnswersHelper(request.userAnswers)
       for {
         email <- customsDataStoreConnector.getEmail(request.eori).map {
           case Right(email) => Some(email)
@@ -51,6 +51,6 @@ class ConfirmationPageController @Inject()(
         }.recover { case _ => None }
         _ <- sessionRepository.clear(request.internalId)
         returnLink = appConfig.returnLink(fileRole, request.userAnswers)
-      } yield Ok(view(email, fileRole, returnLink, checkYourAnswers))
+      } yield Ok(view(email, fileRole, returnLink, dates))
     }
   }
