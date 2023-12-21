@@ -25,10 +25,6 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.retrieve.Email
 import views.html.ConfirmationPageView
-import viewmodels.CheckYourAnswersHelper
-import play.api.i18n.Messages
-import play.api.test.Helpers
-import play.api.test.Helpers._
 import scala.concurrent.Future
 
 class ConfirmationPageControllerSpec extends SpecBase {
@@ -39,7 +35,6 @@ class ConfirmationPageControllerSpec extends SpecBase {
 
       val mockSessionRepository = mock[SessionRepository]
       val mockDataStoreConnector = mock[CustomsDataStoreConnector]
-      val mockCheckYourAnswersHelper = mock[CheckYourAnswersHelper]
 
       val app = applicationBuilder(userAnswers = Some(populatedUserAnswers))
         .overrides(
@@ -49,7 +44,6 @@ class ConfirmationPageControllerSpec extends SpecBase {
 
       when(mockDataStoreConnector.getEmail(any)(any)).thenReturn(Future.successful(Right(Email("some@email.com"))))
       when(mockSessionRepository.clear(any)).thenReturn(Future.successful(true))
-      when(mockCheckYourAnswersHelper.dateRows(any)).thenReturn(Some("October 2019 to October 2019"))
 
       val view = app.injector.instanceOf[ConfirmationPageView]
       val appConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -62,7 +56,8 @@ class ConfirmationPageControllerSpec extends SpecBase {
 
         contentAsString(result) mustEqual
           view(Some(Email("some@email.com")), C79Certificate,
-            "http://localhost:9398/customs/documents/import-vat", mockCheckYourAnswersHelper)(
+            "http://localhost:9398/customs/documents/import-vat",
+            "October 2019 to October 2019")(
             request, messages(app), appConfig).toString
       }
     }
