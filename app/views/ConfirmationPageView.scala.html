@@ -38,22 +38,23 @@
         @h1(messages(s"cf.historic.document.request.confirmation.panel-text.${fileRole.name}"),
             Some("confirmation-text"), "govuk-panel__title govuk-panel__title--confirmation")
 
-        <p>
-            @helper.dateRows(fileRole)
-        </p>
+        @p(
+            classes="govuk-panel--confirmation",
+            id=Some("email-confirmation-panel-date"),
+            content = Html(helper.dateRows(fileRole))
+        )
 
     </div>
 
-    <p id="email-confirmation-subheader" class="govuk-heading-s">
-        @messages(s"cf.historic.document.request.confirmation.subheader-text.${fileRole.name}")
-    </p>
+    @p(
+        classes="govuk-heading-s",
+        id=Some("email-confirmation-subheader"),
+        content = Html(messages(s"cf.historic.document.request.confirmation.subheader-text.${fileRole.name}"))
+    )
 
-    @email.map{ addr => <p id="email-confirmation" class="govuk-body">@messages(
+    @email.map { addr => <p id="email-confirmation" class="govuk-body">@messages(
         s"cf.historic.document.request.confirmation.body-text.${fileRole.name}", addr.value) </p>}
 
-    <p id="email-confirmation-subheader" class="govuk-body">
-        @messages(s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}")
-    </p>
-
+    @p(Html(messages(s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}")))
     @p(link(messages(s"cf.historic.document.request.confirmation.${fileRole.name}.link-text"), location = returnLink))
 }

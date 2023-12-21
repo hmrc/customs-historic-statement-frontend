@@ -36,8 +36,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     res.map { historicDates =>
       HtmlFormat.escape(
         messages("date.range",
-            Formatters.dateAsMonthAndYear(historicDates.start),
-            Formatters.dateAsMonthAndYear(historicDates.end))).toString
+          Formatters.dateAsMonthAndYear(historicDates.start),
+          Formatters.dateAsMonthAndYear(historicDates.end))).toString
     }
   }
 
