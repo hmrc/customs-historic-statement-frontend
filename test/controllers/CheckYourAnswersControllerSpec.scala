@@ -76,7 +76,6 @@ class CheckYourAnswersControllerSpec extends SpecBase {
     }
   }
 
-
   trait Setup {
     val mockCustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
 
@@ -84,5 +83,4 @@ class CheckYourAnswersControllerSpec extends SpecBase {
       inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector)
     ).build()
   }
-
 }

@@ -70,7 +70,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
   }
 
   "historicStatementsDutyDeferment" should {
-    "return dutyDeferment statement" in new Setup{
+    "return dutyDeferment statement" in new Setup {
       when(mockSessionCacheConnector.getAccountNumber(any, any)(any)).thenReturn(Future.successful(Some(someDan)))
       when(mockSdesConnector.getDutyDefermentStatements(any, any)(any)).thenReturn(Future.successful(dutyDefermentFiles))
       val request = fakeRequest(GET, routes.HistoricStatementsController.historicStatementsDutyDeferment("linkId").url).withHeaders("X-Session-Id" -> "sessionId")
@@ -78,7 +78,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
       status(result) mustBe OK
     }
 
-    "return Session Expired when Dan is not returned" in new Setup{
+    "return Session Expired when Dan is not returned" in new Setup {
       when(mockSessionCacheConnector.getAccountNumber(any, any)(any)).thenReturn(Future.successful(None))
       val request = fakeRequest(GET, routes.HistoricStatementsController.historicStatementsDutyDeferment("linkId").url).withHeaders("X-Session-Id" -> "sessionId")
       val result = route(app, request).value
@@ -86,7 +86,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
       redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
     }
 
-    "return Unauthorised when sessionId is not present" in new Setup{
+    "return Unauthorised when sessionId is not present" in new Setup {
       when(mockSessionCacheConnector.getAccountNumber(any, any)(any)).thenReturn(Future.successful(None))
       running(app) {
         val request = fakeRequest(GET, routes.HistoricStatementsController.historicStatementsDutyDeferment("linkId").url)
@@ -149,5 +149,4 @@ class HistoricStatementsControllerSpec extends SpecBase {
     when(mockCustomsFinancialsApiConnector.deleteNotification(any, any)(any)).thenReturn(Future.successful(true))
     when(mockDataStoreConnector.getAllEoriHistory(any)(any)).thenReturn(Future.successful(eoriHistories))
   }
-
 }
