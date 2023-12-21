@@ -51,6 +51,6 @@ class ConfirmationPageController @Inject()(
         }.recover { case _ => None }
         _ <- sessionRepository.clear(request.internalId)
         returnLink = appConfig.returnLink(fileRole, request.userAnswers)
-      } yield Ok(view(email, fileRole, returnLink, dates))
+      } yield Ok(view(email, fileRole, returnLink, dates.dateRows(fileRole).getOrElse("")))
     }
   }

@@ -26,8 +26,13 @@
     h1: components.h1
 )
 
-@(email: Option[Email], fileRole: FileRole, returnLink: String, helper: CheckYourAnswersHelper)(
-    implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
+@(email: Option[Email],
+    fileRole: FileRole,
+    returnLink: String,
+    dates: String)(
+                                    implicit request: Request[_],
+                                    messages: Messages,
+                                    appConfig: FrontendAppConfig)
 
 @layout(
     pageTitle = Some(messages("cf.accounts.title")),
@@ -41,7 +46,7 @@
         @p(
             classes="govuk-panel--confirmation",
             id=Some("email-confirmation-panel-date"),
-            content = Html(helper.dateRows(fileRole))
+            content = Html(dates)
         )
 
     </div>
