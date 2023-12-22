@@ -23,9 +23,7 @@ import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.AccountNumber
 import play.api.inject
 import play.api.test.Helpers._
-
 import scala.concurrent.Future
-
 
 class CheckYourAnswersControllerSpec extends SpecBase {
 
