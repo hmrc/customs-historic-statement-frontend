@@ -25,7 +25,6 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.retrieve.Email
 import views.html.ConfirmationPageView
-
 import scala.concurrent.Future
 
 class ConfirmationPageControllerSpec extends SpecBase {
@@ -56,9 +55,11 @@ class ConfirmationPageControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(Some(Email("some@email.com")), C79Certificate, "http://localhost:9398/customs/documents/import-vat")(request, messages(app), appConfig).toString
+          view(Some(Email("some@email.com")), C79Certificate,
+            "http://localhost:9398/customs/documents/import-vat",
+            "October 2019 to October 2019")(
+            request, messages(app), appConfig).toString
       }
-
     }
   }
 }

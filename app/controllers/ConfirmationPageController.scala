@@ -25,6 +25,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ConfirmationPageView
+import viewmodels.CheckYourAnswersHelper
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -42,6 +43,7 @@ class ConfirmationPageController @Inject()(
 
   def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
+      val dates = new CheckYourAnswersHelper(request.userAnswers)
       for {
         email <- customsDataStoreConnector.getEmail(request.eori).map {
           case Right(email) => Some(email)
@@ -49,6 +51,6 @@ class ConfirmationPageController @Inject()(
         }.recover { case _ => None }
         _ <- sessionRepository.clear(request.internalId)
         returnLink = appConfig.returnLink(fileRole, request.userAnswers)
-      } yield Ok(view(email, fileRole, returnLink))
+      } yield Ok(view(email, fileRole, returnLink, dates.dateRows(fileRole).getOrElse("")))
     }
   }

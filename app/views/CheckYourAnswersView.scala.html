@@ -19,17 +19,18 @@
 @import views.html.templates.Layout
 
 @this(
-layout: Layout,
-button: components.button,
-summaryList: components.summaryList,
-formHelper: FormWithCSRF,
-h1: components.h1,
-h2: components.h2,
-h3: components.h3,
-p: components.p
+    layout: Layout,
+    button: components.button,
+    summaryList: components.summaryList,
+    formHelper: FormWithCSRF,
+    h1: components.h1,
+    h2: components.h2,
+    h3: components.h3,
+    p: components.p
 )
 
-@(helper: CheckYourAnswersHelper, fileRole: FileRole, maybeDan: Option[String], niIndicator: Option[Boolean])(implicit request: Request[_], messages: Messages)
+@(helper: CheckYourAnswersHelper, fileRole: FileRole,
+    maybeDan: Option[String], niIndicator: Option[Boolean])(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = Some(messages(s"cf.historic.document.request.review.${fileRole}.title")),
@@ -55,8 +56,8 @@ p: components.p
 
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(fileRole)) {
 
-        @summaryList(SummaryList(helper.rows(fileRole), "govuk-!-margin-bottom-9 govuk-summary-list--wide "))
-        
+        @summaryList(SummaryList(helper.rows(fileRole), "govuk-!-margin-bottom-9 govuk-summary-list--wide"))
+
         @button("site.continue")
     }
 }
