@@ -63,5 +63,12 @@
         s"cf.historic.document.request.confirmation.body-text.request", addr.value) </p>}
 
     @p(Html(messages(s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}")))
+
+    @p(
+        classes="govuk-body",
+        id=Some("body-text2"),
+        content = Html(messages(s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}"))
+    )
+
     @p(link(messages(s"cf.historic.document.request.confirmation.${fileRole.name}.link-text"), location = returnLink))
 }
