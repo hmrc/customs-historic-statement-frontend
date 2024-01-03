@@ -79,7 +79,7 @@ cf.historic.document.request.heading.SecurityStatement=Which notification of adj
 cf.historic.document.request.heading.DutyDefermentStatement=Which duty deferment statements do you need?
 
 cf.historic.document.request.info-text.C79Certificate=You can request import VAT certificates for up to 6 months at a time from October 2019.
-cf.historic.document.request.info-text.PostponedVATStatement=A statement will show the total import VAT postponed for the previous month.
+cf.historic.document.request.info-text.PostponedVATStatement=You can request postponed import VAT statements for up to 6 months at a time from January 2021.
 cf.historic.document.request.info-text.SecurityStatement=You can request notification of adjustment statements dating back to October 2019.
 cf.historic.document.request.info-text.DutyDefermentStatement=You can request duty deferment statements for up to 6 months at a time from September 2019.
 cf.historic.document.request.continue=Continue
@@ -118,13 +118,12 @@ cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Back 
 cf.historic.document.request.confirmation.SecurityStatement.link-text=Back to Notification of adjustment statements
 cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Back to postponed import VAT account
 cf.historic.document.request.confirmation.body-text.SecurityStatement=We will send an email to {0} when your statements are ready. You can access them from the statements page, usually within 48 hours.
-cf.historic.document.request.confirmation.body-text.C79Certificate=We will send an email to {0} when your certificates are ready. You can access them from the certificates page, usually within 48 hours.
-cf.historic.document.request.confirmation.body-text.PostponedVATStatement=We will send an email to {0} when your statements are ready. You can access them from the statements page, usually within 48 hours.
 
 cf.historic.document.request.confirmation.subheader-text.next=What happens next
 cf.historic.document.request.confirmation.body-text.request=We wll send an email within 48 hours to {0} when your request is processed.
 cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=You can download your statements from the duty deferments statements page.
 cf.historic.document.request.confirmation.body-text2.C79Certificate=You can download your statements from your import VAT certificates (C79) statements page.
+cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=You can download your statements from the Postponed import VAT statements page.
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=You can only request statements from after the {0} to {1} tax year.
