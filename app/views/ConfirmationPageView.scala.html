@@ -56,12 +56,17 @@
     @p(
         classes="govuk-heading-s",
         id=Some("email-confirmation-subheader"),
-        content = Html(messages(s"cf.historic.document.request.confirmation.subheader-text.${fileRole.name}"))
+        content = Html(messages(s"cf.historic.document.request.confirmation.subheader-text.next"))
     )
 
     @email.map { addr => <p id="email-confirmation" class="govuk-body">@messages(
-        s"cf.historic.document.request.confirmation.body-text.${fileRole.name}", addr.value) </p>}
+        s"cf.historic.document.request.confirmation.body-text.request", addr.value) </p>}
 
-    @p(Html(messages(s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}")))
+    @p(
+        classes="govuk-body",
+        id=Some("body-text2"),
+        content = Html(messages(s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}"))
+    )
+
     @p(link(messages(s"cf.historic.document.request.confirmation.${fileRole.name}.link-text"), location = returnLink))
 }

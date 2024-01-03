@@ -86,5 +86,4 @@ class EmailControllerSpec extends SpecBase {
       bind[HttpClient].toInstance(mockHttpClient)
     ).build()
   }
-
 }
