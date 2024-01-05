@@ -80,7 +80,7 @@ cf.historic.document.request.heading.DutyDefermentStatement=Which duty deferment
 
 cf.historic.document.request.info-text.C79Certificate=You can request import VAT certificates for up to 6 months at a time from October 2019.
 cf.historic.document.request.info-text.PostponedVATStatement=You can request postponed import VAT statements for up to 6 months at a time from January 2021.
-cf.historic.document.request.info-text.SecurityStatement=You can request notification of adjustment statements dating back to October 2019.
+cf.historic.document.request.info-text.SecurityStatement=You can request notification of adjustment statements for up to 6 months at a time from October 2019.
 cf.historic.document.request.info-text.DutyDefermentStatement=You can request duty deferment statements for up to 6 months at a time from September 2019.
 cf.historic.document.request.continue=Continue
 
@@ -124,6 +124,7 @@ cf.historic.document.request.confirmation.body-text.request=We will send an emai
 cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=You can download your statements from the duty deferments statements page.
 cf.historic.document.request.confirmation.body-text2.C79Certificate=You can download your certificates from your Import VAT certificates (C79) statements page.
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=You can download your statements from the Postponed import VAT statements page.
+cf.historic.document.request.confirmation.body-text2.SecurityStatement=You can download your statements from the Notification of adjustment statements page.
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=You can only request statements from after the {0} to {1} tax year.

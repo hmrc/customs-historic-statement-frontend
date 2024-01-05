@@ -80,7 +80,7 @@ cf.historic.document.request.heading.DutyDefermentStatement=Pa ddatganiadau gohi
 
 cf.historic.document.request.info-text.C79Certificate=Gallwch wneud cais am dystysgrifau TAW mewnforio am hyd at 6 mis y tro o fis Hydref 2019 ymlaen.
 cf.historic.document.request.info-text.PostponedVATStatement=Gallwch wneud cais am ddatganiadau TAW mewnforio ohiriedig am hyd at 6 mis y tro o fis Ionawr 2021 ymlaen.
-cf.historic.document.request.info-text.SecurityStatement=Gallwch wneud cais am hysbysiad o ddatganiadau addasu sy’n dyddio’n ôl i fis Hydref 2019.
+cf.historic.document.request.info-text.SecurityStatement=Gallwch wneud cais am hysbysiad o ddatganiadau addasu am hyd at 6 mis y tro o fis Hydref 2019 ymlaen.
 cf.historic.document.request.info-text.DutyDefermentStatement=Gallwch wneud cais am dystysgrifau TAW mewnforio am hyd at 6 mis y tro o fis Hydref 2019 ymlaen.
 cf.historic.document.request.continue=Yn eich blaen
 
@@ -115,7 +115,7 @@ cf.historic.document.request.confirmation.panel-text.SecurityStatement=Daeth eic
 cf.historic.document.request.confirmation.panel-text.PostponedVATStatement=Mae’ch cais am ddatganiadau wedi dod i law
 cf.historic.document.request.confirmation.C79Certificate.link-text=Yn ôl i ‘Tystysgrifau TAW mewnforio (C79)’
 cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Yn ôl i ddatganiadau gohirio tollau
-cf.historic.document.request.confirmation.SecurityStatement.link-text=Yn ôl i hysbysiad o ddatganiadau addasu
+cf.historic.document.request.confirmation.SecurityStatement.link-text=Yn ôl i ‘Hysbysiad o ddatganiadau addasu’
 cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Yn ôl i’r cyfrif TAW mewnforio ohiriedig
 cf.historic.document.request.confirmation.body-text.SecurityStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
 
@@ -124,6 +124,7 @@ cf.historic.document.request.confirmation.body-text.request=Byddwn yn anfon e-bo
 cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Datganiadau gohirio tollau’.
 cf.historic.document.request.confirmation.body-text2.C79Certificate=Gallwch lawrlwytho’ch tystysgrifau o’ch tudalen ‘Datganiadau tystysgrifau TAW mewnforio (C79)’.
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Datganiadau TAW mewnforio ohiriedig’.
+cf.historic.document.request.confirmation.body-text2.SecurityStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Hysbysiad o ddatganiadau addasu’.
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau o ar ôl blwyddyn dreth {0} i {1}.
