@@ -17,6 +17,7 @@
 package services
 
 import models._
+import play.api.Logger
 import play.api.i18n.Messages
 import viewmodels.{PostponedVatStatementsByMonth, PostponedVatStatementsForEori, VatCertificatesByMonth, VatCertificatesForEori}
 
@@ -27,36 +28,49 @@ class SortStatementsService @Inject()() {
 
   def sortDutyDefermentStatementsForEori(historicEori: EoriHistory,
                                          dutyDefermentFiles: Seq[DutyDefermentStatementFile]): DutyDefermentStatementsForEori = {
-    dutyDefermentFiles.partition(_.metadata.statementRequestId.isEmpty) match {
-      case (current, requested) => DutyDefermentStatementsForEori(historicEori, current, requested)
+    dutyDefermentFiles.partition(_.metadata.statementRequestId.isDefined) match {
+      case (requested, current) => DutyDefermentStatementsForEori(historicEori, current, requested)
     }
   }
 
   def sortSecurityCertificatesForEori(historicEori: EoriHistory,
                                       securityStatementsFiles: Seq[SecurityStatementFile]): SecurityStatementsForEori = {
-    securityStatementsFiles.groupBy(file => (file.startDate, file.endDate)).map {
+    val groupedByStartAndEndDates = securityStatementsFiles.groupBy(file => (file.startDate, file.endDate)).map {
       case ((startDate, endDate), filesForMonth) => SecurityStatementsByPeriod(startDate, endDate, filesForMonth)
     }.toList.sorted.reverse
-      .partition(_.files.exists(v => v.metadata.statementRequestId.isEmpty)) match {
-      case (current, requested) => SecurityStatementsForEori(historicEori, current, requested)
+    val filteredByStatementRequestId = groupedByStartAndEndDates.map { statementsByStartAndEndDatePeriod =>
+      val filterdFiles = statementsByStartAndEndDatePeriod.files.filter(_.metadata.statementRequestId.isDefined)
+      SecurityStatementsByPeriod(statementsByStartAndEndDatePeriod.startDate, statementsByStartAndEndDatePeriod.endDate, filterdFiles)
     }
+    val (requested, current) = filteredByStatementRequestId.partition(_.files.nonEmpty)
+    SecurityStatementsForEori(historicEori, current, requested)
   }
 
   def sortVatCertificatesForEori(historicEori: EoriHistory, vatCertificateFiles: Seq[VatCertificateFile])
-                                (implicit messages: Messages): VatCertificatesForEori =
-    vatCertificateFiles.groupBy(_.monthAndYear).map {
+                                (implicit messages: Messages): VatCertificatesForEori = {
+    val groupedByMonth = vatCertificateFiles.groupBy(_.monthAndYear).map {
       case (month, filesForMonth) => VatCertificatesByMonth(month, filesForMonth)
     }.toList
-      .partition(_.files.exists(_.metadata.statementRequestId.isEmpty)) match {
-      case (current, requested) => VatCertificatesForEori(historicEori, current, requested)
+
+    val filteredByStatementRequestId = groupedByMonth.map { statementByMonth =>
+      val filteredFiles = statementByMonth.files.filter(_.metadata.statementRequestId.isDefined)
+      VatCertificatesByMonth(statementByMonth.date, filteredFiles)
     }
 
+    val (requested, current) = filteredByStatementRequestId.partition(_.files.nonEmpty)
+    VatCertificatesForEori(historicEori, current, requested)
+  }
+
   def sortPostponedVatStatementsForEori(historicEori: EoriHistory, postponedVatStatementsFile: Seq[PostponedVatStatementFile])
-                                (implicit messages: Messages): PostponedVatStatementsForEori =
-    postponedVatStatementsFile.groupBy(_.monthAndYear).map {
+                                (implicit messages: Messages): PostponedVatStatementsForEori = {
+    val groupedByMonth = postponedVatStatementsFile.groupBy(_.monthAndYear).map {
       case (month, filesForMonth) => PostponedVatStatementsByMonth(month, filesForMonth)
     }.toList
-      .partition(_.files.exists(_.metadata.statementRequestId.isEmpty)) match {
-      case (current, requested) => PostponedVatStatementsForEori(historicEori, current, requested)
+    val filteredByStatementRequestId = groupedByMonth.map { statementByMonth =>
+      val filteredFiles = statementByMonth.files.filter(_.metadata.statementRequestId.isDefined)
+      PostponedVatStatementsByMonth(statementByMonth.date, filteredFiles)
     }
+    val (requested, current) = filteredByStatementRequestId.partition(_.files.nonEmpty)
+    PostponedVatStatementsForEori(historicEori, current, requested)
+  }
 }
