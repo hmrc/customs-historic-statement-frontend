@@ -77,15 +77,15 @@ class SortStatementsServiceSpec extends SpecBase {
 
     val securityStatementFile: SecurityStatementFile = SecurityStatementFile("statementfile_00", "download_url_00",
       size, SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-        periodEndMonth, periodEndDay, Pdf, SecurityStatement, someEori, size, "0000000", None))
+        periodEndMonth, periodEndDay, Pdf, SecurityStatement, someEori, fileSize, "0000000", None))
 
     val securityStatementFile_2: SecurityStatementFile = SecurityStatementFile("statementfile_00", "download_url_00",
       size, SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-        periodEndMonth, periodEndDay, Pdf, SecurityStatement, someEori, size, "0000000", None))
+        periodEndMonth, periodEndDay, Pdf, SecurityStatement, someEori, fileSize, "0000000", None))
 
     val securityStatementFile_3: SecurityStatementFile = SecurityStatementFile("statementfile_00", "download_url_00",
       size, SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-        periodEndMonth, periodEndDay, Pdf, SecurityStatement, someEori, size, "0000000", someRequestId))
+        periodEndMonth, periodEndDay, Pdf, SecurityStatement, someEori, fileSize, "0000000", someRequestId))
 
     val securityStatementFiles = List(securityStatementFile, securityStatementFile_2, securityStatementFile_3)
 
@@ -94,7 +94,7 @@ class SortStatementsServiceSpec extends SpecBase {
         LocalDate.of(periodEndYear, periodEndMonth, periodEndDay),
       List(SecurityStatementFile("statementfile_00", "download_url_00", size,
         SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-          periodEndMonth, periodEndDay, Pdf, SecurityStatement, "12345678", size, "0000000", someRequestId)))))
+          periodEndMonth, periodEndDay, Pdf, SecurityStatement, "12345678", fileSize, "0000000", someRequestId)))))
 
     val c79Certificates: VatCertificateFile = VatCertificateFile("statementfile_00", "download_url_00", size,
       VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate,None))
@@ -118,15 +118,18 @@ class SortStatementsServiceSpec extends SpecBase {
         List(VatCertificateFile("statementfile_00", "download_url_00", size,
           VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate, someRequestId), ""))))
 
-    val postponedVatStatement = PostponedVatStatementFile("statementfile_00", "download_url_00", size,
-      PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth, Pdf, PostponedVATStatement, "CDS", None))
+    val postponedVatStatement: PostponedVatStatementFile =
+      PostponedVatStatementFile("statementfile_00", "download_url_00", size,
+        PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth, Pdf, PostponedVATStatement, "CDS", None))
 
-    val postponedVatStatement_2 = PostponedVatStatementFile("statementfile_00", "download_url_00", size,
-      PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth_2, Pdf, PostponedVATStatement, "Chief",
+    val postponedVatStatement_2: PostponedVatStatementFile =
+      PostponedVatStatementFile("statementfile_00", "download_url_00", size,
+        PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth_2, Pdf, PostponedVATStatement, "Chief",
         someRequestId))
 
-    val postponedVatStatement_3 = PostponedVatStatementFile("statementfile_00", "download_url_00", size,
-      PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth, Pdf, PostponedVATStatement, "CDS",
+    val postponedVatStatement_3: PostponedVatStatementFile =
+      PostponedVatStatementFile("statementfile_00", "download_url_00", size,
+        PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth, Pdf, PostponedVATStatement, "CDS",
         someRequestId))
 
     val postponedVatStatementFiles = Seq(postponedVatStatement, postponedVatStatement_2, postponedVatStatement_3)
