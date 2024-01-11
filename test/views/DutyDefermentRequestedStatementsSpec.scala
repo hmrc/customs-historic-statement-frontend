@@ -22,7 +22,6 @@ import models.{DutyDefermentStatement, DutyDefermentStatementFile, DutyDeferment
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import play.api.routing.Router.empty.routes
 import viewmodels.DutyDefermentAccountViewModel
 import views.html.DutyDefermentRequestedStatements
 
@@ -42,20 +41,21 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
   trait Setup {
 
-    //    val backLinkUrl = routes.
-    val someEori = "12345678"
+    private val someEori = "12345678"
     private val someDan = "12345"
     private val someRequestId: Option[String] = Some("Ab1234")
-    val pdfFileName = "2018_03_01-08.pdf"
-    val pdfUrl = "url.pdf"
-    val pdfSize = 1024L
-    val periodStartYear = 2018
-    val periodStartMonth = 3
-    val periodStartDay = 1
-    val periodEndYear = 2018
-    val periodEndMonth = 3
-    val periodEndDay = 8
-    val dutyPaymentType = "BACS"
+    private val pdfFileName = "2018_03_01-08.pdf"
+    private val pdfUrl = "url.pdf"
+    private val pdfSize = 1024L
+    private val periodStartYear = 2018
+    private val periodStartMonth = 3
+    private val periodStartMonth2 = 2
+    private val periodStartDay = 1
+    private val periodEndYear = 2018
+    private val periodEndMonth2 = 3
+    private val periodEndMonth = 2
+    private val periodEndDay = 8
+    private val dutyPaymentType = "BACS"
 
     private val dutyDeferementFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(pdfFileName,
@@ -75,16 +75,40 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
           someDan,
           someRequestId))
 
-    private val dutyDeferementFile_2: DutyDefermentStatementFile = DutyDefermentStatementFile("2018_02_01-08.pdf", "url.pdf", 1024L,
-      DutyDefermentStatementFileMetadata(2018, 2, 1, 2018, 2, 8, Pdf, DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), someDan, someRequestId))
+    private val dutyDeferementFile_2: DutyDefermentStatementFile = DutyDefermentStatementFile(pdfFileName,
+      pdfUrl,
+      pdfSize,
+      DutyDefermentStatementFileMetadata(periodStartYear,
+        periodStartMonth2,
+        periodStartDay,
+        periodEndYear,
+        periodEndMonth2,
+        periodEndDay,
+        Pdf,
+        DutyDefermentStatement,
+        Supplementary,
+        Some(true),
+        Some(dutyPaymentType),
+        someDan,
+        someRequestId
+      )
+    )
 
-    private val eoriHistory = EoriHistory(someEori, Some(LocalDate.of(2019, 11, 10)),
-      Some(LocalDate.of(2019, 12, 10)))
+    private val localDateYear = 2019
+    private val localDateMonth = 11
+    private val localDateDay = 10
+
+    private val eoriHistory = EoriHistory(someEori,
+      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
+      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)))
 
     private val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori =
       DutyDefermentStatementsForEori.apply(eoriHistory, Seq(dutyDeferementFile), Seq(dutyDeferementFile_2))
 
-    private val dutyDefermentModel = DutyDefermentAccountViewModel("accountNumber", Seq(dutyDefermentStatementsForEori), false)
+    private val dutyDefermentModel = DutyDefermentAccountViewModel(
+      "accountNumber",
+      Seq(dutyDefermentStatementsForEori),
+      isNiAccount = false)
 
     implicit val view: Document = Jsoup.parse(app.injector.instanceOf[DutyDefermentRequestedStatements].
       apply(dutyDefermentModel, config.returnLink("dutyDeferment")).body)
@@ -113,6 +137,4 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       msg("cf.account.details.previous-eori", "12345678")
     ) mustBe true
   }
-
-
 }

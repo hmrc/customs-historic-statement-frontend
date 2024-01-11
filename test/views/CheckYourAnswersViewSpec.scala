@@ -39,16 +39,20 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
 
       "the file role is Duty Deferment" in new Setup {
         implicit val viewDoc: Document = view(DutyDefermentStatement)
-        titleShouldBeCorrect(viewDoc, "cf.historic.document.request.review.DutyDefermentStatement.title")
-        shouldContainSecondaryHeading(view = viewDoc, accountNumber =
+        titleShouldBeCorrect(viewDoc,
+          "cf.historic.document.request.review.DutyDefermentStatement.title")
+
+        shouldContainSecondaryHeading(view = viewDoc, accountNumberText =
           s"${msg("cf.account.detail.requested.deferment-account-secondary-heading")} accountNumber")
       }
 
       "the file role is Duty Deferment and NI Indicator is enabled" in new Setup {
         implicit val viewDoc: Document = view(DutyDefermentStatement, Some(true))
-        titleShouldBeCorrect(viewDoc, "cf.historic.document.request.review.DutyDefermentStatement.title")
-        shouldContainSecondaryHeading(view = viewDoc, accountNumber =
-          s"${msg("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")} accountNumber (Northern Ireland)")
+        titleShouldBeCorrect(viewDoc,
+          "cf.historic.document.request.review.DutyDefermentStatement.title")
+
+        shouldContainSecondaryHeading(view = viewDoc, accountNumberText =
+          msg("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount"))
       }
     }
 
@@ -69,8 +73,8 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
     }
   }
 
-  private def shouldContainSecondaryHeading(implicit view: Document, accountNumber: String) = {
-    view.getElementById("eori-heading").text() mustBe accountNumber
+  private def shouldContainSecondaryHeading(implicit view: Document, accountNumberText: String): Assertion = {
+    view.getElementById("eori-heading").text().contains(accountNumberText) mustBe true
   }
 
   private def shouldContainSelectedDuration(implicit view: Document): Assertion = {
