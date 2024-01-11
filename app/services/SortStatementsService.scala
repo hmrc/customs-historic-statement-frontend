@@ -17,9 +17,8 @@
 package services
 
 import models._
-import play.api.Logger
 import play.api.i18n.Messages
-import viewmodels.{PostponedVatStatementsByMonth, PostponedVatStatementsForEori, VatCertificatesByMonth, VatCertificatesForEori}
+import viewmodels._
 
 import javax.inject.{Inject, Singleton}
 
@@ -27,50 +26,72 @@ import javax.inject.{Inject, Singleton}
 class SortStatementsService @Inject()() {
 
   def sortDutyDefermentStatementsForEori(historicEori: EoriHistory,
-                                         dutyDefermentFiles: Seq[DutyDefermentStatementFile]): DutyDefermentStatementsForEori = {
+                                         dutyDefermentFiles: Seq[DutyDefermentStatementFile])
+                                         : DutyDefermentStatementsForEori = {
+
     dutyDefermentFiles.partition(_.metadata.statementRequestId.isDefined) match {
       case (requested, current) => DutyDefermentStatementsForEori(historicEori, current, requested)
     }
   }
 
   def sortSecurityCertificatesForEori(historicEori: EoriHistory,
-                                      securityStatementsFiles: Seq[SecurityStatementFile]): SecurityStatementsForEori = {
+                                      securityStatementsFiles: Seq[SecurityStatementFile]): SecurityStatementsForEori =
+  {
     val groupedByStartAndEndDates = securityStatementsFiles.groupBy(file => (file.startDate, file.endDate)).map {
       case ((startDate, endDate), filesForMonth) => SecurityStatementsByPeriod(startDate, endDate, filesForMonth)
     }.toList.sorted.reverse
-    val filteredByStatementRequestId = groupedByStartAndEndDates.map { statementsByStartAndEndDatePeriod =>
-      val filterdFiles = statementsByStartAndEndDatePeriod.files.filter(_.metadata.statementRequestId.isDefined)
-      SecurityStatementsByPeriod(statementsByStartAndEndDatePeriod.startDate, statementsByStartAndEndDatePeriod.endDate, filterdFiles)
-    }
-    val (requested, current) = filteredByStatementRequestId.partition(_.files.nonEmpty)
+
+    val (requested, current) = filteredByStatementReqId(groupedByStartAndEndDates).partition(_.files.nonEmpty)
+
     SecurityStatementsForEori(historicEori, current, requested)
   }
 
   def sortVatCertificatesForEori(historicEori: EoriHistory, vatCertificateFiles: Seq[VatCertificateFile])
                                 (implicit messages: Messages): VatCertificatesForEori = {
+
     val groupedByMonth = vatCertificateFiles.groupBy(_.monthAndYear).map {
       case (month, filesForMonth) => VatCertificatesByMonth(month, filesForMonth)
     }.toList
 
     val filteredByStatementRequestId = groupedByMonth.map { statementByMonth =>
       val filteredFiles = statementByMonth.files.filter(_.metadata.statementRequestId.isDefined)
+
       VatCertificatesByMonth(statementByMonth.date, filteredFiles)
     }
 
     val (requested, current) = filteredByStatementRequestId.partition(_.files.nonEmpty)
+
     VatCertificatesForEori(historicEori, current, requested)
   }
 
   def sortPostponedVatStatementsForEori(historicEori: EoriHistory, postponedVatStatementsFile: Seq[PostponedVatStatementFile])
                                 (implicit messages: Messages): PostponedVatStatementsForEori = {
+
     val groupedByMonth = postponedVatStatementsFile.groupBy(_.monthAndYear).map {
       case (month, filesForMonth) => PostponedVatStatementsByMonth(month, filesForMonth)
     }.toList
+
     val filteredByStatementRequestId = groupedByMonth.map { statementByMonth =>
       val filteredFiles = statementByMonth.files.filter(_.metadata.statementRequestId.isDefined)
+
       PostponedVatStatementsByMonth(statementByMonth.date, filteredFiles)
     }
+
     val (requested, current) = filteredByStatementRequestId.partition(_.files.nonEmpty)
+
     PostponedVatStatementsForEori(historicEori, current, requested)
   }
+
+  private def filteredByStatementReqId(securityStatements: List[SecurityStatementsByPeriod])
+  : List[SecurityStatementsByPeriod] =
+    securityStatements.map {
+      statementsByStartAndEndDatePeriod =>
+
+        val filteredFiles = statementsByStartAndEndDatePeriod.files.filter(_.metadata.statementRequestId.isDefined)
+
+        SecurityStatementsByPeriod(
+          statementsByStartAndEndDatePeriod.startDate,
+          statementsByStartAndEndDatePeriod.endDate,
+          filteredFiles)
+    }
 }
