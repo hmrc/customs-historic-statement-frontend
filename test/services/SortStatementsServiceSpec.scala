@@ -67,10 +67,10 @@ class SortStatementsServiceSpec extends SpecBase {
     val periodStartYear = 2017
     val periodStartMonth = 11
     val periodStartMonth_2 = 10
-    val periodStartDay =1
+    val periodStartDay = 1
     val periodEndYear = 2017
-    val periodEndMonth =11
-    val periodEndDay =8
+    val periodEndMonth = 11
+    val periodEndDay = 8
     val fileSize = 500L
     val size = 99L
     val emptyString = ""
@@ -92,21 +92,21 @@ class SortStatementsServiceSpec extends SpecBase {
     val requestedSecurityStatements =
       List(SecurityStatementsByPeriod(LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
         LocalDate.of(periodEndYear, periodEndMonth, periodEndDay),
-      List(SecurityStatementFile("statementfile_00", "download_url_00", size,
-        SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-          periodEndMonth, periodEndDay, Pdf, SecurityStatement, "12345678", fileSize, "0000000", someRequestId)))))
+        List(SecurityStatementFile("statementfile_00", "download_url_00", size,
+          SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
+            periodEndMonth, periodEndDay, Pdf, SecurityStatement, "12345678", fileSize, "0000000", someRequestId)))))
 
     val c79Certificates: VatCertificateFile = VatCertificateFile("statementfile_00", "download_url_00", size,
-      VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate,None))
+      VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, None))
 
     val c79Certificates_2: VatCertificateFile = VatCertificateFile("statementfile_00", "download_url_00", size,
-      VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate,None))
+      VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate, None))
 
     val c79Certificates_3: VatCertificateFile = VatCertificateFile("statementfile_00", "download_url_00", size,
-      VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate,someRequestId))
+      VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, someRequestId))
 
     val c79Certificates_4: VatCertificateFile = VatCertificateFile("statementfile_00", "download_url_00", size,
-      VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate,someRequestId))
+      VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate, someRequestId))
 
     val c79CertificateFiles = Seq(c79Certificates, c79Certificates_2, c79Certificates_3, c79Certificates_4)
 
@@ -114,7 +114,7 @@ class SortStatementsServiceSpec extends SpecBase {
       VatCertificatesByMonth(LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
         List(VatCertificateFile("statementfile_00", "download_url_00", size,
           VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, someRequestId), ""))),
-      VatCertificatesByMonth(LocalDate.of(periodStartYear,periodStartMonth_2,periodStartDay),
+      VatCertificatesByMonth(LocalDate.of(periodStartYear, periodStartMonth_2, periodStartDay),
         List(VatCertificateFile("statementfile_00", "download_url_00", size,
           VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate, someRequestId), ""))))
 
@@ -125,12 +125,12 @@ class SortStatementsServiceSpec extends SpecBase {
     val postponedVatStatement_2: PostponedVatStatementFile =
       PostponedVatStatementFile("statementfile_00", "download_url_00", size,
         PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth_2, Pdf, PostponedVATStatement, "Chief",
-        someRequestId))
+          someRequestId))
 
     val postponedVatStatement_3: PostponedVatStatementFile =
       PostponedVatStatementFile("statementfile_00", "download_url_00", size,
         PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth, Pdf, PostponedVATStatement, "CDS",
-        someRequestId))
+          someRequestId))
 
     val postponedVatStatementFiles = Seq(postponedVatStatement, postponedVatStatement_2, postponedVatStatement_3)
 
@@ -163,16 +163,17 @@ class SortStatementsServiceSpec extends SpecBase {
 
     val dutyDeferementFile_4: DutyDefermentStatementFile =
       DutyDefermentStatementFile("2018_02_01-08.pdf", "url.pdf", size,
-      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth_2, periodStartDay, periodEndYear,
-        periodStartMonth_2, periodEndDay, Pdf, DutyDefermentStatement, Excise, Some(true), Some("BACS"), someDan, None))
+        DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth_2, periodStartDay, periodEndYear,
+          periodStartMonth_2, periodEndDay, Pdf, DutyDefermentStatement, Excise, Some(true), Some("BACS"), someDan,
+          None))
 
     val dutyDefermentFiles = Seq(dutyDeferementFile, dutyDeferementFile_2, dutyDeferementFile_3, dutyDeferementFile_4)
 
     val requestedDutyDefermentStatements = List(
       DutyDefermentStatementFile("2018_03_01-08.pdf", "url.pdf", size,
         DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-        periodStartMonth, periodEndDay, Pdf, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "12345",
-        someRequestId)),
+          periodStartMonth, periodEndDay, Pdf, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "12345",
+          someRequestId)),
       DutyDefermentStatementFile("2018_02_01-08.pdf", "url.pdf", size,
         DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth_2, periodStartDay, periodEndYear,
           periodStartMonth_2, periodEndDay, Pdf, DutyDefermentStatement, Excise, Some(true), Some("BACS"), "12345",
