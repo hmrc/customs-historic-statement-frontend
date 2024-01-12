@@ -40,7 +40,6 @@ trait ViewTestHelper extends SpecBase {
   }
 
   def pageShouldContainBackLinkUrl(view: Document, url: String): Assertion = {
-    println("------------ " + view.getElementsByClass("govuk-back-link"))
     view.getElementsByClass("govuk-back-link").attr("href") mustBe url
   }
 

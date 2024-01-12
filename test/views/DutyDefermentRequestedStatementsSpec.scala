@@ -29,13 +29,30 @@ import java.time.LocalDate
 
 class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
   "view" should {
-    "display correct title and contents" in new Setup {
-      titleShouldBeCorrect(view, "cf.account.detail.requested.title")
-      pageShouldContainBackLinkUrl(view, config.returnLink("dutyDeferment"))
-      shouldContainAccountNumber
-      headingShouldBeCorrect
-      subHeadingShouldBeCorrect
-      eoriNumberShouldBeCorrect
+    "display correct title and contents" when {
+      "account is of Northern Ireland" in new Setup {
+
+        implicit val viewDoc: Document = view(isNiAccount = true)
+
+        titleShouldBeCorrect(viewDoc, "cf.account.detail.requested.title")
+        pageShouldContainBackLinkUrl(viewDoc, config.returnLink("dutyDeferment"))
+        shouldContainNiAccountNumber(viewDoc)
+        headingShouldBeCorrect(viewDoc)
+        subHeadingShouldBeCorrect(viewDoc)
+        eoriNumberShouldBeCorrect(viewDoc)
+      }
+
+      "account is not of Northern Ireland" in new Setup {
+
+        implicit val viewDoc: Document = view()
+
+        titleShouldBeCorrect(viewDoc, "cf.account.detail.requested.title")
+        pageShouldContainBackLinkUrl(viewDoc, config.returnLink("dutyDeferment"))
+        shouldContainAccountNumber(viewDoc)
+        headingShouldBeCorrect(viewDoc)
+        subHeadingShouldBeCorrect(viewDoc)
+        eoriNumberShouldBeCorrect(viewDoc)
+      }
     }
   }
 
@@ -105,18 +122,25 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
     private val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori =
       DutyDefermentStatementsForEori.apply(eoriHistory, Seq(dutyDeferementFile), Seq(dutyDeferementFile_2))
 
-    private val dutyDefermentModel = DutyDefermentAccountViewModel(
+    private def dutyDefermentModel(isNiAccount: Boolean) = DutyDefermentAccountViewModel(
       "accountNumber",
       Seq(dutyDefermentStatementsForEori),
-      isNiAccount = false)
+      isNiAccount = isNiAccount)
 
-    implicit val view: Document = Jsoup.parse(app.injector.instanceOf[DutyDefermentRequestedStatements].
-      apply(dutyDefermentModel, config.returnLink("dutyDeferment")).body)
+    def view(isNiAccount: Boolean = false): Document = Jsoup.parse(
+      app.injector.instanceOf[DutyDefermentRequestedStatements].
+      apply(dutyDefermentModel(isNiAccount), config.returnLink("dutyDeferment")).body)
   }
 
   private def shouldContainAccountNumber(implicit view: Document): Assertion = {
     view.getElementById("eori-heading").html().contains(
       msg("cf.account.detail.requested.deferment-account-secondary-heading")
+    ) mustBe true
+  }
+
+  private def shouldContainNiAccountNumber(implicit view: Document): Assertion = {
+    view.getElementById("eori-heading").html().contains(
+      msg("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
     ) mustBe true
   }
 

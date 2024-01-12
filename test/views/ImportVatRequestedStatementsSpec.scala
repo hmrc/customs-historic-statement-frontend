@@ -17,21 +17,20 @@
 package views
 
 import models.FileFormat.Pdf
-import models.{EoriHistory, PostponedVATStatement, PostponedVatStatementFile, PostponedVatStatementFileMetadata}
+import models.{C79Certificate, EoriHistory, VatCertificateFile, VatCertificateFileMetadata}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import viewmodels.{PostponedVatStatementsByMonth, PostponedVatStatementsForEori, PostponedVatViewModel}
-import views.html.ImportPostponedVatRequestedStatements
+import viewmodels.{VatCertificatesByMonth, VatCertificatesForEori, VatViewModel}
+import views.html.ImportVatRequestedStatements
 
 import java.time.LocalDate
 
-class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
-
+class ImportVatRequestedStatementsSpec extends ViewTestHelper {
   "view" should {
     "display correct title and contents" in new Setup {
-      titleShouldBeCorrect(view, "cf.import-postponed-vat.requested.title")
-      pageShouldContainBackLinkUrl(view, config.returnLink("postponedVATStatement"))
+      titleShouldBeCorrect(view, "cf.import-vat.requested.title")
+      pageShouldContainBackLinkUrl(view, config.returnLink("c79Certificate"))
       headingShouldBeCorrect
       requestedAvailableTextShouldBeCorrect
     }
@@ -44,70 +43,71 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     private val localDateMonth = 10
     private val localDateMonth2 = 10
     private val localDateDay = 1
-
     private val filename: String = "name_04"
     private val downloadURL: String = "download_url_06"
     private val size = 113L
     private val periodStartYear: Int = 2018
     private val periodStartMonth: Int = 3
     private val periodStartMonth2: Int = 4
-    private val source: String = "CDS"
-    private val statementRequestId = "a request id"
 
     private val eoriHistory = EoriHistory(someEori,
       Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
       Some(LocalDate.of(localDateYear, localDateMonth2, localDateDay)))
 
-    private val postponedVatStatementFile = PostponedVatStatementFile(
+    val vatCertificateFiles: VatCertificateFile = VatCertificateFile(
       filename,
       downloadURL,
       size,
-      PostponedVatStatementFileMetadata(periodStartYear,
+      VatCertificateFileMetadata(
+        periodStartYear,
         periodStartMonth,
         Pdf,
-        PostponedVATStatement,
-        source,
-        Some(statementRequestId)))
+        C79Certificate,
+        None))
 
-    private val postponedVatStatementFile_2 = PostponedVatStatementFile(
+    val vatCertificateFiles_2: VatCertificateFile = VatCertificateFile(
       filename,
       downloadURL,
       size,
-      PostponedVatStatementFileMetadata(periodStartYear,
+      VatCertificateFileMetadata(
+        periodStartYear,
         periodStartMonth2,
         Pdf,
-        PostponedVATStatement,
-        source,
-        Some(statementRequestId)))
+        C79Certificate,
+        None))
 
-    private val postponedVatStatementsByMonth_1 = PostponedVatStatementsByMonth(
+    val vatCertificatesByMonth_1: VatCertificatesByMonth = VatCertificatesByMonth(
       LocalDate.of(localDateYear, localDateMonth, localDateDay),
-      Seq(postponedVatStatementFile))
+      Seq(vatCertificateFiles)
+    )
 
-    private val postponedVatStatementsByMonth_2 = PostponedVatStatementsByMonth(
+    val vatCertificatesByMonth_2: VatCertificatesByMonth = VatCertificatesByMonth(
       LocalDate.of(localDateYear, localDateMonth2, localDateDay),
-      Seq(postponedVatStatementFile_2))
+      Seq(vatCertificateFiles_2)
+    )
 
-    private val postponedVatStatementsForEori: PostponedVatStatementsForEori = PostponedVatStatementsForEori(
-      eoriHistory, Seq(postponedVatStatementsByMonth_1), Seq(postponedVatStatementsByMonth_2))
+    private val vatCertificatesForEori = VatCertificatesForEori(eoriHistory,
+      Seq(vatCertificatesByMonth_1),
+      Seq(vatCertificatesByMonth_2))
 
-    private val postponedVatViewModel: PostponedVatViewModel =
-      PostponedVatViewModel(Seq(postponedVatStatementsForEori))
+    private val vatViewModel = VatViewModel(Seq(vatCertificatesForEori))
 
-    implicit val view: Document = Jsoup.parse(
-      app.injector.instanceOf[ImportPostponedVatRequestedStatements].apply(
-        postponedVatViewModel, config.returnLink("postponedVATStatement")).body)
+    implicit val view: Document = Jsoup.parse(app.injector.instanceOf[ImportVatRequestedStatements].apply(
+      vatViewModel,
+      config.returnLink("c79Certificate")
+    ).body)
   }
 
   private def headingShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("requested-import-postponed-vat-statements-heading").html().contains(
-      msg("cf.import-postponed-vat.requested.title")
+    view.getElementById("requested-import-vat-certificates-heading").html().contains(
+      msg("cf.import-vat.requested.title")
     ) mustBe true
   }
 
   private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion = {
     view.getElementById("available-text").html().contains(
-      msg("cf.import-postponed-vat.requested.available.text")
+      msg("cf.import-vat.requested.available.text")
     ) mustBe true
   }
+
 }
