@@ -35,7 +35,7 @@ class SdesFileSpec extends SpecBase with Matchers {
       FileFormat.unapply(Pdf).value mustBe "PDF"
 
       JsString("Pdf").as[FileFormat] mustBe Pdf
-      Json.toJson(Pdf)(FileFormat.fileFormatFormat.writes) mustBe JsString("PDF")
+      Json.toJson[FileFormat](Pdf) mustBe JsString("PDF")
       Pdf.toString mustBe "PDF"
 
       DDStatementType.apply("Random") mustBe UnknownStatementType
