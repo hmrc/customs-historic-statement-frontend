@@ -79,37 +79,6 @@ class LinkSpec extends ViewTestHelper {
     }
   }
 
-  trait Setup {
-    val linkMessage = "cf.undeliverable.email.change.text.p1"
-    val location = "test_location"
-    val id = "test_id"
-    val pId = "test_pid"
-    val preLinkMsgKey = "cf.undeliverable.email.link-text"
-    val postLinkMsgKey = "cf.undeliverable.email.change.text.p2"
-    val testClass = "test_link_class"
-
-    def viewDoc(location: String = location,
-                linkId: Option[String] = None,
-                pWrapped: Boolean = true,
-                linkSentence: Boolean = false,
-                preLinkMessage: Option[String] = None,
-                postLinkMessage: Option[String] = None,
-                pId: Option[String] = None,
-                pClass: String = "govuk-body"): Document =
-
-      Jsoup.parse(app.injector.instanceOf[link].apply(
-        linkMessage = linkMessage,
-        location = location,
-        linkId = linkId,
-        pWrapped = pWrapped,
-        linkSentence = linkSentence,
-        preLinkMessage = preLinkMessage,
-        postLinkMessage = postLinkMessage,
-        pId = pId,
-        pClass = pClass
-      ).body)
-  }
-
   private def shouldContainLocation(id: Option[String],
                                     location: String)(implicit view: Document): Assertion =
     if (id.nonEmpty) {
@@ -141,4 +110,35 @@ class LinkSpec extends ViewTestHelper {
 
   private def shouldContainLinkSentence(linkMessage: String)(implicit view: Document): Assertion =
     view.text().contains(s"${msg(linkMessage)}.") mustBe true
+
+  trait Setup {
+    val linkMessage = "cf.undeliverable.email.change.text.p1"
+    val location = "test_location"
+    val id = "test_id"
+    val pId = "test_pid"
+    val preLinkMsgKey = "cf.undeliverable.email.link-text"
+    val postLinkMsgKey = "cf.undeliverable.email.change.text.p2"
+    val testClass = "test_link_class"
+
+    def viewDoc(location: String = location,
+                linkId: Option[String] = None,
+                pWrapped: Boolean = true,
+                linkSentence: Boolean = false,
+                preLinkMessage: Option[String] = None,
+                postLinkMessage: Option[String] = None,
+                pId: Option[String] = None,
+                pClass: String = "govuk-body"): Document =
+
+      Jsoup.parse(app.injector.instanceOf[link].apply(
+        linkMessage = linkMessage,
+        location = location,
+        linkId = linkId,
+        pWrapped = pWrapped,
+        linkSentence = linkSentence,
+        preLinkMessage = preLinkMessage,
+        postLinkMessage = postLinkMessage,
+        pId = pId,
+        pClass = pClass
+      ).body)
+  }
 }

@@ -36,6 +36,18 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
     }
   }
 
+  private def headingShouldBeCorrect(implicit view: Document): Assertion = {
+    view.getElementById("requested-import-vat-certificates-heading").html().contains(
+      msg("cf.import-vat.requested.title")
+    ) mustBe true
+  }
+
+  private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion = {
+    view.getElementById("available-text").html().contains(
+      msg("cf.import-vat.requested.available.text")
+    ) mustBe true
+  }
+
   trait Setup {
 
     private val someEori = "12345678"
@@ -96,18 +108,6 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
       vatViewModel,
       config.returnLink("c79Certificate")
     ).body)
-  }
-
-  private def headingShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("requested-import-vat-certificates-heading").html().contains(
-      msg("cf.import-vat.requested.title")
-    ) mustBe true
-  }
-
-  private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("available-text").html().contains(
-      msg("cf.import-vat.requested.available.text")
-    ) mustBe true
   }
 
 }

@@ -46,6 +46,31 @@ class DownloadLinkSpec extends ViewTestHelper {
     }
   }
 
+  private def shouldDisplayDownloadURL(id: String = "testId",
+                                       url: String = "download_url_00")(implicit view: Document): Assertion = {
+    view.getElementById(id).attr("href").contains(url) mustBe true
+  }
+
+  private def shouldDisplayFileFormatAndVoiceoverInfo(fileFormat: FileFormat,
+                                                      size: Long,
+                                                      period: String = "periodDuration")
+                                                     (implicit view: Document): Assertion = {
+    val spanElements = view.getElementsByTag("span")
+    spanElements.get(0).text mustBe s"${fileFormat.name} (${Formatters.fileSize(size)})"
+
+    spanElements.get(1).text mustBe msg("cf.account.vat.download-link", fileFormat,
+      period, s"${Formatters.fileSize(size)}")
+  }
+
+  private def shouldDisplayMissingFileIdContents(fileFormat: FileFormat,
+                                                 period: String = "periodDuration")
+                                                (implicit view: Document): Assertion = {
+    val spanElements = view.getElementById("missing-file-testId").getElementsByTag("span")
+
+    spanElements.get(0).text mustBe msg("cf.account.vat.missing-file-hidden-text", fileFormat, period)
+    spanElements.get(1).text mustBe msg("cf.account.vat.missing-file")
+  }
+
   trait Setup {
 
     val filename: String = "statementFile_00"
@@ -70,30 +95,5 @@ class DownloadLinkSpec extends ViewTestHelper {
 
     def view(vatCertificateFile: Option[VatCertificateFile] = None): Document =
       Jsoup.parse(app.injector.instanceOf[download_link].apply(vatCertificateFile, Pdf, id, period).body)
-  }
-
-  private def shouldDisplayDownloadURL(id: String = "testId",
-                                       url: String = "download_url_00")(implicit view: Document): Assertion = {
-    view.getElementById(id).attr("href").contains(url) mustBe true
-  }
-
-  private def shouldDisplayFileFormatAndVoiceoverInfo(fileFormat: FileFormat,
-                                                      size: Long,
-                                                      period: String = "periodDuration")
-                                                     (implicit view: Document): Assertion = {
-    val spanElements = view.getElementsByTag("span")
-    spanElements.get(0).text mustBe s"${fileFormat.name} (${Formatters.fileSize(size)})"
-
-    spanElements.get(1).text mustBe msg("cf.account.vat.download-link", fileFormat,
-      period, s"${Formatters.fileSize(size)}")
-  }
-
-  private def shouldDisplayMissingFileIdContents(fileFormat: FileFormat,
-                                                 period: String = "periodDuration")
-                                                (implicit view: Document): Assertion = {
-    val spanElements = view.getElementById("missing-file-testId").getElementsByTag("span")
-
-    spanElements.get(0).text mustBe msg("cf.account.vat.missing-file-hidden-text", fileFormat, period)
-    spanElements.get(1).text mustBe msg("cf.account.vat.missing-file")
   }
 }

@@ -55,22 +55,6 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
           msg("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount"))
       }
     }
-
-    trait Setup {
-
-      val cyaHelper: CheckYourAnswersHelper = new CheckYourAnswersHelper(populatedUserAnswers)
-      val fileRole: FileRole = C79Certificate
-
-      val returnUrl: String = routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url
-
-      def view(fileRole: FileRole = C79Certificate, niIndicator: Option[Boolean] = Some(false)): Document =
-        Jsoup.parse(app.injector.instanceOf[CheckYourAnswersView].apply(
-          helper = cyaHelper,
-          fileRole = fileRole,
-          maybeDan = Some("accountNumber"),
-          niIndicator = niIndicator
-        ).body)
-    }
   }
 
   private def shouldContainSecondaryHeading(implicit view: Document, accountNumberText: String): Assertion = {
@@ -95,4 +79,19 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
     view.getElementsByClass("govuk-button").html().contains(msg("site.continue")) mustBe true
   }
 
+  trait Setup {
+
+    val cyaHelper: CheckYourAnswersHelper = new CheckYourAnswersHelper(populatedUserAnswers)
+    val fileRole: FileRole = C79Certificate
+
+    val returnUrl: String = routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url
+
+    def view(fileRole: FileRole = C79Certificate, niIndicator: Option[Boolean] = Some(false)): Document =
+      Jsoup.parse(app.injector.instanceOf[CheckYourAnswersView].apply(
+        helper = cyaHelper,
+        fileRole = fileRole,
+        maybeDan = Some("accountNumber"),
+        niIndicator = niIndicator
+      ).body)
+  }
 }

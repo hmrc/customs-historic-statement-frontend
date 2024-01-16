@@ -37,6 +37,18 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     }
   }
 
+  private def headingShouldBeCorrect(implicit view: Document): Assertion = {
+    view.getElementById("requested-import-postponed-vat-statements-heading").html().contains(
+      msg("cf.import-postponed-vat.requested.title")
+    ) mustBe true
+  }
+
+  private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion = {
+    view.getElementById("available-text").html().contains(
+      msg("cf.import-postponed-vat.requested.available.text")
+    ) mustBe true
+  }
+
   trait Setup {
 
     private val someEori = "12345678"
@@ -97,17 +109,5 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     implicit val view: Document = Jsoup.parse(
       app.injector.instanceOf[ImportPostponedVatRequestedStatements].apply(
         postponedVatViewModel, config.returnLink("postponedVATStatement")).body)
-  }
-
-  private def headingShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("requested-import-postponed-vat-statements-heading").html().contains(
-      msg("cf.import-postponed-vat.requested.title")
-    ) mustBe true
-  }
-
-  private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("available-text").html().contains(
-      msg("cf.import-postponed-vat.requested.available.text")
-    ) mustBe true
   }
 }

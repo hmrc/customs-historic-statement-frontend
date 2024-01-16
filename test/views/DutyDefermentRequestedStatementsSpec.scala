@@ -56,82 +56,6 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
     }
   }
 
-  trait Setup {
-
-    private val someEori = "12345678"
-    private val someDan = "12345"
-    private val someRequestId: Option[String] = Some("Ab1234")
-    private val pdfFileName = "2018_03_01-08.pdf"
-    private val pdfUrl = "url.pdf"
-    private val pdfSize = 1024L
-    private val periodStartYear = 2018
-    private val periodStartMonth = 3
-    private val periodStartMonth2 = 2
-    private val periodStartDay = 1
-    private val periodEndYear = 2018
-    private val periodEndMonth2 = 3
-    private val periodEndMonth = 2
-    private val periodEndDay = 8
-    private val dutyPaymentType = "BACS"
-
-    private val dutyDeferementFile: DutyDefermentStatementFile =
-      DutyDefermentStatementFile(pdfFileName,
-        pdfUrl,
-        pdfSize,
-        DutyDefermentStatementFileMetadata(periodStartYear,
-          periodStartMonth,
-          periodStartDay,
-          periodEndYear,
-          periodEndMonth,
-          periodEndDay,
-          Pdf,
-          DutyDefermentStatement,
-          Weekly,
-          Some(true),
-          Some(dutyPaymentType),
-          someDan,
-          someRequestId))
-
-    private val dutyDeferementFile_2: DutyDefermentStatementFile = DutyDefermentStatementFile(pdfFileName,
-      pdfUrl,
-      pdfSize,
-      DutyDefermentStatementFileMetadata(periodStartYear,
-        periodStartMonth2,
-        periodStartDay,
-        periodEndYear,
-        periodEndMonth2,
-        periodEndDay,
-        Pdf,
-        DutyDefermentStatement,
-        Supplementary,
-        Some(true),
-        Some(dutyPaymentType),
-        someDan,
-        someRequestId
-      )
-    )
-
-    private val localDateYear = 2019
-    private val localDateMonth = 11
-    private val localDateDay = 10
-
-    private val eoriHistory = EoriHistory(someEori,
-      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
-      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)))
-
-    private val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori =
-      DutyDefermentStatementsForEori.apply(eoriHistory, Seq(dutyDeferementFile), Seq(dutyDeferementFile_2))
-
-    private def dutyDefermentModel(isNiAccount: Boolean) = DutyDefermentAccountViewModel(
-      "accountNumber",
-      Seq(dutyDefermentStatementsForEori),
-      isNiAccount = isNiAccount)
-
-    def view(isNiAccount: Boolean = false): Document = Jsoup.parse(
-      app.injector.instanceOf[DutyDefermentRequestedStatements].
-      apply(dutyDefermentModel(isNiAccount), config.returnLink("dutyDeferment")).body)
-  }
-
   private def shouldContainAccountNumber(implicit view: Document): Assertion = {
     view.getElementById("eori-heading").html().contains(
       msg("cf.account.detail.requested.deferment-account-secondary-heading")
@@ -160,5 +84,81 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
     view.getElementById("historic-eori-0").html().contains(
       msg("cf.account.details.previous-eori", "12345678")
     ) mustBe true
+  }
+
+  trait Setup {
+
+    private val someEori = "12345678"
+    private val someDan = "12345"
+    private val someRequestId: Option[String] = Some("Ab1234")
+    private val pdfFileName = "2018_03_01-08.pdf"
+    private val pdfUrl = "url.pdf"
+    private val pdfSize = 1024L
+    private val periodStartYear = 2018
+    private val periodStartMonth = 3
+    private val periodStartMonth2 = 2
+    private val periodStartDay = 1
+    private val periodEndYear = 2018
+    private val periodEndMonth2 = 3
+    private val periodEndMonth = 2
+    private val periodEndDay = 8
+    private val dutyPaymentType = "BACS"
+
+    private val dutyDefermentFile: DutyDefermentStatementFile =
+      DutyDefermentStatementFile(pdfFileName,
+        pdfUrl,
+        pdfSize,
+        DutyDefermentStatementFileMetadata(periodStartYear,
+          periodStartMonth,
+          periodStartDay,
+          periodEndYear,
+          periodEndMonth,
+          periodEndDay,
+          Pdf,
+          DutyDefermentStatement,
+          Weekly,
+          Some(true),
+          Some(dutyPaymentType),
+          someDan,
+          someRequestId))
+
+    private val dutyDefermentFile_2: DutyDefermentStatementFile = DutyDefermentStatementFile(pdfFileName,
+      pdfUrl,
+      pdfSize,
+      DutyDefermentStatementFileMetadata(periodStartYear,
+        periodStartMonth2,
+        periodStartDay,
+        periodEndYear,
+        periodEndMonth2,
+        periodEndDay,
+        Pdf,
+        DutyDefermentStatement,
+        Supplementary,
+        Some(true),
+        Some(dutyPaymentType),
+        someDan,
+        someRequestId
+      )
+    )
+
+    private val localDateYear = 2019
+    private val localDateMonth = 11
+    private val localDateDay = 10
+
+    private val eoriHistory = EoriHistory(someEori,
+      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
+      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)))
+
+    private val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori =
+      DutyDefermentStatementsForEori.apply(eoriHistory, Seq(dutyDefermentFile), Seq(dutyDefermentFile_2))
+
+    private def dutyDefermentModel(isNiAccount: Boolean) = DutyDefermentAccountViewModel(
+      "accountNumber",
+      Seq(dutyDefermentStatementsForEori),
+      isNiAccount = isNiAccount)
+
+    def view(isNiAccount: Boolean = false): Document = Jsoup.parse(
+      app.injector.instanceOf[DutyDefermentRequestedStatements].
+        apply(dutyDefermentModel(isNiAccount), config.returnLink("dutyDeferment")).body)
   }
 }
