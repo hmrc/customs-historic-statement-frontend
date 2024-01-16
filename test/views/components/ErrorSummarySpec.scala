@@ -16,18 +16,17 @@
 
 package views.components
 
+import base.SpecBase
 import helpers.FormHelper.updateFormErrorKeyForStartAndEndDate
-import org.mockito.MockitoSugar.mock
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.data.FormError
 import play.api.i18n.Messages
-import play.api.test.Helpers
 import play.api.inject.bind
+import play.api.test.Helpers
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.html.components.GovukErrorSummary
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.{ErrorLink, ErrorSummary}
-import base.SpecBase
 import views.html.components.errorSummary
 
 class ErrorSummarySpec extends SpecBase {

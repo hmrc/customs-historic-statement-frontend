@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package views.helpers
+package models
 
-import play.api.i18n.Messages
+import base.SpecBase
 
-object PageTitle {
-
-  def fullPageTitle(title: Option[String])(implicit messages: Messages): Option[String] = {
-     title match {
-       case Some(text) => Some(s"$text - ${messages("service.name")} - GOV.UK")
-       case _ => Some(s"${messages("service.name")} - GOV.UK")
-      }
+class ModeSpec extends SpecBase {
+  "jsLiteral" should {
+    "transform the value correctly" in {
+      Mode.jsLiteral.to(NormalMode) mustBe "NormalMode"
+      Mode.jsLiteral.to(CheckMode) mustBe "CheckMode"
+    }
   }
 }
