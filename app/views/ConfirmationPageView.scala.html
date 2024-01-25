@@ -59,8 +59,12 @@
         content = Html(messages(s"cf.historic.document.request.confirmation.subheader-text.next"))
     )
 
-    @email.map { addr => <p id="email-confirmation" class="govuk-body">@messages(
-        s"cf.historic.document.request.confirmation.body-text.request", addr.value) </p>}
+    @email.map { addr =>
+        @p(
+            id=Some("email-confirmation"),
+            content = Html(messages(s"cf.historic.document.request.confirmation.body-text.request", addr.value))
+        )
+    }
 
     @p(
         classes="govuk-body",
