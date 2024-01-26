@@ -62,7 +62,7 @@
     @email.map { addr =>
         @p(
             id=Some("email-confirmation"),
-            content = Html(messages(s"cf.historic.document.request.confirmation.body-text.request", addr.value))
+            content = Html(messages(s"cf.historic.document.request.confirmation.body-text.request", s"<strong>${addr.value}</strong>"))
         )
     }
 
