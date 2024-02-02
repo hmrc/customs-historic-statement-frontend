@@ -20,33 +20,21 @@ import base.SpecBase
 import config.FrontendAppConfig
 import connectors.CustomsDataStoreConnector
 import models.C79Certificate
-import play.api.inject
+import play.api.{Application, inject}
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.retrieve.Email
 import views.html.ConfirmationPageView
+
 import scala.concurrent.Future
 
 class ConfirmationPageControllerSpec extends SpecBase {
 
-  "ConfirmationPage Controller" must {
+  "onPageLoad" must {
 
-    "return OK and the correct view for a GET" in {
-
-      val mockSessionRepository = mock[SessionRepository]
-      val mockDataStoreConnector = mock[CustomsDataStoreConnector]
-
-      val app = applicationBuilder(userAnswers = Some(populatedUserAnswers))
-        .overrides(
-          inject.bind[SessionRepository].toInstance(mockSessionRepository),
-          inject.bind[CustomsDataStoreConnector].toInstance(mockDataStoreConnector)
-        ).build()
+    "return OK and the correct view for a GET" in new Setup {
 
       when(mockDataStoreConnector.getEmail(any)(any)).thenReturn(Future.successful(Right(Email("some@email.com"))))
-      when(mockSessionRepository.clear(any)).thenReturn(Future.successful(true))
-
-      val view = app.injector.instanceOf[ConfirmationPageView]
-      val appConfig = app.injector.instanceOf[FrontendAppConfig]
 
       running(app) {
         val request = fakeRequest(GET, routes.ConfirmationPageController.onPageLoad(C79Certificate).url)
@@ -55,11 +43,56 @@ class ConfirmationPageControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(Some(Email("some@email.com")), C79Certificate,
-            "http://localhost:9398/customs/documents/import-vat",
-            "October 2019 to October 2019")(
-            request, messages(app), appConfig).toString
+          view(
+            Some(Email("some@email.com")),
+            C79Certificate,
+            routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url,
+            "October 2019 to October 2019")(request, messages(app), appConfig).toString
       }
     }
+  }
+
+  "returnToStatementsPage" must {
+
+    "redirect to statements page" when {
+
+      "user session is cleared successfully" in new Setup {
+
+        when(mockSessionRepository.clear(any)).thenReturn(Future.successful(true))
+
+        running(app) {
+          val request = fakeRequest(GET, routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url)
+          val result = route(app, request).value
+
+          status(result) mustBe SEE_OTHER
+        }
+      }
+
+      "error occurs in clearing user session" in new Setup {
+        when(mockSessionRepository.clear(any)).thenReturn(Future.failed(new RuntimeException("error occurred")))
+
+        running(app) {
+          val request = fakeRequest(GET, routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url)
+          val result = route(app, request).value
+
+          status(result) mustBe SEE_OTHER
+        }
+      }
+    }
+  }
+
+  trait Setup {
+    val mockSessionRepository: SessionRepository = mock[SessionRepository]
+    val mockDataStoreConnector: CustomsDataStoreConnector = mock[CustomsDataStoreConnector]
+
+    val app: Application = applicationBuilder(userAnswers = Some(populatedUserAnswers))
+      .overrides(
+        inject.bind[SessionRepository].toInstance(mockSessionRepository),
+        inject.bind[CustomsDataStoreConnector].toInstance(mockDataStoreConnector)
+      ).build()
+
+    val view: ConfirmationPageView = app.injector.instanceOf[ConfirmationPageView]
+    val appConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+
   }
 }
