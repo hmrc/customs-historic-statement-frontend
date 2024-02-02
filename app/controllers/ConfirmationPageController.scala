@@ -55,19 +55,22 @@ class ConfirmationPageController @Inject()(
           case Left(_) => None
         }.recover { case _ => None }
 
-      } yield Ok(view(email, fileRole, returnLink, dates.dateRows(fileRole).getOrElse(emptyString)))
+      } yield Ok(
+        view(email,
+          fileRole,
+          returnLink,
+          dates.dateRows(fileRole).getOrElse(emptyString))
+      )
   }
 
   def returnToStatementsPage(fileRole: FileRole): Action[AnyContent] = {
     (identify andThen getData andThen requireData).async {
-
       implicit request =>
-        val returnLink = appConfig.returnLink(fileRole, request.userAnswers)
 
         for {
           _ <- sessionRepository.clear(request.internalId).recover { case _ => true }
         } yield {
-          Redirect(returnLink)
+          Redirect(appConfig.returnLink(fileRole, request.userAnswers))
         }
     }
   }
