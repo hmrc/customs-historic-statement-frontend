@@ -38,8 +38,7 @@
 
 @layout(
     pageTitle = Some(messages("cf.accounts.title")),
-    dutyDeferment = fileRole == DutyDefermentStatement,
-    welshToggle = false
+    dutyDeferment = fileRole == DutyDefermentStatement
     ) {
 
     <div class="govuk-panel govuk-panel--confirmation">
@@ -72,5 +71,7 @@
         content = Html(messages(s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}"))
     )
 
-    @p(link(messages(s"cf.historic.document.request.confirmation.${fileRole.name}.link-text"), location = returnLink))
+    @p(link(linkMessage = messages(s"cf.historic.document.request.confirmation.${fileRole.name}.link-text"),
+            location = returnLink)
+    )
 }

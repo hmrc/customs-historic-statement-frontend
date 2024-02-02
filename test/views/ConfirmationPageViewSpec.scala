@@ -33,45 +33,49 @@ import views.html.ConfirmationPageView
 class ConfirmationPageViewSpec extends SpecBase {
 
   "view" should {
+
     "display correct text" when {
+
       "title should display correctly" in new Setup {
-        running(app) {
-          view.title() mustBe s"${messages(app)(
-            "cf.accounts.title")} - ${messages(app)("service.name")} - GOV.UK"
-        }
+        view.title() mustBe s"${
+          messages(app)(
+            "cf.accounts.title")
+        } - ${messages(app)("service.name")} - GOV.UK"
       }
 
       "date should display correctly" in new Setup {
-        running(app) {
-          view.getElementById(
-            "email-confirmation-panel-date").text() mustBe messages(app)(
-            "03 Oct 2021 to 04 Sept 2022")
-        }
+        view.getElementById(
+          "email-confirmation-panel-date").text() mustBe messages(app)(
+          "03 Oct 2021 to 04 Sept 2022")
       }
 
       "subheader-text should display correctly" in new Setup {
-        running(app) {
-          view.getElementById(
-            "email-confirmation-subheader").text() mustBe messages(app)(
-            "cf.historic.document.request.confirmation.subheader-text.next")
-        }
+        view.getElementById(
+          "email-confirmation-subheader").text() mustBe messages(app)(
+          "cf.historic.document.request.confirmation.subheader-text.next")
       }
 
       "email confirmation should display correctly" in new Setup {
-        running(app) {
-            view.getElementById(
-              "email-confirmation").text() mustBe messages(app)(
-              "cf.historic.document.request.confirmation.body-text.request", email.value)
-          }
+        view.getElementById(
+          "email-confirmation").text() mustBe messages(app)(
+          "cf.historic.document.request.confirmation.body-text.request", email.value)
       }
-      
+
       "body-text2 should display correctly" in new Setup {
-        running(app) {
-          view.getElementById(
-            "body-text2").text() mustBe messages(app)(
-            s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}")
-        }
+        view.getElementById(
+          "body-text2").text() mustBe messages(app)(
+          s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}")
       }
+    }
+
+    "display Welsh toggle" in new Setup {
+      val languageSelectHtml: Document =
+        Jsoup.parse(view.getElementsByClass("hmrc-language-select__list-item").html())
+
+      val welshLinkElement: String = languageSelectHtml.getElementsByTag("a").html()
+
+      languageSelectHtml.toString.contains("English") mustBe true
+      welshLinkElement.contains("Cymraeg") mustBe true
     }
   }
 
