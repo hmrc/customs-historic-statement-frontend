@@ -36,23 +36,25 @@ import java.time.{Clock, LocalDate, LocalDateTime, Period}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HistoricDateRequestPageController @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   sessionRepository: SessionRepository,
-                                                   navigator: Navigator,
-                                                   appConfig: FrontendAppConfig,
-                                                   identify: IdentifierAction,
-                                                   getData: DataRetrievalAction,
-                                                   requireData: DataRequiredAction,
-                                                   clock: Clock,
-                                                   formProvider: HistoricDateRequestPageFormProvider,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   view: HistoricDateRequestPageView
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class HistoricDateRequestPageController @Inject()(override val messagesApi: MessagesApi,
+                                                  sessionRepository: SessionRepository,
+                                                  navigator: Navigator,
+                                                  appConfig: FrontendAppConfig,
+                                                  identify: IdentifierAction,
+                                                  getData: DataRetrievalAction,
+                                                  requireData: DataRequiredAction,
+                                                  clock: Clock,
+                                                  formProvider: HistoricDateRequestPageFormProvider,
+                                                  val controllerComponents: MessagesControllerComponents,
+                                                  view: HistoricDateRequestPageView)(
+  implicit ec: ExecutionContext)
+  extends FrontendBaseController with I18nSupport {
 
   val log = Logger(this.getClass)
 
-  def onPageLoad(mode: Mode, fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode, fileRole: FileRole): Action[AnyContent] = (
+    identify andThen getData andThen requireData) {
+
     implicit request =>
 
       val preparedForm: Form[HistoricDates] = request.userAnswers.get(HistoricDateRequestPage(fileRole)) match {
@@ -61,26 +63,33 @@ class HistoricDateRequestPageController @Inject()(
       }
 
       val backLink = appConfig.returnLink(fileRole, request.userAnswers)
-      Ok(view(preparedForm, mode, fileRole, backLink, request.userAnswers.get(AccountNumber), request.userAnswers.get(IsNiAccount)))
+
+      Ok(view(preparedForm, mode, fileRole, backLink, request.userAnswers.get(AccountNumber),
+        request.userAnswers.get(IsNiAccount)))
   }
 
-  def onSubmit(mode: Mode, fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode, fileRole: FileRole): Action[AnyContent] = (
+    identify andThen getData andThen requireData).async {
+
     implicit request =>
 
       val backLink = appConfig.returnLink(fileRole, request.userAnswers)
 
       formProvider(fileRole).bindFromRequest().fold(
-        formWithErrors =>{
+        formWithErrors => {
           logMessageForAnalytics(fileRole, request.eori, formWithErrors)
-          Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink, request.userAnswers.get(AccountNumber),
-            request.userAnswers.get(IsNiAccount))))
+
+          Future.successful(BadRequest(view(formWithErrors, mode, fileRole,
+            backLink, request.userAnswers.get(AccountNumber), request.userAnswers.get(IsNiAccount))))
         },
         value =>
           customValidation(value, formProvider(fileRole), fileRole, request.eori) match {
+
             case Some(formWithErrors) =>
               logMessageForAnalytics(fileRole, request.eori, formWithErrors)
               Future.successful(BadRequest(view(formWithErrors, mode, fileRole, backLink,
                 request.userAnswers.get(AccountNumber), request.userAnswers.get(IsNiAccount))))
+
             case None =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(HistoricDateRequestPage(fileRole), value))
@@ -102,10 +111,13 @@ class HistoricDateRequestPageController @Inject()(
 
     (dates, fileRole) match {
       case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths < 0 =>
-        Some(form.withError("end", "cf.historic.document.request.form.error.to-date-must-be-later-than-from-date").fill(dates))
 
-      case (HistoricDates(start, end), v) if Period.between(start, end).toTotalMonths >= maximumNumberOfMonths =>
         Some(form.withError("end",
+          "cf.historic.document.request.form.error.to-date-must-be-later-than-from-date").fill(dates))
+
+      case (HistoricDates(start, end), v) if Period.between(
+        start, end).toTotalMonths >= maximumNumberOfMonths => Some(form.withError("end",
+
           if (v == C79Certificate) {
             "cf.historic.document.request.form.error.date-range-too-wide.c79"
           } else {
@@ -138,9 +150,11 @@ class HistoricDateRequestPageController @Inject()(
                                     (implicit messages: Messages): Unit = {
     val errorMessages = formWithErrors.errors.map(e => messages(e.message)).mkString(",")
 
-    val startDate = formWithErrors.data.getOrElse("start.year", "") + "-" + formWithErrors.data.getOrElse("start.month", "")
+    val startDate = formWithErrors.data.getOrElse("start.year", "") + "-" +
+      formWithErrors.data.getOrElse("start.month", "")
 
-    val endDate = formWithErrors.data.getOrElse("end.year", "") + "-" + formWithErrors.data.getOrElse("end.month", "")
+    val endDate = formWithErrors.data.getOrElse("end.year", "") + "-" +
+      formWithErrors.data.getOrElse("end.month", "")
 
     log.warn(s"$fileRole, Historic statement request service, eori number: $eori, " +
       s"start date: $startDate, end date: $endDate, error: $errorMessages")

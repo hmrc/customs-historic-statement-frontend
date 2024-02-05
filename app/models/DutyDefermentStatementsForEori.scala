@@ -29,7 +29,9 @@ case class DutyDefermentStatementsForEori(
   val groupsRequested: Seq[DutyDefermentStatementPeriodsByMonth] = groupByMonthAndYear(requestedStatementsByPeriod)
 
   private def groupByPeriod(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementPeriod] = {
-    files.groupBy(file => (file.metadata.fileRole, file.startDate, file.endDate, file.metadata.defermentStatementType)).map { case (_, periodFiles) =>
+    files.groupBy(file => (file.metadata.fileRole, file.startDate, file.endDate,
+      file.metadata.defermentStatementType)).map { case (_, periodFiles) =>
+
       DutyDefermentStatementPeriod(
         periodFiles.head.metadata.fileRole,
         periodFiles.head.metadata.defermentStatementType,
@@ -48,5 +50,4 @@ case class DutyDefermentStatementsForEori(
         .sortWith(_.defermentStatementType < _.defermentStatementType))
     }
   }
-
 }

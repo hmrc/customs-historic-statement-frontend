@@ -22,10 +22,17 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 trait DateFormatters {
-  def dateAsMonth(date: LocalDate)(implicit messages: Messages): String = messages(s"month.${date.getMonthValue}")
-  def dateAsDayMonthAndYear(date: LocalDate)(implicit messages: Messages): String = s"${date.getDayOfMonth} ${dateAsMonth(date)} ${date.getYear}"
-  def dateAsMonthAndYear(date: LocalDate)(implicit messages: Messages): String = s"${dateAsMonth(date)} ${date.getYear}"
-  def dateAsMonthAndYearAsId(date: LocalDate)(implicit messages: Messages): String = s"${dateAsMonth(date)}-${date.getYear}"
+  def dateAsMonth(date: LocalDate)(implicit messages: Messages): String =
+    messages(s"month.${date.getMonthValue}")
+
+  def dateAsDayMonthAndYear(date: LocalDate)(implicit messages: Messages): String =
+    s"${date.getDayOfMonth} ${dateAsMonth(date)} ${date.getYear}"
+
+  def dateAsMonthAndYear(date: LocalDate)(implicit messages: Messages): String =
+    s"${dateAsMonth(date)} ${date.getYear}"
+
+  def dateAsMonthAndYearAsId(date: LocalDate)(implicit messages: Messages): String =
+    s"${dateAsMonth(date)}-${date.getYear}"
 
   def dateAsDay(date: LocalDate): String = DateTimeFormatter.ofPattern("d").format(date)
 }
@@ -39,4 +46,3 @@ trait FileFormatters {
 }
 
 object Formatters extends DateFormatters with FileFormatters
-

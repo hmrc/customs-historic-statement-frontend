@@ -24,7 +24,6 @@ import play.api.libs.json.{JsPath, _}
 
 import scala.util.{Failure, Success, Try}
 
-
 case class EoriHistory(eori: String,
                        validFrom: Option[LocalDate],
                        validUntil: Option[LocalDate])
@@ -58,5 +57,4 @@ object EoriHistory {
         }
     })
   }
-
 }

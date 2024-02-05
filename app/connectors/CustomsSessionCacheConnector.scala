@@ -29,16 +29,19 @@ class CustomsSessionCacheConnector @Inject()(
                                               appConfig: FrontendAppConfig
                                             )(implicit executionContext: ExecutionContext) {
 
-  def getAccountNumber(sessionId: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
+  def getAccountNumber(sessionId: String, linkId: String)(
+    implicit hc: HeaderCarrier): Future[Option[String]] = {
+
     httpClient.GET[SessionCacheResponse](appConfig.sessionCacheUrl(sessionId, linkId)).map(
       response => Some(response.accountNumber)
     ).recover { case _ => None }
   }
 
-  def getAccountLink(sessionId: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[AccountLink]] =
-    httpClient.GET[AccountLink](
-      appConfig.sessionCacheUrl(sessionId, linkId)
-    ).map(Some(_)).recover { case _ => None }
+  def getAccountLink(sessionId: String, linkId: String)(
+    implicit hc: HeaderCarrier): Future[Option[AccountLink]] =
+
+    httpClient.GET[AccountLink](appConfig.sessionCacheUrl(
+      sessionId, linkId)).map(Some(_)).recover { case _ => None }
 }
 
 case class SessionCacheResponse(accountNumber: String)
@@ -47,7 +50,10 @@ object SessionCacheResponse {
   implicit val format: OFormat[SessionCacheResponse] = Json.format[SessionCacheResponse]
 }
 
-case class AccountLink(eori: String, accountNumber: String, linkId: String, accountStatus: String, accountStatusId: Option[Int], isNiAccount: Boolean)
+case class AccountLink(eori: String, accountNumber: String,
+                       linkId: String,
+                       accountStatus: String,
+                       accountStatusId: Option[Int], isNiAccount: Boolean)
 
 object AccountLink {
   implicit val format: OFormat[AccountLink] = Json.format[AccountLink]

@@ -35,12 +35,11 @@ class EmailAction @Inject() (dataStoreService: CustomsDataStoreConnector)(
     val messagesApi: MessagesApi
 ) extends ActionFilter[IdentifierRequest]
     with I18nSupport {
+
   def filter[A](request: IdentifierRequest[A]): Future[Option[Result]] = {
-    implicit val hc: HeaderCarrier =
-      HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-    dataStoreService
-      .getEmail(request.eori)
-      .map {
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
+    dataStoreService.getEmail(request.eori).map {
         case Left(value) => checkEmailResponseAndRedirect(value)
         case Right(_) => None
       }

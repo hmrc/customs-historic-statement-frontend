@@ -23,5 +23,4 @@ object DateConverters {
   implicit class OrderedLocalDate(date: LocalDate) extends Ordered[LocalDate] {
     def compare(that: LocalDate): Int = date.compareTo(that)
   }
-
 }

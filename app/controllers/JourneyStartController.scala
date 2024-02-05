@@ -33,28 +33,39 @@ class JourneyStartController @Inject()(customsSessionCacheConnector: CustomsSess
                                        checkEmailIsVerified: EmailAction,
                                        getData: DataRetrievalAction,
                                        sessionRepository: SessionRepository,
-                                       mcc: MessagesControllerComponents)(implicit executionContext: ExecutionContext) extends FrontendController(mcc) {
+                                       mcc: MessagesControllerComponents)(
+  implicit executionContext: ExecutionContext) extends FrontendController(mcc) {
 
 
-  def dutyDeferment(linkId: String): Action[AnyContent] = (identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
+  def dutyDeferment(linkId: String): Action[AnyContent] = (
+    identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
     hc.sessionId match {
+
       case Some(sessionId) =>
         customsSessionCacheConnector.getAccountLink(sessionId.value, linkId).flatMap {
           case Some(accountLink) =>
             val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId))
             for {
-              userAnswersAccountNumber <- Future.fromTry(userAnswers.set(AccountNumber, accountLink.accountNumber))
-              userAnswersNiIndicator <- Future.fromTry(userAnswersAccountNumber.set(IsNiAccount, accountLink.isNiAccount))
-              userAnswersLinkId <- Future.fromTry(userAnswersNiIndicator.set(RequestedLinkId, linkId))
+              userAnswersAccountNumber <- Future.fromTry(
+                userAnswers.set(AccountNumber, accountLink.accountNumber))
+
+              userAnswersNiIndicator <- Future.fromTry(
+                userAnswersAccountNumber.set(IsNiAccount, accountLink.isNiAccount))
+
+              userAnswersLinkId <- Future.fromTry(
+                userAnswersNiIndicator.set(RequestedLinkId, linkId))
+
               _ <- sessionRepository.set(userAnswersLinkId)
             } yield Redirect(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, DutyDefermentStatement))
+
           case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
         }
       case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
     }
   }
 
-  def nonDutyDeferment(fileRole: FileRole): Action[AnyContent] = (identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
+  def nonDutyDeferment(fileRole: FileRole): Action[AnyContent] = (
+    identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
     fileRole match {
       case DutyDefermentStatement => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
       case _ =>

@@ -32,32 +32,33 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]
 
-class AuthenticatedIdentifierAction @Inject()(
-                                               override val authConnector: AuthConnector,
-                                               config: FrontendAppConfig,
-                                               val parser: BodyParsers.Default
-                                             )
-                                             (implicit val executionContext: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
+class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthConnector,
+                                              config: FrontendAppConfig,
+                                              val parser: BodyParsers.Default)(
+  implicit val executionContext: ExecutionContext)
+  extends IdentifierAction with AuthorisedFunctions {
 
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
+  override def invokeBlock[A](request: Request[A],
+                              block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     authorised().retrieve(Retrievals.internalId and Retrievals.allEnrolments) {
+
       case Some(internalId) ~ allEnrolments =>
         allEnrolments.getEnrolment("HMRC-CUS-ORG").flatMap(_.getIdentifier("EORINumber")) match {
           case Some(eori) => block(IdentifierRequest(request, internalId, eori.value))
           case None => throw InsufficientEnrolments()
         }
       case _ => throw new RuntimeException("Unable to retrieve internal Id/Enrolments")
+
     } recover {
       case _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue_url" -> Seq(config.loginContinueUrl)))
-      case _: InsufficientEnrolments =>
-        Redirect(routes.UnauthorisedController.onPageLoad)
-      case _ => {
-        Redirect(routes.TechnicalDifficultiesController.onPageLoad)
-      }
+
+      case _: InsufficientEnrolments => Redirect(routes.UnauthorisedController.onPageLoad)
+      case _ => Redirect(routes.TechnicalDifficultiesController.onPageLoad)
+
     }
   }
 }

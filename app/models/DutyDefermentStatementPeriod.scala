@@ -51,9 +51,14 @@ case class DutyDefermentStatementPeriod(fileRole: FileRole,
     lazy val endDateDayMonthAndYear = Formatters.dateAsDayMonthAndYear(endDate)
 
     defermentStatementType match {
-      case Supplementary => messages("cf.account.detail.missing-file-type-supplementary", fileFormat, endDateMonthAndYear)
-      case Excise => messages("cf.account.detail.missing-file-type-excise", fileFormat, endDateMonthAndYear)
-      case _ => messages("cf.account.detail.missing-file-type", fileFormat, Formatters.dateAsDay(startDate), endDateDayMonthAndYear)
+      case Supplementary => messages("cf.account.detail.missing-file-type-supplementary",
+        fileFormat, endDateMonthAndYear)
+
+      case Excise => messages("cf.account.detail.missing-file-type-excise",
+        fileFormat, endDateMonthAndYear)
+
+      case _ => messages("cf.account.detail.missing-file-type",
+        fileFormat, Formatters.dateAsDay(startDate), endDateDayMonthAndYear)
     }
   }
 }

@@ -44,7 +44,6 @@ class SessionIdFilterImpl @Inject()(implicit val executionContext: ExecutionCont
         request.eoriHistory,
         sessionId.value
       )))
-
     }
   }
 }

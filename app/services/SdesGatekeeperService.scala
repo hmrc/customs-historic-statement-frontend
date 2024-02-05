@@ -105,7 +105,8 @@ class SdesGatekeeperService() {
     )
   }
 
-  def convertTo[T <: SdesFile](implicit converter: FileInformation => T): Seq[FileInformation] => Seq[T] = _.map(converter)
+  def convertTo[T <: SdesFile](implicit converter: FileInformation => T): Seq[FileInformation] =>
+    Seq[T] = _.map(converter)
 
   private def mapFileRole(role: String) : FileRole = {
     role match {
@@ -129,5 +130,4 @@ class SdesGatekeeperService() {
       case _   => false
     }
   }
-
 }

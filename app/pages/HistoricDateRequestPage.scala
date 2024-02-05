@@ -20,8 +20,6 @@ import models.{FileRole, HistoricDates}
 import play.api.libs.json.JsPath
 
 case class HistoricDateRequestPage(fileRole: FileRole) extends QuestionPage[HistoricDates] {
-
   override def path: JsPath = JsPath \ fileRole.name \ toString
-
   override def toString: String = "historicDateRequestPage"
 }

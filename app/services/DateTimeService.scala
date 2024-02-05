@@ -42,5 +42,4 @@ class DateTimeService @Inject()(appConfig: FrontendAppConfig) {
   def utcDateTime(): LocalDateTime = systemDateTime(ZoneId.of("UTC"))
 
   def localDateTime(): LocalDateTime = systemDateTime(ZoneId.of("Europe/London"))
-
 }

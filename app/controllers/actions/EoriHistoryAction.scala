@@ -29,7 +29,9 @@ class EoriHistoryActionImpl @Inject()(customsDataStoreConnector: CustomsDataStor
                                       implicit val executionContext: ExecutionContext) extends EoriHistoryAction {
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[IdentifierRequestWithEoriHistory[A]] = {
+
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
     customsDataStoreConnector.getAllEoriHistory(request.eori).map { eoriHistory =>
       IdentifierRequestWithEoriHistory(
         request, request.identifier, request.eori, eoriHistory

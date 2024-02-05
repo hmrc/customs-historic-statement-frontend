@@ -37,7 +37,6 @@ object FileRole {
         case e => JsError(s"Invalid file role: $e")
       }
     }
-
     override def writes(o: FileRole): JsValue = JsString(o.name)
   }
 
@@ -61,5 +60,3 @@ object FileRole {
     }
   }
 }
-
-

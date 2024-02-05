@@ -64,8 +64,9 @@ class SortStatementsService @Inject()() {
     VatCertificatesForEori(historicEori, current, requested)
   }
 
-  def sortPostponedVatStatementsForEori(historicEori: EoriHistory, postponedVatStatementsFile: Seq[PostponedVatStatementFile])
-                                (implicit messages: Messages): PostponedVatStatementsForEori = {
+  def sortPostponedVatStatementsForEori(historicEori: EoriHistory,
+                                        postponedVatStatementsFile: Seq[PostponedVatStatementFile])(
+    implicit messages: Messages): PostponedVatStatementsForEori = {
 
     val groupedByMonth = postponedVatStatementsFile.groupBy(_.monthAndYear).map {
       case (month, filesForMonth) => PostponedVatStatementsByMonth(month, filesForMonth)

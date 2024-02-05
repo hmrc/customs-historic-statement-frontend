@@ -32,12 +32,15 @@ object SdesFileViewModels {
       lazy val fileSize = Formatters.fileSize(file.size)
 
       file.metadata.defermentStatementType match {
-        case Supplementary => messages("cf.account.detail.supplementary-download-link", file.fileFormat, endDateMonthAndYear, fileSize)
-        case Excise => messages("cf.account.detail.excise-download-link", file.fileFormat, endDateMonthAndYear, fileSize)
-        case _ => messages("cf.account.detail.download-link", file.fileFormat, startDateDay, endDateDayMonthAndYear, fileSize)
+        case Supplementary => messages("cf.account.detail.supplementary-download-link",
+          file.fileFormat, endDateMonthAndYear, fileSize)
+
+        case Excise => messages("cf.account.detail.excise-download-link",
+          file.fileFormat, endDateMonthAndYear, fileSize)
+
+        case _ => messages("cf.account.detail.download-link",
+          file.fileFormat, startDateDay, endDateDayMonthAndYear, fileSize)
       }
     }
-
   }
-
 }
