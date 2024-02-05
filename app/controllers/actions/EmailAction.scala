@@ -46,7 +46,7 @@ class EmailAction @Inject() (dataStoreService: CustomsDataStoreConnector)(
       }
       .recover { case _ =>
         None
-      } //This will allow users to access the service if ETMP return an error via SUB09
+      }
   }
 
   private def checkEmailResponseAndRedirect(value: EmailResponses): Option[Result] = {

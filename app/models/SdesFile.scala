@@ -43,7 +43,8 @@ object FileFormat extends Logging {
 
   val SdesFileFormats: SortedSet[FileFormat] = SortedSet(Pdf)
 
-  def filterFileFormats[T <: SdesFile](allowedFileFormats: SortedSet[FileFormat])(files: Seq[T]): Seq[T] = files.filter(file => allowedFileFormats(file.metadata.fileFormat))
+  def filterFileFormats[T <: SdesFile](allowedFileFormats: SortedSet[FileFormat])(
+    files: Seq[T]): Seq[T] = files.filter(file => allowedFileFormats(file.metadata.fileFormat))
 
   def apply(name: String): FileFormat = name.toUpperCase match {
     case Pdf.name => Pdf
@@ -120,7 +121,6 @@ case class DutyDefermentStatementFile(filename: String,
                                       metadata: DutyDefermentStatementFileMetadata)
   extends Ordered[DutyDefermentStatementFile] with SdesFile {
 
-  // TODO perhaps include dates in the ordering...?
   def compare(that: DutyDefermentStatementFile): Int = fileFormat.compare(that.fileFormat)
 
   val startDate: LocalDate = LocalDate.of(metadata.periodStartYear, metadata.periodStartMonth, metadata.periodStartDay)
@@ -168,12 +168,15 @@ case class SecurityStatementFileMetadata(periodStartYear: Int,
                                          statementRequestId: Option[String] = None) extends SdesFileMetadata
 
 
-case class VatCertificateFile(filename: String, downloadURL: String, size: Long, metadata: VatCertificateFileMetadata, eori: String = "")
+case class VatCertificateFile(filename: String,
+                              downloadURL: String,
+                              size: Long,
+                              metadata: VatCertificateFileMetadata,
+                              eori: String = "")
   extends Ordered[VatCertificateFile] with SdesFile {
 
   val formattedSize: String = Formatters.fileSize(size)
 
-  // TODO perhaps include dates in the ordering...?
   def compare(that: VatCertificateFile): Int = that.metadata.fileFormat.compare(metadata.fileFormat)
 }
 
@@ -184,12 +187,15 @@ case class VatCertificateFileMetadata(periodStartYear: Int,
                                       statementRequestId: Option[String]) extends SdesFileMetadata {
 }
 
-case class PostponedVatStatementFile(filename: String, downloadURL: String, size: Long, metadata: PostponedVatStatementFileMetadata, eori: String = "")
+case class PostponedVatStatementFile(filename: String,
+                                     downloadURL: String,
+                                     size: Long,
+                                     metadata: PostponedVatStatementFileMetadata,
+                                     eori: String = "")
   extends Ordered[PostponedVatStatementFile] with SdesFile {
 
   val formattedSize: String = Formatters.fileSize(size)
 
-  // TODO perhaps include dates in the ordering...?
   def compare(that: PostponedVatStatementFile): Int = that.metadata.fileFormat.compare(metadata.fileFormat)
 }
 

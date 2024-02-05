@@ -32,7 +32,7 @@ case class DutyDefermentStatementPeriod(fileRole: FileRole,
   extends Ordered[DutyDefermentStatementPeriod] {
 
   def compare(that:DutyDefermentStatementPeriod):Int = {
-    // order by defermentStatementType then endDate then startDate
+
     this.defermentStatementType compare that.defermentStatementType match {
       case 0 => that.endDate compare endDate match {
         case 0 => startDate compare that.startDate

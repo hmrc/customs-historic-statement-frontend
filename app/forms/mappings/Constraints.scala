@@ -34,7 +34,7 @@ trait Constraints {
     Constraint {
       case request if request.getYear.toString.length != 4 || !request.getYear.toString.matches("^[0-9]+") =>
         Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
-      // exclude the current month
+
       case request if Period.between(request, currentDate.minusMonths(1)).toTotalMonths < olderThan.toTotalMonths =>
         if (fileRole == C79Certificate){
           Invalid(ValidationError("cf.historic.document.request.form.error.date-too-recent.c79"))
