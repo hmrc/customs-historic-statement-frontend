@@ -26,17 +26,18 @@ import views.html.{ErrorTemplate, not_found}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ErrorHandler @Inject()(
-                              val messagesApi: MessagesApi,
-                              view: ErrorTemplate,
-                              notFound: not_found,
-                            )(implicit appConfig: FrontendAppConfig) extends FrontendErrorHandler with I18nSupport {
+class ErrorHandler @Inject()(val messagesApi: MessagesApi,
+                             view: ErrorTemplate,
+                             notFound: not_found
+                            )(implicit appConfig: FrontendAppConfig)
+  extends FrontendErrorHandler with I18nSupport {
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
-    view(pageTitle, heading, message)
+  override def standardErrorTemplate(pageTitle: String,
+                                     heading: String,
+                                     message: String)(
+    implicit rh: Request[_]): Html = view(pageTitle, heading, message)
 
-  override def notFoundTemplate(implicit request: Request[_]): Html =
-    notFound()
+  override def notFoundTemplate(implicit request: Request[_]): Html = notFound()
 
   def unauthorized()(implicit request: Request[_]): Html = {
     standardErrorTemplate(Messages("cf.error.unauthorized.title"), Messages("cf.error.unauthorized.heading"),

@@ -29,7 +29,9 @@ case class VatViewModel(certificatesForAllEoris: Seq[VatCertificatesForEori]) {
   val hasCurrentCertificates: Boolean = certificatesForAllEoris.exists(_.currentCertificates.nonEmpty)
 }
 
-case class VatCertificatesForEori(eoriHistory: EoriHistory, currentCertificates: Seq[VatCertificatesByMonth], requestedCertificates: Seq[VatCertificatesByMonth])
+case class VatCertificatesForEori(eoriHistory: EoriHistory,
+                                  currentCertificates: Seq[VatCertificatesByMonth],
+                                  requestedCertificates: Seq[VatCertificatesByMonth])
   extends OrderedByEoriHistory[VatCertificatesForEori]
 
 case class VatCertificatesByMonth(date: LocalDate, files: Seq[VatCertificateFile] = Seq.empty)(implicit messages: Messages)
