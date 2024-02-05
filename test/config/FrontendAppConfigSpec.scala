@@ -20,52 +20,50 @@ import base.SpecBase
 import models.{C79Certificate, DutyDefermentStatement, SecurityStatement}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.RequestedLinkId
-import play.api.test.Helpers.running
+import play.api.Application
 
 class FrontendAppConfigSpec extends SpecBase {
 
   "returnLink" should {
     "return the adjustments link if a SecurityStatement FileRole provided" in new Setup {
-      running(app){
-        config.returnLink(SecurityStatement, emptyUserAnswers) mustBe "http://localhost:9398/customs/documents/adjustments"
-      }
+      config.returnLink(SecurityStatement, emptyUserAnswers) mustBe
+        "http://localhost:9398/customs/documents/adjustments"
     }
-    
 
     "return the adjustments link if a C79Certificate FileRole provided" in new Setup {
-      running(app) {
-        config.returnLink(C79Certificate, emptyUserAnswers) mustBe "http://localhost:9398/customs/documents/import-vat"
-      }
+      config.returnLink(C79Certificate, emptyUserAnswers) mustBe
+        "http://localhost:9398/customs/documents/import-vat"
     }
 
     "return the DutyDeferment link if a DutyDeferment FileRole provided and linkId in user answers" in new Setup {
-      
-      running(app) {
-        config.returnLink(
-          DutyDefermentStatement,
-          emptyUserAnswers.set(RequestedLinkId, "someLink").success.value) mustBe "http://localhost:9397/customs/duty-deferment/someLink/account"
-      }
+      config.returnLink(
+        DutyDefermentStatement,
+        emptyUserAnswers.set(RequestedLinkId, "someLink").success.value) mustBe
+        "http://localhost:9397/customs/duty-deferment/someLink/account"
     }
 
     "throw an exception if DutyDeferment FileRole and no linkId in user answers" in new Setup {
-      running(app) {
-        intercept[Exception] {
-          config.returnLink(DutyDefermentStatement, emptyUserAnswers) mustBe "http://localhost:9398/customs/documents/import-vat"
-        }.getMessage mustBe "Unable to retrieve linkId"
-      }
+      intercept[Exception] {
+        config.returnLink(DutyDefermentStatement, emptyUserAnswers) mustBe
+          "http://localhost:9398/customs/documents/import-vat"
+      }.getMessage mustBe "Unable to retrieve linkId"
     }
 
     "throw an exception if DutyDeferment fileRole is passed " in new Setup {
-      running(app) {
-        intercept[Exception] {
-          config.returnLink(DutyDefermentStatement) mustBe "http://localhost:9398/customs/documents/import-vat"
-        }.getMessage mustBe "Invalid file role"
-      }
+      intercept[Exception] {
+        config.returnLink(DutyDefermentStatement) mustBe "http://localhost:9398/customs/documents/import-vat"
+      }.getMessage mustBe "Invalid file role"
+    }
+  }
+
+  "feedbackService" should {
+    "return correct url" in new Setup {
+      config.feedbackService mustBe "http://localhost:9514/feedback/CDS-FIN"
     }
   }
 
   trait Setup {
-    val app = applicationBuilder().build()
-    val config = app.injector.instanceOf[FrontendAppConfig]
+    val app: Application = applicationBuilder().build()
+    val config: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
   }
 }

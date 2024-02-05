@@ -24,26 +24,30 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ConfirmationPageView
+import utils.Utils.emptyString
 import viewmodels.CheckYourAnswersHelper
+import views.html.ConfirmationPageView
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class ConfirmationPageController @Inject()(override val messagesApi: MessagesApi,
-                                           identify: IdentifierAction,
-                                           getData: DataRetrievalAction,
-                                           requireData: DataRequiredAction,
-                                           sessionRepository: SessionRepository,
-                                           customsDataStoreConnector: CustomsDataStoreConnector,
-                                           val controllerComponents: MessagesControllerComponents,
-                                           view: ConfirmationPageView
-                                          )(implicit ec: ExecutionContext,
-                                            appConfig: FrontendAppConfig)
+class ConfirmationPageController @Inject()(
+                                            override val messagesApi: MessagesApi,
+                                            identify: IdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            sessionRepository: SessionRepository,
+                                            customsDataStoreConnector: CustomsDataStoreConnector,
+                                            val controllerComponents: MessagesControllerComponents,
+                                            view: ConfirmationPageView
+                                          )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
   extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request => val dates = new CheckYourAnswersHelper(request.userAnswers)
+    implicit request =>
+
+      val dates = new CheckYourAnswersHelper(request.userAnswers)
+      val returnLink = routes.ConfirmationPageController.returnToStatementsPage(fileRole).url
 
       for {
         email <- customsDataStoreConnector.getEmail(request.eori).map {
@@ -51,9 +55,24 @@ class ConfirmationPageController @Inject()(override val messagesApi: MessagesApi
           case Left(_) => None
         }.recover { case _ => None }
 
-        _ <- sessionRepository.clear(request.internalId)
-        returnLink = appConfig.returnLink(fileRole, request.userAnswers)
-
-      } yield Ok(view(email, fileRole, returnLink, dates.dateRows(fileRole).getOrElse("")))
+      } yield Ok(
+        view(email,
+          fileRole,
+          returnLink,
+          dates.dateRows(fileRole).getOrElse(emptyString))
+      )
   }
+
+  def returnToStatementsPage(fileRole: FileRole): Action[AnyContent] = {
+    (identify andThen getData andThen requireData).async {
+      implicit request =>
+
+        for {
+          _ <- sessionRepository.clear(request.internalId).recover { case _ => true }
+        } yield {
+          Redirect(appConfig.returnLink(fileRole, request.userAnswers))
+        }
+    }
+  }
+
 }
