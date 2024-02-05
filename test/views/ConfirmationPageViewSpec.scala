@@ -36,8 +36,10 @@ class ConfirmationPageViewSpec extends SpecBase {
     "display correct text" when {
       "title should display correctly" in new Setup {
         running(app) {
-          view.title() mustBe s"${messages(app)(
-            "cf.accounts.title")} - ${messages(app)("service.name")} - GOV.UK"
+          view.title() mustBe s"${
+            messages(app)(
+              "cf.accounts.title")
+          } - ${messages(app)("service.name")} - GOV.UK"
         }
       }
 
@@ -59,12 +61,12 @@ class ConfirmationPageViewSpec extends SpecBase {
 
       "email confirmation should display correctly" in new Setup {
         running(app) {
-            view.getElementById(
-              "email-confirmation").text() mustBe messages(app)(
-              "cf.historic.document.request.confirmation.body-text.request", email.value)
-          }
+          view.getElementById(
+            "email-confirmation").text() mustBe messages(app)(
+            "cf.historic.document.request.confirmation.body-text.request", email.value)
+        }
       }
-      
+
       "body-text2 should display correctly" in new Setup {
         running(app) {
           view.getElementById(

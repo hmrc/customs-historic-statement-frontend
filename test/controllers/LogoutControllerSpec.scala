@@ -30,7 +30,9 @@ class LogoutControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe "http://localhost:9553/bas-gateway/sign-out-without-state?continue=https%3A%2F%2Fwww.development.tax.service.gov.uk%2Ffeedback%2FCDS-FIN"
+        redirectLocation(result).value mustBe
+          "http://localhost:9553/bas-gateway/sign-out-without-state?continue=https%3A%2F%2F" +
+            "www.development.tax.service.gov.uk%2Ffeedback%2FCDS-FIN"
       }
     }
   }
@@ -41,15 +43,14 @@ class LogoutControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http%3A%2F%2Flocalhost%3A9876%2Fcustoms%2Fpayment-records"
+        redirectLocation(result).value mustBe
+          "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http%3A%2F%2F" +
+            "localhost%3A9876%2Fcustoms%2Fpayment-records"
       }
     }
   }
 
-
   trait Setup {
     val app: Application = applicationBuilder().build()
   }
-
-
 }
