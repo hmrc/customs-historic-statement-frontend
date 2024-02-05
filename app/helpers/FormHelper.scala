@@ -18,21 +18,8 @@ package helpers
 
 object FormHelper {
 
-  /**
-   * Updates the key as per below validation
-   * If key is either start or end and error msg is among future date,etmp date or tax year date
-   *  Updated key - start.month
-   *
-   *  If key is either start or end and error msg is of invalid year length
-   *   Updated key - start.year
-   *
-   *  If key is other than start or end
-   *   Updated key is unchanged
-   *
-   * @return Updated FormError key
-   */
   def updateFormErrorKeyForStartAndEndDate(): (String, String) => String = (key: String, errorMsg: String) => {
-    
+
     val emptyStartMonthKey = "cf.historic.document.request.form.error.start.month.date-number-invalid"
     val emptyStartYearKey = "cf.historic.document.request.form.error.start.year.date-number-invalid"
     val emptyStartDateKey = "cf.historic.document.request.form.error.start.date-missing"
@@ -44,15 +31,27 @@ object FormHelper {
     val emptyEndDateKey = "cf.historic.document.request.form.error.end.date-missing"
     val invalidEndMonthKey = "cf.historic.document.request.form.error.end.month.invalid"
     val invalidEndYearKey = "cf.historic.document.request.form.error.year.invalid"
-    
-    val startDateMsgKeyList = List(emptyStartMonthKey, emptyStartYearKey, emptyStartDateKey, invalidStartMonthKey, invalidStartYearKey)
-    val endDateMsgKeyList = List(emptyEndMonthKey, emptyEndYearKey, emptyEndDateKey, invalidEndMonthKey, invalidEndYearKey)
+
+    val startDateMsgKeyList = List(
+      emptyStartMonthKey,
+      emptyStartYearKey,
+      emptyStartDateKey,
+      invalidStartMonthKey,
+      invalidStartYearKey)
+
+    val endDateMsgKeyList = List(
+      emptyEndMonthKey,
+      emptyEndYearKey,
+      emptyEndDateKey,
+      invalidEndMonthKey,
+      invalidEndYearKey)
 
     if ((key.equals("start") || key.equals("end"))) {
-      if (startDateMsgKeyList.contains(errorMsg) || endDateMsgKeyList.contains(errorMsg))
+      if (startDateMsgKeyList.contains(errorMsg) || endDateMsgKeyList.contains(errorMsg)) {
         s"$key.month"
-      else
+      } else {
         s"$key.year"
+      }
     } else {
       key
     }

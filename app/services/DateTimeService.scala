@@ -17,7 +17,6 @@
 package services
 
 import config.FrontendAppConfig
-
 import java.time._
 import javax.inject.Inject
 
@@ -33,10 +32,11 @@ class DateTimeService @Inject()(appConfig: FrontendAppConfig) {
 
   def systemDateTime(zoneId: ZoneId): LocalDateTime = {
 
-    if (appConfig.fixedDateTime)
+    if (appConfig.fixedDateTime) {
       LocalDateTime.of(LocalDate.of(year, month, day), LocalTime.of(hour, minute))
-    else
+    } else {
       LocalDateTime.now(zoneId)
+    }
   }
 
   def utcDateTime(): LocalDateTime = systemDateTime(ZoneId.of("UTC"))

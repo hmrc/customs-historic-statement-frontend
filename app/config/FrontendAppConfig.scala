@@ -39,6 +39,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   lazy val termsConditions: String = host + configuration.get[String]("urls.footer.termsConditions")
   lazy val govukHelp: String = configuration.get[String]("urls.footer.govukHelp")
   lazy val govUkHome: String = configuration.get[String]("urls.govUkHome")
+
   lazy val customsFinancialsSessionCacheUrl: String = servicesConfig.baseUrl("customs-financials-session-cache") +
     configuration.get[String]("microservice.services.customs-financials-session-cache.context")
 
@@ -48,7 +49,9 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   lazy val customsDataStore: String = servicesConfig.baseUrl("customs-data-store") +
     configuration.get[String]("microservice.services.customs-data-store.context")
 
-  lazy val sdesApi: String = servicesConfig.baseUrl("sdes") + configuration.get[String]("microservice.services.sdes.context")
+  lazy val sdesApi: String = servicesConfig.baseUrl("sdes") +
+    configuration.get[String]("microservice.services.sdes.context")
+
   lazy val xClientIdHeader: String = configuration.get[String]("microservice.services.sdes.x-client-id")
 
   lazy val loginUrl: String = configuration.get[String]("urls.login")
@@ -69,11 +72,11 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
 
   lazy val sdesSecurityStatementListUrl: String = sdesApi + "/files-available/list/SecurityStatement"
   lazy val historicDocumentsApiUrl: String = customsFinancialsApi + "/historic-document-request"
-  
+
   lazy val emailFrontendUrl: String = servicesConfig.baseUrl("customs-email-frontend") +
     configuration.get[String]("microservice.services.customs-email-frontend.context") +
     configuration.get[String]("microservice.services.customs-email-frontend.url")
-  
+
   lazy val fixedDateTime = configuration.get[Boolean]("features.fixed-systemdate-for-tests")
 
   def sessionCacheUrl(sessionId: String, linkId: String): String =
@@ -82,7 +85,8 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   def deleteNotificationUrl(fileRole: FileRole, eori: String): String =
     customsFinancialsApi + s"/eori/$eori/requested-notifications/$fileRole"
 
-  private def dutyDefermentReturnLink(linkId: String): String = configuration.get[String]("urls.dutyDefermentReturn") + linkId + "/account"
+  private def dutyDefermentReturnLink(linkId: String): String = configuration.get[String](
+    "urls.dutyDefermentReturn") + linkId + "/account"
 
   def returnLink(fileRole: FileRole, userAnswers: UserAnswers): String = {
     fileRole match {

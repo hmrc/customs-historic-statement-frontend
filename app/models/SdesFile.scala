@@ -57,6 +57,7 @@ object FileFormat extends Logging {
 
   implicit val fileFormatFormat: Format[FileFormat] = new Format[FileFormat] {
     def reads(json: JsValue): JsSuccess[FileFormat] = JsSuccess(apply(json.as[String]))
+
     def writes(obj: FileFormat): JsString = JsString(obj.name)
   }
 }
@@ -167,7 +168,6 @@ case class SecurityStatementFileMetadata(periodStartYear: Int,
                                          checksum: String,
                                          statementRequestId: Option[String] = None) extends SdesFileMetadata
 
-
 case class VatCertificateFile(filename: String,
                               downloadURL: String,
                               size: Long,
@@ -184,8 +184,7 @@ case class VatCertificateFileMetadata(periodStartYear: Int,
                                       periodStartMonth: Int,
                                       fileFormat: FileFormat,
                                       fileRole: FileRole,
-                                      statementRequestId: Option[String]) extends SdesFileMetadata {
-}
+                                      statementRequestId: Option[String]) extends SdesFileMetadata
 
 case class PostponedVatStatementFile(filename: String,
                                      downloadURL: String,
@@ -200,9 +199,8 @@ case class PostponedVatStatementFile(filename: String,
 }
 
 case class PostponedVatStatementFileMetadata(periodStartYear: Int,
-                                               periodStartMonth: Int,
-                                               fileFormat: FileFormat,
-                                               fileRole: FileRole,
-                                               source: String,
-                                               statementRequestId: Option[String]) extends SdesFileMetadata {
-}
+                                             periodStartMonth: Int,
+                                             fileFormat: FileFormat,
+                                             fileRole: FileRole,
+                                             source: String,
+                                             statementRequestId: Option[String]) extends SdesFileMetadata

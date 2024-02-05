@@ -43,7 +43,7 @@ final case class UserAnswers(
     updatedData.flatMap {
       d =>
         val updatedAnswers = copy (data = d)
-        page.cleanup(Some(value), updatedAnswers)
+        page.cleanup(updatedAnswers)
     }
   }
 
@@ -59,7 +59,7 @@ final case class UserAnswers(
     updatedData.flatMap {
       d =>
         val updatedAnswers = copy (data = d)
-        page.cleanup(None, updatedAnswers)
+        page.cleanup(updatedAnswers)
     }
   }
 }
@@ -87,8 +87,7 @@ object UserAnswers {
 
     import play.api.libs.functional.syntax._
 
-    (
-      (__ \ "_id").read[String] and
+    ((__ \ "_id").read[String] and
       (__ \ "data").read[JsObject] and
       (__ \ "lastUpdated").read(MongoJavatimeFormats.localDateTimeReads)
     ) (UserAnswers.apply _)
@@ -98,8 +97,7 @@ object UserAnswers {
 
     import play.api.libs.functional.syntax._
 
-    (
-      (__ \ "_id").write[String] and
+    ((__ \ "_id").write[String] and
       (__ \ "data").write[JsObject] and
       (__ \ "lastUpdated").write(MongoJavatimeFormats.localDateTimeWrites)
     ) (unlift(UserAnswers.unapply))
