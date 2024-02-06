@@ -31,6 +31,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.time.TaxYear
 import uk.gov.hmrc.time.TaxYear.taxYearFor
 import views.html.HistoricDateRequestPageView
+import utils.Utils.{emptyString, hyphen, comma}
 
 import java.time.{Clock, LocalDate, LocalDateTime, Period}
 import javax.inject.Inject
@@ -148,13 +149,13 @@ class HistoricDateRequestPageController @Inject()(override val messagesApi: Mess
 
   private def logMessageForAnalytics(fileRole: FileRole, eori: String, formWithErrors: Form[HistoricDates])
                                     (implicit messages: Messages): Unit = {
-    val errorMessages = formWithErrors.errors.map(e => messages(e.message)).mkString(",")
+    val errorMessages = formWithErrors.errors.map(e => messages(e.message)).mkString(comma)
 
-    val startDate = formWithErrors.data.getOrElse("start.year", "") + "-" +
-      formWithErrors.data.getOrElse("start.month", "")
+    val startDate = formWithErrors.data.getOrElse("start.year", emptyString) + hyphen +
+      formWithErrors.data.getOrElse("start.month", emptyString)
 
-    val endDate = formWithErrors.data.getOrElse("end.year", "") + "-" +
-      formWithErrors.data.getOrElse("end.month", "")
+    val endDate = formWithErrors.data.getOrElse("end.year", emptyString) + hyphen +
+      formWithErrors.data.getOrElse("end.month", emptyString)
 
     log.warn(s"$fileRole, Historic statement request service, eori number: $eori, " +
       s"start date: $startDate, end date: $endDate, error: $errorMessages")

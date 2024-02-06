@@ -19,4 +19,5 @@ package utils
 object Utils {
   val emptyString = ""
   val comma = ","
+  val hyphen = "-"
 }

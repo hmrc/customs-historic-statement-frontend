@@ -31,4 +31,10 @@ class UtilsSpec extends SpecBase {
       comma mustBe ","
     }
   }
+
+  "hyphen" should {
+    "return correct value" in {
+      hyphen mustBe "-"
+    }
+  }
 }
