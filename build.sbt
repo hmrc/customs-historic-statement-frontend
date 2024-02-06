@@ -5,7 +5,12 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "customs-historic-statement-frontend"
 val silencerVersion = "1.17.13"
+val scala2_13_8 = "2.13.8"
 val testDirectory = "test"
+
+Global / lintUnusedKeysOnLoad := false
+ThisBuild / majorVersion := 0
+ThisBuild / scalaVersion := scala2_13_8
 
 lazy val scalastyleSettings = Seq(scalastyleConfig := baseDirectory.value /  "scalastyle-config.xml",
   (Test / scalastyleConfig) := baseDirectory.value/ testDirectory /  "test-scalastyle-config.xml")
@@ -13,12 +18,10 @@ lazy val scalastyleSettings = Seq(scalastyleConfig := baseDirectory.value /  "sc
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
-  .settings(DefaultBuildSettings.scalaSettings: _*)
-  .settings(DefaultBuildSettings.defaultSettings(): _*)
-  .settings(majorVersion := 0)
-  .settings(useSuperShell in ThisBuild := false)
+  .settings(DefaultBuildSettings.scalaSettings *)
+  .settings(DefaultBuildSettings.defaultSettings() *)
+  .settings(ThisBuild / useSuperShell := false)
   .settings(
-    scalaVersion := "2.13.8",
     name := appName,
     RoutesKeys.routesImport += "models._",
     TwirlKeys.templateImports ++= Seq(
@@ -28,10 +31,12 @@ lazy val root = (project in file("."))
       "models.Mode",
       "controllers.routes._"
     ),
+
     PlayKeys.playDefaultPort := 9396,
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;" +
       ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;.*ControllerConfiguration;" +
       ".*Formatters; .*LocalDateFormatter; .*package; .*UserAnswers",
+
     ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageMinimumBranchTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := true,
@@ -40,8 +45,9 @@ lazy val root = (project in file("."))
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
 
-    evictionWarningOptions in update :=
+    update / evictionWarningOptions :=
       EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
+
     resolvers += Resolver.jcenterRepo,
 
     Concat.groups := Seq(
@@ -50,16 +56,18 @@ lazy val root = (project in file("."))
           "javascripts/jquery.min.js",
           "javascripts/customshistoricstatementfrontend.js"))
     ),
+
     uglifyCompressOptions := Seq("unused=false", "dead_code=false"),
     pipelineStages := Seq(digest),
-    pipelineStages in Assets := Seq(concat,uglify),
-    includeFilter in uglify := GlobFilter("customshistoricstatementfrontend-*.js")
+    Assets / pipelineStages := Seq(concat,uglify),
+    uglify / includeFilter := GlobFilter("customshistoricstatementfrontend-*.js")
   )
+
   .settings(scalacOptions ++= Seq("-Ypatmat-exhaust-depth", "off"))
+
   .settings(
     scalacOptions ++= Seq(
       "-Wunused:imports",
-      "-Wunused:params",
       "-Wunused:patvars",
       "-Wunused:implicits",
       "-Wunused:explicits",
@@ -67,6 +75,7 @@ lazy val root = (project in file("."))
       "-P:silencer:globalFilters=possible missing interpolator: detected interpolated identifier `\\$date`",
       "-P:silencer:pathFilters=target/.*",
       s"-P:silencer:sourceRoots=${baseDirectory.value.getCanonicalPath}"),
+
     Test / scalacOptions ++= Seq(
       "-Wunused:imports",
       "-Wunused:params",
