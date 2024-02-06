@@ -19,10 +19,12 @@ package controllers
 import com.google.inject.Inject
 import connectors.CustomsFinancialsApiConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import models.requests.DataRequest
 import models.{FileRole, HistoricDocumentRequest}
-import pages.{AccountNumber, IsNiAccount}
+import pages.{AccountNumber, HistoricDateRequestPage, IsNiAccount}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.CheckYourAnswersHelper
 import views.html.CheckYourAnswersView
@@ -36,15 +38,23 @@ class CheckYourAnswersController @Inject()(
                                             requireData: DataRequiredAction,
                                             controllerComponents: MessagesControllerComponents,
                                             view: CheckYourAnswersView,
-                                            customsFinancialsApiConnector: CustomsFinancialsApiConnector
-                                          )(implicit execution: ExecutionContext) extends FrontendController(controllerComponents) with I18nSupport {
+                                            customsFinancialsApiConnector: CustomsFinancialsApiConnector,
+                                            sessionRepository: SessionRepository
+                                          )(implicit execution: ExecutionContext)
+  extends FrontendController(controllerComponents) with I18nSupport {
 
-  def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
+
       val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
       val maybeAccountNumber = request.userAnswers.get(AccountNumber)
       val niIndicator = request.userAnswers.get(IsNiAccount)
-      Ok(view(checkYourAnswersHelper, fileRole, maybeAccountNumber, niIndicator))
+      val historicDates = request.userAnswers.get(HistoricDateRequestPage(fileRole))
+
+      historicDates match {
+        case None => clearUserSessionIfUserReturnsFromConfirmationPage(request)
+        case _ => Future.successful(Ok(view(checkYourAnswersHelper, fileRole, maybeAccountNumber, niIndicator)))
+      }
   }
 
   def onSubmit(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -60,5 +70,11 @@ class CheckYourAnswersController @Inject()(
           }
         case None => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
       }
+  }
+
+  private def clearUserSessionIfUserReturnsFromConfirmationPage(request: DataRequest[AnyContent]): Future[Result] = {
+    for {
+      _ <- sessionRepository.clear(request.internalId).recover { case _ => true }
+    } yield Redirect(routes.SessionExpiredController.onPageLoad)
   }
 }

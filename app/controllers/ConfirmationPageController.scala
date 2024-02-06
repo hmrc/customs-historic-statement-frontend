@@ -19,17 +19,21 @@ package controllers
 import config.FrontendAppConfig
 import connectors.CustomsDataStoreConnector
 import controllers.actions._
-import models.FileRole
+import models.{FileRole, UserAnswers}
+import models.requests.DataRequest
+import pages.HistoricDateRequestPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import uk.gov.hmrc.auth.core.retrieve.Email
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.Utils.emptyString
 import viewmodels.CheckYourAnswersHelper
 import views.html.ConfirmationPageView
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmationPageController @Inject()(
                                             override val messagesApi: MessagesApi,
@@ -50,11 +54,8 @@ class ConfirmationPageController @Inject()(
       val returnLink = routes.ConfirmationPageController.returnToStatementsPage(fileRole).url
 
       for {
-        email <- customsDataStoreConnector.getEmail(request.eori).map {
-          case Right(email) => Some(email)
-          case Left(_) => None
-        }.recover { case _ => None }
-
+        _ <- sessionRepository.set(userAnswersWithNoHistoricDates(fileRole, request))
+        email <- retrieveEmail(request)
       } yield Ok(
         view(email,
           fileRole,
@@ -74,5 +75,18 @@ class ConfirmationPageController @Inject()(
         }
     }
   }
+
+  private def userAnswersWithNoHistoricDates(fileRole: FileRole,
+                                         request: DataRequest[AnyContent]): UserAnswers =
+    request.userAnswers.remove(HistoricDateRequestPage(fileRole)) match {
+      case scala.util.Success(value) => value
+      case _ => request.userAnswers
+    }
+
+  private def retrieveEmail(request: DataRequest[AnyContent])(implicit hc: HeaderCarrier): Future[Option[Email]] =
+    customsDataStoreConnector.getEmail(request.eori).map {
+      case Right(email) => Some(email)
+      case Left(_) => None
+    }.recover { case _ => None }
 
 }
