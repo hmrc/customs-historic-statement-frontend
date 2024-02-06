@@ -148,24 +148,23 @@ class SdesConnectorSpec extends SpecBase {
       "http://localhost:9754/customs-financials-sdes-stub/files-available/list/SecurityStatement"
 
     val securityStatementFilesSdesResponse = List(
-      FileInformation("name_01", "download_url_01", 111L, Metadata(List(
+      FileInformation("name_01", "download_url_01", size, Metadata(List(
         MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"),
         MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
         MetadataItem("PeriodEndMonth", "3"), MetadataItem("PeriodEndDay", "23"),
         MetadataItem("FileType", "pdf"), MetadataItem("FileRole", "SecurityStatement"),
         MetadataItem("eoriNumber", someEori), MetadataItem("fileSize", "111"),
         MetadataItem("checksum", "checksum_01"), MetadataItem("issueDate", "3/4/2018")))),
-      FileInformation("name_01", "download_url_01", 111L, Metadata(List(
+      FileInformation("name_01", "download_url_01", size, Metadata(List(
         MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"),
         MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
         MetadataItem("PeriodEndMonth", "3"), MetadataItem("PeriodEndDay", "23"),
         MetadataItem("FileType", "pdf"), MetadataItem("FileRole", "SecurityStatement"),
         MetadataItem("eoriNumber", someEori), MetadataItem("checksum", "checksum_01"),
-        MetadataItem("issueDate", "3/4/2018"))))
-    )
+        MetadataItem("issueDate", "3/4/2018")))))
 
     val securityStatementFilesWithUnknownFileTypesSdesResponse =
-      List(FileInformation("name_01", "download_url_01", 111L, Metadata(List(
+      List(FileInformation("name_01", "download_url_01", size, Metadata(List(
         MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"),
         MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
         MetadataItem("PeriodEndMonth", "3"), MetadataItem("PeriodEndDay", "23"),
@@ -174,7 +173,7 @@ class SdesConnectorSpec extends SpecBase {
         MetadataItem("checksum", "checksum_01"), MetadataItem("issueDate", "3/4/2018"),
         MetadataItem("fileSize", "111"))))) ++
         securityStatementFilesSdesResponse ++
-        List(FileInformation("name_01", "download_url_01", 111L, Metadata(List(
+        List(FileInformation("name_01", "download_url_01", size, Metadata(List(
           MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"),
           MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
           MetadataItem("PeriodEndMonth", "3"), MetadataItem("PeriodEndDay", "23"),
@@ -183,20 +182,25 @@ class SdesConnectorSpec extends SpecBase {
           MetadataItem("checksum", "checksum_01"), MetadataItem("issueDate", "3/4/2018")))))
 
     val securityStatementFiles = List(
-      SecurityStatementFile("name_01", "download_url_01", 111L,
+      SecurityStatementFile("name_01", "download_url_01", size,
         SecurityStatementFileMetadata(year, month, day, year, month, minute, Pdf,
-          SecurityStatement, someEori, 111L, "checksum_01")),
+          SecurityStatement, someEori, size, "checksum_01")),
 
-      SecurityStatementFile("name_01", "download_url_01", 111L,
+      SecurityStatementFile("name_01", "download_url_01", size,
         SecurityStatementFileMetadata(year, month, day, year, month, minute, Pdf,
-          SecurityStatement, someEori, 111L, "checksum_01"))
+          SecurityStatement, someEori, size, "checksum_01"))
     )
 
     val sdesPostponedVatStatementssUrl =
       "http://localhost:9754/customs-financials-sdes-stub/files-available/list/PostponedVATStatement"
 
+    val size2 = 113L
+    val size3 = 114L
+    val size4 = 1115L
+    val size5 = 1300000L
+
     val postponedVatStatementsSdesResponse = List(
-      FileInformation("name_04", "download_url_06", 113L,
+      FileInformation("name_04", "download_url_06", size2,
         Metadata(List(MetadataItem("PeriodStartYear", "2018"),
           MetadataItem("PeriodStartMonth", "3"),
           MetadataItem("FileType", "pdf"),
@@ -204,21 +208,21 @@ class SdesConnectorSpec extends SpecBase {
           MetadataItem("DutyPaymentMethod", "Immediate"),
           MetadataItem("statementRequestID", "a request id")))),
 
-      FileInformation("name_04", "download_url_04", 114L,
+      FileInformation("name_04", "download_url_04", size3,
         Metadata(List(MetadataItem("PeriodStartYear", "2018"),
           MetadataItem("PeriodStartMonth", "4"),
           MetadataItem("FileType", "pdf"),
           MetadataItem("FileRole", "PostponedVATStatement"),
           MetadataItem("DutyPaymentMethod", "Chief")))),
 
-      FileInformation("name_03", "download_url_03", 115L,
+      FileInformation("name_03", "download_url_03", size4,
         Metadata(List(MetadataItem("PeriodStartYear", "2018"),
           MetadataItem("PeriodStartMonth", "5"),
           MetadataItem("FileType", "pdf"),
           MetadataItem("FileRole", "PostponedVATStatement"),
           MetadataItem("DutyPaymentMethod", "??")))),
 
-      FileInformation("name_01", "download_url_01", 1300000L,
+      FileInformation("name_01", "download_url_01", size5,
         Metadata(List(MetadataItem("PeriodStartYear", "2018"),
           MetadataItem("PeriodStartMonth", "6"),
           MetadataItem("FileType", "PDF"),
@@ -227,52 +231,58 @@ class SdesConnectorSpec extends SpecBase {
     )
 
     val postponedVatStatementFilesWithUnknownFileTypesSdesResponse = List(
-      FileInformation("name_04", "download_url_06", 111L,
+      FileInformation("name_04", "download_url_06", size,
         Metadata(List(MetadataItem("PeriodStartYear", "2018"),
           MetadataItem("PeriodStartMonth", "3"),
           MetadataItem("FileType", "foo"),
           MetadataItem("FileRole", "PostponedVATStatement"),
           MetadataItem("DutyPaymentMethod", "CDS"))))) ++ postponedVatStatementsSdesResponse ++ List(FileInformation(
-      "name_01", "download_url_01", 1300000L,
+      "name_01", "download_url_01", size5,
       Metadata(List(MetadataItem("PeriodStartYear", "2018"),
         MetadataItem("PeriodStartMonth", "6"),
         MetadataItem("FileType", "bar"),
         MetadataItem("FileRole", "PostponedVATStatement"),
         MetadataItem("DutyPaymentMethod", "CDS")))))
 
+    val startMonth3 = 3
+    val startMonth4 = 4
+    val startMonth5 = 5
+    val startMonth6 = 6
+
     val postponedVatStatementFiles = List(
-      PostponedVatStatementFile("name_04", "download_url_06", 113L,
-        PostponedVatStatementFileMetadata(year, 3, Pdf, PostponedVATStatement, "CDS", Some("a request id"))),
-      PostponedVatStatementFile("name_04", "download_url_04", 114L,
-        PostponedVatStatementFileMetadata(year, 4, Pdf, PostponedVATStatement, "CHIEF", None)),
-      PostponedVatStatementFile("name_03", "download_url_03", 115L,
-        PostponedVatStatementFileMetadata(year, 5, Pdf, PostponedVATStatement, "CDS", None)),
-      PostponedVatStatementFile("name_01", "download_url_01", 1300000L,
-        PostponedVatStatementFileMetadata(year, 6, Pdf, PostponedVATStatement, "CDS", None)))
+      PostponedVatStatementFile("name_04", "download_url_06", size2,
+        PostponedVatStatementFileMetadata(year, startMonth3, Pdf,
+          PostponedVATStatement,"CDS", Some("a request id"))),
+      PostponedVatStatementFile("name_04", "download_url_04", size3,
+        PostponedVatStatementFileMetadata(year, startMonth4, Pdf, PostponedVATStatement, "CHIEF", None)),
+      PostponedVatStatementFile("name_03", "download_url_03", size4,
+        PostponedVatStatementFileMetadata(year, startMonth5, Pdf, PostponedVATStatement, "CDS", None)),
+      PostponedVatStatementFile("name_01", "download_url_01", size5,
+        PostponedVatStatementFileMetadata(year, startMonth6, Pdf, PostponedVATStatement, "CDS", None)))
 
     val sdesVatCertificatesUrl =
       "http://localhost:9754/customs-financials-sdes-stub/files-available/list/C79Certificate"
 
     val vatCertificateFilesSdesResponse = List(
-      FileInformation("name_04", "download_url_06", 111L,
+      FileInformation("name_04", "download_url_06", size,
         Metadata(List(MetadataItem("PeriodStartYear", "2018"),
           MetadataItem("PeriodStartMonth", "3"),
           MetadataItem("FileType", "pdf"),
           MetadataItem("FileRole", "C79Certificate")))),
 
-      FileInformation("name_04", "download_url_04", 111L,
+      FileInformation("name_04", "download_url_04", size,
         Metadata(List(MetadataItem("PeriodStartYear", "2018"),
           MetadataItem("PeriodStartMonth", "4"),
           MetadataItem("FileType", "pdf"),
           MetadataItem("FileRole", "C79Certificate")))),
 
-      FileInformation("name_03", "download_url_03", 111L,
+      FileInformation("name_03", "download_url_03", size,
         Metadata(List(MetadataItem("PeriodStartYear", "2018"),
           MetadataItem("PeriodStartMonth", "5"),
           MetadataItem("FileType", "pdf"),
           MetadataItem("FileRole", "C79Certificate")))),
 
-      FileInformation("name_01", "download_url_01", 1300000L,
+      FileInformation("name_01", "download_url_01", size5,
         Metadata(List(MetadataItem("PeriodStartYear", "2018"),
           MetadataItem("PeriodStartMonth", "6"),
           MetadataItem("FileType", "PDF"),
@@ -280,37 +290,36 @@ class SdesConnectorSpec extends SpecBase {
     )
 
     val vatCertificateFilesWithUnknownFileTypesSdesResponse = List(
-      FileInformation("name_04", "download_url_06", 111L,
+      FileInformation("name_04", "download_url_06", size,
         Metadata(List(MetadataItem("PeriodStartYear", "2018"),
           MetadataItem("PeriodStartMonth", "3"), MetadataItem("FileType", "foo"),
           MetadataItem("FileRole", "C79Certificate"))))) ++ vatCertificateFilesSdesResponse ++ List(FileInformation(
-      "name_01", "download_url_01", 1300000L,
+      "name_01", "download_url_01", size5,
       Metadata(List(MetadataItem("PeriodStartYear", "2018"),
         MetadataItem("PeriodStartMonth", "6"),
         MetadataItem("FileType", "bar"),
         MetadataItem("FileRole", "C79Certificate")))))
 
     val vatCertificateFiles = List(
-      VatCertificateFile("name_04", "download_url_06", 111L,
-        VatCertificateFileMetadata(year, 3, Pdf, C79Certificate, None)),
+      VatCertificateFile("name_04", "download_url_06", size,
+        VatCertificateFileMetadata(year, startMonth3, Pdf, C79Certificate, None)),
 
-      VatCertificateFile("name_04", "download_url_04", 111L,
-        VatCertificateFileMetadata(year, 4, Pdf, C79Certificate, None)),
+      VatCertificateFile("name_04", "download_url_04", size,
+        VatCertificateFileMetadata(year, startMonth4, Pdf, C79Certificate, None)),
 
-      VatCertificateFile("name_03", "download_url_03", 111L,
-        VatCertificateFileMetadata(year, 5, Pdf, C79Certificate, None)),
+      VatCertificateFile("name_03", "download_url_03", size,
+        VatCertificateFileMetadata(year, startMonth5, Pdf, C79Certificate, None)),
 
-      VatCertificateFile("name_01", "download_url_01", 1300000L,
-        VatCertificateFileMetadata(year, 6, Pdf, C79Certificate, None))
-    )
+      VatCertificateFile("name_01", "download_url_01", size5,
+        VatCertificateFileMetadata(year, startMonth6, Pdf, C79Certificate, None)))
 
     val vatCertificateFilesWithUnknownFileRoleSdesResponse = List(
-      FileInformation("name_04", "download_url_06", 111L,
+      FileInformation("name_04", "download_url_06", size,
         Metadata(List(MetadataItem("PeriodStartYear", "2018"),
           MetadataItem("PeriodStartMonth", "3"),
           MetadataItem("FileType", "foo"),
           MetadataItem("FileRole", "Invalid"))))) ++ vatCertificateFilesSdesResponse ++ List(FileInformation(
-      "name_01", "download_url_01", 1300000L,
+      "name_01", "download_url_01", size5,
       Metadata(List(MetadataItem("PeriodStartYear", "2018"),
         MetadataItem("PeriodStartMonth", "6"),
         MetadataItem("FileType", "bar"),
