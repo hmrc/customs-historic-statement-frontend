@@ -17,13 +17,18 @@
 package utils
 
 import base.SpecBase
-import utils.Utils.emptyString
+import utils.Utils._
 
 class UtilsSpec extends SpecBase {
   "emptyString" should {
-
     "return correct value" in {
       emptyString mustBe ""
+    }
+  }
+
+  "comma" should {
+    "return correct value" in {
+      comma mustBe ","
     }
   }
 }

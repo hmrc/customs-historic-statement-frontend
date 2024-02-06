@@ -73,7 +73,6 @@ class SortStatementsServiceSpec extends SpecBase {
     val periodEndDay = 8
     val fileSize = 500L
     val size = 99L
-    val emptyString = ""
 
     val securityStatementFile: SecurityStatementFile = SecurityStatementFile("statementfile_00", "download_url_00",
       size, SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,

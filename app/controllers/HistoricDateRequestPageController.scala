@@ -83,7 +83,7 @@ class HistoricDateRequestPageController @Inject()(override val messagesApi: Mess
             backLink, request.userAnswers.get(AccountNumber), request.userAnswers.get(IsNiAccount))))
         },
         value =>
-          customValidation(value, formProvider(fileRole), fileRole, request.eori) match {
+          customValidation(value, formProvider(fileRole), fileRole) match {
 
             case Some(formWithErrors) =>
               logMessageForAnalytics(fileRole, request.eori, formWithErrors)
@@ -99,7 +99,7 @@ class HistoricDateRequestPageController @Inject()(override val messagesApi: Mess
       )
   }
 
-  def customValidation(dates: HistoricDates, form: Form[HistoricDates], fileRole: FileRole, eori: String)
+  def customValidation(dates: HistoricDates, form: Form[HistoricDates], fileRole: FileRole)
                       (implicit messages: Messages): Option[Form[HistoricDates]] = {
     val maximumNumberOfMonths = 6
 

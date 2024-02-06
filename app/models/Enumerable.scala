@@ -19,7 +19,6 @@ package models
 import play.api.libs.json._
 
 trait Enumerable[A] {
-
   def withName(str: String): Option[A]
 }
 
