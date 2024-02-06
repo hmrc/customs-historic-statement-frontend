@@ -19,10 +19,9 @@ package models
 import controllers.OrderedByEoriHistory
 import services.DateConverters.OrderedLocalDate
 
-case class DutyDefermentStatementsForEori(
-                                           eoriHistory: EoriHistory,
-                                           currentStatements: Seq[DutyDefermentStatementFile],
-                                           requestedStatements: Seq[DutyDefermentStatementFile]
+case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
+                                          currentStatements: Seq[DutyDefermentStatementFile],
+                                          requestedStatements: Seq[DutyDefermentStatementFile]
                                          ) extends OrderedByEoriHistory[DutyDefermentStatementsForEori] {
 
   protected val requestedStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(requestedStatements)

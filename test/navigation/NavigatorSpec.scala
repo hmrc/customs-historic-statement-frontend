@@ -30,17 +30,23 @@ class NavigatorSpec extends SpecBase {
     "in Normal mode" must {
       "go to HistoricDateRequest from a page that doesn't exist in the route map" in {
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode, emptyUserAnswers, SecurityStatement) mustBe routes.HistoricDateRequestPageController.onPageLoad(NormalMode, SecurityStatement)
+        navigator.nextPage(UnknownPage, NormalMode,
+          emptyUserAnswers, SecurityStatement) mustBe
+          routes.HistoricDateRequestPageController.onPageLoad(NormalMode, SecurityStatement)
       }
 
       "go from HistoricDateRequest to CheckYourAnswers" in {
-        navigator.nextPage(HistoricDateRequestPage(C79Certificate), NormalMode, emptyUserAnswers, C79Certificate) mustBe routes.CheckYourAnswersController.onPageLoad(C79Certificate)
+        navigator.nextPage(HistoricDateRequestPage(C79Certificate), NormalMode,
+          emptyUserAnswers, C79Certificate) mustBe
+          routes.CheckYourAnswersController.onPageLoad(C79Certificate)
       }
     }
 
     "in Check mode" must {
       "go to CheckYourAnswers from any page" in {
-        navigator.nextPage(HistoricDateRequestPage(C79Certificate), CheckMode, emptyUserAnswers, C79Certificate) mustBe routes.CheckYourAnswersController.onPageLoad(C79Certificate)
+        navigator.nextPage(HistoricDateRequestPage(C79Certificate), CheckMode,
+          emptyUserAnswers, C79Certificate) mustBe
+          routes.CheckYourAnswersController.onPageLoad(C79Certificate)
       }
     }
   }

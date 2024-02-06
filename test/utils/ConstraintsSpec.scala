@@ -25,25 +25,28 @@ import play.api.data.validation.{Invalid, Valid}
 class ConstraintsSpec extends SpecBase with Constraints {
 
   "yearLength" must {
-
-    "return Valid for a string shorter than the allowed length" in {
-      val result = maxLength(4, "error.length")("a" * 3)
+    "return Valid for a string shorter than the allowed length" in new Setup {
+      val result = maxLength(length, "error.length")("a" * 3)
       result mustEqual Valid
     }
 
-    "return Valid for an empty string" in {
-      val result = maxLength(4, "error.length")("")
+    "return Valid for an empty string" in new Setup {
+      val result = maxLength(length, "error.length")("")
       result mustEqual Valid
     }
 
-    "return Valid for a string equal to the allowed length" in {
-      val result = maxLength(4, "error.length")("a" * 4)
+    "return Valid for a string equal to the allowed length" in new Setup {
+      val result = maxLength(length, "error.length")("a" * 4)
       result mustEqual Valid
     }
 
-    "return Invalid for a string longer than the allowed length" in {
-      val result = maxLength(4, "error.length")("a" * 5)
-      result mustEqual Invalid("error.length", 4)
+    "return Invalid for a string longer than the allowed length" in new Setup {
+      val result = maxLength(length, "error.length")("a" * 5)
+      result mustEqual Invalid("error.length", length)
     }
+  }
+
+  trait Setup {
+    val length = 4
   }
 }

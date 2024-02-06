@@ -34,10 +34,14 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
     "submit request successfully" in new Setup {
       val customsFinancialsApiUrl = "http://localhost:9878/customs-financials-api/historic-document-request"
-      val historicDocumentRequest = HistoricDocumentRequest(C79Certificate, LocalDate.now(), LocalDate.now().plusMonths(1), Some("1234"))
 
-      when[Future[HttpResponse]](mockHttpClient.POST(ArgumentMatchers.eq(customsFinancialsApiUrl), ArgumentMatchers.eq(historicDocumentRequest), any)(any, any, any, any))
+      val historicDocumentRequest = HistoricDocumentRequest(C79Certificate,
+        LocalDate.now(), LocalDate.now().plusMonths(1), Some("1234"))
+
+      when[Future[HttpResponse]](mockHttpClient.POST(ArgumentMatchers.eq(
+        customsFinancialsApiUrl), ArgumentMatchers.eq(historicDocumentRequest), any)(any, any, any, any))
         .thenReturn(Future.successful(HttpResponse.apply(Status.NO_CONTENT, "")))
+
       running(app) {
         val result = await(customsFinancialsApiConnector.postHistoricDocumentRequest(historicDocumentRequest)(hc))
         result mustBe true
@@ -46,10 +50,15 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
   "return false when failed to submit the request" in new Setup {
       val customsFinancialsApiUrl = "http://localhost:9878/customs-financials-api/historic-document-request"
-      val historicDocumentRequest = HistoricDocumentRequest(C79Certificate, LocalDate.now(), LocalDate.now().plusMonths(1), Some("1234"))
 
-      when[Future[HttpResponse]](mockHttpClient.POST(ArgumentMatchers.eq(customsFinancialsApiUrl), ArgumentMatchers.eq(historicDocumentRequest), any)(any, any, any, any))
+      val historicDocumentRequest = HistoricDocumentRequest(C79Certificate,
+        LocalDate.now(), LocalDate.now().plusMonths(1), Some("1234"))
+
+      when[Future[HttpResponse]](mockHttpClient.POST(
+        ArgumentMatchers.eq(customsFinancialsApiUrl),
+        ArgumentMatchers.eq(historicDocumentRequest), any)(any, any, any, any))
         .thenReturn(Future.failed(new RuntimeException("failed")))
+
       running(app) {
         val result = await(customsFinancialsApiConnector.postHistoricDocumentRequest(historicDocumentRequest)(hc))
         result mustBe false
@@ -58,11 +67,14 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
   }
 
   "deleteNotification" should {
-
     "return true when deletion is successful" in new Setup {
-      val customsFinancialsApiUrl = "http://localhost:9878/customs-financials-api/eori/eori1/requested-notifications/C79Certificate"
-      when[Future[HttpResponse]](mockHttpClient.DELETE(ArgumentMatchers.eq(customsFinancialsApiUrl), any)(any, any, any))
+      val customsFinancialsApiUrl =
+        "http://localhost:9878/customs-financials-api/eori/eori1/requested-notifications/C79Certificate"
+
+      when[Future[HttpResponse]](mockHttpClient.DELETE(
+        ArgumentMatchers.eq(customsFinancialsApiUrl), any)(any, any, any))
         .thenReturn(Future.successful(HttpResponse.apply(Status.OK, "")))
+
       running(app) {
         val result = await(customsFinancialsApiConnector.deleteNotification("eori1", C79Certificate)(hc))
         result mustBe true
@@ -70,23 +82,29 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
     }
 
     "return false when failed to submit the request" in new Setup {
-      val customsFinancialsApiUrl = "http://localhost:9878/customs-financials-api/eori/eori1/requested-notifications/C79Certificate"
-      when[Future[HttpResponse]](mockHttpClient.DELETE(ArgumentMatchers.eq(customsFinancialsApiUrl), any)(any, any, any))
+      val customsFinancialsApiUrl =
+        "http://localhost:9878/customs-financials-api/eori/eori1/requested-notifications/C79Certificate"
+
+      when[Future[HttpResponse]](mockHttpClient.DELETE(
+        ArgumentMatchers.eq(customsFinancialsApiUrl), any)(any, any, any))
         .thenReturn(Future.failed(new RuntimeException("failed")))
+
       running(app) {
         val result = await(customsFinancialsApiConnector.deleteNotification("eori1", C79Certificate)(hc))
         result mustBe false
       }
     }
   }
+
   trait Setup {
     val mockHttpClient = mock[HttpClient]
+
     val app = applicationBuilder().overrides(
       bind[HttpClient].toInstance(mockHttpClient)
     ).build()
+
     val mockAppConfig = app.injector.instanceOf[FrontendAppConfig]
     val customsFinancialsApiConnector = app.injector.instanceOf[CustomsFinancialsApiConnector]
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }
-
 }

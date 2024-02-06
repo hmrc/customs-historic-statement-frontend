@@ -28,9 +28,13 @@ class SdesFileSpec extends SpecBase with Matchers {
   "an SdesFile" should {
     "be correctly ordered and formatted" in new Setup {
 
-      securityStatementFile2 compare securityStatementFile1 mustBe 1
-      vatCertificateFile1 compare vatCertificateFile2 mustBe 0
-      postponedVatStatementFile1 compare postponedVatStatementFile2 mustBe 0
+      val one = 1
+      val zero = 0
+      val minusOne = -1
+
+      securityStatementFile2 compare securityStatementFile1 mustBe one
+      vatCertificateFile1 compare vatCertificateFile2 mustBe zero
+      postponedVatStatementFile1 compare postponedVatStatementFile2 mustBe zero
 
       FileFormat.unapply(Pdf).value mustBe "PDF"
 
@@ -48,21 +52,22 @@ class SdesFileSpec extends SpecBase with Matchers {
       unapply(Supplementary).value mustBe "Supplementary"
       unapply(Excise).value mustBe "Excise"
 
-      Weekly compare Excise mustBe 1
-      Weekly compare Supplementary mustBe 1
-      Weekly compare UnknownStatementType mustBe -1
+      Weekly compare Excise mustBe one
+      Weekly compare Supplementary mustBe one
+      Weekly compare UnknownStatementType mustBe minusOne
 
-      Excise compare Weekly mustBe -1
-      Excise compare Supplementary mustBe -1
-      Excise compare UnknownStatementType mustBe -1
+      Excise compare Weekly mustBe minusOne
+      Excise compare Supplementary mustBe minusOne
+      Excise compare UnknownStatementType mustBe minusOne
 
-      Supplementary compare Weekly mustBe -1
-      Supplementary compare Excise mustBe 1
-      Supplementary compare UnknownStatementType mustBe -1
+      Supplementary compare Weekly mustBe minusOne
+      Supplementary compare Excise mustBe one
+      Supplementary compare UnknownStatementType mustBe minusOne
 
       DutyDefermentStatement.name mustBe "DutyDefermentStatement"
 
-      List(dutyDefermentFile1, dutyDefermentFile2, dutyDefermentFile3).sorted mustBe List(dutyDefermentFile2, dutyDefermentFile3, dutyDefermentFile1)
+      List(dutyDefermentFile1, dutyDefermentFile2, dutyDefermentFile3).sorted mustBe
+        List(dutyDefermentFile2, dutyDefermentFile3, dutyDefermentFile1)
     }
   }
 
