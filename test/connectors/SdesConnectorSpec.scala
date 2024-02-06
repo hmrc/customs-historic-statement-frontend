@@ -111,11 +111,13 @@ class SdesConnectorSpec extends SpecBase {
     val hour = 2
     val minute = 23
 
+    val size = 111L
+
     val sdesDutyDefermentStatementsUrl =
       "http://localhost:9754/customs-financials-sdes-stub/files-available/list/DutyDefermentStatement"
 
     val dutyDefermentStatementFilesSdesResponse = List(
-      FileInformation("name_04", "download_url_06", 111L, Metadata(List(
+      FileInformation("name_04", "download_url_06", size, Metadata(List(
         MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"),
         MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
         MetadataItem("PeriodEndMonth", "3"), MetadataItem("PeriodEndDay", "23"),
@@ -123,7 +125,7 @@ class SdesConnectorSpec extends SpecBase {
         MetadataItem("DefermentStatementType", "Weekly"), MetadataItem("DutyOverLimit", "Y"),
         MetadataItem("DutyPaymentType", "BACS"), MetadataItem("DAN", someDan)))),
 
-      FileInformation("name_05", "download_url_06", 111L, Metadata(List(
+      FileInformation("name_05", "download_url_06", size, Metadata(List(
         MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "2"),
         MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
         MetadataItem("PeriodEndMonth", "2"), MetadataItem("PeriodEndDay", "23"),
@@ -133,11 +135,11 @@ class SdesConnectorSpec extends SpecBase {
     )
 
     val dutyDefermentStatementFiles = List(
-      DutyDefermentStatementFile("name_04", "download_url_06", 111L, DutyDefermentStatementFileMetadata(
+      DutyDefermentStatementFile("name_04", "download_url_06", size, DutyDefermentStatementFileMetadata(
         year, month, day, year, month, minute, Pdf,
         DutyDefermentStatement, Weekly, Some(true), Some("BACS"), someDan)),
 
-      DutyDefermentStatementFile("name_05", "download_url_06", 111L, DutyDefermentStatementFileMetadata(
+      DutyDefermentStatementFile("name_05", "download_url_06", size, DutyDefermentStatementFileMetadata(
         year, hour, day, year, hour, minute, Pdf,
         DutyDefermentStatement, Weekly, Some(false), Some("BACS"), someDan))
     )
