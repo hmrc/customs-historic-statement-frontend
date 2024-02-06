@@ -458,7 +458,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
 
   trait Setup {
     val offset = 6
-    val lastest = 1
+    val latest = 1
 
     val earliestMonthInCurrentPeriod = LocalDateTime.now().minusMonths(offset)
     val lastestMonthInLastPeriod = earliestMonthInCurrentPeriod.minusMonths(latest)

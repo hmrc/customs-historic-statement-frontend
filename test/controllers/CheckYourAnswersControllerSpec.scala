@@ -18,21 +18,39 @@ package controllers
 
 import base.SpecBase
 import connectors.CustomsFinancialsApiConnector
-import models.C79Certificate
+import models.{C79Certificate, UserAnswers}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.AccountNumber
-import play.api.inject
+import play.api.{Application, inject}
 import play.api.test.Helpers._
+import repositories.SessionRepository
+
 import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends SpecBase {
 
   "onPageLoad" should {
     "return Ok" in new Setup {
+      val app: Application = createApp()
+
       running(app) {
         val request = fakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(C79Certificate).url)
         val result = route(app, request).value
+
         status(result) mustBe OK
+      }
+    }
+
+    "redirect to SessionExpired page if user returns from confirmation page using browser back button" in new Setup {
+      val app: Application = createApp(emptyUserAnswers)
+
+      when(mockSessionRepo.clear(any)).thenReturn(Future.successful(true))
+
+      running(app) {
+        val request = fakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(C79Certificate).url)
+        val result = route(app, request).value
+
+        status(result) mustBe SEE_OTHER
       }
     }
   }
@@ -42,9 +60,12 @@ class CheckYourAnswersControllerSpec extends SpecBase {
       when(mockCustomsFinancialsApiConnector.postHistoricDocumentRequest(any)(any))
         .thenReturn(Future.successful(true))
 
+      val app: Application = createApp()
+
       running(app) {
         val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
         val result = route(app, request).value
+
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ConfirmationPageController.onPageLoad(C79Certificate).url
       }
@@ -53,6 +74,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
     "redirect to Technical difficulties if the user answers aren't populated" in {
       val app = applicationBuilder(userAnswers = Some(
         emptyUserAnswers.set(AccountNumber, "123").success.value)).build()
+
       running(app) {
         val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
         val result = route(app, request).value
@@ -65,6 +87,8 @@ class CheckYourAnswersControllerSpec extends SpecBase {
       when(mockCustomsFinancialsApiConnector.postHistoricDocumentRequest(any)(any))
         .thenReturn(Future.successful(false))
 
+      val app: Application = createApp()
+
       running(app) {
         val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
         val result = route(app, request).value
@@ -75,10 +99,13 @@ class CheckYourAnswersControllerSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockCustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
+    val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
+    val mockSessionRepo: SessionRepository = mock[SessionRepository]
 
-    val app = applicationBuilder(userAnswers = Some(populatedUserAnswers)).overrides(
-      inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector)
-    ).build()
+    def createApp(userAnswers: UserAnswers = populatedUserAnswers): Application =
+      applicationBuilder(userAnswers = Some(userAnswers)).overrides(
+        inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
+        inject.bind[SessionRepository].toInstance(mockSessionRepo)
+      ).build()
   }
 }

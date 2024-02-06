@@ -46,7 +46,7 @@ trait SpecBase extends AnyWordSpecLike
 
   val userAnswersId = "id"
 
-  def emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId, Json.obj())
+  def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
   private val year = 2019
   private val month = 10
