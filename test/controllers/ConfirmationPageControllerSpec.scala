@@ -35,6 +35,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in new Setup {
 
       when(mockDataStoreConnector.getEmail(any)(any)).thenReturn(Future.successful(Right(Email("some@email.com"))))
+      when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
 
       running(app) {
         val request = fakeRequest(GET, routes.ConfirmationPageController.onPageLoad(C79Certificate).url)

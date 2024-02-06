@@ -36,17 +36,22 @@ import play.api.test.FakeRequest
 
 import java.time.LocalDate
 
-
-trait SpecBase extends AnyWordSpecLike with MockitoSugar with OptionValues with ScalaFutures with Matchers with IntegrationPatience {
+trait SpecBase extends AnyWordSpecLike
+  with MockitoSugar
+  with OptionValues
+  with ScalaFutures
+  with Matchers
+  with IntegrationPatience {
 
   val userAnswersId = "id"
 
-  def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
+  def emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId, Json.obj())
 
-  def populatedUserAnswers =
+  def populatedUserAnswers: UserAnswers =
     emptyUserAnswers
       .set(AccountNumber, "123").success.value
-      .set(HistoricDateRequestPage(C79Certificate), HistoricDates(LocalDate.of(2019, 10, 1), LocalDate.of(2019, 10, 1))).success.value
+      .set(HistoricDateRequestPage(C79Certificate), HistoricDates(
+        LocalDate.of(2019, 10, 1), LocalDate.of(2019, 10, 1))).success.value
 
   def fakeRequest(method: String = "", path: String = ""): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(method, path).withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
