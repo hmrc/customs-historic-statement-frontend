@@ -26,11 +26,17 @@ class VatCertificatesByMonthSpec extends SpecBase{
 
   "compare" should{
     "return the correct order" in {
-      val vatCertificatesByMonth = VatCertificatesByMonth(LocalDate.of(2019, 10, 10))(Helpers.stubMessages())
-      val vatCertificatesByMonth2 = VatCertificatesByMonth(LocalDate.of(2018, 10, 10))(Helpers.stubMessages())
-      vatCertificatesByMonth.compare(vatCertificatesByMonth2) mustBe 1
-      vatCertificatesByMonth2.compare(vatCertificatesByMonth) mustBe -1
+
+      val year = 2019
+      val year2 = 2018
+      val ten = 10
+      val one = 1
+      val minusOne = -1
+
+      val vatCertificatesByMonth = VatCertificatesByMonth(LocalDate.of(year, ten, ten))(Helpers.stubMessages())
+      val vatCertificatesByMonth2 = VatCertificatesByMonth(LocalDate.of(year2, ten, ten))(Helpers.stubMessages())
+      vatCertificatesByMonth.compare(vatCertificatesByMonth2) mustBe one
+      vatCertificatesByMonth2.compare(vatCertificatesByMonth) mustBe minusOne
     }
   }
-
 }

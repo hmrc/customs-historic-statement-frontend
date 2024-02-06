@@ -31,16 +31,15 @@ import views.html.ConfirmationPageView
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class ConfirmationPageController @Inject()(
-                                            override val messagesApi: MessagesApi,
-                                            identify: IdentifierAction,
-                                            getData: DataRetrievalAction,
-                                            requireData: DataRequiredAction,
-                                            sessionRepository: SessionRepository,
-                                            customsDataStoreConnector: CustomsDataStoreConnector,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            view: ConfirmationPageView
-                                          )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
+class ConfirmationPageController @Inject()(override val messagesApi: MessagesApi,
+                                           identify: IdentifierAction,
+                                           getData: DataRetrievalAction,
+                                           requireData: DataRequiredAction,
+                                           sessionRepository: SessionRepository,
+                                           customsDataStoreConnector: CustomsDataStoreConnector,
+                                           val controllerComponents: MessagesControllerComponents,
+                                           view: ConfirmationPageView)(
+  implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
   extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -74,5 +73,4 @@ class ConfirmationPageController @Inject()(
         }
     }
   }
-
 }
