@@ -28,8 +28,7 @@ class CustomsSessionCacheConnector @Inject()(httpClient: HttpClient,
                                              appConfig: FrontendAppConfig)
                                             (implicit executionContext: ExecutionContext) {
 
-  def getAccountNumber(sessionId: String, linkId: String)(
-    implicit hc: HeaderCarrier): Future[Option[String]] = {
+  def getAccountNumber(sessionId: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
 
     httpClient.GET[SessionCacheResponse](appConfig.sessionCacheUrl(sessionId, linkId)).map(
       response => Some(response.accountNumber)

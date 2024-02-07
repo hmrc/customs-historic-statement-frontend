@@ -36,30 +36,27 @@ class SdesConnector @Inject()(http: HttpClient,
   private def addXHeaders(hc: HeaderCarrier, key: String): HeaderCarrier =
     hc.copy(extraHeaders = hc.extraHeaders ++ Seq("x-client-id" -> appConfig.xClientIdHeader, "X-SDES-Key" -> key))
 
-  def getDutyDefermentStatements(eori: String, dan: String)(
-    implicit hc: HeaderCarrier): Future[Seq[DutyDefermentStatementFile]] = {
+  def getDutyDefermentStatements(eori: String, dan: String)
+                                (implicit hc: HeaderCarrier): Future[Seq[DutyDefermentStatementFile]] = {
 
     val transform = convertTo[DutyDefermentStatementFile] andThen filterFileFormats(SdesFileFormats)
     getSdesFiles(appConfig.sdesDutyDefermentStatementListUrl, s"$eori-$dan", transform)
   }
 
-  def getVatCertificates(eori: String)(
-    implicit hc: HeaderCarrier): Future[Seq[VatCertificateFile]] = {
+  def getVatCertificates(eori: String)(implicit hc: HeaderCarrier): Future[Seq[VatCertificateFile]] = {
 
     val transform = convertTo[VatCertificateFile] andThen filterFileFormats(SdesFileFormats)
     getSdesFiles[FileInformation, VatCertificateFile](appConfig.sdesImportVatCertificateListUrl, eori, transform)
   }
 
-  def getPostponedVatStatements(eori: String)(
-    implicit hc: HeaderCarrier): Future[Seq[PostponedVatStatementFile]] = {
+  def getPostponedVatStatements(eori: String)(implicit hc: HeaderCarrier): Future[Seq[PostponedVatStatementFile]] = {
 
     val transform = convertTo[PostponedVatStatementFile] andThen filterFileFormats(SdesFileFormats)
     getSdesFiles[FileInformation, PostponedVatStatementFile](
       appConfig.sdesImportPostponedVatStatementListUrl, eori, transform)
   }
 
-  def getSecurityStatements(eori: String)(
-    implicit hc: HeaderCarrier): Future[Seq[SecurityStatementFile]] = {
+  def getSecurityStatements(eori: String)(implicit hc: HeaderCarrier): Future[Seq[SecurityStatementFile]] = {
 
     val transform = convertTo[SecurityStatementFile] andThen filterFileFormats(SdesFileFormats)
     getSdesFiles[FileInformation, SecurityStatementFile](appConfig.sdesSecurityStatementListUrl, eori, transform)

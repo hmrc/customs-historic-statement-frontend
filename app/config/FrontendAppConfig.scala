@@ -33,13 +33,6 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   val feedbackService: String = configuration.get[String]("microservice.services.feedback.url") +
     configuration.get[String]("microservice.services.feedback.source")
 
-  lazy val accessibilityStatement: String = configuration.get[String]("urls.footer.accessibility")
-  lazy val cookies: String = host + configuration.get[String]("urls.footer.cookies")
-  lazy val privacy: String = host + configuration.get[String]("urls.footer.privacy")
-  lazy val termsConditions: String = host + configuration.get[String]("urls.footer.termsConditions")
-  lazy val govukHelp: String = configuration.get[String]("urls.footer.govukHelp")
-  lazy val govUkHome: String = configuration.get[String]("urls.govUkHome")
-
   lazy val customsFinancialsSessionCacheUrl: String = servicesConfig.baseUrl("customs-financials-session-cache") +
     configuration.get[String]("microservice.services.customs-financials-session-cache.context")
 
@@ -57,7 +50,6 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   lazy val loginUrl: String = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
   lazy val signOutUrl: String = configuration.get[String]("urls.signOut")
-  lazy val registerCdsUrl: String = configuration.get[String]("urls.cdsRegisterUrl")
   lazy val subscribeCdsUrl: String = configuration.get[String]("urls.cdsSubscribeUrl")
   lazy val financialsHomepage: String = configuration.get[String]("urls.financialsHomepage")
   lazy val helpMakeGovUkBetterUrl: String = configuration.get[String]("urls.helpMakeGovUkBetterUrl")

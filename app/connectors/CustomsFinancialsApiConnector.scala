@@ -30,8 +30,8 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: FrontendAppConfig,
                                               httpClient: HttpClient)
                                              (implicit executionContext: ExecutionContext) {
 
-  def postHistoricDocumentRequest(historicDocumentRequest: HistoricDocumentRequest)(
-    implicit hc: HeaderCarrier): Future[Boolean] = {
+  def postHistoricDocumentRequest(historicDocumentRequest: HistoricDocumentRequest)
+                                 (implicit hc: HeaderCarrier): Future[Boolean] = {
 
     httpClient.POST[HistoricDocumentRequest, HttpResponse](
         appConfig.historicDocumentsApiUrl, historicDocumentRequest)
@@ -47,7 +47,7 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: FrontendAppConfig,
 
   def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
     httpClient.GET[EmailUnverifiedResponse](appConfig.customsFinancialsApi +
-      "/subscriptions/unverified-email-display").map( res => res.unVerifiedEmail)
+      "/subscriptions/unverified-email-display").map(res => res.unVerifiedEmail)
   }
 
   def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] =

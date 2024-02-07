@@ -1,9 +1,11 @@
 import play.sbt.routes.RoutesKeys
 import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings
+import uk.gov.hmrc.DefaultBuildSettings.itSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "customs-historic-statement-frontend"
+val bootstrap = "7.22.0"
 val silencerVersion = "1.17.13"
 val scala2_13_8 = "2.13.8"
 val testDirectory = "test"
@@ -89,3 +91,10 @@ lazy val root = (project in file("."))
     )
   )
   .settings(scalastyleSettings)
+
+
+lazy val it = project
+  .enablePlugins(PlayScala)
+  .dependsOn(root % "test->test")
+  .settings(itSettings)
+  .settings(libraryDependencies ++= Seq("uk.gov.hmrc" %% "bootstrap-test-play-28" % bootstrap % Test))
