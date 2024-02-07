@@ -17,10 +17,10 @@
 package controllers
 
 import base.SpecBase
-import connectors.{CustomsDataStoreConnector, CustomsFinancialsApiConnector, CustomsSessionCacheConnector, SdesConnector}
+import connectors._
 import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileFormat.Pdf
-import models.{C79Certificate, DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, EoriHistory, PostponedVATStatement, PostponedVatStatementFile, PostponedVatStatementFileMetadata, SecurityStatement, SecurityStatementFile, SecurityStatementFileMetadata, VatCertificateFile, VatCertificateFileMetadata}
+import models._
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import play.api.test.Helpers._
@@ -33,8 +33,12 @@ class HistoricStatementsControllerSpec extends SpecBase {
 
   "historicStatements" should {
     "return Security Statements" in new Setup {
-      when(mockSdesConnector.getSecurityStatements(any)(any)).thenReturn(Future.successful(securityStatementFiles))
-      val request = fakeRequest(GET, controllers.routes.HistoricStatementsController.historicStatements(SecurityStatement).url)
+      when(mockSdesConnector.getSecurityStatements(any)(any))
+        .thenReturn(Future.successful(securityStatementFiles))
+
+      val request = fakeRequest(GET,
+        controllers.routes.HistoricStatementsController.historicStatements(SecurityStatement).url)
+
       running(app) {
         val result = route(app, request).value
         status(result) mustBe OK
@@ -42,8 +46,12 @@ class HistoricStatementsControllerSpec extends SpecBase {
     }
 
     "return C79 Statements" in new Setup {
-      when(mockSdesConnector.getVatCertificates(any)(any)).thenReturn(Future.successful(c79CertificateFiles))
-      val request = fakeRequest(GET, controllers.routes.HistoricStatementsController.historicStatements(C79Certificate).url)
+      when(mockSdesConnector.getVatCertificates(any)(any))
+        .thenReturn(Future.successful(c79CertificateFiles))
+
+      val request = fakeRequest(GET,
+        controllers.routes.HistoricStatementsController.historicStatements(C79Certificate).url)
+
       running(app) {
         val result = route(app, request).value
         status(result) mustBe OK
@@ -51,8 +59,12 @@ class HistoricStatementsControllerSpec extends SpecBase {
     }
 
     "return PVAT Statements" in new Setup {
-      when(mockSdesConnector.getPostponedVatStatements(any)(any)).thenReturn(Future.successful(postponedVatStatementFiles))
-      val request = fakeRequest(GET, controllers.routes.HistoricStatementsController.historicStatements(PostponedVATStatement).url)
+      when(mockSdesConnector.getPostponedVatStatements(any)(any))
+        .thenReturn(Future.successful(postponedVatStatementFiles))
+
+      val request = fakeRequest(GET,
+        controllers.routes.HistoricStatementsController.historicStatements(PostponedVATStatement).url)
+
       running(app) {
         val result = route(app, request).value
         status(result) mustBe OK
@@ -60,7 +72,9 @@ class HistoricStatementsControllerSpec extends SpecBase {
     }
 
     "return Technical difficulties page when the file role does not match" in new Setup {
-      val request = fakeRequest(GET, controllers.routes.HistoricStatementsController.historicStatements(DutyDefermentStatement).url)
+      val request = fakeRequest(GET,
+        controllers.routes.HistoricStatementsController.historicStatements(DutyDefermentStatement).url)
+
       running(app) {
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
@@ -71,25 +85,41 @@ class HistoricStatementsControllerSpec extends SpecBase {
 
   "historicStatementsDutyDeferment" should {
     "return dutyDeferment statement" in new Setup {
-      when(mockSessionCacheConnector.getAccountNumber(any, any)(any)).thenReturn(Future.successful(Some(someDan)))
-      when(mockSdesConnector.getDutyDefermentStatements(any, any)(any)).thenReturn(Future.successful(dutyDefermentFiles))
-      val request = fakeRequest(GET, routes.HistoricStatementsController.historicStatementsDutyDeferment("linkId").url).withHeaders("X-Session-Id" -> "sessionId")
+      when(mockSessionCacheConnector.getAccountNumber(any, any)(any))
+        .thenReturn(Future.successful(Some(someDan)))
+
+      when(mockSdesConnector.getDutyDefermentStatements(any, any)(any))
+        .thenReturn(Future.successful(dutyDefermentFiles))
+
+      val request = fakeRequest(GET,
+        routes.HistoricStatementsController.historicStatementsDutyDeferment(
+          "linkId").url).withHeaders("X-Session-Id" -> "sessionId")
+
       val result = route(app, request).value
       status(result) mustBe OK
     }
 
     "return Session Expired when Dan is not returned" in new Setup {
-      when(mockSessionCacheConnector.getAccountNumber(any, any)(any)).thenReturn(Future.successful(None))
-      val request = fakeRequest(GET, routes.HistoricStatementsController.historicStatementsDutyDeferment("linkId").url).withHeaders("X-Session-Id" -> "sessionId")
+      when(mockSessionCacheConnector.getAccountNumber(any, any)(any))
+        .thenReturn(Future.successful(None))
+
+      val request = fakeRequest(GET,
+        routes.HistoricStatementsController.historicStatementsDutyDeferment(
+          "linkId").url).withHeaders("X-Session-Id" -> "sessionId")
+
       val result = route(app, request).value
       status(result) mustBe SEE_OTHER
       redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
     }
 
     "return Unauthorised when sessionId is not present" in new Setup {
-      when(mockSessionCacheConnector.getAccountNumber(any, any)(any)).thenReturn(Future.successful(None))
+      when(mockSessionCacheConnector.getAccountNumber(any, any)(any))
+        .thenReturn(Future.successful(None))
+
       running(app) {
-        val request = fakeRequest(GET, routes.HistoricStatementsController.historicStatementsDutyDeferment("linkId").url)
+        val request = fakeRequest(GET,
+          routes.HistoricStatementsController.historicStatementsDutyDeferment("linkId").url)
+
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
@@ -103,36 +133,71 @@ class HistoricStatementsControllerSpec extends SpecBase {
     val someEori = "12345678"
     val someDan = "12345"
     val someRequestId = Some("Ab1234")
-    val securityStatementFile = SecurityStatementFile("statementfile_00", "download_url_00", 99L,
-      SecurityStatementFileMetadata(2017, 12, 28, 2018, 1, 1, Pdf, SecurityStatement, someEori, 500L, "0000000"))
-    val securityStatementFile_2 = SecurityStatementFile("statementfile_00", "download_url_00", 99L,
-      SecurityStatementFileMetadata(2017, 11, 28, 2018, 2, 2, Pdf, SecurityStatement, someEori, 500L, "0000000"))
+
+    val year = 2018
+    val year17 = 2014
+    val two = 3
+    val one = 1
+    val three = 3
+    val minute = 8
+    val twentyEight = 28
+    val twelve = 12
+    val eleven = 11
+
+    val fiveHundread = 500L
+    val ninetynine = 99L
+
+    val securityStatementFile = SecurityStatementFile("statementfile_00", "download_url_00", ninetynine,
+      SecurityStatementFileMetadata(year17, twelve, twentyEight, year, one, one, Pdf,
+        SecurityStatement, someEori, fiveHundread, "0000000"))
+
+    val securityStatementFile_2 = SecurityStatementFile("statementfile_00", "download_url_00", ninetynine,
+      SecurityStatementFileMetadata(year17, eleven, twentyEight, year, two, two, Pdf,
+        SecurityStatement, someEori, fiveHundread, "0000000"))
+
     val securityStatementFiles = List(securityStatementFile, securityStatementFile_2)
 
-    val c79Certificates = VatCertificateFile("statementfile_00", "download_url_00", 99L,
-      VatCertificateFileMetadata(2017, 12, Pdf, C79Certificate,None))
-    val c79Certificates_2 = VatCertificateFile("statementfile_00", "download_url_00", 99L,
-      VatCertificateFileMetadata(2017, 11, Pdf, C79Certificate,None))
+    val c79Certificates = VatCertificateFile("statementfile_00", "download_url_00", ninetynine,
+      VatCertificateFileMetadata(year17, twelve, Pdf, C79Certificate,None))
+    val c79Certificates_2 = VatCertificateFile("statementfile_00", "download_url_00", ninetynine,
+      VatCertificateFileMetadata(year17, eleven, Pdf, C79Certificate,None))
     val c79CertificateFiles = Seq(c79Certificates, c79Certificates_2)
 
-    val postponedVatStatement = PostponedVatStatementFile("statementfile_00", "download_url_00", 99L,
-      PostponedVatStatementFileMetadata(2017, 12, Pdf, PostponedVATStatement, "CDS", None))
-    val postponedVatStatement_2 = PostponedVatStatementFile("statementfile_00", "download_url_00", 99L,
-      PostponedVatStatementFileMetadata(2017, 11, Pdf, PostponedVATStatement, "Chief", Some("a request id")))
+    val postponedVatStatement = PostponedVatStatementFile("statementfile_00", "download_url_00", ninetynine,
+      PostponedVatStatementFileMetadata(year17, twelve, Pdf, PostponedVATStatement, "CDS", None))
+    val postponedVatStatement_2 = PostponedVatStatementFile("statementfile_00", "download_url_00", ninetynine,
+      PostponedVatStatementFileMetadata(year17, eleven, Pdf, PostponedVATStatement, "Chief", Some("a request id")))
     val postponedVatStatementFiles = Seq(postponedVatStatement, postponedVatStatement_2)
 
-    val dutyDeferementFile: DutyDefermentStatementFile = DutyDefermentStatementFile("2018_03_01-08.pdf", "url.pdf", 1024L,
-      DutyDefermentStatementFileMetadata(2018, 3, 1, 2018, 3, 8, Pdf, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), someDan, someRequestId))
-    val dutyDeferementFile_2: DutyDefermentStatementFile = DutyDefermentStatementFile("2018_02_01-08.pdf", "url.pdf", 1024L,
-      DutyDefermentStatementFileMetadata(2018, 2, 1, 2018, 2, 8, Pdf, DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), someDan, someRequestId))
-    val dutyDeferementFile_3: DutyDefermentStatementFile = DutyDefermentStatementFile("2018_02_01-08.pdf", "url.pdf", 1024L,
-      DutyDefermentStatementFileMetadata(2018, 1, 1, 2018, 1, 8, Pdf, DutyDefermentStatement, Excise, Some(true), Some("BACS"), someDan, someRequestId))
-    val dutyDeferementFile_4: DutyDefermentStatementFile = DutyDefermentStatementFile("2018_02_01-08.pdf", "url.pdf", 1024L,
-      DutyDefermentStatementFileMetadata(2018, 1, 1, 2018, 1, 8, Pdf, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), someDan, someRequestId))
+    val size = 1024L
+
+    val dutyDeferementFile: DutyDefermentStatementFile = DutyDefermentStatementFile(
+      "2018_03_01-08.pdf", "url.pdf", size,
+      DutyDefermentStatementFileMetadata(year, three, one, year, three, minute, Pdf,
+        DutyDefermentStatement, Weekly, Some(true), Some("BACS"), someDan, someRequestId))
+
+    val dutyDeferementFile_2: DutyDefermentStatementFile = DutyDefermentStatementFile(
+      "2018_02_01-08.pdf", "url.pdf", size,
+      DutyDefermentStatementFileMetadata(year, two, one, year, two, minute, Pdf,
+        DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), someDan, someRequestId))
+
+    val dutyDeferementFile_3: DutyDefermentStatementFile = DutyDefermentStatementFile(
+      "2018_02_01-08.pdf", "url.pdf", size,
+      DutyDefermentStatementFileMetadata(year, one, one, year, one, minute, Pdf,
+        DutyDefermentStatement, Excise, Some(true), Some("BACS"), someDan, someRequestId))
+
+    val dutyDeferementFile_4: DutyDefermentStatementFile = DutyDefermentStatementFile(
+      "2018_02_01-08.pdf", "url.pdf", size,
+      DutyDefermentStatementFileMetadata(year, one, one, year, one, minute, Pdf,
+        DutyDefermentStatement, Weekly, Some(true), Some("BACS"), someDan, someRequestId))
+
     val dutyDefermentFiles = Seq(dutyDeferementFile, dutyDeferementFile_2, dutyDeferementFile_3, dutyDeferementFile_4)
 
+    val offset = 10
+
     val eoriHistories = Seq(EoriHistory("eori1", Some(LocalDate.now()), Some(LocalDate.now())),
-                            EoriHistory("eori2", Some(LocalDate.now().minusDays(10)), Some(LocalDate.now().minusDays(10))))
+                            EoriHistory("eori2", Some(LocalDate.now().minusDays(offset)),
+                              Some(LocalDate.now().minusDays(offset))))
 
     val mockCustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
     val mockSdesConnector = mock[SdesConnector]

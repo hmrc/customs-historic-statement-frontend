@@ -24,12 +24,11 @@ import play.api.i18n.Messages
 
 import java.time.LocalDate
 
-case class VatViewModel(certificatesForAllEoris: Seq[VatCertificatesForEori]) {
-  val hasRequestedCertificates: Boolean = certificatesForAllEoris.exists(_.requestedCertificates.nonEmpty)
-  val hasCurrentCertificates: Boolean = certificatesForAllEoris.exists(_.currentCertificates.nonEmpty)
-}
+case class VatViewModel(certificatesForAllEoris: Seq[VatCertificatesForEori])
 
-case class VatCertificatesForEori(eoriHistory: EoriHistory, currentCertificates: Seq[VatCertificatesByMonth], requestedCertificates: Seq[VatCertificatesByMonth])
+case class VatCertificatesForEori(eoriHistory: EoriHistory,
+                                  currentCertificates: Seq[VatCertificatesByMonth],
+                                  requestedCertificates: Seq[VatCertificatesByMonth])
   extends OrderedByEoriHistory[VatCertificatesForEori]
 
 case class VatCertificatesByMonth(date: LocalDate, files: Seq[VatCertificateFile] = Seq.empty)(implicit messages: Messages)

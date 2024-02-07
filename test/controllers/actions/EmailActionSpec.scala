@@ -28,6 +28,7 @@ import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.ServiceUnavailableException
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import utils.Utils.emptyString
 
 class EmailActionSpec extends SpecBase {
 
@@ -45,7 +46,9 @@ class EmailActionSpec extends SpecBase {
 
     "Let request through, when getEmail throws service unavailable exception" in new Setup {
       running(app) {
-        when(mockDataStoreService.getEmail(any)(any)).thenReturn(Future.failed(new ServiceUnavailableException("")))
+
+        when(mockDataStoreService.getEmail(any)(any))
+          .thenReturn(Future.failed(new ServiceUnavailableException(emptyString)))
 
         val response = await(emailAction.filter(authenticatedRequest))
         response mustBe None

@@ -32,7 +32,7 @@ case class DutyDefermentStatementPeriod(fileRole: FileRole,
   extends Ordered[DutyDefermentStatementPeriod] {
 
   def compare(that:DutyDefermentStatementPeriod):Int = {
-    // order by defermentStatementType then endDate then startDate
+
     this.defermentStatementType compare that.defermentStatementType match {
       case 0 => that.endDate compare endDate match {
         case 0 => startDate compare that.startDate
@@ -51,9 +51,14 @@ case class DutyDefermentStatementPeriod(fileRole: FileRole,
     lazy val endDateDayMonthAndYear = Formatters.dateAsDayMonthAndYear(endDate)
 
     defermentStatementType match {
-      case Supplementary => messages("cf.account.detail.missing-file-type-supplementary", fileFormat, endDateMonthAndYear)
-      case Excise => messages("cf.account.detail.missing-file-type-excise", fileFormat, endDateMonthAndYear)
-      case _ => messages("cf.account.detail.missing-file-type", fileFormat, Formatters.dateAsDay(startDate), endDateDayMonthAndYear)
+      case Supplementary => messages("cf.account.detail.missing-file-type-supplementary",
+        fileFormat, endDateMonthAndYear)
+
+      case Excise => messages("cf.account.detail.missing-file-type-excise",
+        fileFormat, endDateMonthAndYear)
+
+      case _ => messages("cf.account.detail.missing-file-type",
+        fileFormat, Formatters.dateAsDay(startDate), endDateDayMonthAndYear)
     }
   }
 }

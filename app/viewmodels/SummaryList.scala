@@ -16,8 +16,8 @@
 
 package viewmodels
 
-case class SummaryList(
-                        rows: Seq[SummaryListRow]       = Nil,
-                        classes: String                 = "",
-                        attributes: Map[String, String] = Map.empty
-                      )
+import utils.Utils.emptyString
+
+case class SummaryList(rows: Seq[SummaryListRow] = Nil,
+                       classes: String = emptyString,
+                       attributes: Map[String, String] = Map.empty)

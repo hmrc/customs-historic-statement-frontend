@@ -26,13 +26,15 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CustomsFinancialsApiConnector @Inject()(
-                                               appConfig: FrontendAppConfig,
-                                               httpClient: HttpClient
-                                             )(implicit executionContext: ExecutionContext) {
+class CustomsFinancialsApiConnector @Inject()(appConfig: FrontendAppConfig,
+                                              httpClient: HttpClient)
+                                             (implicit executionContext: ExecutionContext) {
 
-  def postHistoricDocumentRequest(historicDocumentRequest: HistoricDocumentRequest)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    httpClient.POST[HistoricDocumentRequest, HttpResponse](appConfig.historicDocumentsApiUrl, historicDocumentRequest)
+  def postHistoricDocumentRequest(historicDocumentRequest: HistoricDocumentRequest)
+                                 (implicit hc: HeaderCarrier): Future[Boolean] = {
+
+    httpClient.POST[HistoricDocumentRequest, HttpResponse](
+        appConfig.historicDocumentsApiUrl, historicDocumentRequest)
       .map(_.status == NO_CONTENT)
       .recover { case _ => false }
   }
@@ -44,7 +46,8 @@ class CustomsFinancialsApiConnector @Inject()(
   }
 
   def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
-    httpClient.GET[EmailUnverifiedResponse](appConfig.customsFinancialsApi + "/subscriptions/unverified-email-display").map( res => res.unVerifiedEmail)
+    httpClient.GET[EmailUnverifiedResponse](appConfig.customsFinancialsApi +
+      "/subscriptions/unverified-email-display").map(res => res.unVerifiedEmail)
   }
 
   def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] =

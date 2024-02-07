@@ -19,6 +19,7 @@ package viewmodels
 import base.SpecBase
 import uk.gov.hmrc.govukfrontend.views.Aliases.{HtmlContent, Value}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.Actions
+import utils.Utils.emptyString
 
 class SummaryListRowHelperSpec extends SpecBase with SummaryListRowHelper {
 
@@ -27,8 +28,7 @@ class SummaryListRowHelperSpec extends SpecBase with SummaryListRowHelper {
       val result = summaryListRow("something", Some("something"), Actions())
       result.actions mustBe Some(Actions())
       result.value mustBe Value(HtmlContent("something"))
-      result.secondValue mustBe Some(Value(HtmlContent("something"), classes = ""))
+      result.secondValue mustBe Some(Value(HtmlContent("something"), classes = emptyString))
     }
   }
-
 }

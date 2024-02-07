@@ -43,7 +43,7 @@ final case class UserAnswers(
     updatedData.flatMap {
       d =>
         val updatedAnswers = copy (data = d)
-        page.cleanup(Some(value), updatedAnswers)
+        page.cleanup(updatedAnswers)
     }
   }
 
@@ -59,24 +59,29 @@ final case class UserAnswers(
     updatedData.flatMap {
       d =>
         val updatedAnswers = copy (data = d)
-        page.cleanup(None, updatedAnswers)
+        page.cleanup(updatedAnswers)
     }
   }
 }
 
 trait MongoJavatimeFormats {
   outer =>
+
   final val localDateTimeReads: Reads[LocalDateTime] =
     Reads.at[String](__ \ "$date" \ "$numberLong")
       .map(dateTime => Instant.ofEpochMilli(dateTime.toLong).atZone(ZoneOffset.UTC).toLocalDateTime)
+
   final val localDateTimeWrites: Writes[LocalDateTime] =
     Writes.at[String](__ \ "$date" \ "$numberLong")
       .contramap(_.toInstant(ZoneOffset.UTC).toEpochMilli.toString)
+
   final val localDateTimeFormat: Format[LocalDateTime] =
     Format(localDateTimeReads, localDateTimeWrites)
+
   trait Implicits {
     implicit val jatLocalDateTimeFormat: Format[LocalDateTime] = outer.localDateTimeFormat
   }
+
   object Implicits extends Implicits
 }
 object MongoJavatimeFormats extends MongoJavatimeFormats
@@ -87,8 +92,7 @@ object UserAnswers {
 
     import play.api.libs.functional.syntax._
 
-    (
-      (__ \ "_id").read[String] and
+    ((__ \ "_id").read[String] and
       (__ \ "data").read[JsObject] and
       (__ \ "lastUpdated").read(MongoJavatimeFormats.localDateTimeReads)
     ) (UserAnswers.apply _)
@@ -98,8 +102,7 @@ object UserAnswers {
 
     import play.api.libs.functional.syntax._
 
-    (
-      (__ \ "_id").write[String] and
+    ((__ \ "_id").write[String] and
       (__ \ "data").write[JsObject] and
       (__ \ "lastUpdated").write(MongoJavatimeFormats.localDateTimeWrites)
     ) (unlift(UserAnswers.unapply))

@@ -26,35 +26,41 @@ class DateTimeServiceSpec extends SpecBase {
 
     "return system date and time for UTC" in new Setup {
       val systemDateTime = dateTimeService.systemDateTime(ZoneId.of("UTC"))
-      systemDateTime must not be null
+      Option(systemDateTime) must not be empty
     }
 
     "return system date and time for Europe/London" in new Setup {
       val systemDateTime = dateTimeService.systemDateTime(ZoneId.of("Europe/London"))
-      systemDateTime must not be null
+      Option(systemDateTime) must not be empty
     }
 
     "return fixed date and time when fixedDateTime is true" in new Setup {
       when(mockAppConfig.fixedDateTime).thenReturn(true)
       val fixedDateTime = dateTimeService.systemDateTime(ZoneId.of("UTC"))
-      fixedDateTime mustBe LocalDateTime.of(2027, 12, 20, 12, 30)
+      fixedDateTime mustBe LocalDateTime.of(year, month, day, hour, minute)
     }
 
     "return UTC date and time for utcDateTime" in new Setup {
       val utcDateTime = dateTimeService.utcDateTime()
-      utcDateTime must not be null
+      Option(utcDateTime) must not be empty
     }
 
     "return Europe/London date and time for localDateTime" in new Setup {
       val londonDateTime = dateTimeService.localDateTime()
-      londonDateTime must not be null
+      Option(londonDateTime) must not be empty
     }
   }
 
   trait Setup {
-    val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
-    when(mockAppConfig.fixedDateTime).thenReturn(false) 
 
+    val year = 2027
+    val month = 12
+    val day = 20
+    val hour = 12
+    val minute = 30
+
+    val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+    when(mockAppConfig.fixedDateTime).thenReturn(false)
     val dateTimeService: DateTimeService = new DateTimeService(mockAppConfig)
   }
 }

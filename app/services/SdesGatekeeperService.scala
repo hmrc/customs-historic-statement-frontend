@@ -55,7 +55,7 @@ class SdesGatekeeperService() {
         mapFileRole(metadata("FileRole")),
         mapDutyPaymentMethod(metadata("DutyPaymentMethod")),
         metadata.get("statementRequestID"))
-      )
+    )
   }
 
   implicit def convertToSecurityStatementFile(sdesResponseFile: FileInformation): SecurityStatementFile = {
@@ -105,9 +105,10 @@ class SdesGatekeeperService() {
     )
   }
 
-  def convertTo[T <: SdesFile](implicit converter: FileInformation => T): Seq[FileInformation] => Seq[T] = _.map(converter)
+  def convertTo[T <: SdesFile](implicit converter: FileInformation => T): Seq[FileInformation] =>
+    Seq[T] = _.map(converter)
 
-  private def mapFileRole(role: String) : FileRole = {
+  private def mapFileRole(role: String): FileRole = {
     role match {
       case "C79Certificate" => C79Certificate
       case "SecurityStatement" => SecurityStatement
@@ -123,11 +124,11 @@ class SdesGatekeeperService() {
       case _ => "CDS"
     }
   }
+
   private def mapDutyOverLimit(MDGDutyOverLimitResponse: String): Boolean = {
     MDGDutyOverLimitResponse match {
       case "Y" => true
-      case _   => false
+      case _ => false
     }
   }
-
 }

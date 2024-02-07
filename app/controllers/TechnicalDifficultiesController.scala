@@ -22,11 +22,9 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
 
-class TechnicalDifficultiesController @Inject()(
-                                        controllerComponents: MessagesControllerComponents,
-                                        errorHandler: ErrorHandler
-                                      )
-  extends FrontendController(controllerComponents){
+class TechnicalDifficultiesController @Inject()(controllerComponents: MessagesControllerComponents,
+                                                errorHandler: ErrorHandler)
+  extends FrontendController(controllerComponents) {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(errorHandler.standardErrorTemplate(

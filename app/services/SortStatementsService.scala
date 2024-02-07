@@ -26,8 +26,7 @@ import javax.inject.{Inject, Singleton}
 class SortStatementsService @Inject()() {
 
   def sortDutyDefermentStatementsForEori(historicEori: EoriHistory,
-                                         dutyDefermentFiles: Seq[DutyDefermentStatementFile])
-                                         : DutyDefermentStatementsForEori = {
+                                         dutyDefermentFiles: Seq[DutyDefermentStatementFile]): DutyDefermentStatementsForEori = {
 
     dutyDefermentFiles.partition(_.metadata.statementRequestId.isDefined) match {
       case (requested, current) => DutyDefermentStatementsForEori(historicEori, current, requested)
@@ -35,8 +34,8 @@ class SortStatementsService @Inject()() {
   }
 
   def sortSecurityCertificatesForEori(historicEori: EoriHistory,
-                                      securityStatementsFiles: Seq[SecurityStatementFile]): SecurityStatementsForEori =
-  {
+                                      securityStatementsFiles: Seq[SecurityStatementFile]): SecurityStatementsForEori = {
+
     val groupedByStartAndEndDates = securityStatementsFiles.groupBy(file => (file.startDate, file.endDate)).map {
       case ((startDate, endDate), filesForMonth) => SecurityStatementsByPeriod(startDate, endDate, filesForMonth)
     }.toList.sorted.reverse
@@ -64,8 +63,9 @@ class SortStatementsService @Inject()() {
     VatCertificatesForEori(historicEori, current, requested)
   }
 
-  def sortPostponedVatStatementsForEori(historicEori: EoriHistory, postponedVatStatementsFile: Seq[PostponedVatStatementFile])
-                                (implicit messages: Messages): PostponedVatStatementsForEori = {
+  def sortPostponedVatStatementsForEori(historicEori: EoriHistory,
+                                        postponedVatStatementsFile: Seq[PostponedVatStatementFile])
+                                       (implicit messages: Messages): PostponedVatStatementsForEori = {
 
     val groupedByMonth = postponedVatStatementsFile.groupBy(_.monthAndYear).map {
       case (month, filesForMonth) => PostponedVatStatementsByMonth(month, filesForMonth)
@@ -82,8 +82,8 @@ class SortStatementsService @Inject()() {
     PostponedVatStatementsForEori(historicEori, current, requested)
   }
 
-  private def filteredByStatementReqId(securityStatements: List[SecurityStatementsByPeriod])
-  : List[SecurityStatementsByPeriod] =
+  private def filteredByStatementReqId(securityStatements: List[SecurityStatementsByPeriod]): List[SecurityStatementsByPeriod] =
+
     securityStatements.map {
       statementsByStartAndEndDatePeriod =>
 

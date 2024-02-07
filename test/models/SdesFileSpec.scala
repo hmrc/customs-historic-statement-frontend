@@ -28,9 +28,13 @@ class SdesFileSpec extends SpecBase with Matchers {
   "an SdesFile" should {
     "be correctly ordered and formatted" in new Setup {
 
-      securityStatementFile2 compare securityStatementFile1 mustBe 1
-      vatCertificateFile1 compare vatCertificateFile2 mustBe 0
-      postponedVatStatementFile1 compare postponedVatStatementFile2 mustBe 0
+      val one = 1
+      val zero = 0
+      val minusOne = -1
+
+      securityStatementFile2 compare securityStatementFile1 mustBe one
+      vatCertificateFile1 compare vatCertificateFile2 mustBe zero
+      postponedVatStatementFile1 compare postponedVatStatementFile2 mustBe zero
 
       FileFormat.unapply(Pdf).value mustBe "PDF"
 
@@ -48,82 +52,92 @@ class SdesFileSpec extends SpecBase with Matchers {
       unapply(Supplementary).value mustBe "Supplementary"
       unapply(Excise).value mustBe "Excise"
 
-      Weekly compare Excise mustBe 1
-      Weekly compare Supplementary mustBe 1
-      Weekly compare UnknownStatementType mustBe -1
+      Weekly compare Excise mustBe one
+      Weekly compare Supplementary mustBe one
+      Weekly compare UnknownStatementType mustBe minusOne
 
-      Excise compare Weekly mustBe -1
-      Excise compare Supplementary mustBe -1
-      Excise compare UnknownStatementType mustBe -1
+      Excise compare Weekly mustBe minusOne
+      Excise compare Supplementary mustBe minusOne
+      Excise compare UnknownStatementType mustBe minusOne
 
-      Supplementary compare Weekly mustBe -1
-      Supplementary compare Excise mustBe 1
-      Supplementary compare UnknownStatementType mustBe -1
+      Supplementary compare Weekly mustBe minusOne
+      Supplementary compare Excise mustBe one
+      Supplementary compare UnknownStatementType mustBe minusOne
 
       DutyDefermentStatement.name mustBe "DutyDefermentStatement"
 
-      List(dutyDefermentFile1, dutyDefermentFile2, dutyDefermentFile3).sorted mustBe List(dutyDefermentFile2, dutyDefermentFile3, dutyDefermentFile1)
+      List(dutyDefermentFile1, dutyDefermentFile2, dutyDefermentFile3).sorted mustBe
+        List(dutyDefermentFile2, dutyDefermentFile3, dutyDefermentFile1)
     }
   }
 
   trait Setup {
-    val securityStatementFile1 = SecurityStatementFile("file1", "/download", 10, SecurityStatementFileMetadata(
-      2018, 11, 27,
-      2018, 11, 27,
-      Pdf, SecurityStatement, "12345678912", 12, "BACS", None)
-    )
 
-    val securityStatementFile2 = SecurityStatementFile("file2", "/download", 10, SecurityStatementFileMetadata(
-      2019, 11, 27,
-      2019, 11, 27,
-      Pdf, SecurityStatement, "12345678912", 12, "BACS", None)
-    )
+    val year = 2018
+    val year2 = 2019
+    val year3 = 19
+    val year4 = 2011
+    val year5 = 2012
 
-    val vatCertificateFile1 = VatCertificateFile("file1", "/download", 10, VatCertificateFileMetadata(
-      19, 10, Pdf, C79Certificate, None
-    ), "123456789")
+    val month = 11
+    val day = 27
+    val size = 10
+    val fileSize = 12
 
-    val vatCertificateFile2 = VatCertificateFile("file1", "/download", 10, VatCertificateFileMetadata(
-      19, 10, Pdf, C79Certificate, None
-    ), "123456789")
+    val securityStatementFile1 = SecurityStatementFile("file1", "/download", size,
+      SecurityStatementFileMetadata(
+        year, month, day,
+        year, month, day,
+        Pdf, SecurityStatement, "12345678912", fileSize, "BACS", None))
 
-    val postponedVatStatementFile1 = PostponedVatStatementFile("file1", "/download", 10, PostponedVatStatementFileMetadata(
-      19, 10, Pdf, PostponedVATStatement, "CDS", Some("request id")
-    ), "123456789")
+    val securityStatementFile2 = SecurityStatementFile("file2", "/download", size,
+      SecurityStatementFileMetadata(
+        year2, month, day,
+        year2, month, day,
+        Pdf, SecurityStatement, "12345678912", fileSize, "BACS", None))
 
-    val postponedVatStatementFile2 = PostponedVatStatementFile("file1", "/download", 10, PostponedVatStatementFileMetadata(
-      19, 10, Pdf, PostponedVATStatement, "CDS", Some("request id")
-    ), "123456789")
+    val vatCertificateFile1 = VatCertificateFile("file1", "/download", size,
+      VatCertificateFileMetadata(year3, size, Pdf, C79Certificate, None), "123456789")
 
+    val vatCertificateFile2 = VatCertificateFile("file1", "/download", size,
+      VatCertificateFileMetadata(year3, size, Pdf, C79Certificate, None), "123456789")
+
+    val postponedVatStatementFile1 = PostponedVatStatementFile("file1", "/download", size,
+      PostponedVatStatementFileMetadata(year3, size, Pdf, PostponedVATStatement,
+        "CDS", Some("request id")), "123456789")
+
+    val postponedVatStatementFile2 = PostponedVatStatementFile("file1", "/download", size,
+      PostponedVatStatementFileMetadata(year3, size, Pdf,
+        PostponedVATStatement, "CDS", Some("request id")), "123456789")
+
+    val dutyFileSize = 47
 
     val dutyDefermentFile1 = DutyDefermentStatementFile(
       s"12345678.123",
       s"http://first.com/",
-      47,
+      dutyFileSize,
       DutyDefermentStatementFileMetadata(
-        2018, 11, 27,
-        2018, 11, 27,
-        UnknownFileFormat, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "12345678")
-    )
+        year, month, day,
+        year, month, day,
+        UnknownFileFormat, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "12345678"))
 
     val dutyDefermentFile2 = DutyDefermentStatementFile(
       s"12345678.123",
       s"http://second.com/",
-      47,
+      dutyFileSize,
       DutyDefermentStatementFileMetadata(
-        2011, 11, 27,
-        2012, 11, 27,
-        Pdf, DutyDefermentStatement, Excise, Some(true), Some("BACS"), "12345678")
-    )
+        year4, month, day,
+        year5, month, day,
+        Pdf, DutyDefermentStatement, Excise, Some(true), Some("BACS"), "12345678"))
 
     val dutyDefermentFile3 = DutyDefermentStatementFile(
       s"12345678.123",
       s"http://second.com/",
-      47,
+      dutyFileSize,
       DutyDefermentStatementFileMetadata(
-        2011, 11, 27,
-        2012, 11, 27,
-        Pdf, DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), "12345678")
-    )
+        year4, month, day,
+        year5, month, day,
+        Pdf, DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), "12345678"))
+
   }
 }

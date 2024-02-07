@@ -17,7 +17,7 @@ $(document).ready(function() {
   // =====================================================
   // Handle number inputs
   // =====================================================
-    numberInputs();
+  numberInputs();
 
   // =====================================================
   // Introduce direct skip link control, to work around voiceover failing of hash links
@@ -32,13 +32,15 @@ $(document).ready(function() {
   // =====================================================
   // Back link mimics browser back functionality
   // =====================================================
-  // store referrer value to cater for IE - https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/  */
+  // store referrer value to cater for IE -
+  // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/  */
   var docReferrer = document.referrer
+
   // prevent resubmit warning
   if (window.history && window.history.replaceState && typeof window.history.replaceState === 'function') {
     window.history.replaceState(null, null, window.location.href);
   }
-  // back click handle, dependent upon presence of referrer & no host change
+
   $('#back-link').on('click', function(e){
     e.preventDefault();
     if (window.history && window.history.back && typeof window.history.back === 'function' &&
@@ -54,10 +56,10 @@ $(document).ready(function() {
     $('.error-summary').focus();
   }
 
-  // =====================================================
-  // Adds data-focuses attribute to all containers of inputs listed in an error summary
-  // This allows validatorFocus to bring viewport to correct scroll point
-  // =====================================================
+      // =====================================================
+      // Adds data-focuses attribute to all containers of inputs listed in an error summary
+      // This allows validatorFocus to bring viewport to correct scroll point
+      // =====================================================
       function assignFocus () {
           var counter = 0;
           $('.error-summary-list a').each(function(){
@@ -69,13 +71,13 @@ $(document).ready(function() {
       }
       assignFocus();
 
-    // =====================================================
-    // Print functionality
-    // Opens any details components so they are printed
-    // =====================================================
+      // =====================================================
+      // Print functionality
+      // Opens any details components so they are printed
+      // =====================================================
       function beforePrintCall(){
           if($('.no-details').length > 0){
-              // store current focussed element to return focus to later
+
               var fe = document.activeElement;
               // store scroll position
               var scrollPos = window.pageYOffset;
@@ -84,6 +86,7 @@ $(document).ready(function() {
                   $(this).find('summary').trigger('click');
               });
               // blur focus off current element in case original cannot take focus back
+
               $(document.activeElement).blur();
               // return focus if possible
               $(fe).focus();
@@ -98,20 +101,22 @@ $(document).ready(function() {
       function afterPrintCall(){
           $('details.print--open').find('summary').removeClass('heading-medium');
           if($('.no-details').length > 0){
-              // store current focussed element to return focus to later
+            // store current focussed element to return focus to later
               var fe = document.activeElement;
-              // store scroll position
+
               var scrollPos = window.pageYOffset;
               $('details.print--open').each(function(){
                   $(this).removeClass('print--open');
                   $(this).find('summary').trigger('click');
               });
+
               // blur focus off current element in case original cannot take focus back
               $(document.activeElement).blur();
               // return focus if possible
               $(fe).focus();
               // return to scroll pos
               window.scrollTo(0,scrollPos);
+
           } else {
               $('details.print--open').removeAttr("open").removeClass('print--open');
           }
@@ -139,13 +144,12 @@ $(document).ready(function() {
       }
   });
 
-
+  // =====================================================
+  // Set currency fields to number inputs on touch devices
+  // this ensures on-screen keyboards display the correct style
+  // don't do this for FF as it has issues with trailing zeroes
+  // =====================================================
   function numberInputs() {
-      // =====================================================
-      // Set currency fields to number inputs on touch devices
-      // this ensures on-screen keyboards display the correct style
-      // don't do this for FF as it has issues with trailing zeroes
-      // =====================================================
       if($('html.touchevents').length > 0 && window.navigator.userAgent.indexOf("Firefox") == -1){
           $('[data-type="currency"] > input[type="text"], [data-type="percentage"] > input[type="text"]').each(function(){
             $(this).attr('type', 'number');

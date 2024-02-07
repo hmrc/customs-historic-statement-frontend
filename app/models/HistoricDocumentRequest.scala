@@ -23,12 +23,10 @@ import play.api.mvc.AnyContent
 
 import java.time.LocalDate
 
-case class HistoricDocumentRequest(
-                                    documentType: FileRole,
-                                    from: LocalDate,
-                                    until: LocalDate,
-                                    dan: Option[String]
-                                  )
+case class HistoricDocumentRequest(documentType: FileRole,
+                                   from: LocalDate,
+                                   until: LocalDate,
+                                   dan: Option[String])
 
 object HistoricDocumentRequest {
   implicit val format: OFormat[HistoricDocumentRequest] = Json.format[HistoricDocumentRequest]

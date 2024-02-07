@@ -75,7 +75,6 @@
       // i.e. checks to see if another related control is selected
       // this allows us to prevent hiding content before showing it again, triggering an unneeded aria response
       return getRelatedControls($control).filter(':checked').length > 0;
-
     }
 
     // Hide toggled content for control
@@ -85,12 +84,12 @@
       if ($control.attr('aria-controls')) {
         $control.attr('aria-expanded', 'false')
       }
+
       // Hide content (only if we need to)
       if ($content.attr('aria-hidden') == 'false' && !shouldContentBeVisible($control)) {
         $content.addClass('js-hidden')
         $content.attr('aria-hidden', 'true')
       }
-
     }
 
     // Handle radio show/hide
@@ -116,7 +115,7 @@
       // Show checkbox content
       if ($control.is(':checked')) {
         showToggledContent($control, $content)
-      } else { // Hide checkbox content
+      } else {// Hide checkbox content
 
         //update related checkboxes
         // If the controlling input, update aria-expanded if no other checkboxes pointing to this content are checked

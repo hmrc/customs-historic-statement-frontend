@@ -37,7 +37,6 @@ object FileRole {
         case e => JsError(s"Invalid file role: $e")
       }
     }
-
     override def writes(o: FileRole): JsValue = JsString(o.name)
   }
 
@@ -48,9 +47,10 @@ object FileRole {
         case "duty-deferment" => Right(DutyDefermentStatement)
         case "adjustments" => Right(SecurityStatement)
         case "postponed-vat" => Right(PostponedVATStatement)
-        case fileRole => Left(s"unknown file role: ${fileRole}")
+        case fileRole => Left(s"unknown file role: $fileRole")
       }
     }
+
     override def unbind(key: String, fileRole: FileRole): String = {
       fileRole match {
         case C79Certificate => "import-vat"
@@ -61,5 +61,3 @@ object FileRole {
     }
   }
 }
-
-

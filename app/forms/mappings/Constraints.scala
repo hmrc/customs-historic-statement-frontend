@@ -18,63 +18,99 @@ package forms.mappings
 
 import models.{C79Certificate, DutyDefermentStatement, FileRole, PostponedVATStatement, SecurityStatement}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
+import utils.Utils.emptyString
 
 import java.time.{LocalDate, LocalDateTime, Period}
 
 trait Constraints {
 
-  private lazy val etmpStatementsDate: LocalDate = LocalDate.of(2019, 10, 1)
-  private lazy val pvatStatementsDate: LocalDate = LocalDate.of(2021, 1, 1)
-  private lazy val dutyDefermentStatementsDate: LocalDate = LocalDate.of(2019, 9, 1)
-  private val olderThan = Period.ofMonths(6)
+  val offset = 6
+  private val dayOne = 1
+  private val pvatStatementMonth = 1
+  private val etmpStatementMonth = 10
+  private val ddStatementMonth = 9
+  private val etmpAndDDStatementYear = 2019
+  private val pvatStatementYear = 2021
+  private val validYearLength = 4
+
+  private lazy val etmpStatementsDate: LocalDate = LocalDate.of(etmpAndDDStatementYear, etmpStatementMonth, dayOne)
+  private lazy val pvatStatementsDate: LocalDate = LocalDate.of(pvatStatementYear, pvatStatementMonth, dayOne)
+  private lazy val dutyDefermentStatementsDate: LocalDate = LocalDate.of(etmpAndDDStatementYear, ddStatementMonth, dayOne)
+  private val olderThan = Period.ofMonths(offset)
 
   def currentDate: LocalDate = LocalDateTime.now().toLocalDate
 
   def tooRecentDate(fileRole: FileRole): Constraint[LocalDate] = {
     Constraint {
-      case request if request.getYear.toString.length != 4 || !request.getYear.toString.matches("^[0-9]+") =>
+      case request if (request.getYear.toString.length != validYearLength ||
+        !request.getYear.toString.matches("^[0-9]+")) =>
+
         Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
-      // exclude the current month
-      case request if Period.between(request, currentDate.minusMonths(1)).toTotalMonths < olderThan.toTotalMonths =>
-        if (fileRole == C79Certificate){
+
+      case request if (Period.between(request,
+        currentDate.minusMonths(pvatStatementMonth)).toTotalMonths < olderThan.toTotalMonths) =>
+
+        if (fileRole == C79Certificate) {
           Invalid(ValidationError("cf.historic.document.request.form.error.date-too-recent.c79"))
-        } else { Invalid(ValidationError("cf.historic.document.request.form.error.date-too-recent")) }
+        } else {
+          Invalid(ValidationError("cf.historic.document.request.form.error.date-too-recent"))
+        }
       case _ => Valid
     }
   }
 
   def earlierThanSystemStartDate(fileRole: FileRole): Constraint[LocalDate] = {
     val messageKey = fileRole match {
-      case C79Certificate => "cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79"
-      case SecurityStatement => "cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities"
-      case _ => ""
+      case C79Certificate =>
+        "cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79"
+
+      case SecurityStatement =>
+        "cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities"
+
+      case _ => emptyString
     }
 
     Constraint {
-      case request if (request.getYear.toString.length != 4 || !request.getYear.toString.matches("^[0-9]+"))
+      case request if (request.getYear.toString.length != validYearLength ||
+        !request.getYear.toString.matches("^[0-9]+"))
+
         && fileRole != DutyDefermentStatement && fileRole != PostponedVATStatement =>
         Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
-      case request if request.isBefore(etmpStatementsDate) && fileRole != PostponedVATStatement && fileRole != DutyDefermentStatement =>
-      Invalid(ValidationError(messageKey))
+
+      case request if request.isBefore(etmpStatementsDate) && fileRole
+        != PostponedVATStatement && fileRole != DutyDefermentStatement =>
+        Invalid(ValidationError(messageKey))
+
       case _ => Valid
     }
   }
 
   def earlierThanPVATStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if (request.getYear.toString.length != 4  || !request.getYear.toString.matches("^[0-9]+"))
+
+    case request if (request.getYear.toString.length != validYearLength ||
+      !request.getYear.toString.matches("^[0-9]+"))
+
       && (fileRole == PostponedVATStatement) =>
       Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
-    case request if request.isBefore(pvatStatementsDate)  && fileRole == PostponedVATStatement =>
+
+    case request if request.isBefore(pvatStatementsDate) && fileRole == PostponedVATStatement =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"))
+
     case _ => Valid
   }
 
   def earlierThanDDStatementStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if (request.getYear.toString.length != 4 || !request.getYear.toString.matches("^[0-9]+"))
+
+    case request if (request.getYear.toString.length != validYearLength ||
+      !request.getYear.toString.matches("^[0-9]+"))
+
       && (fileRole == DutyDefermentStatement) =>
       Invalid(ValidationError("cf.historic.document.request.form.error.year.invalid-length"))
-    case request if request.isBefore(dutyDefermentStatementsDate)  && fileRole == DutyDefermentStatement =>
-      Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date"))
+
+    case request if request.isBefore(dutyDefermentStatementsDate) && fileRole == DutyDefermentStatement =>
+      Invalid(ValidationError(
+        "cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date"))
+
     case _ => Valid
   }
 }

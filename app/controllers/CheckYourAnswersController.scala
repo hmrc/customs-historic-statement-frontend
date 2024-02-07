@@ -31,16 +31,15 @@ import views.html.CheckYourAnswersView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersController @Inject()(
-                                            override val messagesApi: MessagesApi,
-                                            identify: IdentifierAction,
-                                            getData: DataRetrievalAction,
-                                            requireData: DataRequiredAction,
-                                            controllerComponents: MessagesControllerComponents,
-                                            view: CheckYourAnswersView,
-                                            customsFinancialsApiConnector: CustomsFinancialsApiConnector,
-                                            sessionRepository: SessionRepository
-                                          )(implicit execution: ExecutionContext)
+class CheckYourAnswersController @Inject()(override val messagesApi: MessagesApi,
+                                           identify: IdentifierAction,
+                                           getData: DataRetrievalAction,
+                                           requireData: DataRequiredAction,
+                                           controllerComponents: MessagesControllerComponents,
+                                           view: CheckYourAnswersView,
+                                           customsFinancialsApiConnector: CustomsFinancialsApiConnector,
+                                           sessionRepository: SessionRepository)
+                                          (implicit execution: ExecutionContext)
   extends FrontendController(controllerComponents) with I18nSupport {
 
   def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -58,8 +57,9 @@ class CheckYourAnswersController @Inject()(
   }
 
   def onSubmit(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
-      HistoricDocumentRequest.fromRequest(fileRole) match {
+
+    implicit request => HistoricDocumentRequest.fromRequest(fileRole) match {
+
         case Some(value) =>
           customsFinancialsApiConnector.postHistoricDocumentRequest(value).map { successful =>
             if (successful) {
@@ -68,6 +68,7 @@ class CheckYourAnswersController @Inject()(
               Redirect(routes.TechnicalDifficultiesController.onPageLoad)
             }
           }
+
         case None => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
       }
   }

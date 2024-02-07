@@ -24,7 +24,6 @@ import play.api.libs.json.{JsPath, _}
 
 import scala.util.{Failure, Success, Try}
 
-
 case class EoriHistory(eori: String,
                        validFrom: Option[LocalDate],
                        validUntil: Option[LocalDate])
@@ -36,7 +35,7 @@ object EoriHistory {
     (JsPath \ "eori").read[String] and
       (JsPath \ "validFrom").readNullable[String].map(asDate) and
       (JsPath \ "validUntil").readNullable[String].map(asDate)
-    ) (EoriHistory.apply _)
+    )(EoriHistory.apply _)
 
   implicit val writes: Writes[EoriHistory] = (o: EoriHistory) => {
     Json.obj(
@@ -58,5 +57,4 @@ object EoriHistory {
         }
     })
   }
-
 }

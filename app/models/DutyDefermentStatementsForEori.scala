@@ -19,17 +19,18 @@ package models
 import controllers.OrderedByEoriHistory
 import services.DateConverters.OrderedLocalDate
 
-case class DutyDefermentStatementsForEori(
-                                           eoriHistory: EoriHistory,
-                                           currentStatements: Seq[DutyDefermentStatementFile],
-                                           requestedStatements: Seq[DutyDefermentStatementFile]
+case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
+                                          currentStatements: Seq[DutyDefermentStatementFile],
+                                          requestedStatements: Seq[DutyDefermentStatementFile]
                                          ) extends OrderedByEoriHistory[DutyDefermentStatementsForEori] {
 
-  protected val requestedStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(requestedStatements)
+  private val requestedStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(requestedStatements)
   val groupsRequested: Seq[DutyDefermentStatementPeriodsByMonth] = groupByMonthAndYear(requestedStatementsByPeriod)
 
   private def groupByPeriod(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementPeriod] = {
-    files.groupBy(file => (file.metadata.fileRole, file.startDate, file.endDate, file.metadata.defermentStatementType)).map { case (_, periodFiles) =>
+    files.groupBy(file => (file.metadata.fileRole, file.startDate, file.endDate,
+      file.metadata.defermentStatementType)).map { case (_, periodFiles) =>
+
       DutyDefermentStatementPeriod(
         periodFiles.head.metadata.fileRole,
         periodFiles.head.metadata.defermentStatementType,
@@ -42,11 +43,11 @@ case class DutyDefermentStatementsForEori(
 
   private def groupByMonthAndYear(statementPeriods: Seq[DutyDefermentStatementPeriod]) = {
     val monthYearSorted = statementPeriods.groupBy(_.monthAndYear).toSeq.sortWith(_._1 > _._1)
+
     monthYearSorted.map {
       case (monthAndYear, statementPeriods) => DutyDefermentStatementPeriodsByMonth(monthAndYear, statementPeriods
         .sortWith(_.startDate > _.startDate)
         .sortWith(_.defermentStatementType < _.defermentStatementType))
     }
   }
-
 }

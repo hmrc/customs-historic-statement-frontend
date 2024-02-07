@@ -26,42 +26,57 @@ import viewmodels.SdesFileViewModels.DutyDefermentStatementFileViewModel
 class DutyDefermentStatementFileViewModelSpec extends SpecBase{
 
  "download link Aria label" should {
-   "return correct label for excise, supplementary and unknown " in {
+   "return correct label for excise, supplementary and unknown" in new Setup {
+
      val excise = DutyDefermentStatementFile(
        s"12345678.123",
        s"http://second.com/",
-       47,
+       size,
        DutyDefermentStatementFileMetadata(
-         2011, 11, 27,
-         2012, 11, 27,
-         Pdf, DutyDefermentStatement, Excise, Some(true), Some("BACS"), "12345678")
-     )
+         year, month, day,
+         year2, month, day,
+         Pdf, DutyDefermentStatement, Excise, Some(true), Some("BACS"), "12345678"))
+
      val supplementary = DutyDefermentStatementFile(
        s"12345678.123",
        s"http://second.com/",
-       47,
+       size,
        DutyDefermentStatementFileMetadata(
-         2011, 11, 27,
-         2012, 11, 27,
-         Pdf, DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), "12345678")
-     )
+         year, month, day,
+         year2, month, day,
+         Pdf, DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), "12345678"))
+
      val unknown = DutyDefermentStatementFile(
        s"12345678.123",
        s"http://second.com/",
-       47,
+       size,
        DutyDefermentStatementFileMetadata(
-         2011, 11, 27,
-         2012, 11, 27,
-         Pdf, DutyDefermentStatement, UnknownStatementType, Some(true), Some("BACS"), "12345678")
-     )
+         year, month, day,
+         year2, month, day,
+         Pdf, DutyDefermentStatement, UnknownStatementType, Some(true), Some("BACS"), "12345678"))
+
      val exciseViewModel = new DutyDefermentStatementFileViewModel(excise)
-     exciseViewModel.downloadLinkAriaLabel()(Helpers.stubMessages()) mustBe "cf.account.detail.excise-download-link"
+
+     exciseViewModel.downloadLinkAriaLabel()(Helpers.stubMessages()) mustBe
+       "cf.account.detail.excise-download-link"
 
      val supplementaryViewModel = new DutyDefermentStatementFileViewModel(supplementary)
-     supplementaryViewModel.downloadLinkAriaLabel()(Helpers.stubMessages()) mustBe "cf.account.detail.supplementary-download-link"
+
+     supplementaryViewModel.downloadLinkAriaLabel()(Helpers.stubMessages()) mustBe
+       "cf.account.detail.supplementary-download-link"
 
      val unknownViewModel = new DutyDefermentStatementFileViewModel(unknown)
-     unknownViewModel.downloadLinkAriaLabel()(Helpers.stubMessages()) mustBe "cf.account.detail.download-link"
+
+     unknownViewModel.downloadLinkAriaLabel()(Helpers.stubMessages()) mustBe
+       "cf.account.detail.download-link"
    }
  }
+
+  trait Setup {
+    val size = 47
+    val year = 2011
+    val year2 = 2021
+    val month = 11
+    val day = 27
+  }
 }

@@ -17,24 +17,27 @@
 package services
 
 import config.FrontendAppConfig
-
 import java.time._
 import javax.inject.Inject
 
 class DateTimeService @Inject()(appConfig: FrontendAppConfig) {
 
-  def getTimeStamp: OffsetDateTime = OffsetDateTime.ofInstant( Instant.now() , ZoneOffset.UTC)
+  val year = 2027
+  val month = 12
+  val day = 20
+  val hour = 12
+  val minute = 30
 
   def systemDateTime(zoneId: ZoneId): LocalDateTime = {
 
-    if (appConfig.fixedDateTime)
-      LocalDateTime.of(LocalDate.of(2027, 12, 20), LocalTime.of(12,30)) // scalastyle:ignore
-    else
+    if (appConfig.fixedDateTime) {
+      LocalDateTime.of(LocalDate.of(year, month, day), LocalTime.of(hour, minute))
+    } else {
       LocalDateTime.now(zoneId)
+    }
   }
 
   def utcDateTime(): LocalDateTime = systemDateTime(ZoneId.of("UTC"))
 
   def localDateTime(): LocalDateTime = systemDateTime(ZoneId.of("Europe/London"))
-
 }
