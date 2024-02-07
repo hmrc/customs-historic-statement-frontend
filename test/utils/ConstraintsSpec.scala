@@ -21,6 +21,7 @@ import base.SpecBase
 import forms.mappings.Constraints
 import play.api.data.validation.Constraints.maxLength
 import play.api.data.validation.{Invalid, Valid}
+import utils.Utils.emptyString
 
 class ConstraintsSpec extends SpecBase with Constraints {
 
@@ -31,7 +32,7 @@ class ConstraintsSpec extends SpecBase with Constraints {
     }
 
     "return Valid for an empty string" in new Setup {
-      val result = maxLength(length, "error.length")("")
+      val result = maxLength(length, "error.length")(emptyString)
       result mustEqual Valid
     }
 

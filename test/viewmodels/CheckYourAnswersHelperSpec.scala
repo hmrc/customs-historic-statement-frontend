@@ -23,6 +23,7 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.ActionItem
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Actions, Value}
+import utils.Utils.emptyString
 
 class CheckYourAnswersHelperSpec extends SpecBase {
 
@@ -30,9 +31,9 @@ class CheckYourAnswersHelperSpec extends SpecBase {
     "return a sequence of historicDatesRow" in new Setup {
 
       val compare = List(SummaryListRow(Value(
-        HtmlContent("October 2019 to October 2019"), ""),
-        None,"", Some(Actions("", List(ActionItem("/customs/historic-statement/import-vat/change-request-date",
-          HtmlContent("Change"), Some("statement period"), "", Map()))))))
+        HtmlContent("October 2019 to October 2019"), emptyString), None, emptyString,
+        Some(Actions(emptyString, List(ActionItem("/customs/historic-statement/import-vat/change-request-date",
+          HtmlContent("Change"), Some("statement period"), emptyString, Map()))))))
 
       helperOb.rows(c79FileRole) mustBe compare
     }

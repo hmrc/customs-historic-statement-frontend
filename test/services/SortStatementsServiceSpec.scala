@@ -23,6 +23,7 @@ import models._
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import viewmodels._
+import utils.Utils.emptyString
 
 import java.time.LocalDate
 
@@ -112,10 +113,12 @@ class SortStatementsServiceSpec extends SpecBase {
     val requestedC79Certificates = List(
       VatCertificatesByMonth(LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
         List(VatCertificateFile("statementfile_00", "download_url_00", size,
-          VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, someRequestId), ""))),
+          VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf,
+            C79Certificate, someRequestId), emptyString))),
       VatCertificatesByMonth(LocalDate.of(periodStartYear, periodStartMonth_2, periodStartDay),
         List(VatCertificateFile("statementfile_00", "download_url_00", size,
-          VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate, someRequestId), ""))))
+          VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf,
+            C79Certificate, someRequestId), emptyString))))
 
     val postponedVatStatement: PostponedVatStatementFile =
       PostponedVatStatementFile("statementfile_00", "download_url_00", size,
@@ -137,11 +140,11 @@ class SortStatementsServiceSpec extends SpecBase {
       PostponedVatStatementsByMonth(LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
         List(PostponedVatStatementFile("statementfile_00", "download_url_00", size,
           PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth, Pdf, PostponedVATStatement, "CDS",
-            someRequestId), ""))),
+            someRequestId), emptyString))),
       PostponedVatStatementsByMonth(LocalDate.of(periodStartYear, periodStartMonth_2, periodStartDay),
         List(PostponedVatStatementFile("statementfile_00", "download_url_00", size,
           PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth_2, Pdf, PostponedVATStatement, "Chief",
-            someRequestId), ""))))
+            someRequestId), emptyString))))
 
     val dutyDeferementFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile("2018_03_01-08.pdf", "url.pdf", size,

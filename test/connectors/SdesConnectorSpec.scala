@@ -28,6 +28,7 @@ import play.api.libs.json.Json
 import play.api.test.Helpers
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import utils.Utils.emptyString
 
 import scala.concurrent.Future
 
@@ -227,7 +228,7 @@ class SdesConnectorSpec extends SpecBase {
           MetadataItem("PeriodStartMonth", "6"),
           MetadataItem("FileType", "PDF"),
           MetadataItem("FileRole", "PostponedVATStatement"),
-          MetadataItem("DutyPaymentMethod", ""))))
+          MetadataItem("DutyPaymentMethod", emptyString))))
     )
 
     val postponedVatStatementFilesWithUnknownFileTypesSdesResponse = List(
