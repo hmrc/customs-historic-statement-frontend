@@ -25,13 +25,13 @@ import java.time.{LocalDate, LocalDateTime, Period}
 trait Constraints {
 
   val offset = 6
-  val dayOne = 1
-  val pvatStatementMonth = 1
-  val etmpStatementMonth = 10
-  val ddStatementMonth = 9
-  val etmpAndDDStatementYear = 2019
-  val pvatStatementYear = 2021
-  val validYearLength = 4
+  private val dayOne = 1
+  private val pvatStatementMonth = 1
+  private val etmpStatementMonth = 10
+  private val ddStatementMonth = 9
+  private val etmpAndDDStatementYear = 2019
+  private val pvatStatementYear = 2021
+  private val validYearLength = 4
 
   private lazy val etmpStatementsDate: LocalDate = LocalDate.of(etmpAndDDStatementYear, etmpStatementMonth, dayOne)
   private lazy val pvatStatementsDate: LocalDate = LocalDate.of(pvatStatementYear, pvatStatementMonth, dayOne)

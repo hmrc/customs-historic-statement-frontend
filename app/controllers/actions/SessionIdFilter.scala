@@ -50,5 +50,4 @@ class SessionIdFilterImpl @Inject()(implicit val executionContext: ExecutionCont
 }
 
 trait SessionIdFilter
-  extends ActionRefiner[IdentifierRequestWithEoriHistory,
-  IdentifierRequestWithEoriHistoryAndSessionId]
+  extends ActionRefiner[IdentifierRequestWithEoriHistory, IdentifierRequestWithEoriHistoryAndSessionId]
