@@ -115,7 +115,7 @@
       // Show checkbox content
       if ($control.is(':checked')) {
         showToggledContent($control, $content)
-      } else {
+      } else {// Hide checkbox content
 
         //update related checkboxes
         // If the controlling input, update aria-expanded if no other checkboxes pointing to this content are checked
@@ -140,7 +140,7 @@
         handler($control, getToggledContent($control))
       }
 
-      // Prepare ARIA attributes`
+      // Prepare ARIA attributes
       var $controls = $(elementSelector)
       $controls.each(initToggledContent)
 
