@@ -34,8 +34,8 @@ trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with
 
 class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthConnector,
                                               config: FrontendAppConfig,
-                                              val parser: BodyParsers.Default)(
-  implicit val executionContext: ExecutionContext)
+                                              val parser: BodyParsers.Default)
+                                             (implicit val executionContext: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions {
 
   override def invokeBlock[A](request: Request[A],

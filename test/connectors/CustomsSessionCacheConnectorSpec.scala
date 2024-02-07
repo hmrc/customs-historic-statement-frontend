@@ -72,5 +72,4 @@ class CustomsSessionCacheConnectorSpec extends SpecBase {
     val customsSessionCacheConnector = app.injector.instanceOf[CustomsSessionCacheConnector]
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }
-
 }

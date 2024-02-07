@@ -28,8 +28,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class SdesConnector @Inject()(http: HttpClient,
-                              sdesGatekeeperService: SdesGatekeeperService)(
-  implicit appConfig: FrontendAppConfig, ec: ExecutionContext) {
+                              sdesGatekeeperService: SdesGatekeeperService)
+                             (implicit appConfig: FrontendAppConfig, ec: ExecutionContext) {
 
   import sdesGatekeeperService._
 

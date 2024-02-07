@@ -38,8 +38,8 @@ class CheckYourAnswersController @Inject()(override val messagesApi: MessagesApi
                                            controllerComponents: MessagesControllerComponents,
                                            view: CheckYourAnswersView,
                                            customsFinancialsApiConnector: CustomsFinancialsApiConnector,
-                                           sessionRepository: SessionRepository
-                                          )(implicit execution: ExecutionContext)
+                                           sessionRepository: SessionRepository)
+                                          (implicit execution: ExecutionContext)
   extends FrontendController(controllerComponents) with I18nSupport {
 
   def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {

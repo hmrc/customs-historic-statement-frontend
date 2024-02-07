@@ -26,10 +26,9 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CustomsFinancialsApiConnector @Inject()(
-                                               appConfig: FrontendAppConfig,
-                                               httpClient: HttpClient
-                                             )(implicit executionContext: ExecutionContext) {
+class CustomsFinancialsApiConnector @Inject()(appConfig: FrontendAppConfig,
+                                              httpClient: HttpClient)
+                                             (implicit executionContext: ExecutionContext) {
 
   def postHistoricDocumentRequest(historicDocumentRequest: HistoricDocumentRequest)(
     implicit hc: HeaderCarrier): Future[Boolean] = {

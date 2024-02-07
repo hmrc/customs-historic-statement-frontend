@@ -33,8 +33,8 @@ class JourneyStartController @Inject()(customsSessionCacheConnector: CustomsSess
                                        checkEmailIsVerified: EmailAction,
                                        getData: DataRetrievalAction,
                                        sessionRepository: SessionRepository,
-                                       mcc: MessagesControllerComponents)(
-  implicit executionContext: ExecutionContext) extends FrontendController(mcc) {
+                                       mcc: MessagesControllerComponents)
+                                      (implicit executionContext: ExecutionContext) extends FrontendController(mcc) {
 
 
   def dutyDeferment(linkId: String): Action[AnyContent] = (

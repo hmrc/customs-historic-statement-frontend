@@ -47,8 +47,8 @@ class HistoricDateRequestPageController @Inject()(override val messagesApi: Mess
                                                   clock: Clock,
                                                   formProvider: HistoricDateRequestPageFormProvider,
                                                   val controllerComponents: MessagesControllerComponents,
-                                                  view: HistoricDateRequestPageView)(
-  implicit ec: ExecutionContext)
+                                                  view: HistoricDateRequestPageView)
+                                                 (implicit ec: ExecutionContext)
   extends FrontendBaseController with I18nSupport {
 
   val log = Logger(this.getClass)

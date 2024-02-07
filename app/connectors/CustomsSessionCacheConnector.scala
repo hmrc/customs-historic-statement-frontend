@@ -24,10 +24,9 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CustomsSessionCacheConnector @Inject()(
-                                              httpClient: HttpClient,
-                                              appConfig: FrontendAppConfig
-                                            )(implicit executionContext: ExecutionContext) {
+class CustomsSessionCacheConnector @Inject()(httpClient: HttpClient,
+                                             appConfig: FrontendAppConfig)
+                                            (implicit executionContext: ExecutionContext) {
 
   def getAccountNumber(sessionId: String, linkId: String)(
     implicit hc: HeaderCarrier): Future[Option[String]] = {

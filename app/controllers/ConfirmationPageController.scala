@@ -42,8 +42,8 @@ class ConfirmationPageController @Inject()(override val messagesApi: MessagesApi
                                            sessionRepository: SessionRepository,
                                            customsDataStoreConnector: CustomsDataStoreConnector,
                                            val controllerComponents: MessagesControllerComponents,
-                                           view: ConfirmationPageView)(
-  implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
+                                           view: ConfirmationPageView)
+                                          (implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
   extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -76,7 +76,7 @@ class ConfirmationPageController @Inject()(override val messagesApi: MessagesApi
   }
 
   private def userAnswersWithNoHistoricDates(fileRole: FileRole,
-                                         request: DataRequest[AnyContent]): UserAnswers =
+                                             request: DataRequest[AnyContent]): UserAnswers =
     request.userAnswers.remove(HistoricDateRequestPage(fileRole)) match {
       case scala.util.Success(value) => value
       case _ => request.userAnswers

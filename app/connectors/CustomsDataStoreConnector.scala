@@ -29,8 +29,8 @@ import javax.inject.Inject
 import scala.concurrent._
 
 class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig,
-                                          httpClient: HttpClient)(
-  implicit executionContext: ExecutionContext) extends Logging {
+                                          httpClient: HttpClient)
+                                         (implicit executionContext: ExecutionContext) extends Logging {
 
   def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
     val dataStoreEndpoint = appConfig.customsDataStore + s"/eori/$eori/verified-email"
