@@ -36,7 +36,6 @@ class JourneyStartController @Inject()(customsSessionCacheConnector: CustomsSess
                                        mcc: MessagesControllerComponents)
                                       (implicit executionContext: ExecutionContext) extends FrontendController(mcc) {
 
-
   def dutyDeferment(linkId: String): Action[AnyContent] = (
     identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
     hc.sessionId match {

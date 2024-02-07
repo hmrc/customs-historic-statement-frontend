@@ -26,8 +26,7 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SessionIdFilterImpl @Inject()(implicit val executionContext: ExecutionContext,
-                                    errorHandler: ErrorHandler)
+class SessionIdFilterImpl @Inject()(implicit val executionContext: ExecutionContext, errorHandler: ErrorHandler)
   extends SessionIdFilter {
 
   override protected def refine[A] (request: IdentifierRequestWithEoriHistory[A]): Future[Either[Result,
@@ -36,7 +35,9 @@ class SessionIdFilterImpl @Inject()(implicit val executionContext: ExecutionCont
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     hc.sessionId match {
+
       case None => Future.successful(Left(Unauthorized(errorHandler.unauthorized()(request))))
+
       case Some(sessionId) => Future.successful(Right(IdentifierRequestWithEoriHistoryAndSessionId(
         request,
         request.identifier,

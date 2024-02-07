@@ -29,12 +29,9 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EmailAction @Inject() (dataStoreService: CustomsDataStoreConnector)(
-    implicit
-    val executionContext: ExecutionContext,
-    val messagesApi: MessagesApi
-) extends ActionFilter[IdentifierRequest]
-    with I18nSupport {
+class EmailAction @Inject()(dataStoreService: CustomsDataStoreConnector)
+                           (implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi)
+  extends ActionFilter[IdentifierRequest] with I18nSupport {
 
   def filter[A](request: IdentifierRequest[A]): Future[Option[Result]] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)

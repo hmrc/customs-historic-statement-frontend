@@ -28,8 +28,6 @@ class DateTimeService @Inject()(appConfig: FrontendAppConfig) {
   val hour = 12
   val minute = 30
 
-  def getTimeStamp: OffsetDateTime = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.UTC)
-
   def systemDateTime(zoneId: ZoneId): LocalDateTime = {
 
     if (appConfig.fixedDateTime) {

@@ -19,6 +19,7 @@ package models
 import helpers.Formatters
 import play.api.Logging
 import play.api.libs.json._
+import utils.Utils.emptyString
 
 import java.time.LocalDate
 import scala.collection.immutable.SortedSet
@@ -172,7 +173,7 @@ case class VatCertificateFile(filename: String,
                               downloadURL: String,
                               size: Long,
                               metadata: VatCertificateFileMetadata,
-                              eori: String = "")
+                              eori: String = emptyString)
   extends Ordered[VatCertificateFile] with SdesFile {
 
   val formattedSize: String = Formatters.fileSize(size)
@@ -190,7 +191,7 @@ case class PostponedVatStatementFile(filename: String,
                                      downloadURL: String,
                                      size: Long,
                                      metadata: PostponedVatStatementFileMetadata,
-                                     eori: String = "")
+                                     eori: String = emptyString)
   extends Ordered[PostponedVatStatementFile] with SdesFile {
 
   val formattedSize: String = Formatters.fileSize(size)

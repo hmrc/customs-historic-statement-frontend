@@ -24,6 +24,7 @@ import play.api.http.Status
 import play.api.inject.bind
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import utils.Utils.emptyString
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -40,7 +41,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
       when[Future[HttpResponse]](mockHttpClient.POST(ArgumentMatchers.eq(
         customsFinancialsApiUrl), ArgumentMatchers.eq(historicDocumentRequest), any)(any, any, any, any))
-        .thenReturn(Future.successful(HttpResponse.apply(Status.NO_CONTENT, "")))
+        .thenReturn(Future.successful(HttpResponse.apply(Status.NO_CONTENT, emptyString)))
 
       running(app) {
         val result = await(customsFinancialsApiConnector.postHistoricDocumentRequest(historicDocumentRequest)(hc))
@@ -73,7 +74,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
       when[Future[HttpResponse]](mockHttpClient.DELETE(
         ArgumentMatchers.eq(customsFinancialsApiUrl), any)(any, any, any))
-        .thenReturn(Future.successful(HttpResponse.apply(Status.OK, "")))
+        .thenReturn(Future.successful(HttpResponse.apply(Status.OK, emptyString)))
 
       running(app) {
         val result = await(customsFinancialsApiConnector.deleteNotification("eori1", C79Certificate)(hc))

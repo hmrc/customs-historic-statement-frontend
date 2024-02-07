@@ -30,9 +30,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DefaultSessionRepository @Inject()(mongoComponent: PlayMongoComponent,
-                                         config: Configuration)(
-  implicit executionContext: ExecutionContext)
+class DefaultSessionRepository @Inject()(mongoComponent: PlayMongoComponent, config: Configuration)
+                                        (implicit executionContext: ExecutionContext)
 
   extends PlayMongoRepository[UserAnswers](
     collectionName = "user-session",

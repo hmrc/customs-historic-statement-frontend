@@ -50,6 +50,7 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
           case Some(eori) => block(IdentifierRequest(request, internalId, eori.value))
           case None => throw InsufficientEnrolments()
         }
+
       case _ => throw new RuntimeException("Unable to retrieve internal Id/Enrolments")
 
     } recover {

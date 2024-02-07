@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class TechnicalDifficultiesController @Inject()(controllerComponents: MessagesControllerComponents,
                                                 errorHandler: ErrorHandler)
-  extends FrontendController(controllerComponents){
+  extends FrontendController(controllerComponents) {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(errorHandler.standardErrorTemplate(

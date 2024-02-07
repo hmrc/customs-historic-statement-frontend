@@ -38,9 +38,8 @@ object FileInformation {
 
   implicit val metadataItemWrites: Writes[MetadataItem] =  Json.writes[MetadataItem]
 
-  implicit val metadataWrites: Writes[Metadata] = new Writes[Metadata] {
-    override def writes(o: Metadata): JsValue = JsArray(o.items.map(
-      item => Json.obj(("metadata", item.key), ("value", item.value))))
-  }
+  implicit val metadataWrites: Writes[Metadata] = (o: Metadata) => JsArray(o.items.map(
+    item => Json.obj(("metadata", item.key), ("value", item.value))))
+
   implicit val fileInformationFormats: Format[FileInformation] = Json.format[FileInformation]
 }

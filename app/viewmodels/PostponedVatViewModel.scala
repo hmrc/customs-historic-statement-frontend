@@ -24,10 +24,7 @@ import play.api.i18n.Messages
 
 import java.time.LocalDate
 
-case class PostponedVatViewModel(statementsForAllEoris: Seq[PostponedVatStatementsForEori]) {
-  val hasRequestedStatements: Boolean = statementsForAllEoris.exists(_.requestedStatements.nonEmpty)
-  val hasCurrentStatements: Boolean = statementsForAllEoris.exists(_.currentStatements.nonEmpty)
-}
+case class PostponedVatViewModel(statementsForAllEoris: Seq[PostponedVatStatementsForEori])
 
 case class PostponedVatStatementsForEori(eoriHistory: EoriHistory,
                                          currentStatements: Seq[PostponedVatStatementsByMonth],

@@ -46,7 +46,7 @@ object FormHelper {
       invalidEndMonthKey,
       invalidEndYearKey)
 
-    if ((key.equals("start") || key.equals("end"))) {
+    if (key.equals("start") || key.equals("end")) {
       if (startDateMsgKeyList.contains(errorMsg) || endDateMsgKeyList.contains(errorMsg)) {
         s"$key.month"
       } else {

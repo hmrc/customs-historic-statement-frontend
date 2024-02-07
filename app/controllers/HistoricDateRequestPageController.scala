@@ -100,7 +100,7 @@ class HistoricDateRequestPageController @Inject()(override val messagesApi: Mess
       )
   }
 
-  def customValidation(dates: HistoricDates, form: Form[HistoricDates], fileRole: FileRole)
+  private def customValidation(dates: HistoricDates, form: Form[HistoricDates], fileRole: FileRole)
                       (implicit messages: Messages): Option[Form[HistoricDates]] = {
     val maximumNumberOfMonths = 6
 
@@ -136,7 +136,7 @@ class HistoricDateRequestPageController @Inject()(override val messagesApi: Mess
     }
   }
 
-  def minTaxYear: TaxYear = {
+  private def minTaxYear: TaxYear = {
     lazy val currentDate: LocalDate = LocalDateTime.now(clock).toLocalDate
     val maximumNumberOfYears = 6
     taxYearFor(currentDate).back(maximumNumberOfYears)

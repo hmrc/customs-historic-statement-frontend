@@ -35,7 +35,7 @@ object EoriHistory {
     (JsPath \ "eori").read[String] and
       (JsPath \ "validFrom").readNullable[String].map(asDate) and
       (JsPath \ "validUntil").readNullable[String].map(asDate)
-    ) (EoriHistory.apply _)
+    )(EoriHistory.apply _)
 
   implicit val writes: Writes[EoriHistory] = (o: EoriHistory) => {
     Json.obj(
