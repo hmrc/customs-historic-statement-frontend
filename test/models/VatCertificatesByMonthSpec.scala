@@ -22,9 +22,9 @@ import viewmodels.VatCertificatesByMonth
 
 import java.time.LocalDate
 
-class VatCertificatesByMonthSpec extends SpecBase{
+class VatCertificatesByMonthSpec extends SpecBase {
 
-  "compare" should{
+  "compare" should {
     "return the correct order" in {
 
       val year = 2019

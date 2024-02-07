@@ -26,12 +26,12 @@ class DateTimeServiceSpec extends SpecBase {
 
     "return system date and time for UTC" in new Setup {
       val systemDateTime = dateTimeService.systemDateTime(ZoneId.of("UTC"))
-      systemDateTime must not be None
+      Option(systemDateTime) must not be empty
     }
 
     "return system date and time for Europe/London" in new Setup {
       val systemDateTime = dateTimeService.systemDateTime(ZoneId.of("Europe/London"))
-      systemDateTime must not be None
+      Option(systemDateTime) must not be empty
     }
 
     "return fixed date and time when fixedDateTime is true" in new Setup {
@@ -42,12 +42,12 @@ class DateTimeServiceSpec extends SpecBase {
 
     "return UTC date and time for utcDateTime" in new Setup {
       val utcDateTime = dateTimeService.utcDateTime()
-      utcDateTime must not be None
+      Option(utcDateTime) must not be empty
     }
 
     "return Europe/London date and time for localDateTime" in new Setup {
       val londonDateTime = dateTimeService.localDateTime()
-      londonDateTime must not be None
+      Option(londonDateTime) must not be empty
     }
   }
 
