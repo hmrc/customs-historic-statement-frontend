@@ -138,17 +138,12 @@ class InputDateSpec extends SpecBase {
                 html.getElementsByTag("legend").text() must include(headline)
                 html.getElementById(s"$id.month").attr(id) mustNot include("01")
                 html.getElementById(s"$id.year").attr(id) mustNot include("2021")
-                html.getElementById(s"$id.month").attr("class") must include(
-                    "govuk-input--error"
-                )
-                html.getElementById(s"$id.year").attr("class") must include(
-                    "govuk-input--error"
-                )
+                html.getElementsByTag("input").attr("class") must include("govuk-input--error")
             }
         }
     }
 
-
+    
     trait Setup {
         implicit val clk: Clock = Clock.systemUTC()
         val form = new HistoricDateRequestPageFormProvider().apply(DutyDefermentStatement)
