@@ -25,8 +25,7 @@
         button: components.button,
         errorSummary: components.errorSummary,
         h1: components.h1,
-        p: components.p,
-        fieldset: components.fieldset
+        p: components.p
 )
 
 @(form: Form[_], mode: Mode, fileRole: FileRole, returnUrl: String, maybeDan: Option[String], niIndicator: Option[Boolean])(implicit request: Request[_], messages: Messages)
@@ -50,10 +49,7 @@
     @formHelper(action = HistoricDateRequestPageController.onSubmit(mode, fileRole), 'autoComplete -> "off") {
         @errorSummary(form.errors,errorFieldName = None, isErrorKeyUpdateEnabled = true, Some(updateFormErrorKeyForStartAndEndDate))
 
-        @fieldset(
-            legend = messages(s"cf.historic.document.request.heading.$fileRole"),
-            describedBy = None
-        ) {
+            @h1(s"cf.historic.document.request.heading.$fileRole")        
             @p(Html(messages(s"cf.historic.document.request.info-text.$fileRole")))
 
             @if(fileRole != C79Certificate){
@@ -90,7 +86,6 @@
                     legendAsPageHeading = false,
                 )
             }
-        }
 
         @button(messages("cf.historic.document.request.continue"))
     }

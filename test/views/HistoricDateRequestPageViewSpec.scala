@@ -41,7 +41,7 @@ class HistoricDateRequestPageViewSpec extends SpecBase {
       }
 
       "date is displayed" in new SetUp {
-        view.getElementsByTag("h1").text() mustBe
+        view.getElementsByClass("govuk-fieldset__heading").text() mustBe
           message("cf.historic.document.request.heading.SecurityStatement")
       }
 
