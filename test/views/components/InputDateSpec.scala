@@ -24,131 +24,131 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
-import java.time.Clock
 import views.html.components.inputDate
 
 class InputDateSpec extends SpecBase {
 
-    "InpuDate component" should {
-        "render correctly with no errors" in new Setup {
-            val formWithValues = form.bind(
-                Map(
-                    s"$id.month" -> "01",
-                    s"$id.year" -> "2021"
-                )
-            )
+  "InpuDate component" should {
+    "render correctly with no errors" in new Setup {
+      val formWithValues = form.bind(
+        Map(
+          s"$id.month" -> "01",
+          s"$id.year" -> "2021"
+        )
+      )
 
-            running(app) {
-                val inputDateView = app.injector.instanceOf[inputDate]
-                val output: HtmlFormat.Appendable = inputDateView(
-                    formWithValues,
-                    headline,
-                    id = id,
-                    hintText = None,
-                    legendAsPageHeading = false
-                )(messages(app))
+      running(app) {
+        val inputDateView = app.injector.instanceOf[inputDate]
+        val output: HtmlFormat.Appendable = inputDateView(
+          formWithValues,
+          headline,
+          id = id,
+          hintText = None,
+          legendAsPageHeading = false
+        )(messages(app))
 
-                val html: Document = Jsoup.parse(output.toString)
-                html.getElementsByTag("legend").text() must include(headline)
-                html.getElementById(s"$id.month").attr(id) must include("01")
-                html.getElementById(s"$id.year").attr(id) must include("2021")
-                html.getElementsByTag("input").attr("class") mustNot include(
-                    "govuk-input--error"
-                )
-            }
-            
-        }
+        val html: Document = Jsoup.parse(output.toString)
+        html.getElementsByTag("legend").text() must include(headline)
+        html.getElementById(s"$id.month").attr(id) must include("01")
+        html.getElementById(s"$id.year").attr(id) must include("2021")
+        html.getElementsByTag("input").attr("class") mustNot include(
+          "govuk-input--error"
+        )
+      }
 
-        "render correctly with month error" in new Setup {
-            val formWithValues = form.bind(
-                Map(
-                    s"$id.month" -> "",
-                    s"$id.year" -> "2021"
-                )
-            )
-
-            running(app) {
-                val inputDateView = app.injector.instanceOf[inputDate]
-                val output: HtmlFormat.Appendable = inputDateView(
-                    formWithValues,
-                    headline,
-                    id = id,
-                    hintText = None,
-                    legendAsPageHeading = false
-                )(messages(app))
-
-                val html: Document = Jsoup.parse(output.toString)
-                html.getElementsByTag("legend").text() must include(headline)
-                html.getElementById(s"$id.month").attr(id) mustNot include("01")
-                html.getElementById(s"$id.year").attr(id) must include("2021")
-                html.getElementById(s"$id.month").attr("class") must include(
-                    "govuk-input--error"
-                )
-
-            }
-        }
-
-        "render correctly with year error" in new Setup {
-            val formWithValues = form.bind(
-                Map(
-                    s"$id.month" -> "01",
-                    s"$id.year" -> ""
-                )
-            )
-
-            running(app) {
-                val inputDateView = app.injector.instanceOf[inputDate]
-                val output: HtmlFormat.Appendable = inputDateView(
-                    formWithValues,
-                    headline,
-                    id = id,
-                    hintText = None,
-                    legendAsPageHeading = false
-                )(messages(app))
-
-                val html: Document = Jsoup.parse(output.toString)
-                html.getElementsByTag("legend").text() must include(headline)
-                html.getElementById(s"$id.month").attr(id) must include("01")
-                html.getElementById(s"$id.year").attr(id) mustNot include("2021")
-                html.getElementById(s"$id.year").attr("class") must include(
-                    "govuk-input--error"
-                )
-            }
-        }
-
-        "render correctly with both month and year errors" in new Setup {
-            val formWithValues = form.bind(
-                Map(
-                    s"$id.month" -> "",
-                    s"$id.year" -> ""
-                )
-            )
-
-            running(app) {
-                val inputDateView = app.injector.instanceOf[inputDate]
-                val output: HtmlFormat.Appendable = inputDateView(
-                    formWithValues,
-                    headline,
-                    id = id,
-                    hintText = None,
-                    legendAsPageHeading = false
-                )(messages(app))
-
-                val html: Document = Jsoup.parse(output.toString)
-                html.getElementsByTag("legend").text() must include(headline)
-                html.getElementById(s"$id.month").attr(id) mustNot include("01")
-                html.getElementById(s"$id.year").attr(id) mustNot include("2021")
-                html.getElementsByTag("input").attr("class") must include("govuk-input--error")
-            }
-        }
     }
 
-    
-    trait Setup {
-        implicit val clk: Clock = Clock.systemUTC()
-        val form = new HistoricDateRequestPageFormProvider().apply(DutyDefermentStatement)
-        val app: Application = applicationBuilder().build()
-        val id = "value"
-        val headline = "Date of birth"
+    "render correctly with month error" in new Setup {
+      val formWithValues = form.bind(
+        Map(
+          s"$id.month" -> "",
+          s"$id.year" -> "2021"
+        )
+      )
+
+      running(app) {
+        val inputDateView = app.injector.instanceOf[inputDate]
+        val output: HtmlFormat.Appendable = inputDateView(
+          formWithValues,
+          headline,
+          id = id,
+          hintText = None,
+          legendAsPageHeading = false
+        )(messages(app))
+
+        val html: Document = Jsoup.parse(output.toString)
+        html.getElementsByTag("legend").text() must include(headline)
+        html.getElementById(s"$id.month").attr(id) mustNot include("01")
+        html.getElementById(s"$id.year").attr(id) must include("2021")
+        html.getElementById(s"$id.month").attr("class") must include(
+          "govuk-input--error"
+        )
+
+      }
     }
+
+    "render correctly with year error" in new Setup {
+      val formWithValues = form.bind(
+        Map(
+          s"$id.month" -> "01",
+          s"$id.year" -> ""
+        )
+      )
+
+      running(app) {
+        val inputDateView = app.injector.instanceOf[inputDate]
+        val output: HtmlFormat.Appendable = inputDateView(
+          formWithValues,
+          headline,
+          id = id,
+          hintText = None,
+          legendAsPageHeading = false
+        )(messages(app))
+
+        val html: Document = Jsoup.parse(output.toString)
+        html.getElementsByTag("legend").text() must include(headline)
+        html.getElementById(s"$id.month").attr(id) must include("01")
+        html.getElementById(s"$id.year").attr(id) mustNot include("2021")
+        html.getElementById(s"$id.year").attr("class") must include(
+          "govuk-input--error"
+        )
+      }
+    }
+
+    "render correctly with both month and year errors" in new Setup {
+      val formWithValues = form.bind(
+        Map(
+          s"$id.month" -> "",
+          s"$id.year" -> ""
+        )
+      )
+
+      running(app) {
+        val inputDateView = app.injector.instanceOf[inputDate]
+        val output: HtmlFormat.Appendable = inputDateView(
+          formWithValues,
+          headline,
+          id = id,
+          hintText = None,
+          legendAsPageHeading = false
+        )(messages(app))
+
+        val html: Document = Jsoup.parse(output.toString)
+        html.getElementsByTag("legend").text() must include(headline)
+        html.getElementById(s"$id.month").attr(id) mustNot include("01")
+        html.getElementById(s"$id.year").attr(id) mustNot include("2021")
+        html.getElementsByTag("input").attr("class") must include(
+          "govuk-input--error"
+        )
+      }
+    }
+  }
+
+  trait Setup {
+    val form =
+      new HistoricDateRequestPageFormProvider().apply(DutyDefermentStatement)
+    val app: Application = applicationBuilder().build()
+    val id = "value"
+    val headline = "Date of birth"
+  }
 }
