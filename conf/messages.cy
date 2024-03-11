@@ -143,17 +143,26 @@ cf.historic.document.request.form.error.date-too-recent.c79=Gallwch ofyn am dyst
 
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.dd=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Medi 2019
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Hydref 2019
-
-cf.historic.document.request.form.error.start.month.date-number-invalid=Nodwch o ba fis yr ydych am chwilio
-cf.historic.document.request.form.error.start.year.date-number-invalid=Nodwch o ba flwyddyn yr ydych am chwilio
-cf.historic.document.request.form.error.end.month.date-number-invalid=Nodwch hyd at ba fis yr ydych am chwilio
-cf.historic.document.request.form.error.end.year.date-number-invalid=Nodwch hyd at ba flwyddyn rydych am chwilio
-cf.historic.document.request.form.error.start.date-missing=Nodwch o ba fis a blwyddyn yr ydych am chwilio
-cf.historic.document.request.form.error.end.date-missing=Nodwch hyd at ba fis a blwyddyn rydych am chwilio
 cf.historic.document.request.form.error.start.month.invalid=Mae’n rhaid i’r dyddiad dechrau fod yn ddyddiad go iawn
 cf.historic.document.request.form.error.end.month.invalid=Mae’n rhaid i’r dyddiad dod i ben fod yn ddyddiad go iawn
 cf.historic.document.request.form.error.year.invalid=Nodwch flwyddyn go iawn
 cf.historic.document.request.form.error.year.invalid-length=Mae’n rhaid i’r flwyddyn gynnwys pedwar rhif
+
+# Duty Deferment Statement Error Messages
+cf.historic.document.request.form.error.start.date-missing.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch o ba fis a blwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.end.date-missing.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis a blwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.start.year.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch o ba flwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.end.year.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba flwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.start.month.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch o ba fis yr hoffech eu cael
+cf.historic.document.request.form.error.end.month.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis yr hoffech eu cael
+
+# Postponed VAT Statement Error Messages
+cf.historic.document.request.form.error.start.date-missing.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch o ba fis a blwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.end.date-missing.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis a blwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.start.year.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch o ba flwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.end.year.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba flwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.start.month.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch o ba fis yr hoffech eu cael
+cf.historic.document.request.form.error.end.month.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis yr hoffech eu cael
 
 # Security Statements requested view
 cf.security-statements.requested.title=Hysbysiad o ddatganiadau addasu y gofynnwyd amdanynt
