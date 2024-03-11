@@ -164,6 +164,14 @@ cf.historic.document.request.form.error.end.year.date-number-invalid.PostponedVA
 cf.historic.document.request.form.error.start.month.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch o ba fis yr hoffech eu cael
 cf.historic.document.request.form.error.end.month.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis yr hoffech eu cael
 
+# C79 Certificate Statement Error Messages
+cf.historic.document.request.form.error.start.date-missing.C79Certificate=Yn eich cais am dystysgrifau, nodwch o ba fis a blwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.end.date-missing.C79Certificate=Yn eich cais am dystysgrifau, nodwch hyd at ba fis a blwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.start.year.date-number-invalid.C79Certificate=Yn eich cais am dystysgrifau, nodwch o ba flwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.end.year.date-number-invalid.C79Certificate=Yn eich cais am dystysgrifau, nodwch hyd at ba flwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.start.month.date-number-invalid.C79Certificate=Yn eich cais am dystysgrifau, nodwch o ba fis yr hoffech eu cael
+cf.historic.document.request.form.error.end.month.date-number-invalid.C79Certificate=Yn eich cais am dystysgrifau, nodwch hyd at ba fis yr hoffech eu cael
+
 # Security Statements requested view
 cf.security-statements.requested.title=Hysbysiad o ddatganiadau addasu y gofynnwyd amdanynt
 cf.security-statements.requested.available.text=Mae datganiadau y gofynnwyd amdanynt ar gael i’w gweld am 10 diwrnod. Gallwn ddarparu’r rhain ar ffurf PDF yn unig.

@@ -161,6 +161,14 @@ cf.historic.document.request.form.error.end.year.date-number-invalid.PostponedVA
 cf.historic.document.request.form.error.start.month.date-number-invalid.PostponedVATStatement=Enter the month you want to request statements from
 cf.historic.document.request.form.error.end.month.date-number-invalid.PostponedVATStatement=Enter the month you want to request statements to
 
+# C79 Certificate Statement Error Messages
+cf.historic.document.request.form.error.start.date-missing.C79Certificate=Enter the month and year you want to request certificates from
+cf.historic.document.request.form.error.end.date-missing.C79Certificate=Enter the month and year you want to request certificates to
+cf.historic.document.request.form.error.start.year.date-number-invalid.C79Certificate=Enter the year you want to request certificates from
+cf.historic.document.request.form.error.end.year.date-number-invalid.C79Certificate=Enter the year you want to request certificates to
+cf.historic.document.request.form.error.start.month.date-number-invalid.C79Certificate=Enter the month you want to request certificates from
+cf.historic.document.request.form.error.end.month.date-number-invalid.C79Certificate=Enter the month you want to request certificates to
+
 # Security Statements requested view
 cf.security-statements.requested.title=Requested notification of adjustment statements
 cf.security-statements.requested.available.text=Requested statements are available to view for 10 days. We can only provide these in PDF format.
