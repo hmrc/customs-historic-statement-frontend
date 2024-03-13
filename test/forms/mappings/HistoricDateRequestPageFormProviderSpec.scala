@@ -20,6 +20,7 @@ import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
 import models.{C79Certificate, HistoricDates, PostponedVATStatement}
 import play.api.data.{Form, FormError}
+import utils.Utils.emptyString
 
 class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
@@ -74,12 +75,12 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
     
         val formAfterBinding: Form[HistoricDates] = form.bind(
             Map(
-            "start.year" -> "",
-            "start.month" -> "",
-            "start.day" -> "",
-            "end.year" -> "",
-            "end.month" -> "",
-            "end.day" -> ""
+              "start.year" -> emptyString,
+              "start.month" -> emptyString,
+              "start.day" -> emptyString,
+              "end.year" -> emptyString,
+              "end.month" -> emptyString,
+              "end.day" -> emptyString
             )
         )
     
@@ -112,7 +113,7 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
       val formAfterBinding: Form[HistoricDates] = form.bind(
         Map(
-          "start.year" -> "",
+          "start.year" -> emptyString,
           "start.month" -> s"$month3",
           "start.day" -> s"$day1",
           "end.year" -> s"$year2021",
@@ -140,7 +141,7 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
       val formAfterBinding: Form[HistoricDates] = form.bind(
         Map(
           "start.year" -> s"$year2021",
-          "start.month" -> "",
+          "start.month" -> emptyString,
           "start.day" -> s"$day1",
           "end.year" -> s"$year2021",
           "end.month" -> s"$month10",
@@ -160,8 +161,6 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
         )
       ) mustBe true
     }
-    
-
   }
 
   trait Setup {
