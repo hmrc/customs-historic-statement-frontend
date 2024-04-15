@@ -6,14 +6,14 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "customs-historic-statement-frontend"
 
-val bootstrapVersion = "7.22.0"
-val silencerVersion = "1.17.13"
-val scala2_13_8 = "2.13.8"
+val bootstrapVersion = "8.5.0"
+val silencerVersion = "1.17.16"
+val scala2_13_12 = "2.13.12"
 val testDirectory = "test"
 
 Global / lintUnusedKeysOnLoad := false
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := scala2_13_8
+ThisBuild / scalaVersion := scala2_13_12
 
 lazy val scalastyleSettings = Seq(scalastyleConfig := baseDirectory.value /  "scalastyle-config.xml",
   (Test / scalastyleConfig) := baseDirectory.value/ testDirectory /  "test-scalastyle-config.xml")
@@ -22,7 +22,7 @@ lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(root % "test->test")
   .settings(itSettings())
-  .settings(libraryDependencies ++= Seq("uk.gov.hmrc" %% "bootstrap-test-play-28" % bootstrapVersion % Test))
+  .settings(libraryDependencies ++= Seq("uk.gov.hmrc" %% "bootstrap-test-play-30" % bootstrapVersion % Test))
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
