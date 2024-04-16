@@ -19,7 +19,7 @@ object AppDependencies {
     "org.scalatest" %% "scalatest" % "3.2.16",
     "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0",
     "org.jsoup" % "jsoup" % "1.16.1",
-    "com.typesafe.play" %% "play-test" % current,
+    "com.typesafe.play" %% "play-test" % "2.9.2",
     "com.vladsch.flexmark" % "flexmark-all" % "0.64.8",
     "org.scalacheck" %% "scalacheck" % "1.17.0",
     "org.mockito" %% "mockito-scala-scalatest" % "1.17.29"

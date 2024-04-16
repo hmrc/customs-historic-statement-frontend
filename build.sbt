@@ -7,7 +7,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 lazy val appName: String = "customs-historic-statement-frontend"
 
 val bootstrapVersion = "8.5.0"
-val silencerVersion = "1.17.16"
+val silencerVersion = "1.7.16"
 val scala2_13_12 = "2.13.12"
 val testDirectory = "test"
 
