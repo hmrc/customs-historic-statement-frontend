@@ -78,7 +78,7 @@ class EmailControllerSpec extends SpecBase {
   trait Setup {
     val expectedResult = Some("unverifiedEmail")
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    implicit val mockHttpClient = mock[HttpClient]
+    implicit val mockHttpClient: HttpClient = mock[HttpClient]
 
     val response = EmailUnverifiedResponse(Some("unverifiedEmail"))
 
