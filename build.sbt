@@ -11,6 +11,9 @@ val silencerVersion = "1.7.16"
 val scala2_13_12 = "2.13.12"
 val testDirectory = "test"
 
+val turnoffJSUglifyWarningsTask = SettingKey[Seq[String]]("sbt-uglify turn off console output")
+turnoffJSUglifyWarningsTask := Seq("warnings=false")
+
 Global / lintUnusedKeysOnLoad := false
 ThisBuild / majorVersion := 0
 ThisBuild / scalaVersion := scala2_13_12
@@ -69,6 +72,7 @@ lazy val root = (project in file("."))
     uglify / includeFilter := GlobFilter("customshistoricstatementfrontend-*.js")
   )
   .settings(scalacOptions ++= Seq("-Ypatmat-exhaust-depth", "off"))
+  .settings(uglifyCompressOptions := turnoffJSUglifyWarningsTask.value)
   .settings(
     scalacOptions ++= Seq(
       "-Wunused:imports",

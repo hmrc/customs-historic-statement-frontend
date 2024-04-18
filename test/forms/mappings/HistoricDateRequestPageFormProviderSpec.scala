@@ -72,7 +72,7 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
     "throw error for empty start and end dates" in new Setup {
         val form: Form[HistoricDates] = histDateReqPageForm(C79Certificate)
-    
+
         val formAfterBinding: Form[HistoricDates] = form.bind(
             Map(
               "start.year" -> emptyString,
@@ -83,9 +83,9 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
               "end.day" -> emptyString
             )
         )
-    
+
         formAfterBinding.hasErrors mustBe true
-    
+
         formAfterBinding.errors.contains(
             FormError(
             "start.month",
@@ -95,7 +95,7 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
             List()
             )
         ) mustBe true
-    
+
         formAfterBinding.errors.contains(
             FormError(
             "end.month",
@@ -105,7 +105,7 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
             List()
             )
         ) mustBe true
-        
+
     }
 
     "return an error for empty year field" in new Setup {
