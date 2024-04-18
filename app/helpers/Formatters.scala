@@ -39,8 +39,8 @@ trait DateFormatters {
 
 trait FileFormatters {
 
-  val kbThreshold = 1000
-  val mbThreshold = 1000000
+  private val kbThreshold = 1000
+  private val mbThreshold = 1000000
 
   def fileSize(size: Long): String = size match {
     case kb if kb >= kbThreshold && kb < mbThreshold => s"${kb / kbThreshold}KB"
