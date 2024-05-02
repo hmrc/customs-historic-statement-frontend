@@ -6,7 +6,7 @@ language.cymraeg = Cymraeg
 language.english = English
 language.change.english=Change the language to English
 
-service.name=Bwrw golwg dros eich cyfrifon ariannol ar gyfer y tollau
+service.name=Rheoli tollau mewnforio a chyfrifon TAW
 
 footer.accessibility   = Datganiad hygyrchedd
 footer.cookies         = Cwcis

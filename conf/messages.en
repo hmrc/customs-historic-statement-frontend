@@ -6,7 +6,7 @@ language.cymraeg = Cymraeg
 language.english = English
 language.change.cymraeg=Newid yr iaith ir Gymraeg
 
-service.name=View your customs financial accounts
+service.name=Manage import duties and VAT accounts
 
 footer.accessibility   = Accessibility statement
 footer.cookies         = Cookies
