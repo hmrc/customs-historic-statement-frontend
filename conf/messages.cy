@@ -241,7 +241,7 @@ cf.error.not-found.heading=Heb ddod o hyd i’r dudalen
 cf.error.not-found.message.address-typed-wrong=Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gywir.
 cf.error.not-found.message.address-pasted-wrong=Os gwnaethoch ludo’r cyfeiriad gwe, gwiriwch eich bod wedi copïo’r cyfeiriad yn llawn.
 cf.error.not-found.message.go-to-home-page-text1=Neu gallwch
-cf.accounts.view-customs-account=fwrw golwg dros eich cyfrifon ariannol ar gyfer y tollau
+cf.accounts.view-customs-account=rheoli tollau mewnforio a chyfrifon TAW
 
 # Unauthorised Error
 cf.error.unauthorized.title=Nid ydych wedi’ch awdurdodi i fwrw golwg dros y dudalen hon
