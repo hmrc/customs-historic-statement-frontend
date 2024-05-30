@@ -22,7 +22,8 @@ import base.SpecBase
 class FormHelperSpec extends SpecBase {
   "updateFormErrorKeyForStartAndEndDate" must {
     "append .month in the FormError key when key is either start or end and error msg key is " +
-      "emptyStartMonthKey, emptyStartYearKey, emptyStartDateKey, invalidStartMonthKey and invalidStartYearKey" in new SetUp {
+      "emptyStartMonthKey, emptyStartYearKey, emptyStartDateKey, " +
+      "invalidStartMonthKey and invalidStartYearKey" in new Setup {
 
       FormHelper.updateFormErrorKeyForStartAndEndDate()(
         startKey, "cf.historic.document.request.form.error.start.month.date-number-invalid") shouldBe s"$startKey.month"
@@ -35,7 +36,7 @@ class FormHelperSpec extends SpecBase {
     }
 
     "append .year in the FormError key when key is either start or end and " +
-      "error msg key is of invalid year length" in new SetUp {
+      "error msg key is of invalid year length" in new Setup {
 
       FormHelper.updateFormErrorKeyForStartAndEndDate()(
         startKey, "cf.historic.document.request.form.error.year.invalid-length") shouldBe s"$startKey.year"
@@ -44,7 +45,7 @@ class FormHelperSpec extends SpecBase {
         endKey, "cf.historic.document.request.form.error.year.invalid-length") shouldBe s"$endKey.year"
     }
 
-    "return the unchanged key when key in neither start or end" in new SetUp {
+    "return the unchanged key when key in neither start or end" in new Setup {
       FormHelper.updateFormErrorKeyForStartAndEndDate()(
         defaultKey, "cf.historic.document.request.form.error.year.invalid-length") shouldBe defaultKey
 
@@ -52,10 +53,10 @@ class FormHelperSpec extends SpecBase {
         defaultKey, "cf.historic.document.request.form.error.year.invalid-length") shouldBe defaultKey
     }
   }
-}
 
-trait SetUp {
-  val startKey = "start"
-  val endKey = "end"
-  val defaultKey = "default"
+  trait Setup {
+    val startKey = "start"
+    val endKey = "end"
+    val defaultKey = "default"
+  }
 }
