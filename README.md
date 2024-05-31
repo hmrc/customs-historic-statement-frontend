@@ -38,6 +38,6 @@ Once these services are running, use the following command to start the service 
 
 ## All tests and checks
 
-This is an sbt command alias specific to this project. It will run a scala style check, run unit tests, run integration tests and produce a coverage report.
+This is a sbt command alias specific to this project. It will run a scala style check, run unit tests, run integration tests and produce a coverage report.
 
 > `sbt runAllChecks` 
