@@ -98,3 +98,5 @@ lazy val root = (project in file("."))
     )
   )
   .settings(scalastyleSettings)
+
+addCommandAlias("runAllChecks", ";clean;compile;coverage;test;it/test;scalastyle;Test/scalastyle;coverageReport")

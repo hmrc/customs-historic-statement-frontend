@@ -35,4 +35,9 @@ Start the required development services (make sure your service-manager-config f
     sm --start CUSTOMS_FINANCIALS_ALL -f
     
 Once these services are running, use the following command to start the service `sbt "run 9396"`
-    
+
+## All tests and checks
+
+This is a sbt command alias specific to this project. It will run a scala style check, run unit tests, run integration
+tests and produce a coverage report:
+> `sbt runAllChecks`
