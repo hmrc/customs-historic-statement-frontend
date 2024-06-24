@@ -120,9 +120,9 @@ cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Back t
 cf.historic.document.request.confirmation.body-text.SecurityStatement=We will send an email to {0} when your statements are ready. You can access them from the statements page, usually within 48 hours.
 
 cf.historic.document.request.confirmation.subheader-text.next=What happens next
-cf.historic.document.request.confirmation.body-text.request=We will send an email within 48 hours to {0} when your request is processed.
+cf.historic.document.request.confirmation.body-text.request=We''ll send an email within 48 hours to {0} when your request is processed.
 cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=You can download your statements from the duty deferments statements page.
-cf.historic.document.request.confirmation.body-text2.C79Certificate=You can download your certificates from your Import VAT certificates (C79) statements page.
+cf.historic.document.request.confirmation.body-text2.C79Certificate=You''ll be able to download your certificates from the import VAT certificates (C79) statements page.
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=You can download your statements from the Postponed import VAT statements page.
 cf.historic.document.request.confirmation.body-text2.SecurityStatement=You can download your statements from the Notification of adjustment statements page.
 
