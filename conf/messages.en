@@ -44,8 +44,8 @@ unauthorised.eori-info=You''ll need an
 unauthorised.eori-link=Economic Operator and Registration Identification (EORI) number (opens in a new window or tab)
 unauthorised.get-access-info=If you already have an EORI number, you can
 unauthorised.get-access-link=get access to CDS (opens in a new window or tab)
-unauthorised.already-subscribed-to-cds=If you are already subscribed to CDS
-unauthorised.already-subscribed-to-cds-guidance-text=Check that you signed in with the Government Gateway user ID that is linked to your Economic Operator and Registration Identification (EORI) number and CDS account.
+unauthorised.already-subscribed-to-cds=If you''re already subscribed to CDS
+unauthorised.already-subscribed-to-cds-guidance-text=Check that you signed in with the Government Gateway user ID that''s linked to your Economic Operator and Registration Identification (EORI) number and CDS account.
 unauthorised.subscribe-cds.title=Subscribe to CDS
 unauthorised.subscribe-cds.link=Subscribe to the Customs Declaration Service.
 
@@ -121,8 +121,13 @@ cf.historic.document.request.confirmation.body-text.SecurityStatement=We will se
 
 cf.historic.document.request.confirmation.subheader-text.next=What happens next
 cf.historic.document.request.confirmation.body-text.request=We''ll send an email within 48 hours to {0} when your request is processed.
+<<<<<<< MMCA-4738
 cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=You''ll be able to download your statements from the duty deferment statements page.
 cf.historic.document.request.confirmation.body-text2.C79Certificate=You can download your certificates from your Import VAT certificates (C79) statements page.
+=======
+cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=You can download your statements from the duty deferments statements page.
+cf.historic.document.request.confirmation.body-text2.C79Certificate=You''ll be able to download your certificates from the import VAT certificates (C79) statements page.
+>>>>>>> main
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=You can download your statements from the Postponed import VAT statements page.
 cf.historic.document.request.confirmation.body-text2.SecurityStatement=You can download your statements from the Notification of adjustment statements page.
 
