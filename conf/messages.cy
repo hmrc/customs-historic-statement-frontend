@@ -44,8 +44,8 @@ unauthorised.eori-info=Bydd angen y canlynol arnoch:
 unauthorised.eori-link=Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) (yn agor ffenestr neu dab newydd)
 unauthorised.get-access-info=Os oes gennych rif EORI eisoes, gallwch
 unauthorised.get-access-link=cael mynediad at CDS (yn agor ffenestr neu dab newydd)
-unauthorised.already-subscribed-to-cds=Os ydych eisoes wedi tanysgrifio i’r CDS
-unauthorised.already-subscribed-to-cds-guidance-text=Gwiriwch eich bod wedi mewngofnodi gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth sy’n gysylltiedig â’ch Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) a’ch cyfrif CDS.
+unauthorised.already-subscribed-to-cds=Os ydych eisoes wedi tanysgrifio i CDS
+unauthorised.already-subscribed-to-cds-guidance-text=Gwiriwch eich bod wedi mewngofnodi gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth sy’n gysylltiedig â’ch rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) a’ch cyfrif CDS.
 unauthorised.subscribe-cds.title=Tanysgrifio i’r CDS
 unauthorised.subscribe-cds.link=Tanysgrifio i’r Gwasanaeth Datganiadau Tollau.
 
