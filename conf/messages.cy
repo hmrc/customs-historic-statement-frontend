@@ -122,7 +122,7 @@ cf.historic.document.request.confirmation.body-text.SecurityStatement=Byddwn yn 
 cf.historic.document.request.confirmation.subheader-text.next=Yr hyn sy’n digwydd nesaf
 cf.historic.document.request.confirmation.body-text.request=Byddwn yn anfon e-bost at {0} cyn pen 48 awr pan fydd eich cais wedi’i brosesu.
 cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Datganiadau gohirio tollau’.
-cf.historic.document.request.confirmation.body-text2.C79Certificate=Gallwch lawrlwytho’ch tystysgrifau o’ch tudalen ‘Datganiadau tystysgrifau TAW mewnforio (C79)’.
+cf.historic.document.request.confirmation.body-text2.C79Certificate=Byddwch yn gallu lawrlwytho’ch tystysgrifau o’r dudalen ‘Datganiadau tystysgrifau TAW mewnforio (C79)’.
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Datganiadau TAW mewnforio ohiriedig’.
 cf.historic.document.request.confirmation.body-text2.SecurityStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Hysbysiad o ddatganiadau addasu’.
 
