@@ -114,14 +114,14 @@ cf.historic.document.request.confirmation.panel-text.C79Certificate=Daeth eich c
 cf.historic.document.request.confirmation.panel-text.SecurityStatement=Daeth eich cais am ddatganiadau i law
 cf.historic.document.request.confirmation.panel-text.PostponedVATStatement=Mae’ch cais am ddatganiadau wedi dod i law
 cf.historic.document.request.confirmation.C79Certificate.link-text=Yn ôl i ‘Tystysgrifau TAW mewnforio (C79)’
-cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Yn ôl i ddatganiadau gohirio tollau
+cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Yn ôl i ‘Datganiadau gohirio tollau’
 cf.historic.document.request.confirmation.SecurityStatement.link-text=Yn ôl i ‘Hysbysiad o ddatganiadau addasu’
 cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Yn ôl i’r cyfrif TAW mewnforio ohiriedig
 cf.historic.document.request.confirmation.body-text.SecurityStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
 
 cf.historic.document.request.confirmation.subheader-text.next=Yr hyn sy’n digwydd nesaf
 cf.historic.document.request.confirmation.body-text.request=Byddwn yn anfon e-bost at {0} cyn pen 48 awr pan fydd eich cais wedi’i brosesu.
-cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Datganiadau gohirio tollau’.
+cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen ‘Datganiadau gohirio tollau’.
 cf.historic.document.request.confirmation.body-text2.C79Certificate=Gallwch lawrlwytho’ch tystysgrifau o’ch tudalen ‘Datganiadau tystysgrifau TAW mewnforio (C79)’.
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Datganiadau TAW mewnforio ohiriedig’.
 cf.historic.document.request.confirmation.body-text2.SecurityStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Hysbysiad o ddatganiadau addasu’.
