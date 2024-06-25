@@ -66,6 +66,17 @@ class ConfirmationPageViewSpec extends SpecBase {
           "body-text2").text() mustBe messages(app)(
           s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}")
       }
+
+      "link meta info should display use govuk-body class" in new Setup {
+        val classInfo = "<p id=\"link-text\" class=\"govuk-body\"></p>"
+        view.getElementById("link-text").toString mustBe classInfo
+      }
+
+      "link should display correct text" in new Setup {
+        view.getElementById(
+          "link-text").text() mustBe messages(app)(
+          s"cf.historic.document.request.confirmation.${fileRole.name}.link-text")
+      }
     }
 
     "display Welsh toggle" in new Setup {
