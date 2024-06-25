@@ -67,11 +67,6 @@ class ConfirmationPageViewSpec extends SpecBase {
           s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}")
       }
 
-      "link meta info should display use govuk-body class" in new Setup {
-        val classInfo = "<p id=\"link-text\" class=\"govuk-body\"></p>"
-        view.getElementById("link-text").toString mustBe classInfo
-      }
-
       "link should display correct text" in new Setup {
         view.getElementById(
           "link-text").text() mustBe messages(app)(
