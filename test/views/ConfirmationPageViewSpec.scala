@@ -61,6 +61,11 @@ class ConfirmationPageViewSpec extends SpecBase {
           "cf.historic.document.request.confirmation.body-text.request", email.value)
       }
 
+      "download your PVAT statements text should display correctly" in new Setup {
+        view.text().contains(messages(app)(
+          "cf.historic.document.request.confirmation.body-text2.PostponedVATStatement"))
+      }
+
       "body-text2 should display correctly" in new Setup {
         view.getElementById(
           "body-text2").text() mustBe messages(app)(
