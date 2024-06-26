@@ -71,6 +71,9 @@
         content = Html(messages(s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}"))
     )
 
-    @link(linkMessage = messages(s"cf.historic.document.request.confirmation.${fileRole.name}.link-text"),
-            location = returnLink, pClass="govuk-body govuk-!-margin-bottom-9")
+    @link(linkMessage = messages(
+        s"cf.historic.document.request.confirmation.${fileRole.name}.link-text"),
+        location = returnLink,
+        pId = Some("link-text"),
+        pClass = "govuk-body govuk-!-margin-bottom-9")
 }

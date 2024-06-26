@@ -44,8 +44,8 @@ unauthorised.eori-info=Bydd angen y canlynol arnoch:
 unauthorised.eori-link=Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) (yn agor ffenestr neu dab newydd)
 unauthorised.get-access-info=Os oes gennych rif EORI eisoes, gallwch
 unauthorised.get-access-link=cael mynediad at CDS (yn agor ffenestr neu dab newydd)
-unauthorised.already-subscribed-to-cds=Os ydych eisoes wedi tanysgrifio i’r CDS
-unauthorised.already-subscribed-to-cds-guidance-text=Gwiriwch eich bod wedi mewngofnodi gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth sy’n gysylltiedig â’ch Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) a’ch cyfrif CDS.
+unauthorised.already-subscribed-to-cds=Os ydych eisoes wedi tanysgrifio i CDS
+unauthorised.already-subscribed-to-cds-guidance-text=Gwiriwch eich bod wedi mewngofnodi gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth sy’n gysylltiedig â’ch rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) a’ch cyfrif CDS.
 unauthorised.subscribe-cds.title=Tanysgrifio i’r CDS
 unauthorised.subscribe-cds.link=Tanysgrifio i’r Gwasanaeth Datganiadau Tollau.
 
@@ -122,7 +122,7 @@ cf.historic.document.request.confirmation.body-text.SecurityStatement=Byddwn yn 
 cf.historic.document.request.confirmation.subheader-text.next=Yr hyn sy’n digwydd nesaf
 cf.historic.document.request.confirmation.body-text.request=Byddwn yn anfon e-bost at {0} cyn pen 48 awr pan fydd eich cais wedi’i brosesu.
 cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Datganiadau gohirio tollau’.
-cf.historic.document.request.confirmation.body-text2.C79Certificate=Gallwch lawrlwytho’ch tystysgrifau o’ch tudalen ‘Datganiadau tystysgrifau TAW mewnforio (C79)’.
+cf.historic.document.request.confirmation.body-text2.C79Certificate=Byddwch yn gallu lawrlwytho’ch tystysgrifau o’r dudalen ‘Datganiadau tystysgrifau TAW mewnforio (C79)’.
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen datganiadau TAW mewnforio ohiriedig.
 cf.historic.document.request.confirmation.body-text2.SecurityStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Hysbysiad o ddatganiadau addasu’.
 
