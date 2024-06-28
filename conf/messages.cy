@@ -124,7 +124,7 @@ cf.historic.document.request.confirmation.body-text.request=Byddwn yn anfon e-bo
 cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen ‘Datganiadau gohirio tollau’.
 cf.historic.document.request.confirmation.body-text2.C79Certificate=Byddwch yn gallu lawrlwytho’ch tystysgrifau o’r dudalen ‘Datganiadau tystysgrifau TAW mewnforio (C79)’.
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen datganiadau TAW mewnforio ohiriedig.
-cf.historic.document.request.confirmation.body-text2.SecurityStatement=Gallwch lawrlwytho’ch datganiadau o’r dudalen ‘Hysbysiad o ddatganiadau addasu’.
+cf.historic.document.request.confirmation.body-text2.SecurityStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen ‘Hysbysiad o ddatganiadau addasu’.
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau o ar ôl blwyddyn dreth {0} i {1}.
