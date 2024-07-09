@@ -24,7 +24,41 @@ import play.api.i18n.Messages
 
 import java.time.LocalDate
 
-case class PostponedVatViewModel(statementsForAllEoris: Seq[PostponedVatStatementsForEori])
+case class PostponedVatViewModel(statementsForAllEoris: Seq[PostponedVatStatementsForEori]) {
+  val histories: Seq[Int] = statementsForAllEoris.indices
+  val sources: Seq[String] = Seq("CDS", "CHIEF")
+
+  def requestedStatements(historyIndex: Int): Seq[(PostponedVatStatementsByMonth, Int)] =
+    statementsForAllEoris(historyIndex).requestedStatements.sorted.zipWithIndex
+
+  def displayStatements(historyIndex: Int): Seq[StatementDisplayData] =
+    if (hasRequestedStatements(historyIndex)) requestedStatements(historyIndex).map(createStatementDisplayData) else Seq.empty
+
+  def groupedStatements(statementsOfOneMonth: PostponedVatStatementsByMonth): Map[String, Seq[PostponedVatStatementFile]] =
+    statementsOfOneMonth.files.groupBy(_.metadata.source)
+
+  def hasRequestedStatements(historyIndex: Int): Boolean =
+    statementsForAllEoris(historyIndex).requestedStatements.nonEmpty
+
+  def createStatementDisplayData(statementWithIndex: (PostponedVatStatementsByMonth, Int)): StatementDisplayData = {
+    val (statementsOfOneMonth, index) = statementWithIndex
+    val groupedStatements = this.groupedStatements(statementsOfOneMonth)
+    val sourceDisplays = sources.map { source =>
+      SourceDisplay(source, groupedStatements.getOrElse(source, Seq.empty))
+    }
+
+    StatementDisplayData(
+      statementsOfOneMonth.formattedMonthYear,
+      statementsOfOneMonth.formattedMonthYearAsId,
+      statementsOfOneMonth.formattedMonth,
+      sourceDisplays,
+      index
+    )
+  }
+}
+
+case class StatementDisplayData(monthYear: String, monthYearId: String, formattedMonth: String, sources: Seq[SourceDisplay], index: Int)
+case class SourceDisplay(source: String, files: Seq[PostponedVatStatementFile])
 
 case class PostponedVatStatementsForEori(eoriHistory: EoriHistory,
                                          currentStatements: Seq[PostponedVatStatementsByMonth],

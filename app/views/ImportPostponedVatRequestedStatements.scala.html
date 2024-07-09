@@ -30,42 +30,30 @@
 
 @(model: PostponedVatViewModel, backLink: String)(implicit request: Request[_], messages: Messages)
 
-@histories = @{model.statementsForAllEoris.indices}
-@sources = @{Seq("CDS", "CHIEF")}
-
 @layout(pageTitle = Some(messages("cf.import-postponed-vat.requested.title")), backLink = Some(backLink)) {
 
     @h1(id=Some("requested-import-postponed-vat-statements-heading"), classes="govuk-heading-xl govuk-!-margin-bottom-3", msg=messages("cf.import-postponed-vat.requested.title"))
 
     @p(classes="govuk-body govuk-!-margin-bottom-8", id=Some("available-text"), content=Html(messages("cf.import-postponed-vat.requested.available.text")))
 
-    @for(historyIndex <- histories) {
-        @if(model.statementsForAllEoris(historyIndex).requestedStatements.nonEmpty) {
-
-            @for((statementsOfOneMonth, index) <- model.statementsForAllEoris(historyIndex).requestedStatements.sorted.zipWithIndex) {
-                <div id="requested-@{statementsOfOneMonth.formattedMonthYearAsId}">
-                    @h2(msg=statementsOfOneMonth.formattedMonthYear,id=Some(s"period-${statementsOfOneMonth.formattedMonthYearAsId}"))
-                    <ul class="govuk-list" id="requested-statements-list-@{historyIndex}-row-@{index}">
-                        @if(statementsOfOneMonth.files.nonEmpty) {
-                            @defining(statementsOfOneMonth.files.groupBy(_.metadata.source)){ statements =>
-                                @for(source <- sources) {
-                                    <li>@{
-                                        if(statements.get(source).isEmpty) {
-                                            messages("cf.account.postponed-vat.missing-file-type", source)
-                                        } else {
-                                            displayRows(statements(source), historyIndex, index, statementsOfOneMonth.formattedMonthYear)
-                                        }
-                                    }</li>
+    @for(historyIndex <- model.histories) {
+        @for(statementDisplayData <- model.displayStatements(historyIndex)) {
+            <div id="requested-@{statementDisplayData.monthYearId}">
+                @h2(msg=statementDisplayData.monthYear, id=Some(s"period-${statementDisplayData.monthYearId}"))
+                <ul class="govuk-list" id="requested-statements-list-@{historyIndex}-row-@{statementDisplayData.index}">
+                    @for(sourceDisplay <- statementDisplayData.sources) {
+                        <li>
+                            @{
+                                if(sourceDisplay.files.isEmpty) {
+                                    messages("cf.account.postponed-vat.missing-file-type", sourceDisplay.source)
+                                } else {
+                                    displayRows(sourceDisplay.files, historyIndex, statementDisplayData.index, statementDisplayData.monthYear)
                                 }
                             }
-                        } else {
-                            <li id="missing-file-@{statementsOfOneMonth.formattedMonthYear}">
-                                @{messages("cf.account.postponed-vat.missing-file-month", statementsOfOneMonth.formattedMonth)}
-                            </li>
-                        }
-                    </ul>
-                </div>
-            }
+                        </li>
+                    }
+                </ul>
+            </div>
         }
     }
 }
