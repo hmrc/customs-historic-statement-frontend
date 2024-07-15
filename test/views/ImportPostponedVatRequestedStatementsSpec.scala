@@ -21,7 +21,8 @@ import models.{EoriHistory, PostponedVATStatement, PostponedVatStatementFile, Po
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import viewmodels.{PostponedVatStatementsByMonth, PostponedVatStatementsForEori, PostponedVatViewModel}
+import play.twirl.api.Html
+import viewmodels.{PostponedVatStatementsByMonth, PostponedVatStatementsForEori, PostponedVatViewModel, SourceDisplay, StatementDisplayData}
 import views.html.ImportPostponedVatRequestedStatements
 
 import java.time.LocalDate
@@ -35,6 +36,46 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
       headingShouldBeCorrect
       requestedAvailableTextShouldBeCorrect
     }
+  }
+
+  "PostponedVatViewModel" should {
+    "correctly handle historiesWithDisplayData" in new Setup {
+      val result: Seq[StatementDisplayData] = PostponedVatViewModel.historiesWithDisplayData(postponedVatViewModel.statementsForAllEoris)
+      displayStatementsShouldBeCorrect(result)
+    }
+
+    "correctly handle groupedStatementsBySource" in new Setup {
+      val result: Map[String, Seq[PostponedVatStatementFile]] = PostponedVatViewModel.groupedStatementsBySource(postponedVatStatementsByMonth_2)
+      result.size mustBe 1
+      result("CDS").length mustBe 1
+      result("CDS").head mustBe postponedVatStatementFile_2
+    }
+
+    "correctly handle renderSourceDisplay" in new Setup {
+      val sourceDisplay: SourceDisplay = SourceDisplay("CDS", Seq(postponedVatStatementFile))
+      val result: Html = PostponedVatViewModel.renderSourceDisplay(sourceDisplay, 0, 0, "October 2020")
+      result.body must include(postponedVatStatementFile.downloadURL)
+    }
+
+    "correctly handle missingFileMessage for CDS" in new Setup {
+      val result: String = PostponedVatViewModel.missingFileMessage("CDS")
+      result mustBe "No CDS statements available."
+    }
+
+    "correctly handle missingFileMessage for CHIEF" in new Setup {
+      val result: String = PostponedVatViewModel.missingFileMessage("CHIEF")
+      result mustBe "No CHIEF statements available."
+    }
+  }
+
+  private def displayStatementsShouldBeCorrect(result: Seq[StatementDisplayData]): Assertion = {
+    result.length mustBe 1
+    result.head.monthYear.equalsIgnoreCase("October 2020") mustBe true
+    result.head.monthYearId.equalsIgnoreCase("october-2020") mustBe true
+    result.head.formattedMonth mustBe "October"
+    result.head.sources.length mustBe 2
+    result.head.sources.head.source mustBe "CDS"
+    result.head.index mustBe 0
   }
 
   private def headingShouldBeCorrect(implicit view: Document): Assertion = {
@@ -66,11 +107,11 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     private val source: String = "CDS"
     private val statementRequestId = "a request id"
 
-    private val eoriHistory = EoriHistory(someEori,
+    protected val eoriHistory: EoriHistory = EoriHistory(someEori,
       Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
       Some(LocalDate.of(localDateYear, localDateMonth2, localDateDay)))
 
-    private val postponedVatStatementFile = PostponedVatStatementFile(
+    protected val postponedVatStatementFile: PostponedVatStatementFile = PostponedVatStatementFile(
       filename,
       downloadURL,
       size,
@@ -81,7 +122,7 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
         source,
         Some(statementRequestId)))
 
-    private val postponedVatStatementFile_2 = PostponedVatStatementFile(
+    protected val postponedVatStatementFile_2: PostponedVatStatementFile = PostponedVatStatementFile(
       filename,
       downloadURL,
       size,
@@ -96,14 +137,14 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
       LocalDate.of(localDateYear, localDateMonth, localDateDay),
       Seq(postponedVatStatementFile))
 
-    private val postponedVatStatementsByMonth_2 = PostponedVatStatementsByMonth(
+    protected val postponedVatStatementsByMonth_2: PostponedVatStatementsByMonth = PostponedVatStatementsByMonth(
       LocalDate.of(localDateYear, localDateMonth2, localDateDay),
       Seq(postponedVatStatementFile_2))
 
     private val postponedVatStatementsForEori: PostponedVatStatementsForEori = PostponedVatStatementsForEori(
       eoriHistory, Seq(postponedVatStatementsByMonth_1), Seq(postponedVatStatementsByMonth_2))
 
-    private val postponedVatViewModel: PostponedVatViewModel =
+    protected val postponedVatViewModel: PostponedVatViewModel =
       PostponedVatViewModel(Seq(postponedVatStatementsForEori))
 
     implicit val view: Document = Jsoup.parse(
