@@ -21,7 +21,8 @@ import models.{EoriHistory, PostponedVATStatement, PostponedVatStatementFile, Po
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import viewmodels.{PostponedVatStatementsByMonth, PostponedVatStatementsForEori, PostponedVatViewModel, StatementDisplayData}
+import play.twirl.api.Html
+import viewmodels.{PostponedVatStatementsByMonth, PostponedVatStatementsForEori, PostponedVatViewModel, SourceDisplay, StatementDisplayData}
 import views.html.ImportPostponedVatRequestedStatements
 
 import java.time.LocalDate
@@ -38,89 +39,43 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
   }
 
   "PostponedVatViewModel" should {
-    "correctly handle requestedStatements" in new Setup {
-      val result: Seq[(PostponedVatStatementsByMonth, Int)] = postponedVatViewModel.requestedStatements(0)
-      result.length mustBe 1
-      result.head._1 mustBe postponedVatStatementsByMonth_2
-      result.head._2 mustBe 0
-    }
-
-    "correctly handle displayStatements" in new Setup {
-      val result: Seq[StatementDisplayData] = postponedVatViewModel.displayStatements(0)
+    "correctly handle historiesWithDisplayData" in new Setup {
+      val result: Seq[StatementDisplayData] = PostponedVatViewModel.historiesWithDisplayData(postponedVatViewModel.statementsForAllEoris)
       displayStatementsShouldBeCorrect(result)
     }
 
-    "correctly handle groupedStatements" in new Setup {
-      val result: Map[String, Seq[PostponedVatStatementFile]] = postponedVatViewModel.groupedStatements(postponedVatStatementsByMonth_2)
+    "correctly handle groupedStatementsBySource" in new Setup {
+      val result: Map[String, Seq[PostponedVatStatementFile]] = PostponedVatViewModel.groupedStatementsBySource(postponedVatStatementsByMonth_2)
       result.size mustBe 1
       result("CDS").length mustBe 1
       result("CDS").head mustBe postponedVatStatementFile_2
     }
 
-    "correctly handle hasRequestedStatements" in new Setup {
-      postponedVatViewModel.hasRequestedStatements(0) mustBe true
-
-      val emptyViewModel: PostponedVatViewModel = PostponedVatViewModel(Seq(PostponedVatStatementsForEori(eoriHistory, Seq.empty, Seq.empty)))
-      emptyViewModel.hasRequestedStatements(0) mustBe false
+    "correctly handle renderSourceDisplay" in new Setup {
+      val sourceDisplay: SourceDisplay = SourceDisplay("CDS", Seq(postponedVatStatementFile))
+      val result: Html = PostponedVatViewModel.renderSourceDisplay(sourceDisplay, 0, 0, "October 2020")
+      result.body must include(postponedVatStatementFile.downloadURL)
     }
 
-    "correctly handle createStatementDisplayData" in new Setup {
-      val statementWithIndex: (PostponedVatStatementsByMonth, Int) = (postponedVatStatementsByMonth_2, 0)
-      val result: StatementDisplayData = postponedVatViewModel.createStatementDisplayData(statementWithIndex)
-      statementDisplayDataShouldBeCorrect(result)
+    "correctly handle missingFileMessage for CDS" in new Setup {
+      val result: String = PostponedVatViewModel.missingFileMessage("CDS")
+      result mustBe "No CDS statements available."
     }
 
-    "correctly handle empty requestedStatements" in new Setup {
-      val emptyViewModel: PostponedVatViewModel = PostponedVatViewModel(Seq(PostponedVatStatementsForEori(eoriHistory, Seq.empty, Seq.empty)))
-      val result: Seq[(PostponedVatStatementsByMonth, Int)] = emptyViewModel.requestedStatements(0)
-      result.length mustBe 0
-    }
-
-    "correctly handle single file in statement" in new Setup {
-      val singleFileStatementsByMonth: PostponedVatStatementsByMonth = postponedVatStatementsByMonth_2.copy(files = Seq(postponedVatStatementFile))
-      val result: Map[String, Seq[PostponedVatStatementFile]] = postponedVatViewModel.groupedStatements(singleFileStatementsByMonth)
-      result.size mustBe 1
-      result("CDS").length mustBe 1
-      result("CDS").head mustBe postponedVatStatementFile
-    }
-
-    "correctly handle multiple files from the same source" in new Setup {
-      val multipleFiles: Seq[PostponedVatStatementFile] = Seq(postponedVatStatementFile, postponedVatStatementFile_2)
-      val multipleFilesStatementsByMonth: PostponedVatStatementsByMonth = postponedVatStatementsByMonth_2.copy(files = multipleFiles)
-      val result: Map[String, Seq[PostponedVatStatementFile]] = postponedVatViewModel.groupedStatements(multipleFilesStatementsByMonth)
-      result.size mustBe 1
-      result("CDS").length mustBe 2
-    }
-
-    "correctly handle groupedStatements with multiple sources" in new Setup {
-      val cdsFile: PostponedVatStatementFile = postponedVatStatementFile_2.copy(metadata = postponedVatStatementFile_2.metadata.copy(source = "CDS"))
-      val chiefFile: PostponedVatStatementFile = postponedVatStatementFile_2.copy(metadata = postponedVatStatementFile_2.metadata.copy(source = "CHIEF"))
-      val mixedStatementsByMonth: PostponedVatStatementsByMonth = postponedVatStatementsByMonth_2.copy(files = Seq(cdsFile, chiefFile))
-      val result: Map[String, Seq[PostponedVatStatementFile]] = postponedVatViewModel.groupedStatements(mixedStatementsByMonth)
-
-      result.size mustBe 2
-      result("CDS") must contain only cdsFile
-      result("CHIEF") must contain only chiefFile
+    "correctly handle missingFileMessage for CHIEF" in new Setup {
+      val result: String = PostponedVatViewModel.missingFileMessage("CHIEF")
+      result mustBe "No CHIEF statements available."
     }
   }
 
   private def displayStatementsShouldBeCorrect(result: Seq[StatementDisplayData]): Assertion = {
     result.length mustBe 1
-    result.head.monthYear.equalsIgnoreCase("october 2020") mustBe true
+    result.head.monthYear.equalsIgnoreCase("October 2020") mustBe true
     result.head.monthYearId.equalsIgnoreCase("october-2020") mustBe true
     result.head.formattedMonth mustBe "October"
     result.head.sources.length mustBe 2
+    result.head.sources.head.source mustBe "CDS"
     result.head.index mustBe 0
-  }
-
-  private def statementDisplayDataShouldBeCorrect(result: StatementDisplayData): Assertion = {
-    result.monthYear.equalsIgnoreCase("october 2020") mustBe true
-    result.monthYearId.equalsIgnoreCase("october-2020") mustBe true
-    result.formattedMonth mustBe "October"
-    result.sources.length mustBe 2
-    result.sources.find(_.source == "CDS").get.files.length mustBe 1
-    result.sources.find(_.source == "CHIEF").get.files.length mustBe 0
-    result.index mustBe 0
   }
 
   private def headingShouldBeCorrect(implicit view: Document): Assertion = {

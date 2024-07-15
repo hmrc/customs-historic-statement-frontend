@@ -32,39 +32,35 @@
 
 @layout(pageTitle = Some(messages("cf.import-postponed-vat.requested.title")), backLink = Some(backLink)) {
 
-    @h1(id=Some("requested-import-postponed-vat-statements-heading"), classes="govuk-heading-xl govuk-!-margin-bottom-3", msg=messages("cf.import-postponed-vat.requested.title"))
+    @h1(id=Some("requested-import-postponed-vat-statements-heading"),
+        classes="govuk-heading-xl govuk-!-margin-bottom-3",
+        msg=messages("cf.import-postponed-vat.requested.title")
+    )
 
-    @p(classes="govuk-body govuk-!-margin-bottom-8", id=Some("available-text"), content=Html(messages("cf.import-postponed-vat.requested.available.text")))
+    @p(classes="govuk-body govuk-!-margin-bottom-8",
+        id=Some("available-text"),
+        content=Html(messages("cf.import-postponed-vat.requested.available.text"))
+    )
 
-    @for(historyIndex <- model.histories) {
-        @for(statementDisplayData <- model.displayStatements(historyIndex)) {
-            <div id="requested-@{statementDisplayData.monthYearId}">
-                @h2(msg=statementDisplayData.monthYear, id=Some(s"period-${statementDisplayData.monthYearId}"))
-                <ul class="govuk-list" id="requested-statements-list-@{historyIndex}-row-@{statementDisplayData.index}">
-                    @for(sourceDisplay <- statementDisplayData.sources) {
+    @for(history <- PostponedVatViewModel.historiesWithDisplayData(model.statementsForAllEoris)) {
+
+        <div id="requested-@history.monthYearId">
+
+            @h2(msg = history.monthYear, id = Some(s"period-${history.monthYearId}"))
+
+                <ul class="govuk-list" id="requested-statements-list-@history.historyIndex-row-@history.index">
+
+                    @for(sourceDisplay <- history.sources) {
                         <li>
-                            @{
-                                if(sourceDisplay.files.isEmpty) {
-                                    messages("cf.account.postponed-vat.missing-file-type", sourceDisplay.source)
-                                } else {
-                                    displayRows(sourceDisplay.files, historyIndex, statementDisplayData.index, statementDisplayData.monthYear)
-                                }
-                            }
+                            @PostponedVatViewModel.renderSourceDisplay(
+                                sourceDisplay,
+                                history.historyIndex,
+                                history.index,
+                                history.monthYear
+                            )
                         </li>
                     }
                 </ul>
-            </div>
-        }
-    }
-}
-
-@displayRows(files: Seq[PostponedVatStatementFile], historyIndex: Int, index: Int, date: String) = {
-    @for(file <- files){
-        @download_link(
-        Some(file),
-        Pdf,
-        s"${file.metadata.source} statement",
-        s"requested-${file.metadata.source}-statements-list-${historyIndex}-row-${index}-pdf-download-link",
-        date)
+        </div>
     }
 }
