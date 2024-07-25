@@ -14,9 +14,8 @@
  * limitations under the License.
  *@
 
-@import helpers.Formatters.dateAsDayMonthAndYear
-@import models.FileFormat.Pdf
 @import views.html.templates.Layout
+@import viewmodels.SecuritiesRequestedStatementsViewModel._
 
 @this(
         layout: Layout,
@@ -32,66 +31,30 @@
 
 @layout(pageTitle = Some(messages("cf.security-statements.requested.title")), backLink = Some(backLink)) {
 
-@h1(id=Some("security-statements-heading"), classes="govuk-heading-xl govuk-!-margin-bottom-3", msg=messages("cf.security-statements.requested.title"))
+@h1(id=Some("security-statements-heading"),
+  classes="govuk-heading-xl govuk-!-margin-bottom-3",
+  msg=messages("cf.security-statements.requested.title")
+)
 
-@p(classes="govuk-body govuk-!-margin-bottom-8", id=Some("available-text"), content=Html(messages("cf.security-statements.requested.available.text")))
+@p(classes="govuk-body govuk-!-margin-bottom-8",
+  id=Some("available-text"),
+  content=Html(messages("cf.security-statements.requested.available.text"))
+)
 
-@for(historyIndex <- statements.indices) {
-    @if(statements(historyIndex).requestedStatements.nonEmpty) {
-        @if(historyIndex > 0) {
+<dl class="govuk-summary-list statement-list">
 
-            @h2(id=Some(s"requested-statements-eori-heading-${historyIndex}"),
-                classes="govuk-heading-s govuk-!-margin-bottom-2",
-                msg= messages("cf.account.details.previous-eori", statements(historyIndex).eoriHistory.eori)
-            )
-        }
+    @for(row <- prepareStatementRows(statements)) {
+        @renderEoriHeading(row)
 
-        <dl class="govuk-summary-list statement-list" id="requested-statements-list-@{
-            historyIndex
-        }">
-        @for((statementsOfOneMonth, index) <- statements(historyIndex).requestedStatements.sorted.zipWithIndex) {
-            <div class="govuk-summary-list__row" id="requested-statements-list-@{
-                historyIndex
-            }-row-@{
-                index
-            }">
-                <dt class="govuk-summary-list__value" id="requested-statements-list-@{
-                    historyIndex
-                }-row-@{
-                    index
-                }-date-cell">
-                @messages("cf.security-statements.requested.period",
-                    dateAsDayMonthAndYear(statementsOfOneMonth.startDate),
-                    dateAsDayMonthAndYear(statementsOfOneMonth.endDate))
-                </dt>
-                <dd class="govuk-summary-list__actions" id="requested-statements-list-@{
-                    historyIndex
-                }-row-@{
-                    index
-                }-link-cell">
-                @if(statementsOfOneMonth.pdf.isDefined) {
-                    <a class="file-link govuk-link" href="@{
-                        statementsOfOneMonth.pdf.get.downloadURL
-                    }" download>
-                        <span>
-                            @Pdf (@statementsOfOneMonth.pdf.get.formattedSize)
-                        </span>
-                         <span class="govuk-visually-hidden"> @messages("cf.security-statements.requested.download-link.aria-text",
-                            Pdf,
-                            dateAsDayMonthAndYear(statementsOfOneMonth.startDate),
-                            dateAsDayMonthAndYear(statementsOfOneMonth.endDate),
-                            statementsOfOneMonth.pdf.get.formattedSize)
-                        </span>
-                    </a>
-                } else {
-                    <span class="file-link">@messages("cf.security-statements.no-statements", Pdf)</span>
-                }
-                </dd>
-            </div>
-        }
-        </dl>
+        <div class="govuk-summary-list__row" id="@row.rowId">
+            <dt class="govuk-summary-list__value" id="@row.dateCellId">@row.date</dt>
+            <dd class="govuk-summary-list__actions" id="@row.linkCellId">
+                @renderPdfLink(row.pdf)
+            </dd>
+        </div>
     }
-}
+
+</dl>
 
 @missing_documents_guidance("statement")
 }
