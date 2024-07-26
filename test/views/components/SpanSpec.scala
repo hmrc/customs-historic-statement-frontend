@@ -54,6 +54,6 @@ class SpanSpec extends ViewTestHelper {
     val messageKey = "timeout.title"
 
     def view(msgKey: String = messageKey, visuallyHidden: Boolean = true): Document = Jsoup.parse(
-      app.injector.instanceOf[span].apply(key = msgKey, visuallyHidden = visuallyHidden).body)
+      app.injector.instanceOf[span].apply(key = msgKey, classes = Some(""), visuallyHidden = visuallyHidden).body)
   }
 }

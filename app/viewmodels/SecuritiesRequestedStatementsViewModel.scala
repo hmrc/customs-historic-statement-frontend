@@ -18,9 +18,10 @@ package viewmodels
 
 import helpers.Formatters.dateAsDayMonthAndYear
 import models.FileFormat.Pdf
-import models.SecurityStatementsForEori
+import models.{SecurityStatementsByPeriod, SecurityStatementsForEori}
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
+import utils.Utils.{h2Component, missingDocumentsGuidanceComponent, spanComponent, spanLinkComponent}
 
 case class StatementRow(historyIndex: Int,
                         eori: Option[String],
@@ -38,59 +39,81 @@ object SecuritiesRequestedStatementsViewModel {
 
     securityStatements.zipWithIndex.flatMap { case (statement, statementIndex) =>
       statement.requestedStatements.sorted.zipWithIndex.map { case (requestedStatement, requestedIndex) =>
-
-        val eori = if (statementIndex > 0) Some(statement.eoriHistory.eori) else None
-
-        val date = messages("cf.security-statements.requested.period",
-          dateAsDayMonthAndYear(requestedStatement.startDate),
-          dateAsDayMonthAndYear(requestedStatement.endDate))
-
-        val pdf = requestedStatement.pdf.map { pdf =>
-          PdfLink(
-            downloadURL = pdf.downloadURL,
-            formattedSize = pdf.formattedSize,
-            ariaText = messages(
-              "cf.security-statements.requested.download-link.aria-text",
-              Pdf,
-              dateAsDayMonthAndYear(requestedStatement.startDate),
-              dateAsDayMonthAndYear(requestedStatement.endDate),
-              pdf.formattedSize
-            )
-          )
-        }
-
-        StatementRow(
-          historyIndex = statementIndex,
-          eori,
-          date,
-          pdf,
-          rowId = s"requested-statements-list-$statementIndex-row-$requestedIndex",
-          dateCellId = s"requested-statements-list-$statementIndex-row-$requestedIndex-date-cell",
-          linkCellId = s"requested-statements-list-$statementIndex-row-$requestedIndex-link-cell"
-        )
+        createStatementRow(statement, statementIndex, requestedStatement, requestedIndex)
       }
     }
   }
 
+  private def createStatementRow(statement: SecurityStatementsForEori,
+                                 statementIndex: Int,
+                                 requestedStatement: SecurityStatementsByPeriod,
+                                 requestedIndex: Int)
+                                (implicit messages: Messages): StatementRow = {
+
+    val eori = if (statementIndex > 0) Some(statement.eoriHistory.eori) else None
+
+    val date = messages("cf.security-statements.requested.period",
+      dateAsDayMonthAndYear(requestedStatement.startDate),
+      dateAsDayMonthAndYear(requestedStatement.endDate))
+
+    val pdf = requestedStatement.pdf.map { pdf =>
+      PdfLink(
+        downloadURL = pdf.downloadURL,
+        formattedSize = pdf.formattedSize,
+        ariaText = messages(
+          "cf.security-statements.requested.download-link.aria-text",
+          Pdf,
+          dateAsDayMonthAndYear(requestedStatement.startDate),
+          dateAsDayMonthAndYear(requestedStatement.endDate),
+          pdf.formattedSize
+        )
+      )
+    }
+
+    StatementRow(
+      historyIndex = statementIndex,
+      eori,
+      date,
+      pdf,
+      rowId = s"requested-statements-list-$statementIndex-row-$requestedIndex",
+      dateCellId = s"requested-statements-list-$statementIndex-row-$requestedIndex-date-cell",
+      linkCellId = s"requested-statements-list-$statementIndex-row-$requestedIndex-link-cell"
+    )
+  }
+
+  def hasSecurityStatementsForEori(securityStatements: Seq[SecurityStatementsForEori]): Boolean = {
+    securityStatements.exists(_.requestedStatements.nonEmpty)
+  }
+
   def renderEoriHeading(row: StatementRow)(implicit messages: Messages): Option[HtmlFormat.Appendable] = {
     row.eori.map { eori =>
-      Html(
-        s"""<h2 id="requested-statements-eori-heading-${row.historyIndex}"
-           |    class="govuk-heading-s govuk-!-margin-bottom-2">
-           |  ${messages("cf.account.details.previous-eori", eori)}
-           |</h2>""".stripMargin)
+      h2Component(
+        msg = messages("cf.account.details.previous-eori", eori),
+        id = Some(s"requested-statements-eori-heading-${row.historyIndex}"),
+        classes = "govuk-heading-s govuk-!-margin-bottom-2"
+      )
     }
   }
 
-  def renderPdfLink(pdf: Option[PdfLink])(implicit messages: Messages): HtmlFormat.Appendable = {
+  def renderPdfLink(pdf: Option[PdfLink])(implicit messages: Messages): Html = {
     pdf.fold(
-      Html(s"""<span class="file-link">${messages("cf.security-statements.no-statements", Pdf)}</span>""")
+      spanComponent(
+        key = s"${messages("cf.security-statements.no-statements", Pdf)}",
+        classes = Some("file-link"),
+        visuallyHidden = false
+      )
     ) { link =>
-      Html(
-        s"""<a class="file-link govuk-link" href="${link.downloadURL}" download>
-           |<span>$Pdf (${link.formattedSize})</span>
-           |<span class="govuk-visually-hidden">${link.ariaText}</span>
-           |</a>""".stripMargin)
+      spanLinkComponent(
+        msg = s"$Pdf (${link.formattedSize})",
+        url = link.downloadURL,
+        classes = "file-link govuk-link",
+        spanMsg = Some(link.ariaText),
+        spanClass = Some("govuk-visually-hidden")
+      )
     }
+  }
+
+  def renderMissingDocumentsGuidance(implicit messages: Messages): HtmlFormat.Appendable = {
+    missingDocumentsGuidanceComponent("statement")
   }
 }

@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,17 @@
 
 @this()
 
-@(key: String, classes: Option[String], visuallyHidden: Boolean = true)(implicit messages: Messages)
+@(msg: String,
+  id: Option[String] = None,
+  classes: String = "govuk-link",
+  url: String,
+  spanClass: Option[String] = None,
+  spanMsg: Option[String] = None
+)(implicit messages: Messages)
 
-@if(visuallyHidden){
-    <span class="govuk-visually-hidden">@messages(key)</span>
-} else {
-    <span>@messages(key)</span>
-}
+<a @{id.fold("")(id => s"id=$id")} href="@url" class="@classes">
+    @messages(msg)
+    <span @{spanClass.fold("")(spanClass => s"class=$spanClass")}>
+        @{spanMsg.fold("")(spanMsg => s"$spanMsg")}
+  </span>
+</a>

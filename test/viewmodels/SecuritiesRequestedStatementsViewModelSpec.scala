@@ -19,6 +19,11 @@ package viewmodels
 import base.SpecBase
 import play.api.i18n.Messages
 import models.{EoriHistory, SecurityStatementsByPeriod, SecurityStatementsForEori}
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.select.Elements
+import play.twirl.api.HtmlFormat
+import utils.Utils.{h2Component, spanLinkComponent}
 
 import java.time.LocalDate
 
@@ -43,6 +48,27 @@ class SecuritiesRequestedStatementsViewModelSpec extends Setup {
         )
       )
     }
+
+    "return a sequence of StatementRow with correct data" in {
+      val securityStatements = Seq(
+        SecurityStatementsForEori(
+          eoriHistory = EoriHistory("EORI456", Some(LocalDate.parse("2023-07-10")), Some(LocalDate.parse("2023-07-20"))),
+          currentStatements = Seq(requestedStatement),
+          requestedStatements = Seq(requestedStatement)
+        ),
+        SecurityStatementsForEori(
+          eoriHistory = EoriHistory("EORI789", Some(LocalDate.parse("2023-06-01")), Some(LocalDate.parse("2023-06-30"))),
+          currentStatements = Seq(requestedStatement),
+          requestedStatements = Seq(requestedStatement)
+        )
+      )
+
+      val result = SecuritiesRequestedStatementsViewModel.prepareStatementRows(securityStatements)
+
+      result.size mustBe 2
+      result.head.eori mustBe None
+      result(1).eori mustBe Some("EORI789")
+    }
   }
 
   "renderEoriHeading" should {
@@ -59,11 +85,13 @@ class SecuritiesRequestedStatementsViewModelSpec extends Setup {
 
       val result = SecuritiesRequestedStatementsViewModel.renderEoriHeading(row)
 
-      result.map(_.body.trim) mustBe Some(
-        """<h2 id="requested-statements-eori-heading-0"
-          |    class="govuk-heading-s govuk-!-margin-bottom-2">
-          |  Previous EORI: EORI456
-          |</h2>""".stripMargin.trim)
+      val expectedHtml = h2Component(
+        msg = "cf.account.details.previous-eori",
+        id = Some("requested-statements-eori-heading-0"),
+        classes = "govuk-heading-s govuk-!-margin-bottom-2"
+      ).body.trim
+
+      result.map(_.body.trim.replaceAll("\\s+", " ")) mustBe Some(expectedHtml.replaceAll("\\s+", " "))
     }
 
     "return None when EORI is not present" in {
@@ -88,11 +116,57 @@ class SecuritiesRequestedStatementsViewModelSpec extends Setup {
       val pdf = Some(pdfLink)
       val result = SecuritiesRequestedStatementsViewModel.renderPdfLink(pdf)
 
-      result.body.trim mustBe
-        s"""<a class="file-link govuk-link" href="${pdfLink.downloadURL}" download>
-           |<span>PDF (${pdfLink.formattedSize})</span>
-           |<span class="govuk-visually-hidden">Download PDF</span>
-           |</a>""".stripMargin.trim
+      val expectedHtml = spanLinkComponent(
+        msg = s"PDF (${pdfLink.formattedSize})",
+        url = pdfLink.downloadURL,
+        classes = "file-link govuk-link",
+        spanClass = Some("govuk-visually-hidden"),
+        spanMsg = Some("Download PDF")
+      ).body.trim
+
+      result.body.trim.replaceAll("\\s+", " ") mustBe expectedHtml.replaceAll("\\s+", " ")
+    }
+  }
+
+  "renderMissingDocumentsGuidance" should {
+    "generate guidance" in {
+      val result: HtmlFormat.Appendable = SecuritiesRequestedStatementsViewModel.renderMissingDocumentsGuidance
+
+      val document: Document = Jsoup.parse(result.body)
+
+      val heading: Elements = document.select("#missing-documents-guidance-heading")
+
+      heading.size() mustBe 1
+    }
+  }
+
+  "hasSecurityStatementsForEori" should {
+    "return true if there are requested statements" in {
+      val securityStatements = Seq(
+        SecurityStatementsForEori(
+          eoriHistory = EoriHistory("EORI456", Some(LocalDate.parse("2023-07-10")), Some(LocalDate.parse("2023-07-20"))),
+          currentStatements = Seq(requestedStatement),
+          requestedStatements = Seq(requestedStatement)
+        )
+      )
+
+      val result = SecuritiesRequestedStatementsViewModel.hasSecurityStatementsForEori(securityStatements)
+
+      result mustBe true
+    }
+
+    "return false if there are no requested statements" in {
+      val securityStatements = Seq(
+        SecurityStatementsForEori(
+          eoriHistory = EoriHistory("EORI456", Some(LocalDate.parse("2023-07-10")), Some(LocalDate.parse("2023-07-20"))),
+          currentStatements = Seq(requestedStatement),
+          requestedStatements = Seq.empty
+        )
+      )
+
+      val result = SecuritiesRequestedStatementsViewModel.hasSecurityStatementsForEori(securityStatements)
+
+      result mustBe false
     }
   }
 }

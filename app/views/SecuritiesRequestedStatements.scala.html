@@ -41,20 +41,20 @@
   content=Html(messages("cf.security-statements.requested.available.text"))
 )
 
-<dl class="govuk-summary-list statement-list">
+@for(row <- prepareStatementRows(statements)) {
+  @if(hasSecurityStatementsForEori(statements)) {
+    @renderEoriHeading(row)
 
-    @for(row <- prepareStatementRows(statements)) {
-        @renderEoriHeading(row)
+      <dl class="govuk-summary-list statement-list">
+          <div class="govuk-summary-list__row" id="@row.rowId">
+              <dt class="govuk-summary-list__value" id="@row.dateCellId">@row.date</dt>
+                <dd class="govuk-summary-list__actions" id="@row.linkCellId">
+                    @renderPdfLink(row.pdf)
+                </dd>
+          </div>
+      </dl>
+  }
+}
 
-        <div class="govuk-summary-list__row" id="@row.rowId">
-            <dt class="govuk-summary-list__value" id="@row.dateCellId">@row.date</dt>
-            <dd class="govuk-summary-list__actions" id="@row.linkCellId">
-                @renderPdfLink(row.pdf)
-            </dd>
-        </div>
-    }
-
-</dl>
-
-@missing_documents_guidance("statement")
+@renderMissingDocumentsGuidance
 }
