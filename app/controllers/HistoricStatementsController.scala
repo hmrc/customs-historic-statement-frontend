@@ -25,7 +25,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.SortStatementsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import viewmodels.{DutyDefermentAccountViewModel, PostponedVatViewModel, VatViewModel}
+import viewmodels.{DutyDefermentAccountViewModel, PostponedVatViewModel, SecuritiesRequestedStatementsViewModel, VatViewModel}
 import views.html._
 
 import javax.inject.Inject
@@ -105,7 +105,10 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
             .getSecurityStatements(historicEori.eori)
             .map(sortStatementsService.sortSecurityCertificatesForEori(historicEori, _))
       })
-    } yield Ok(securitiesView(allCertificates, appConfig.returnLink(SecurityStatement)))
+    } yield {
+      val model = SecuritiesRequestedStatementsViewModel(allCertificates)
+      Ok(securitiesView(model, appConfig.returnLink(SecurityStatement)))
+    }
   }
 
   private def showHistoricDutyDefermentStatements(dan: String, linkId: String)(

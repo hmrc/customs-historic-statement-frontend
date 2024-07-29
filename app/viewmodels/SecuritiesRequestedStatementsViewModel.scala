@@ -33,15 +33,38 @@ case class StatementRow(historyIndex: Int,
 
 case class PdfLink(downloadURL: String, formattedSize: String, ariaText: String)
 
+case class SecuritiesRequestedStatementsViewModel(statementRows: Seq[StatementRow],
+                                                  hasStatements: Boolean,
+                                                  renderEoriHeading: HtmlFormat.Appendable,
+                                                  renderPdfLink: Option[Html],
+                                                  renderMissingDocumentsGuidance: HtmlFormat.Appendable)
+
 object SecuritiesRequestedStatementsViewModel {
+
+  def apply(securityStatementsForEori: Seq[SecurityStatementsForEori])
+           (implicit messages: Messages): SecuritiesRequestedStatementsViewModel = {
+
+    val preparedStatementRows = prepareStatementRows(securityStatementsForEori)
+    val hasStatements = hasSecurityStatementsForEori(securityStatementsForEori)
+    val eoriHeading = preparedStatementRows.headOption.flatMap(renderEoriHeading).getOrElse(HtmlFormat.empty)
+    val pdfLink = preparedStatementRows.headOption.map(row => renderPdfLink(row.pdf))
+
+    SecuritiesRequestedStatementsViewModel(
+      statementRows = preparedStatementRows,
+      hasStatements = hasStatements,
+      renderEoriHeading = eoriHeading,
+      renderPdfLink = pdfLink,
+      renderMissingDocumentsGuidance = renderMissingDocumentsGuidance
+    )
+  }
+
   def prepareStatementRows(securityStatements: Seq[SecurityStatementsForEori])
                           (implicit messages: Messages): Seq[StatementRow] = {
 
-    securityStatements.zipWithIndex.flatMap { case (statement, statementIndex) =>
-      statement.requestedStatements.sorted.zipWithIndex.map { case (requestedStatement, requestedIndex) =>
-        createStatementRow(statement, statementIndex, requestedStatement, requestedIndex)
-      }
-    }
+    for {
+      (statement, statementIndex) <- securityStatements.zipWithIndex
+      (requestedStatement, requestedIndex) <- statement.requestedStatements.sorted.zipWithIndex
+    } yield createStatementRow(statement, statementIndex, requestedStatement, requestedIndex)
   }
 
   private def createStatementRow(statement: SecurityStatementsForEori,
