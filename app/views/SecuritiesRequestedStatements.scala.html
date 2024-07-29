@@ -42,7 +42,9 @@
 )
 
 @for(row <- model.statementRows) {
+
   @if(model.hasStatements) {
+
     @model.renderEoriHeading
 
       <dl class="govuk-summary-list statement-list">

@@ -18,6 +18,7 @@ package views.components
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import utils.Utils.emptyString
 import views.ViewTestHelper
 import views.html.components.span
 
@@ -54,6 +55,6 @@ class SpanSpec extends ViewTestHelper {
     val messageKey = "timeout.title"
 
     def view(msgKey: String = messageKey, visuallyHidden: Boolean = true): Document = Jsoup.parse(
-      app.injector.instanceOf[span].apply(key = msgKey, classes = Some(""), visuallyHidden = visuallyHidden).body)
+      app.injector.instanceOf[span].apply(key = msgKey, classes = Some(emptyString), visuallyHidden = visuallyHidden).body)
   }
 }

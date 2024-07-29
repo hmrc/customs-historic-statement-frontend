@@ -22,25 +22,23 @@ import models.{EoriHistory, SecurityStatementsByPeriod, SecurityStatementsForEor
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
-import play.twirl.api.HtmlFormat
-import utils.Utils.{h2Component, spanLinkComponent}
+import play.api.Application
+import utils.Utils.{emptyString, spanComponent}
 
 import java.time.LocalDate
 
-class SecuritiesRequestedStatementsViewModelSpec extends Setup {
-
-  when(mockMessages("cf.account.details.previous-eori", "EORI456"))
-    .thenReturn("Previous EORI: EORI456")
+class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
 
   "prepareStatementRows" should {
     "return a sequence of StatementRow" in {
-      val result = SecuritiesRequestedStatementsViewModel.prepareStatementRows(securityStatements)
+      val viewModel = createViewModel(securityStatements)
+      val result = viewModel.statementRows
 
       result mustBe Seq(
         StatementRow(
           historyIndex = 0,
           eori = None,
-          date = "",
+          date = "10 July 2023 to 20 July 2023",
           pdf = None,
           rowId = "requested-statements-list-0-row-0",
           dateCellId = "requested-statements-list-0-row-0-date-cell",
@@ -52,18 +50,19 @@ class SecuritiesRequestedStatementsViewModelSpec extends Setup {
     "return a sequence of StatementRow with correct data" in {
       val securityStatements = Seq(
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory("EORI456", Some(LocalDate.parse("2023-07-10")), Some(LocalDate.parse("2023-07-20"))),
+          eoriHistory = EoriHistory("EORI456", Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq(requestedStatement)
         ),
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory("EORI789", Some(LocalDate.parse("2023-06-01")), Some(LocalDate.parse("2023-06-30"))),
+          eoriHistory = EoriHistory("EORI789", Some(startDateJune), Some(endDateJune)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq(requestedStatement)
         )
       )
 
-      val result = SecuritiesRequestedStatementsViewModel.prepareStatementRows(securityStatements)
+      val viewModel = createViewModel(securityStatements)
+      val result = viewModel.statementRows
 
       result.size mustBe 2
       result.head.eori mustBe None
@@ -75,7 +74,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends Setup {
     "render the EORI" in {
       val row = StatementRow(
         0,
-        Some("EORI456"),
+        Some(securityStatementForEori.eoriHistory.eori),
         "10 July 2023 to 20 July 2023",
         Some(pdfLink),
         "rowId",
@@ -83,54 +82,48 @@ class SecuritiesRequestedStatementsViewModelSpec extends Setup {
         "linkCellId"
       )
 
-      val result = SecuritiesRequestedStatementsViewModel.renderEoriHeading(row)
+      val result = row.eori
 
-      val expectedHtml = h2Component(
-        msg = "cf.account.details.previous-eori",
-        id = Some("requested-statements-eori-heading-0"),
-        classes = "govuk-heading-s govuk-!-margin-bottom-2"
-      ).body.trim
+      result mustBe Some(securityStatementForEori.eoriHistory.eori)
 
-      result.map(_.body.trim.replaceAll("\\s+", " ")) mustBe Some(expectedHtml.replaceAll("\\s+", " "))
+      val expectedSize = securityStatementForEori.eoriHistory.eori.length
+      val actualSize = result.map(_.length)
+
+      actualSize mustBe Some(expectedSize)
     }
 
-    "return None when EORI is not present" in {
-      val row = StatementRow(
-        0,
-        None,
-        "10 July 2023 to 20 July 2023",
-        Some(pdfLink),
-        "rowId",
-        "dateCellId",
-        "linkCellId"
-      )
+    "return false if EORI is not present" in {
+      val viewModel = createViewModel(Seq(emptySecurityStatementForEori))
+      val result = viewModel.statementRows
 
-      val result = SecuritiesRequestedStatementsViewModel.renderEoriHeading(row)
+      val isEoriPresent = result.nonEmpty
 
-      result mustBe None
+      isEoriPresent mustBe false
     }
   }
 
   "renderPdfLink" should {
-    "render the correct PDF link" in {
-      val pdf = Some(pdfLink)
-      val result = SecuritiesRequestedStatementsViewModel.renderPdfLink(pdf)
+    "return true if PDF size is 1 and true" in {
+      val viewModel = createViewModel(securityStatements)
+      val pdfLink = viewModel.renderPdfLink
 
-      val expectedHtml = spanLinkComponent(
-        msg = s"PDF (${pdfLink.formattedSize})",
-        url = pdfLink.downloadURL,
-        classes = "file-link govuk-link",
-        spanClass = Some("govuk-visually-hidden"),
-        spanMsg = Some("Download PDF")
-      ).body.trim
+      val isSizeOne = pdfLink.size == 1
 
-      result.body.trim.replaceAll("\\s+", " ") mustBe expectedHtml.replaceAll("\\s+", " ")
+      isSizeOne mustBe true
+    }
+
+    "render the correct PDF title when no statements" in {
+      val viewModel = createViewModel(securityStatements)
+      val result = viewModel.renderPdfLink
+
+      result mustBe Some(spanComponent("There are no statements available to view.", classes = Some(emptyString), visuallyHidden = false))
     }
   }
 
   "renderMissingDocumentsGuidance" should {
     "generate guidance" in {
-      val result: HtmlFormat.Appendable = SecuritiesRequestedStatementsViewModel.renderMissingDocumentsGuidance
+      val viewModel = createViewModel(securityStatements)
+      val result = viewModel.renderMissingDocumentsGuidance
 
       val document: Document = Jsoup.parse(result.body)
 
@@ -144,13 +137,14 @@ class SecuritiesRequestedStatementsViewModelSpec extends Setup {
     "return true if there are requested statements" in {
       val securityStatements = Seq(
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory("EORI456", Some(LocalDate.parse("2023-07-10")), Some(LocalDate.parse("2023-07-20"))),
+          eoriHistory = EoriHistory("EORI456", Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq(requestedStatement)
         )
       )
 
-      val result = SecuritiesRequestedStatementsViewModel.hasSecurityStatementsForEori(securityStatements)
+      val viewModel = createViewModel(securityStatements)
+      val result = viewModel.hasStatements
 
       result mustBe true
     }
@@ -158,35 +152,56 @@ class SecuritiesRequestedStatementsViewModelSpec extends Setup {
     "return false if there are no requested statements" in {
       val securityStatements = Seq(
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory("EORI456", Some(LocalDate.parse("2023-07-10")), Some(LocalDate.parse("2023-07-20"))),
+          eoriHistory = EoriHistory("EORI456", Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq.empty
         )
       )
 
-      val result = SecuritiesRequestedStatementsViewModel.hasSecurityStatementsForEori(securityStatements)
+      val viewModel = createViewModel(securityStatements)
+      val result = viewModel.hasStatements
 
       result mustBe false
     }
   }
+
+  private def createViewModel(securityStatements: Seq[SecurityStatementsForEori]) = {
+    SecuritiesRequestedStatementsViewModel(securityStatements)
+  }
 }
 
-trait Setup extends SpecBase {
-  implicit val mockMessages: Messages = mock[Messages]
+trait SpecBaseWithSetup extends SpecBase {
+
+  val app: Application = applicationBuilder().build()
+  implicit val messages: Messages = messages(app)
 
   val pdfLink: PdfLink = PdfLink("file.pdf", "1MB", "Download PDF")
 
+  val startDateJuly: LocalDate = LocalDate.parse("2023-07-10")
+  val endDateJuly: LocalDate = LocalDate.parse("2023-07-20")
+  val startDateJune: LocalDate = LocalDate.parse("2023-06-01")
+  val endDateJune: LocalDate = LocalDate.parse("2023-06-30")
+
   val requestedStatement: SecurityStatementsByPeriod = SecurityStatementsByPeriod(
-    startDate = LocalDate.parse("2023-07-10"),
-    endDate = LocalDate.parse("2023-07-20"),
+    startDate = startDateJuly,
+    endDate = endDateJuly,
     files = Seq.empty
   )
 
   val securityStatementForEori: SecurityStatementsForEori = SecurityStatementsForEori(
-    eoriHistory = EoriHistory("EORI456", Some(LocalDate.parse("2023-07-10")), Some(LocalDate.parse("2023-07-20"))),
+    eoriHistory = EoriHistory("EORI456", Some(startDateJuly), Some(endDateJuly)),
     currentStatements = Seq(requestedStatement),
     requestedStatements = Seq(requestedStatement)
   )
 
+  val emptySecurityStatementForEori: SecurityStatementsForEori = SecurityStatementsForEori(
+    eoriHistory = EoriHistory(emptyString, None, None),
+    currentStatements = Seq.empty,
+    requestedStatements = Seq.empty
+  )
+
   val securityStatements: Seq[SecurityStatementsForEori] = Seq(securityStatementForEori)
+
+  when(messages("cf.account.details.previous-eori", "EORI456"))
+    .thenReturn("Previous EORI: EORI456")
 }

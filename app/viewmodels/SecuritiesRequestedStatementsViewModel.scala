@@ -58,7 +58,7 @@ object SecuritiesRequestedStatementsViewModel {
     )
   }
 
-  def prepareStatementRows(securityStatements: Seq[SecurityStatementsForEori])
+  private def prepareStatementRows(securityStatements: Seq[SecurityStatementsForEori])
                           (implicit messages: Messages): Seq[StatementRow] = {
 
     for {
@@ -104,11 +104,11 @@ object SecuritiesRequestedStatementsViewModel {
     )
   }
 
-  def hasSecurityStatementsForEori(securityStatements: Seq[SecurityStatementsForEori]): Boolean = {
+  private def hasSecurityStatementsForEori(securityStatements: Seq[SecurityStatementsForEori]): Boolean = {
     securityStatements.exists(_.requestedStatements.nonEmpty)
   }
 
-  def renderEoriHeading(row: StatementRow)(implicit messages: Messages): Option[HtmlFormat.Appendable] = {
+  private def renderEoriHeading(row: StatementRow)(implicit messages: Messages): Option[HtmlFormat.Appendable] = {
     row.eori.map { eori =>
       h2Component(
         msg = messages("cf.account.details.previous-eori", eori),
@@ -118,7 +118,7 @@ object SecuritiesRequestedStatementsViewModel {
     }
   }
 
-  def renderPdfLink(pdf: Option[PdfLink])(implicit messages: Messages): Html = {
+  private def renderPdfLink(pdf: Option[PdfLink])(implicit messages: Messages): Html = {
     pdf.fold(
       spanComponent(
         key = s"${messages("cf.security-statements.no-statements", Pdf)}",
@@ -136,7 +136,7 @@ object SecuritiesRequestedStatementsViewModel {
     }
   }
 
-  def renderMissingDocumentsGuidance(implicit messages: Messages): HtmlFormat.Appendable = {
+  private def renderMissingDocumentsGuidance(implicit messages: Messages): HtmlFormat.Appendable = {
     missingDocumentsGuidanceComponent("statement")
   }
 }
