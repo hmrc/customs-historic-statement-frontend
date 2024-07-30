@@ -30,13 +30,13 @@ case class StatementRow(historyIndex: Int,
                         rowId: String,
                         dateCellId: String,
                         linkCellId: String,
-                        eoriHeading: Option[HtmlFormat.Appendable])
+                        renderEoriHeading: Option[HtmlFormat.Appendable],
+                        renderPdfLink: Html)
 
 case class PdfLink(downloadURL: String, formattedSize: String, ariaText: String)
 
 case class SecuritiesRequestedStatementsViewModel(statementRows: Seq[StatementRow],
                                                   hasStatements: Boolean,
-                                                  renderPdfLink: Option[Html],
                                                   renderMissingDocumentsGuidance: HtmlFormat.Appendable)
 
 object SecuritiesRequestedStatementsViewModel {
@@ -46,12 +46,10 @@ object SecuritiesRequestedStatementsViewModel {
 
     val preparedStatementRows = prepareStatementRows(securityStatementsForEori)
     val hasStatements = hasSecurityStatementsForEori(securityStatementsForEori)
-    val pdfLink = preparedStatementRows.headOption.map(row => renderPdfLink(row.pdf))
 
     SecuritiesRequestedStatementsViewModel(
       statementRows = preparedStatementRows,
       hasStatements = hasStatements,
-      renderPdfLink = pdfLink,
       renderMissingDocumentsGuidance = renderMissingDocumentsGuidance
     )
   }
@@ -72,7 +70,7 @@ object SecuritiesRequestedStatementsViewModel {
 
     val eori = if (statementIndex > 0) Some(statement.eoriHistory.eori) else None
 
-    val eoriHeading = eori.map { eori =>
+    val renderEoriHeading = eori.map { eori =>
       h2Component(
         msg = messages("cf.account.details.previous-eori", eori),
         id = Some(s"requested-statements-eori-heading-$statementIndex"),
@@ -106,7 +104,8 @@ object SecuritiesRequestedStatementsViewModel {
       rowId = s"requested-statements-list-$statementIndex-row-$requestedIndex",
       dateCellId = s"requested-statements-list-$statementIndex-row-$requestedIndex-date-cell",
       linkCellId = s"requested-statements-list-$statementIndex-row-$requestedIndex-link-cell",
-      eoriHeading = eoriHeading
+      renderEoriHeading,
+      renderPdfLink(pdf)
     )
   }
 

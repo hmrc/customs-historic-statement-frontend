@@ -17,6 +17,7 @@
 package viewmodels
 
 import base.SpecBase
+import models.FileFormat.Pdf
 import play.api.i18n.Messages
 import models.{EoriHistory, SecurityStatementsByPeriod, SecurityStatementsForEori}
 import org.jsoup.Jsoup
@@ -34,18 +35,17 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
     "return a sequence of StatementRow" in {
       val result = viewModel.statementRows
 
-      result mustBe Seq(
-        StatementRow(
-          historyIndex = 0,
-          eori = None,
-          date = "10 July 2023 to 20 July 2023",
-          pdf = None,
-          rowId = "requested-statements-list-0-row-0",
-          dateCellId = "requested-statements-list-0-row-0-date-cell",
-          linkCellId = "requested-statements-list-0-row-0-link-cell",
-          eoriHeading = None
-        )
-      )
+      result.size mustBe 1
+      val row = result.head
+
+      row.historyIndex mustBe 0
+      row.eori mustBe None
+      row.date mustBe "10 July 2023 to 20 July 2023"
+      row.pdf mustBe None
+      row.rowId mustBe "requested-statements-list-0-row-0"
+      row.dateCellId mustBe "requested-statements-list-0-row-0-date-cell"
+      row.linkCellId mustBe "requested-statements-list-0-row-0-link-cell"
+      row.renderEoriHeading mustBe None
     }
 
     "return a sequence of StatementRow with correct data" in {
@@ -81,17 +81,17 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
         rowId = emptyString,
         dateCellId = emptyString,
         linkCellId = emptyString,
-        eoriHeading = Some(h2Component(
+        renderEoriHeading = Some(h2Component(
           msg = messages("cf.account.details.previous-eori", eoriNumber),
           id = Some("requested-statements-eori-heading-0"),
           classes = "govuk-heading-s govuk-!-margin-bottom-2"
-        ))
+        )),
+        renderPdfLink = HtmlFormat.empty
       )
 
       val viewModel = SecuritiesRequestedStatementsViewModel(
         statementRows = Seq(mockStatementRow),
         hasStatements = true,
-        renderPdfLink = None,
         renderMissingDocumentsGuidance = HtmlFormat.empty
       )
 
@@ -101,7 +101,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
         classes = "govuk-heading-s govuk-!-margin-bottom-2"
       )
 
-      viewModel.statementRows.head.eoriHeading mustBe Some(expectedHtml)
+      viewModel.statementRows.head.renderEoriHeading mustBe Some(expectedHtml)
     }
 
     "return false if EORI is not present" in {
@@ -116,6 +116,14 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
 
   "renderPdfLink" should {
     "render the PDF link correctly" in {
+      val expectedHtml = spanLinkComponent(
+        msg = s"PDF (${pdfLink.formattedSize})",
+        url = pdfLink.downloadURL,
+        classes = "file-link govuk-link",
+        spanClass = Some("govuk-visually-hidden"),
+        spanMsg = Some(pdfLink.ariaText)
+      )
+
       val mockStatementRow = StatementRow(
         historyIndex = 0,
         eori = None,
@@ -124,51 +132,45 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
         rowId = emptyString,
         dateCellId = emptyString,
         linkCellId = emptyString,
-        eoriHeading = None
+        renderEoriHeading = None,
+        renderPdfLink = expectedHtml
       )
 
       val viewModel = SecuritiesRequestedStatementsViewModel(
         statementRows = Seq(mockStatementRow),
         hasStatements = true,
-        renderPdfLink = Some(HtmlFormat.raw(spanLinkComponent(
-          msg = s"PDF (${pdfLink.formattedSize})",
-          url = pdfLink.downloadURL,
-          classes = "file-link govuk-link",
-          spanClass = Some("govuk-visually-hidden"),
-          spanMsg = Some(pdfLink.ariaText)
-        ).body.trim)),
         renderMissingDocumentsGuidance = HtmlFormat.empty
       )
 
-      val expectedHtml = spanLinkComponent(
-        msg = s"PDF (${pdfLink.formattedSize})",
-        url = pdfLink.downloadURL,
-        classes = "file-link govuk-link",
-        spanClass = Some("govuk-visually-hidden"),
-        spanMsg = Some(pdfLink.ariaText)
-      ).body.trim
-
-      viewModel.renderPdfLink mustBe Some(HtmlFormat.raw(expectedHtml))
-    }
-
-    "return true if PDF size is 1 and true" in {
-      val pdfLink = viewModel.renderPdfLink
-
-      val isSizeOne = pdfLink.size == 1
-
-      isSizeOne mustBe true
+      viewModel.statementRows.head.renderPdfLink mustBe expectedHtml
     }
 
     "render the correct PDF title when no statements" in {
-      val result = viewModel.renderPdfLink
-
-      result mustBe Some(
-        spanComponent(
-          "There are no statements available to view.",
-          classes = Some(emptyString),
-          visuallyHidden = false
-        )
+      val expectedHtml = spanComponent(
+        key = s"${messages("cf.security-statements.no-statements", Pdf)}",
+        classes = Some("file-link"),
+        visuallyHidden = false
       )
+
+      val mockStatementRow = StatementRow(
+        historyIndex = 0,
+        eori = None,
+        date = emptyString,
+        pdf = None,
+        rowId = emptyString,
+        dateCellId = emptyString,
+        linkCellId = emptyString,
+        renderEoriHeading = None,
+        renderPdfLink = expectedHtml
+      )
+
+      val viewModel = SecuritiesRequestedStatementsViewModel(
+        statementRows = Seq(mockStatementRow),
+        hasStatements = false,
+        renderMissingDocumentsGuidance = HtmlFormat.empty
+      )
+
+      viewModel.statementRows.head.renderPdfLink mustBe expectedHtml
     }
   }
 
