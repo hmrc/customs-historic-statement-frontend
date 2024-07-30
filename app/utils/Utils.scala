@@ -16,8 +16,16 @@
 
 package utils
 
+import views.html.components.{h2, missing_documents_guidance, p, span, span_link}
+
 object Utils {
   val emptyString = ""
   val comma = ","
   val hyphen = "-"
+
+  val h2Component = new h2()
+  val pComponent = new p()
+  val spanComponent = new span()
+  val spanLinkComponent = new span_link()
+  val missingDocumentsGuidanceComponent = new missing_documents_guidance(h2Component, pComponent)
 }
