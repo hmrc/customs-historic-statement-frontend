@@ -23,7 +23,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import play.api.Application
-import utils.Utils.{emptyString, spanComponent}
+import play.twirl.api.HtmlFormat
+import utils.Utils.{emptyString, h2Component, spanComponent, spanLinkComponent}
 
 import java.time.LocalDate
 
@@ -31,7 +32,6 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
 
   "prepareStatementRows" should {
     "return a sequence of StatementRow" in {
-      val viewModel = createViewModel(securityStatements)
       val result = viewModel.statementRows
 
       result mustBe Seq(
@@ -50,12 +50,12 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
     "return a sequence of StatementRow with correct data" in {
       val securityStatements = Seq(
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory("EORI456", Some(startDateJuly), Some(endDateJuly)),
+          eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq(requestedStatement)
         ),
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory("EORI789", Some(startDateJune), Some(endDateJune)),
+          eoriHistory = EoriHistory(eoriNumber, Some(startDateJune), Some(endDateJune)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq(requestedStatement)
         )
@@ -66,30 +66,33 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
 
       result.size mustBe 2
       result.head.eori mustBe None
-      result(1).eori mustBe Some("EORI789")
+      result(1).eori mustBe Some(eoriNumber)
     }
   }
 
   "renderEoriHeading" should {
-    "render the EORI" in {
-      val row = StatementRow(
-        0,
-        Some(securityStatementForEori.eoriHistory.eori),
-        "10 July 2023 to 20 July 2023",
-        Some(pdfLink),
-        "rowId",
-        "dateCellId",
-        "linkCellId"
+    "render the EORI heading correctly" in {
+      val mockStatementRow = mock[StatementRow]
+
+      val viewModel = SecuritiesRequestedStatementsViewModel(
+        statementRows = Seq(mockStatementRow),
+        hasStatements = true,
+        renderEoriHeading = h2Component(
+          msg = messages("cf.account.details.previous-eori", eoriNumber),
+          id = Some("requested-statements-eori-heading-0"),
+          classes = "govuk-heading-s govuk-!-margin-bottom-2"
+        ),
+        renderPdfLink = None,
+        renderMissingDocumentsGuidance = HtmlFormat.empty
       )
 
-      val result = row.eori
+      val expectedHtml = h2Component(
+        msg = messages("cf.account.details.previous-eori", eoriNumber),
+        id = Some("requested-statements-eori-heading-0"),
+        classes = "govuk-heading-s govuk-!-margin-bottom-2"
+      )
 
-      result mustBe Some(securityStatementForEori.eoriHistory.eori)
-
-      val expectedSize = securityStatementForEori.eoriHistory.eori.length
-      val actualSize = result.map(_.length)
-
-      actualSize mustBe Some(expectedSize)
+      viewModel.renderEoriHeading mustBe expectedHtml
     }
 
     "return false if EORI is not present" in {
@@ -103,8 +106,43 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
   }
 
   "renderPdfLink" should {
+    "render the PDF link correctly" in {
+      val mockStatementRow = StatementRow(
+        historyIndex = 0,
+        eori = None,
+        date = emptyString,
+        pdf = Some(pdfLink),
+        rowId = emptyString,
+        dateCellId = emptyString,
+        linkCellId = emptyString
+      )
+
+      val viewModel = SecuritiesRequestedStatementsViewModel(
+        statementRows = Seq(mockStatementRow),
+        hasStatements = true,
+        renderEoriHeading = HtmlFormat.empty,
+        renderPdfLink = Some(HtmlFormat.raw(spanLinkComponent(
+          msg = s"PDF (${pdfLink.formattedSize})",
+          url = pdfLink.downloadURL,
+          classes = "file-link govuk-link",
+          spanClass = Some("govuk-visually-hidden"),
+          spanMsg = Some(pdfLink.ariaText)
+        ).body.trim)),
+        renderMissingDocumentsGuidance = HtmlFormat.empty
+      )
+
+      val expectedHtml = spanLinkComponent(
+        msg = s"PDF (${pdfLink.formattedSize})",
+        url = pdfLink.downloadURL,
+        classes = "file-link govuk-link",
+        spanClass = Some("govuk-visually-hidden"),
+        spanMsg = Some(pdfLink.ariaText)
+      ).body.trim
+
+      viewModel.renderPdfLink mustBe Some(HtmlFormat.raw(expectedHtml))
+    }
+
     "return true if PDF size is 1 and true" in {
-      val viewModel = createViewModel(securityStatements)
       val pdfLink = viewModel.renderPdfLink
 
       val isSizeOne = pdfLink.size == 1
@@ -113,16 +151,20 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
     }
 
     "render the correct PDF title when no statements" in {
-      val viewModel = createViewModel(securityStatements)
       val result = viewModel.renderPdfLink
 
-      result mustBe Some(spanComponent("There are no statements available to view.", classes = Some(emptyString), visuallyHidden = false))
+      result mustBe Some(
+        spanComponent(
+          "There are no statements available to view.",
+          classes = Some(emptyString),
+          visuallyHidden = false
+        )
+      )
     }
   }
 
   "renderMissingDocumentsGuidance" should {
     "generate guidance" in {
-      val viewModel = createViewModel(securityStatements)
       val result = viewModel.renderMissingDocumentsGuidance
 
       val document: Document = Jsoup.parse(result.body)
@@ -137,7 +179,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
     "return true if there are requested statements" in {
       val securityStatements = Seq(
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory("EORI456", Some(startDateJuly), Some(endDateJuly)),
+          eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq(requestedStatement)
         )
@@ -152,7 +194,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
     "return false if there are no requested statements" in {
       val securityStatements = Seq(
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory("EORI456", Some(startDateJuly), Some(endDateJuly)),
+          eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq.empty
         )
@@ -164,10 +206,6 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
       result mustBe false
     }
   }
-
-  private def createViewModel(securityStatements: Seq[SecurityStatementsForEori]) = {
-    SecuritiesRequestedStatementsViewModel(securityStatements)
-  }
 }
 
 trait SpecBaseWithSetup extends SpecBase {
@@ -176,6 +214,7 @@ trait SpecBaseWithSetup extends SpecBase {
   implicit val messages: Messages = messages(app)
 
   val pdfLink: PdfLink = PdfLink("file.pdf", "1MB", "Download PDF")
+  val eoriNumber = "EORI456"
 
   val startDateJuly: LocalDate = LocalDate.parse("2023-07-10")
   val endDateJuly: LocalDate = LocalDate.parse("2023-07-20")
@@ -189,7 +228,7 @@ trait SpecBaseWithSetup extends SpecBase {
   )
 
   val securityStatementForEori: SecurityStatementsForEori = SecurityStatementsForEori(
-    eoriHistory = EoriHistory("EORI456", Some(startDateJuly), Some(endDateJuly)),
+    eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
     currentStatements = Seq(requestedStatement),
     requestedStatements = Seq(requestedStatement)
   )
@@ -201,7 +240,14 @@ trait SpecBaseWithSetup extends SpecBase {
   )
 
   val securityStatements: Seq[SecurityStatementsForEori] = Seq(securityStatementForEori)
+  val viewModel: SecuritiesRequestedStatementsViewModel = createViewModel(securityStatements)
 
-  when(messages("cf.account.details.previous-eori", "EORI456"))
-    .thenReturn("Previous EORI: EORI456")
+  protected def createViewModel(securityStatements: Seq[SecurityStatementsForEori]
+                               ): SecuritiesRequestedStatementsViewModel = {
+
+    SecuritiesRequestedStatementsViewModel(securityStatements)
+  }
+
+  when(messages("cf.account.details.previous-eori", eoriNumber))
+    .thenReturn(s"Previous EORI: $eoriNumber")
 }
