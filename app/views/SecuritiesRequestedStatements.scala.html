@@ -42,13 +42,13 @@
 
   @if(model.hasStatements) {
 
-    @row.eoriHeading
+    @row.renderEoriHeading
 
       <dl class="govuk-summary-list statement-list">
           <div class="govuk-summary-list__row" id="@row.rowId">
               <dt class="govuk-summary-list__value" id="@row.dateCellId">@row.date</dt>
                 <dd class="govuk-summary-list__actions" id="@row.linkCellId">
-                    @model.renderPdfLink
+                    @row.renderPdfLink
                 </dd>
           </div>
       </dl>
