@@ -261,4 +261,5 @@ trait SpecBaseWithSetup extends SpecBase {
 
   when(messages("cf.account.details.previous-eori", eoriNumber))
     .thenReturn(s"Previous EORI: $eoriNumber")
+
 }
