@@ -42,7 +42,8 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
           pdf = None,
           rowId = "requested-statements-list-0-row-0",
           dateCellId = "requested-statements-list-0-row-0-date-cell",
-          linkCellId = "requested-statements-list-0-row-0-link-cell"
+          linkCellId = "requested-statements-list-0-row-0-link-cell",
+          eoriHeading = None
         )
       )
     }
@@ -72,16 +73,24 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
 
   "renderEoriHeading" should {
     "render the EORI heading correctly" in {
-      val mockStatementRow = mock[StatementRow]
+      val mockStatementRow = StatementRow(
+        historyIndex = 0,
+        eori = Some(eoriNumber),
+        date = emptyString,
+        pdf = None,
+        rowId = emptyString,
+        dateCellId = emptyString,
+        linkCellId = emptyString,
+        eoriHeading = Some(h2Component(
+          msg = messages("cf.account.details.previous-eori", eoriNumber),
+          id = Some("requested-statements-eori-heading-0"),
+          classes = "govuk-heading-s govuk-!-margin-bottom-2"
+        ))
+      )
 
       val viewModel = SecuritiesRequestedStatementsViewModel(
         statementRows = Seq(mockStatementRow),
         hasStatements = true,
-        renderEoriHeading = h2Component(
-          msg = messages("cf.account.details.previous-eori", eoriNumber),
-          id = Some("requested-statements-eori-heading-0"),
-          classes = "govuk-heading-s govuk-!-margin-bottom-2"
-        ),
         renderPdfLink = None,
         renderMissingDocumentsGuidance = HtmlFormat.empty
       )
@@ -92,7 +101,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
         classes = "govuk-heading-s govuk-!-margin-bottom-2"
       )
 
-      viewModel.renderEoriHeading mustBe expectedHtml
+      viewModel.statementRows.head.eoriHeading mustBe Some(expectedHtml)
     }
 
     "return false if EORI is not present" in {
@@ -114,13 +123,13 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
         pdf = Some(pdfLink),
         rowId = emptyString,
         dateCellId = emptyString,
-        linkCellId = emptyString
+        linkCellId = emptyString,
+        eoriHeading = None
       )
 
       val viewModel = SecuritiesRequestedStatementsViewModel(
         statementRows = Seq(mockStatementRow),
         hasStatements = true,
-        renderEoriHeading = HtmlFormat.empty,
         renderPdfLink = Some(HtmlFormat.raw(spanLinkComponent(
           msg = s"PDF (${pdfLink.formattedSize})",
           url = pdfLink.downloadURL,
