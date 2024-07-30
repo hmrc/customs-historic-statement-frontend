@@ -29,13 +29,13 @@ case class StatementRow(historyIndex: Int,
                         pdf: Option[PdfLink],
                         rowId: String,
                         dateCellId: String,
-                        linkCellId: String)
+                        linkCellId: String,
+                        eoriHeading: Option[HtmlFormat.Appendable])
 
 case class PdfLink(downloadURL: String, formattedSize: String, ariaText: String)
 
 case class SecuritiesRequestedStatementsViewModel(statementRows: Seq[StatementRow],
                                                   hasStatements: Boolean,
-                                                  renderEoriHeading: HtmlFormat.Appendable,
                                                   renderPdfLink: Option[Html],
                                                   renderMissingDocumentsGuidance: HtmlFormat.Appendable)
 
@@ -46,21 +46,18 @@ object SecuritiesRequestedStatementsViewModel {
 
     val preparedStatementRows = prepareStatementRows(securityStatementsForEori)
     val hasStatements = hasSecurityStatementsForEori(securityStatementsForEori)
-    val eoriHeading = preparedStatementRows.headOption.flatMap(renderEoriHeading).getOrElse(HtmlFormat.empty)
     val pdfLink = preparedStatementRows.headOption.map(row => renderPdfLink(row.pdf))
 
     SecuritiesRequestedStatementsViewModel(
       statementRows = preparedStatementRows,
       hasStatements = hasStatements,
-      renderEoriHeading = eoriHeading,
       renderPdfLink = pdfLink,
       renderMissingDocumentsGuidance = renderMissingDocumentsGuidance
     )
   }
 
   private def prepareStatementRows(securityStatements: Seq[SecurityStatementsForEori])
-                          (implicit messages: Messages): Seq[StatementRow] = {
-
+                                  (implicit messages: Messages): Seq[StatementRow] = {
     for {
       (statement, statementIndex) <- securityStatements.zipWithIndex
       (requestedStatement, requestedIndex) <- statement.requestedStatements.sorted.zipWithIndex
@@ -74,6 +71,14 @@ object SecuritiesRequestedStatementsViewModel {
                                 (implicit messages: Messages): StatementRow = {
 
     val eori = if (statementIndex > 0) Some(statement.eoriHistory.eori) else None
+
+    val eoriHeading = eori.map { eori =>
+      h2Component(
+        msg = messages("cf.account.details.previous-eori", eori),
+        id = Some(s"requested-statements-eori-heading-$statementIndex"),
+        classes = "govuk-heading-s govuk-!-margin-bottom-2"
+      )
+    }
 
     val date = messages("cf.security-statements.requested.period",
       dateAsDayMonthAndYear(requestedStatement.startDate),
@@ -100,22 +105,13 @@ object SecuritiesRequestedStatementsViewModel {
       pdf,
       rowId = s"requested-statements-list-$statementIndex-row-$requestedIndex",
       dateCellId = s"requested-statements-list-$statementIndex-row-$requestedIndex-date-cell",
-      linkCellId = s"requested-statements-list-$statementIndex-row-$requestedIndex-link-cell"
+      linkCellId = s"requested-statements-list-$statementIndex-row-$requestedIndex-link-cell",
+      eoriHeading = eoriHeading
     )
   }
 
   private def hasSecurityStatementsForEori(securityStatements: Seq[SecurityStatementsForEori]): Boolean = {
     securityStatements.exists(_.requestedStatements.nonEmpty)
-  }
-
-  private def renderEoriHeading(row: StatementRow)(implicit messages: Messages): Option[HtmlFormat.Appendable] = {
-    row.eori.map { eori =>
-      h2Component(
-        msg = messages("cf.account.details.previous-eori", eori),
-        id = Some(s"requested-statements-eori-heading-${row.historyIndex}"),
-        classes = "govuk-heading-s govuk-!-margin-bottom-2"
-      )
-    }
   }
 
   private def renderPdfLink(pdf: Option[PdfLink])(implicit messages: Messages): Html = {
