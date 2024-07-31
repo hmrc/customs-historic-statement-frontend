@@ -128,7 +128,8 @@ object SecuritiesRequestedStatementsViewModel {
         url = link.downloadURL,
         classes = "file-link govuk-link",
         spanMsg = Some(link.ariaText),
-        spanClass = Some("govuk-visually-hidden")
+        spanClass = Some("govuk-visually-hidden"),
+        download = true
       )
     }
   }

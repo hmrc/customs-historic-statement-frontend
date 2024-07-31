@@ -23,11 +23,12 @@
   classes: String = "govuk-link",
   url: String,
   spanClass: Option[String] = None,
-  spanMsg: Option[String] = None
+  spanMsg: Option[String] = None,
+  download: Boolean = false
 )(implicit messages: Messages)
 
-<a @{id.fold(emptyString)(id => s"id=$id")} href="@url" class="@classes">
-    @messages(msg)
+<a @{id.fold(emptyString)(id => s"id=$id")} class="@classes" href="@url" @if(download) {download}>
+    <span> @messages(msg) </span>
     <span @{spanClass.fold(emptyString)(spanClass => s"class=$spanClass")}>
         @{spanMsg.fold(emptyString)(spanMsg => s"$spanMsg")}
   </span>
