@@ -27,13 +27,13 @@ class SpanLinkSpec extends ViewTestHelper {
     "display the span message" when {
       "spanMsg is set and visually hidden" in new Setup {
         implicit val spanView: Document = view(spanMsg = Some(msgKey), spanClass = Some("govuk-visually-hidden"))
-        displayVisuallyHiddenMessage()
+        displayVisuallyHiddenMessage(msgKey)
       }
 
       "spanMsg is set and not visually hidden" in new Setup {
         implicit val spanView: Document = view(spanMsg = Some(msgKey), spanClass = None)
         shouldNotDisplayVisuallyHiddenMessage()
-        shouldDisplaySpanWithMessageKey()
+        shouldDisplaySpanWithMessageKey(msgKey)
       }
 
       "spanMsg is not set" in new Setup {
@@ -48,30 +48,31 @@ class SpanLinkSpec extends ViewTestHelper {
         spanClass = Some("govuk-visually-hidden"),
         id = Some("govuk-id")
       )
-      shouldRenderLinkWithId()
+
+      shouldRenderLinkWithId("govuk-id", msgKey)
     }
   }
 
-  private def displayVisuallyHiddenMessage(msgKey: String = "timeout.title")(implicit view: Document) = {
-    view.getElementsByClass("govuk-visually-hidden").text() mustBe msgKey
+  private def displayVisuallyHiddenMessage(expectedMsg: String)(implicit view: Document) = {
+    view.getElementsByClass("govuk-visually-hidden").text() mustBe expectedMsg.trim
   }
 
   private def shouldNotDisplayVisuallyHiddenMessage()(implicit view: Document) = {
     view.getElementsByClass("govuk-visually-hidden").text() mustBe empty
   }
 
-  private def shouldDisplaySpanWithMessageKey(msgKey: String = "timeout.title")(implicit view: Document) = {
-    view.getElementsByTag("span").text() mustBe msgKey
+  private def shouldDisplaySpanWithMessageKey(expectedMsg: String)(implicit view: Document) = {
+    view.getElementsByTag("span").last().text() mustBe expectedMsg.trim
   }
 
   private def shouldNotDisplaySpanMessage()(implicit view: Document) = {
-    view.getElementsByTag("span").text() mustBe empty
+    view.getElementsByTag("span").last().text() mustBe empty
   }
 
-  private def shouldRenderLinkWithId(msgKey: String = "timeout.title")(implicit view: Document) = {
-    view.getElementsByTag("a").attr("id") mustBe "govuk-id"
-    view.getElementsByTag("span").text() mustBe msgKey
-    view.getElementsByClass("govuk-visually-hidden").text() mustBe msgKey
+  private def shouldRenderLinkWithId(expectedId: String, expectedMsg: String)(implicit view: Document) = {
+    view.getElementsByTag("a").attr("id") mustBe expectedId
+    view.getElementsByTag("span").last().text() mustBe expectedMsg.trim
+    view.getElementsByClass("govuk-visually-hidden").text() mustBe expectedMsg.trim
   }
 
   trait Setup {
