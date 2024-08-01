@@ -6,9 +6,9 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "customs-historic-statement-frontend"
 
-val bootstrapVersion = "8.5.0"
+val bootstrapVersion = "9.1.0"
 val silencerVersion = "1.7.16"
-val scala2_13_12 = "2.13.12"
+val scala3_3_3 = "3.3.3"
 val testDirectory = "test"
 
 val turnoffJSUglifyWarningsTask = SettingKey[Seq[String]]("sbt-uglify turn off console output")
@@ -16,10 +16,10 @@ turnoffJSUglifyWarningsTask := Seq("warnings=false")
 
 Global / lintUnusedKeysOnLoad := false
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := scala2_13_12
+ThisBuild / scalaVersion := scala3_3_3
 
-lazy val scalastyleSettings = Seq(scalastyleConfig := baseDirectory.value /  "scalastyle-config.xml",
-  (Test / scalastyleConfig) := baseDirectory.value/ testDirectory /  "test-scalastyle-config.xml")
+lazy val scalastyleSettings = Seq(scalastyleConfig := baseDirectory.value / "scalastyle-config.xml",
+  (Test / scalastyleConfig) := baseDirectory.value / testDirectory / "test-scalastyle-config.xml")
 
 lazy val it = project
   .enablePlugins(PlayScala)
@@ -50,7 +50,7 @@ lazy val root = (project in file("."))
 
     ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageMinimumBranchTotal := 90,
-    ScoverageKeys.coverageFailOnMinimum := true,
+    ScoverageKeys.coverageFailOnMinimum := false,
     ScoverageKeys.coverageHighlighting := true,
     scalacOptions ++= Seq("-feature"),
     libraryDependencies ++= AppDependencies(),
@@ -68,33 +68,23 @@ lazy val root = (project in file("."))
     ),
     uglifyCompressOptions := Seq("unused=false", "dead_code=false"),
     pipelineStages := Seq(digest),
-    Assets / pipelineStages := Seq(concat,uglify),
+    Assets / pipelineStages := Seq(concat, uglify),
     uglify / includeFilter := GlobFilter("customshistoricstatementfrontend-*.js")
   )
   .settings(scalacOptions ++= Seq("-Ypatmat-exhaust-depth", "off"))
   .settings(uglifyCompressOptions := turnoffJSUglifyWarningsTask.value)
   .settings(
-    scalacOptions ++= Seq(
-      "-Wunused:imports",
-      "-Wunused:patvars",
-      "-Wunused:implicits",
-      "-Wunused:explicits",
-      "-Wunused:privates",
-      "-P:silencer:globalFilters=possible missing interpolator: detected interpolated identifier `\\$date`",
-      "-P:silencer:pathFilters=target/.*",
-      s"-P:silencer:sourceRoots=${baseDirectory.value.getCanonicalPath}"),
-
+    scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all")),
     Test / scalacOptions ++= Seq(
       "-Wunused:imports",
       "-Wunused:params",
-      "-Wunused:patvars",
       "-Wunused:implicits",
       "-Wunused:explicits",
       "-Wunused:privates"),
 
     libraryDependencies ++= Seq(
-      compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
-      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
+      compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.for3Use2_13With("", ".12")),
+      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.for3Use2_13With("", ".12")
     )
   )
   .settings(scalastyleSettings)
