@@ -50,15 +50,15 @@ class CustomsSessionCacheConnectorSpec extends SpecBase {
 
       when[Future[AccountLink]](mockHttpClient.GET(
         ArgumentMatchers.eq(customsSessionCacheUrl), any, any)(any, any, any))
-        .thenReturn(Future.successful(AccountLink("GB123","1234567", "a67dhdfkd8sf","Open", Some(0), true)))
+        .thenReturn(Future.successful(AccountLink("GB123", "1234567", "a67dhdfkd8sf", "Open", Some(0), true)))
 
       running(app) {
         val result = await(customsSessionCacheConnector.getAccountLink("12345", "Ab123")(hc))
-        result mustBe Some(AccountLink("GB123","1234567", "a67dhdfkd8sf","Open", Some(0), true))
+        result mustBe Some(AccountLink("GB123", "1234567", "a67dhdfkd8sf", "Open", Some(0), true))
       }
     }
 
-  "return false when failed to submit the request" in new Setup {
+    "return false when failed to submit the request" in new Setup {
       val customsSessionCacheUrl = "http://localhost:9840/customs/session-cache/account-link/12345/Ab123"
 
       when[Future[HttpResponse]](mockHttpClient.GET(

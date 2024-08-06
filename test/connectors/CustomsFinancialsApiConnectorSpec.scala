@@ -52,7 +52,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       }
     }
 
-  "return false when failed to submit the request" in new Setup {
+    "return false when failed to submit the request" in new Setup {
       val customsFinancialsApiUrl = "http://localhost:9878/customs-financials-api/historic-document-request"
 
       val historicDocumentRequest = HistoricDocumentRequest(C79Certificate,

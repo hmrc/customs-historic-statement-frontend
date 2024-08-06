@@ -18,7 +18,6 @@ package views.components
 
 import base.SpecBase
 import helpers.FormHelper.updateFormErrorKeyForStartAndEndDate
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.data.FormError
 import play.api.i18n.Messages
 import play.api.inject.bind
@@ -30,6 +29,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.{ErrorLink, Error
 import views.html.components.errorSummary
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
+import org.scalatest.matchers.should.Matchers.shouldBe
 
 class ErrorSummarySpec extends SpecBase {
   "ErrorSummary component" must {

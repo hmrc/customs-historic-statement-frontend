@@ -26,7 +26,7 @@ import org.jsoup.select.Elements
 import play.api.Application
 import play.twirl.api.HtmlFormat
 import utils.Utils.{emptyString, h2Component, spanComponent, spanLinkComponent}
-
+import org.mockito.Mockito.when
 import java.time.LocalDate
 
 class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {

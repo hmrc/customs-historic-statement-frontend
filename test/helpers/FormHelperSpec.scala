@@ -15,8 +15,7 @@
  */
 
 package helpers
-
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.shouldBe
 import base.SpecBase
 
 class FormHelperSpec extends SpecBase {
