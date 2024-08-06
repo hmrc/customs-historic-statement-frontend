@@ -41,7 +41,7 @@ class DefaultSessionRepository @Inject()(mongoComponent: PlayMongoComponent, con
       IndexModel(
         ascending("lastUpdated"),
         IndexOptions().name("user-answers-last-updated-index")
-          .expireAfter(config.get[Int]("mongodb.timeToLiveInSeconds"), TimeUnit.SECONDS)
+          .expireAfter(config.get[Long]("mongodb.timeToLiveInSeconds"), TimeUnit.SECONDS)
       )
     )
   ) with SessionRepository {

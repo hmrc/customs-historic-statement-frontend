@@ -21,35 +21,44 @@ import models.{EmailUnverifiedResponse, EmailVerifiedResponse, FileRole, Histori
 import play.api.http.Status.NO_CONTENT
 import play.mvc.Http.Status
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsFinancialsApiConnector @Inject()(appConfig: FrontendAppConfig,
-                                              httpClient: HttpClient)
+                                              httpClient: HttpClientV2)
                                              (implicit executionContext: ExecutionContext) {
 
   def postHistoricDocumentRequest(historicDocumentRequest: HistoricDocumentRequest)
                                  (implicit hc: HeaderCarrier): Future[Boolean] = {
 
-    httpClient.POST[HistoricDocumentRequest, HttpResponse](
-        appConfig.historicDocumentsApiUrl, historicDocumentRequest)
+    httpClient.post(url"$appConfig.historicDocumentsApiUrl")
+      .withBody[HistoricDocumentRequest](historicDocumentRequest)
+      .execute[HttpResponse]
       .map(_.status == NO_CONTENT)
       .recover { case _ => false }
   }
 
   def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    httpClient.DELETE[HttpResponse](appConfig.deleteNotificationUrl(fileRole, eori))
+    val deleteNotificationEndpoint = appConfig.deleteNotificationUrl(fileRole, eori)
+    httpClient.delete(url"$deleteNotificationEndpoint")
+      .execute[HttpResponse]
       .map(_.status == Status.OK)
       .recover { case _ => false }
   }
 
   def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
-    httpClient.GET[EmailUnverifiedResponse](appConfig.customsFinancialsApi +
-      "/subscriptions/unverified-email-display").map(res => res.unVerifiedEmail)
+    val unVerifiedEmailEndpoint = appConfig.customsFinancialsApi + "/subscriptions/unverified-email-display"
+    httpClient.get(url"$unVerifiedEmailEndpoint")
+      .execute[EmailUnverifiedResponse]
+      .map(res => res.unVerifiedEmail)
   }
 
-  def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] =
-    httpClient.GET[EmailVerifiedResponse](appConfig.customsFinancialsApi + "/subscriptions/email-display")
+  def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] = {
+    val emailDisplayEndpoint = appConfig.customsFinancialsApi + "/subscriptions/email-display"
+    httpClient.get(url"$emailDisplayEndpoint").execute[EmailVerifiedResponse]
+  }
 }

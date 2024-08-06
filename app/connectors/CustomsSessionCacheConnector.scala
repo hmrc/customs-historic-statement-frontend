@@ -19,27 +19,33 @@ package connectors
 import config.FrontendAppConfig
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CustomsSessionCacheConnector @Inject()(httpClient: HttpClient,
+class CustomsSessionCacheConnector @Inject()(httpClient: HttpClientV2,
                                              appConfig: FrontendAppConfig)
                                             (implicit executionContext: ExecutionContext) {
 
   def getAccountNumber(sessionId: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
 
-    httpClient.GET[SessionCacheResponse](appConfig.sessionCacheUrl(sessionId, linkId)).map(
-      response => Some(response.accountNumber)
-    ).recover { case _ => None }
+    val cacheUrl = appConfig.sessionCacheUrl(sessionId, linkId)
+    httpClient.get(url"$cacheUrl")
+      .execute[SessionCacheResponse]
+      .map(
+        response => Some(response.accountNumber)
+      ).recover { case _ => None }
   }
 
   def getAccountLink(sessionId: String, linkId: String)(
-    implicit hc: HeaderCarrier): Future[Option[AccountLink]] =
-
-    httpClient.GET[AccountLink](appConfig.sessionCacheUrl(
-      sessionId, linkId)).map(Some(_)).recover { case _ => None }
+    implicit hc: HeaderCarrier): Future[Option[AccountLink]] = {
+    val cacheUrl = appConfig.sessionCacheUrl(sessionId, linkId)
+    httpClient.get(url"$cacheUrl")
+      .execute[AccountLink]
+      .map(Some(_)).recover { case _ => None }
+  }
 }
 
 case class SessionCacheResponse(accountNumber: String)
