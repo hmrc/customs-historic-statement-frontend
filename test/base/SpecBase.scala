@@ -18,7 +18,7 @@ package base
 
 import controllers.actions._
 import models.{C79Certificate, HistoricDates, UserAnswers}
-import org.mockito.scalatest.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.OptionValues
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}

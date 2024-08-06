@@ -30,6 +30,10 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import utils.Utils.emptyString
 
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.{eq => eqTo}
+
 import scala.concurrent.Future
 
 class SdesConnectorSpec extends SpecBase {

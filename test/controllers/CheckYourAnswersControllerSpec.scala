@@ -25,6 +25,9 @@ import play.api.{Application, inject}
 import play.api.test.Helpers._
 import repositories.SessionRepository
 
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+
 import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends SpecBase {
@@ -79,7 +82,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
         val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad.url
+        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
       }
     }
 
@@ -93,7 +96,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
         val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad.url
+        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
       }
     }
   }

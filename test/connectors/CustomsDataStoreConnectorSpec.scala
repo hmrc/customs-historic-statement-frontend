@@ -26,6 +26,10 @@ import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, UpstreamErrorResponse}
 import play.api.http.Status.NOT_FOUND
 
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.{eq => eqTo}
+
 import java.time.LocalDate
 import scala.concurrent.Future
 

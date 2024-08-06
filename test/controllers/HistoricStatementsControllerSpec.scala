@@ -26,6 +26,9 @@ import play.api.test.Helpers
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+
 import java.time._
 import scala.concurrent.Future
 
@@ -78,7 +81,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad.url
+        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
       }
     }
   }
@@ -109,7 +112,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
 
       val result = route(app, request).value
       status(result) mustBe SEE_OTHER
-      redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
+      redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
     }
 
     "return Unauthorised when sessionId is not present" in new Setup {
@@ -122,7 +125,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
 
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
+        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
       }
     }
   }

@@ -25,6 +25,9 @@ import play.api.{Application, inject}
 import repositories.SessionRepository
 import utils.Utils.emptyString
 
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+
 import java.time._
 import scala.concurrent.Future
 
@@ -63,7 +66,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
+        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
       }
     }
   }

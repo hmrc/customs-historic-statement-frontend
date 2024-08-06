@@ -26,6 +26,9 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import utils.Utils.emptyString
 
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+
 import java.time.LocalDate
 import scala.concurrent.Future
 

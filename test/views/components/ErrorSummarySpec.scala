@@ -28,6 +28,8 @@ import uk.gov.hmrc.govukfrontend.views.html.components.GovukErrorSummary
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.{ErrorLink, ErrorSummary}
 import views.html.components.errorSummary
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
 
 class ErrorSummarySpec extends SpecBase {
   "ErrorSummary component" must {

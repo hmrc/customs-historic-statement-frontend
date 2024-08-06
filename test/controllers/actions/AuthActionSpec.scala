@@ -28,6 +28,9 @@ import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Utils.emptyString
 
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -165,7 +168,7 @@ class AuthActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad.url)
+        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
       }
     }
   }

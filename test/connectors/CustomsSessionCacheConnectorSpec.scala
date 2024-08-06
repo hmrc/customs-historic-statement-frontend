@@ -23,6 +23,9 @@ import play.api.inject.bind
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+
 import scala.concurrent.Future
 
 class CustomsSessionCacheConnectorSpec extends SpecBase {

@@ -25,6 +25,9 @@ import base.SpecBase
 import org.mockito.ArgumentMatchers
 import play.api.test.Helpers._
 
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+
 import scala.concurrent.Future
 
 class EmailControllerSpec extends SpecBase {
