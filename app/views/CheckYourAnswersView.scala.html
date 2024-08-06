@@ -34,7 +34,7 @@
 
 @layout(
     pageTitle = Some(messages(s"cf.historic.document.request.review.${fileRole}.title")),
-    backLink = Some(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url),
+    backLinkUrl = Some(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url),
     dutyDeferment = fileRole == DutyDefermentStatement
 ) {
 

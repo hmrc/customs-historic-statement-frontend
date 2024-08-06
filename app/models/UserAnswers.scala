@@ -105,7 +105,7 @@ object UserAnswers {
     ((__ \ "_id").write[String] and
       (__ \ "data").write[JsObject] and
       (__ \ "lastUpdated").write(MongoJavatimeFormats.localDateTimeWrites)
-    ) (unlift(UserAnswers.unapply))
+    ) (ead => Tuple.fromProductTyped(ead))
   }
 
   implicit lazy val format: Format[UserAnswers] = Format(reads, writes)

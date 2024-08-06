@@ -28,7 +28,7 @@ layout: Layout,
 
 @()(implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
 
- @layout(Some(titleNoForm("session_expired.title")), backLink = Some(appConfig.financialsHomepage)) {
+ @layout(Some(titleNoForm("session_expired.title")), backLinkUrl = Some(appConfig.financialsHomepage)) {
 
   @h1(messages("session_expired.heading"))
 

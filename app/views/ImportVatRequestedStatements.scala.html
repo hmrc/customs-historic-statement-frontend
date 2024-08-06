@@ -31,7 +31,7 @@
 
 @histories = @{model.certificatesForAllEoris.indices}
 
-@layout(pageTitle = Some(messages("cf.import-vat.requested.title")), backLink = Some(backLink)) {
+@layout(pageTitle = Some(messages("cf.import-vat.requested.title")), backLinkUrl = Some(backLink)) {
 
     @h1(id=Some("requested-import-vat-certificates-heading"), classes="govuk-heading-xl govuk-!-margin-bottom-3", msg=messages("cf.import-vat.requested.title"))
 

@@ -20,6 +20,8 @@ import com.mongodb.client.model.Indexes.ascending
 import models.UserAnswers
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model.{IndexModel, IndexOptions, ReplaceOptions}
+import org.mongodb.scala.SingleObservableFuture
+import org.mongodb.scala.ToSingleObservablePublisher
 import play.api.Configuration
 import uk.gov.hmrc.mongo.play.PlayMongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository

@@ -65,17 +65,17 @@ class CheckYourAnswersController @Inject()(override val messagesApi: MessagesApi
             if (successful) {
               Redirect(routes.ConfirmationPageController.onPageLoad(fileRole))
             } else {
-              Redirect(routes.TechnicalDifficultiesController.onPageLoad)
+              Redirect(routes.TechnicalDifficultiesController.onPageLoad())
             }
           }
 
-        case None => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
+        case None => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
       }
   }
 
   private def clearUserSessionIfUserReturnsFromConfirmationPage(request: DataRequest[AnyContent]): Future[Result] = {
     for {
       _ <- sessionRepository.clear(request.internalId).recover { case _ => true }
-    } yield Redirect(routes.SessionExpiredController.onPageLoad)
+    } yield Redirect(routes.SessionExpiredController.onPageLoad())
   }
 }

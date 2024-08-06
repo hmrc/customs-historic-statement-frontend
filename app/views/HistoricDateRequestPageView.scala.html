@@ -31,7 +31,7 @@
 @(form: Form[_], mode: Mode, fileRole: FileRole, returnUrl: String, maybeDan: Option[String], niIndicator: Option[Boolean])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some(title(form, messages(s"cf.historic.document.request.${fileRole}.title"))),
-        backLink = Some(returnUrl),
+        backLinkUrl = Some(returnUrl),
         dutyDeferment = fileRole == DutyDefermentStatement) {
 
     @maybeDan.map{ dan =>
@@ -46,8 +46,8 @@
             }
     }
 
-    @formHelper(action = HistoricDateRequestPageController.onSubmit(mode, fileRole), Symbol("autoComplete") -> "off") {
-        @errorSummary(form.errors,errorFieldName = None, isErrorKeyUpdateEnabled = true, Some(updateFormErrorKeyForStartAndEndDate))
+    @formHelper(action = controllers.routes.HistoricDateRequestPageController.onSubmit(mode, fileRole), Symbol("autoComplete") -> "off") {
+        @errorSummary(form.errors,errorFieldName = None, isErrorKeyUpdateEnabled = true, Some(updateFormErrorKeyForStartAndEndDate()))
 
             @h1(s"cf.historic.document.request.heading.$fileRole")        
             @p(Html(messages(s"cf.historic.document.request.info-text.$fileRole")))

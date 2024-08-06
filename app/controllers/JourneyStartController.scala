@@ -57,16 +57,16 @@ class JourneyStartController @Inject()(customsSessionCacheConnector: CustomsSess
               _ <- sessionRepository.set(userAnswersLinkId)
             } yield Redirect(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, DutyDefermentStatement))
 
-          case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
+          case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
         }
-      case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
+      case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
   }
 
   def nonDutyDeferment(fileRole: FileRole): Action[AnyContent] = (
     identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
     fileRole match {
-      case DutyDefermentStatement => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
+      case DutyDefermentStatement => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
       case _ =>
         val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId))
         for {

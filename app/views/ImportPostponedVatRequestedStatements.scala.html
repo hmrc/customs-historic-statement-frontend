@@ -30,7 +30,7 @@
 
 @(model: PostponedVatViewModel, backLink: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("cf.import-postponed-vat.requested.title")), backLink = Some(backLink)) {
+@layout(pageTitle = Some(messages("cf.import-postponed-vat.requested.title")), backLinkUrl = Some(backLink)) {
 
     @h1(id=Some("requested-import-postponed-vat-statements-heading"),
         classes="govuk-heading-xl govuk-!-margin-bottom-3",

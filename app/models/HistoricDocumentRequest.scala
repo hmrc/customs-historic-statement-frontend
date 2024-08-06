@@ -20,6 +20,8 @@ import models.requests.DataRequest
 import pages.{AccountNumber, HistoricDateRequestPage}
 import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.AnyContent
+import play.api.libs.ws.BodyWritable
+import play.api.libs.json.{JsValue, Writes}
 
 import java.time.LocalDate
 
@@ -30,6 +32,11 @@ case class HistoricDocumentRequest(documentType: FileRole,
 
 object HistoricDocumentRequest {
   implicit val format: OFormat[HistoricDocumentRequest] = Json.format[HistoricDocumentRequest]
+
+  implicit def jsonBodyWritable[T](implicit
+                                   writes: Writes[T],
+                                   jsValueBodyWritable: BodyWritable[JsValue]
+                                  ): BodyWritable[T] = jsValueBodyWritable.map(writes.writes)
 
   def fromRequest(fileRole: FileRole)(implicit request: DataRequest[AnyContent]): Option[HistoricDocumentRequest] = {
     for {

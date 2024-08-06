@@ -48,7 +48,7 @@ class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
         invalidMonth = "cf.historic.document.request.form.error.end.month.invalid",
         invalidYear = "cf.historic.document.request.form.error.year.invalid"
       ).verifying(tooRecentDate(fileRole))
-    )(HistoricDates.apply)(HistoricDates.unapply)
+    )(HistoricDates.apply)(hd => Some(Tuple.fromProductTyped(hd)))
     )
   }
 }
