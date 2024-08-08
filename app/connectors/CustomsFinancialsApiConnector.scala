@@ -35,7 +35,7 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: FrontendAppConfig,
   def postHistoricDocumentRequest(historicDocumentRequest: HistoricDocumentRequest)
                                  (implicit hc: HeaderCarrier): Future[Boolean] = {
 
-    httpClient.post(url"$appConfig.historicDocumentsApiUrl")
+    httpClient.post(url"${appConfig.historicDocumentsApiUrl}")
       .withBody[HistoricDocumentRequest](historicDocumentRequest)
       .execute[HttpResponse]
       .map(_.status == NO_CONTENT)

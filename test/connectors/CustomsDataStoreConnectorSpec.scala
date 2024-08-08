@@ -23,15 +23,16 @@ import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.retrieve.Email
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, UpstreamErrorResponse}
 import play.api.http.Status.NOT_FOUND
-
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 
+import java.net.URL
 import java.time.LocalDate
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsDataStoreConnectorSpec extends SpecBase {
 
@@ -41,8 +42,11 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
       val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/GB12345/verified-email"
 
-      when[Future[EmailResponse]](mockHttpClient.GET(
-        eqTo(customsDataStoreUrl), any, any)(any, any, any)).thenReturn(Future.successful(emailResponse))
+      //when[Future[EmailResponse]](mockHttpClient.GET(eqTo(customsDataStoreUrl), any, any)(any, any, any))
+      when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(emailResponse))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(customsDataStoreConnector.getEmail("GB12345")(hc))
@@ -58,8 +62,11 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
       val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/GB12346/verified-email"
 
-      when[Future[EmailResponse]](mockHttpClient.GET(eqTo(customsDataStoreUrl), any, any)(any, any, any))
+      //when[Future[EmailResponse]](mockHttpClient.GET(eqTo(customsDataStoreUrl), any, any)(any, any, any))
+      when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(emailResponse))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(customsDataStoreConnector.getEmail("GB12346")(hc))
@@ -68,8 +75,12 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
     }
 
     "return None when call to customs data store fails" in new Setup {
-      when[Future[EmailResponse]](mockHttpClient.GET(any, any, any)(any, any, any)).thenReturn(
-        Future.failed(UpstreamErrorResponse("NoData", NOT_FOUND, NOT_FOUND)))
+
+      //when[Future[EmailResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
+        .thenReturn(Future.failed(UpstreamErrorResponse("NoData", NOT_FOUND, NOT_FOUND)))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = customsDataStoreConnector.getEmail(eori)
@@ -113,9 +124,11 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
       val eoriHistoryResponse = EoriHistoryResponse(Seq(eoriHistory1, eoriHistory2))
       val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/eori1/eori-history"
 
-      when[Future[EoriHistoryResponse]](mockHttpClient.GET(
-        eqTo(customsDataStoreUrl), any, any)(any, any, any))
+      //when[Future[EoriHistoryResponse]](mockHttpClient.GET(eqTo(customsDataStoreUrl), any, any)(any, any, any))
+      when(requestBuilder.execute(any[HttpReads[EoriHistoryResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(eoriHistoryResponse))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(customsDataStoreConnector.getAllEoriHistory("eori1")(hc))
@@ -126,8 +139,11 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
     "return empty EoriHistory when failed to get eoriHistory from data store" in new Setup {
       val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/eori1/eori-history"
 
-      when[Future[EoriHistoryResponse]](mockHttpClient.GET(eqTo(customsDataStoreUrl), any, any)(any, any, any))
+      //when[Future[EoriHistoryResponse]](mockHttpClient.GET(eqTo(customsDataStoreUrl), any, any)(any, any, any))
+      when(requestBuilder.execute(any[HttpReads[EoriHistoryResponse]], any[ExecutionContext]))
         .thenReturn(Future.failed(new RuntimeException("failed to get eori history")))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(customsDataStoreConnector.getAllEoriHistory("eori1")(hc))
@@ -137,11 +153,13 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient = mock[HttpClient]
+    val mockHttpClient = mock[HttpClientV2]
+    val requestBuilder: RequestBuilder = mock[RequestBuilder]
     val eori = "GB11111"
 
     val app = applicationBuilder().overrides(
-      bind[HttpClient].to(mockHttpClient)
+      bind[HttpClientV2].to(mockHttpClient),
+      bind[RequestBuilder].toInstance(requestBuilder)
     ).build()
 
     val mockAppConfig = app.injector.instanceOf[FrontendAppConfig]

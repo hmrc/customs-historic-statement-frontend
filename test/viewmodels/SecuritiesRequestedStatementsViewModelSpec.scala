@@ -26,7 +26,6 @@ import org.jsoup.select.Elements
 import play.api.Application
 import play.twirl.api.HtmlFormat
 import utils.Utils.{emptyString, h2Component, spanComponent, spanLinkComponent}
-import org.mockito.Mockito.when
 import java.time.LocalDate
 
 class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
@@ -261,8 +260,5 @@ trait SpecBaseWithSetup extends SpecBase {
 
     SecuritiesRequestedStatementsViewModel(securityStatements)
   }
-
-  when(messages("cf.account.details.previous-eori", eoriNumber))
-    .thenReturn(s"Previous EORI: $eoriNumber")
 
 }

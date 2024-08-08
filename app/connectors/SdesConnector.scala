@@ -21,13 +21,14 @@ import models.FileFormat.{SdesFileFormats, filterFileFormats}
 import models._
 import services.SdesGatekeeperService
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HttpClient, _}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http._
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SdesConnector @Inject()(http: HttpClient,
+class SdesConnector @Inject()(http: HttpClientV2,
                               sdesGatekeeperService: SdesGatekeeperService)
                              (implicit appConfig: FrontendAppConfig, ec: ExecutionContext) {
 
@@ -62,13 +63,22 @@ class SdesConnector @Inject()(http: HttpClient,
     getSdesFiles[FileInformation, SecurityStatementFile](appConfig.sdesSecurityStatementListUrl, eori, transform)
   }
 
-  def getSdesFiles[A, B <: SdesFile](url: String, key: String, transform: Seq[A] => Seq[B])
+  //TODO
+  def getSdesFiles[A, B <: SdesFile](filesUrl: String, key: String, transform: Seq[A] => Seq[B])
                                     (implicit hc: HeaderCarrier,
                                      reads: HttpReads[HttpResponse],
                                      readSeq: HttpReads[Seq[A]]): Future[Seq[B]] = {
 
-    http.GET[HttpResponse](url)(reads, addXHeaders(hc, key), ec)
-      .map(readSeq.read("GET", url, _))
+    /*
+      http.GET[HttpResponse](filesUrl)(reads, addXHeaders(hc, key), ec)
+      .map(readSeq.read("GET", filesUrl, _))
       .map(transform)
+      */
+    http.get(url"$filesUrl")
+      .execute[HttpResponse]
+      .map(readSeq.read("GET", filesUrl, _))
+      .map(transform)
+
+
   }
 }
