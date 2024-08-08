@@ -30,8 +30,6 @@ lazy val it = project
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
-  .settings(DefaultBuildSettings.scalaSettings *)
-  .settings(DefaultBuildSettings.defaultSettings() *)
   .settings(ThisBuild / useSuperShell := false)
   .settings(
     name := appName,
