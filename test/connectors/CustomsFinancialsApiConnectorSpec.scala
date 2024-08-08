@@ -22,14 +22,13 @@ import models.{C79Certificate, HistoricDocumentRequest}
 import org.mockito.ArgumentMatchers
 import play.api.http.Status
 import play.api.inject.bind
-import play.api.test.Helpers._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
+import play.api.test.Helpers.*
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
 import utils.Utils.emptyString
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 
-import java.net.URL
 import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,13 +42,13 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       val historicDocumentRequest = HistoricDocumentRequest(C79Certificate,
         LocalDate.now(), LocalDate.now().plusMonths(1), Some("1234"))
 
-      when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
+      when(requestBuilder.withBody(ArgumentMatchers.eq(historicDocumentRequest))(any(), any(), any()))
+        .thenReturn(requestBuilder)
 
-      //when[Future[HttpResponse]](mockHttpClient.POST(ArgumentMatchers.eq(customsFinancialsApiUrl), ArgumentMatchers.eq(historicDocumentRequest), any)(any, any, any, any))
       when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(HttpResponse.apply(Status.NO_CONTENT, emptyString)))
 
-      when(mockHttpClient.post(any[URL]())(any())).thenReturn(requestBuilder)
+      when(mockHttpClient.post(ArgumentMatchers.eq(url"$customsFinancialsApiUrl"))(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(customsFinancialsApiConnector.postHistoricDocumentRequest(historicDocumentRequest)(hc))
@@ -63,13 +62,14 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       val historicDocumentRequest = HistoricDocumentRequest(C79Certificate,
         LocalDate.now(), LocalDate.now().plusMonths(1), Some("1234"))
 
-      when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
+      when(requestBuilder.withBody(ArgumentMatchers.eq(historicDocumentRequest))(any(), any(), any()))
+        .thenReturn(requestBuilder)
 
-      //when[Future[HttpResponse]](mockHttpClient.POST(ArgumentMatchers.eq(customsFinancialsApiUrl), ArgumentMatchers.eq(historicDocumentRequest), any)(any, any, any, any))
       when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.failed(new RuntimeException("failed")))
 
-      when(mockHttpClient.post(any[URL]())(any())).thenReturn(requestBuilder)
+      when(mockHttpClient.post(ArgumentMatchers.eq(url"$customsFinancialsApiUrl"))(any()))
+        .thenReturn(requestBuilder)
 
       running(app) {
         val result = await(customsFinancialsApiConnector.postHistoricDocumentRequest(historicDocumentRequest)(hc))
@@ -85,11 +85,11 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
       when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
 
-      //when[Future[HttpResponse]](mockHttpClient.DELETE(ArgumentMatchers.eq(customsFinancialsApiUrl), any)(any, any, any))
       when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(HttpResponse.apply(Status.OK, emptyString)))
 
-      when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
+      when(mockHttpClient.delete(ArgumentMatchers.eq(url"$customsFinancialsApiUrl"))(any()))
+        .thenReturn(requestBuilder)
 
       running(app) {
         val result = await(customsFinancialsApiConnector.deleteNotification("eori1", C79Certificate)(hc))
@@ -103,11 +103,11 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
       when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
 
-      //when[Future[HttpResponse]](mockHttpClient.DELETE(ArgumentMatchers.eq(customsFinancialsApiUrl), any)(any, any, any))
       when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.failed(new RuntimeException("failed")))
 
-      when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
+      when(mockHttpClient.delete(ArgumentMatchers.eq(url"$customsFinancialsApiUrl"))(any()))
+        .thenReturn(requestBuilder)
 
       running(app) {
         val result = await(customsFinancialsApiConnector.deleteNotification("eori1", C79Certificate)(hc))

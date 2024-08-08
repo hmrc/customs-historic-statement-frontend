@@ -19,12 +19,13 @@ package controllers
 import handlers.ErrorHandler
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import scala.concurrent.ExecutionContext.Implicits.global
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class TechnicalDifficultiesController @Inject()(controllerComponents: MessagesControllerComponents,
                                                 errorHandler: ErrorHandler)
+                                               (implicit executionContext: ExecutionContext)
   extends FrontendController(controllerComponents) {
 
   //TODO

@@ -37,7 +37,6 @@ class EmailControllerSpec extends SpecBase {
 
     "return unverified email" in new Setup {
 
-      //when[Future[EmailUnverifiedResponse]](mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/unverified-email-display"), any, any)(any, any, any))
       when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(response))
 
@@ -53,7 +52,6 @@ class EmailControllerSpec extends SpecBase {
 
     "return unverified email response" in new Setup {
 
-      //when[Future[EmailUnverifiedResponse]](mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/unverified-email-display"), any, any)(any, any, any))
       when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(response))
 
@@ -66,9 +64,8 @@ class EmailControllerSpec extends SpecBase {
       }
     }
 
-    "display undeliverable email response" in new Setup{
+    "display undeliverable email response" in new Setup {
 
-      //when[Future[EmailVerifiedResponse]](mockHttpClient.GET(ArgumentMatchers.endsWith("/subscriptions/email-display"), any, any)(any, any, any))
       when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(EmailVerifiedResponse(Some("undeliverableEmail"))))
 
