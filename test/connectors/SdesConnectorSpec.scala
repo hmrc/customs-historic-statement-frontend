@@ -44,6 +44,7 @@ class SdesConnectorSpec extends SpecBase {
         .thenReturn(Future.successful(HttpResponse(Status.OK,
           Json.toJson(dutyDefermentStatementFilesSdesResponse).toString())))
 
+      when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
       when(mockHttp.get(eqTo(url"$sdesDutyDefermentStatementsUrl"))(any()))
         .thenReturn(requestBuilder)
 
@@ -59,6 +60,7 @@ class SdesConnectorSpec extends SpecBase {
   "getSecurityStatements" should {
     "return transformed security statements" in new Setup {
 
+      when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
       when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(HttpResponse(Status.OK, Json.toJson(
           securityStatementFilesWithUnknownFileTypesSdesResponse).toString())))
@@ -76,6 +78,7 @@ class SdesConnectorSpec extends SpecBase {
   "getVatCertificates" should {
     "return transformed vat certificates" in new Setup {
 
+      when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
       when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(HttpResponse(
           Status.OK, Json.toJson(vatCertificateFilesWithUnknownFileTypesSdesResponse).toString())))
@@ -92,6 +95,7 @@ class SdesConnectorSpec extends SpecBase {
     "getPostponedVatStatements" should {
       "return transformed postponed vat statements" in new Setup {
 
+        when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
         when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
           .thenReturn(Future.successful(HttpResponse(
             Status.OK, Json.toJson(postponedVatStatementFilesWithUnknownFileTypesSdesResponse).toString())))
@@ -108,6 +112,7 @@ class SdesConnectorSpec extends SpecBase {
 
     "throw exception when file with unknown fileRole" in new Setup {
 
+      when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
       when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(
           HttpResponse(Status.OK, Json.toJson(vatCertificateFilesWithUnknownFileRoleSdesResponse).toString())))

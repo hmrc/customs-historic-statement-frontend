@@ -63,18 +63,12 @@ class SdesConnector @Inject()(http: HttpClientV2,
     getSdesFiles[FileInformation, SecurityStatementFile](appConfig.sdesSecurityStatementListUrl, eori, transform)
   }
 
-  //TODO
   def getSdesFiles[A, B <: SdesFile](filesUrl: String, key: String, transform: Seq[A] => Seq[B])
                                     (implicit hc: HeaderCarrier,
                                      reads: HttpReads[HttpResponse],
                                      readSeq: HttpReads[Seq[A]]): Future[Seq[B]] = {
-
-    /*
-      http.GET[HttpResponse](filesUrl)(reads, addXHeaders(hc, key), ec)
-      .map(readSeq.read("GET", filesUrl, _))
-      .map(transform)
-      */
     http.get(url"$filesUrl")
+      .setHeader(addXHeaders(hc, key).extraHeaders: _*)
       .execute[HttpResponse]
       .map(readSeq.read("GET", filesUrl, _))
       .map(transform)

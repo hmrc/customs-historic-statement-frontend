@@ -28,7 +28,6 @@ class TechnicalDifficultiesController @Inject()(controllerComponents: MessagesCo
                                                (implicit executionContext: ExecutionContext)
   extends FrontendController(controllerComponents) {
 
-  //TODO
   def onPageLoad: Action[AnyContent] = Action.async { implicit request =>
     errorHandler.standardErrorTemplate(
       "service-technical-difficulties.title",
