@@ -69,7 +69,6 @@ lazy val root = (project in file("."))
     Assets / pipelineStages := Seq(concat, uglify),
     uglify / includeFilter := GlobFilter("customshistoricstatementfrontend-*.js")
   )
-  .settings(scalacOptions ++= Seq("-Ypatmat-exhaust-depth", "off"))
   .settings(uglifyCompressOptions := turnoffJSUglifyWarningsTask.value)
   .settings(
     scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all")),
