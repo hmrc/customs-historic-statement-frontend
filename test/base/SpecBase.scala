@@ -53,8 +53,8 @@ trait SpecBase extends AnyWordSpecLike
   private val day = 1
 
   def populatedUserAnswers: UserAnswers = emptyUserAnswers.set(
-      AccountNumber, "123").success.value.set(HistoricDateRequestPage(C79Certificate),
-        HistoricDates(LocalDate.of(year, month, day), LocalDate.of(year, month, day))).success.value
+    AccountNumber, "123").success.value.set(HistoricDateRequestPage(C79Certificate),
+    HistoricDates(LocalDate.of(year, month, day), LocalDate.of(year, month, day))).success.value
 
   def fakeRequest(method: String = emptyString, path: String = emptyString): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(method, path).withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]

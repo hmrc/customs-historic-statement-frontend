@@ -55,9 +55,9 @@ class DefaultSessionRepository @Inject()(mongoComponent: PlayMongoComponent, con
 
   override def set(userAnswers: UserAnswers): Future[Boolean] =
     collection.replaceOne(
-      equal("_id", userAnswers.id),
-      userAnswers.copy(lastUpdated = LocalDateTime.now()),
-      ReplaceOptions().upsert(true))
+        equal("_id", userAnswers.id),
+        userAnswers.copy(lastUpdated = LocalDateTime.now()),
+        ReplaceOptions().upsert(true))
       .toFuture()
       .map(_.wasAcknowledged())
 

@@ -161,13 +161,13 @@ class ErrorSummarySpec extends SpecBase {
     }
   }
 
-    trait SetUp {
-        implicit val msgs: Messages = Helpers.stubMessages()
-        val mockGovSummary: GovukErrorSummary = mock[GovukErrorSummary]
+  trait SetUp {
+    implicit val msgs: Messages = Helpers.stubMessages()
+    val mockGovSummary: GovukErrorSummary = mock[GovukErrorSummary]
 
-        val app = applicationBuilder().overrides(
-            bind[GovukErrorSummary].toInstance(mockGovSummary)
-            ).build()
-    }
+    val app = applicationBuilder().overrides(
+      bind[GovukErrorSummary].toInstance(mockGovSummary)
+    ).build()
+  }
 }
 

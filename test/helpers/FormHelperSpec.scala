@@ -15,6 +15,7 @@
  */
 
 package helpers
+
 import org.scalatest.matchers.should.Matchers.shouldBe
 import base.SpecBase
 

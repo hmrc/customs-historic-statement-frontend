@@ -161,9 +161,9 @@ class HistoricStatementsControllerSpec extends SpecBase {
     val securityStatementFiles = List(securityStatementFile, securityStatementFile_2)
 
     val c79Certificates = VatCertificateFile("statementfile_00", "download_url_00", ninetynine,
-      VatCertificateFileMetadata(year17, twelve, Pdf, C79Certificate,None))
+      VatCertificateFileMetadata(year17, twelve, Pdf, C79Certificate, None))
     val c79Certificates_2 = VatCertificateFile("statementfile_00", "download_url_00", ninetynine,
-      VatCertificateFileMetadata(year17, eleven, Pdf, C79Certificate,None))
+      VatCertificateFileMetadata(year17, eleven, Pdf, C79Certificate, None))
     val c79CertificateFiles = Seq(c79Certificates, c79Certificates_2)
 
     val postponedVatStatement = PostponedVatStatementFile("statementfile_00", "download_url_00", ninetynine,
@@ -199,8 +199,8 @@ class HistoricStatementsControllerSpec extends SpecBase {
     val offset = 10
 
     val eoriHistories = Seq(EoriHistory("eori1", Some(LocalDate.now()), Some(LocalDate.now())),
-                            EoriHistory("eori2", Some(LocalDate.now().minusDays(offset)),
-                              Some(LocalDate.now().minusDays(offset))))
+      EoriHistory("eori2", Some(LocalDate.now().minusDays(offset)),
+        Some(LocalDate.now().minusDays(offset))))
 
     val mockCustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
     val mockSdesConnector = mock[SdesConnector]

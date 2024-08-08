@@ -58,7 +58,8 @@ class CheckYourAnswersController @Inject()(override val messagesApi: MessagesApi
 
   def onSubmit(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
 
-    implicit request => HistoricDocumentRequest.fromRequest(fileRole) match {
+    implicit request =>
+      HistoricDocumentRequest.fromRequest(fileRole) match {
 
         case Some(value) =>
           customsFinancialsApiConnector.postHistoricDocumentRequest(value).map { successful =>

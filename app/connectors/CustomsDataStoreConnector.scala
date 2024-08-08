@@ -39,12 +39,12 @@ class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig, httpClie
     httpClient.get(url"$dataStoreEndpoint")
       .execute[EmailResponse]
       .map {
-      case EmailResponse(Some(address), _, None) => Right(Email(address))
-      case EmailResponse(Some(email), _, Some(_)) => Left(UndeliverableEmail(email))
-      case _ => Left(UnverifiedEmail)
-    }.recover {
-      case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
-    }
+        case EmailResponse(Some(address), _, None) => Right(Email(address))
+        case EmailResponse(Some(email), _, Some(_)) => Left(UndeliverableEmail(email))
+        case _ => Left(UnverifiedEmail)
+      }.recover {
+        case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
+      }
   }
 
   def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] = {
