@@ -72,7 +72,5 @@ class SdesConnector @Inject()(http: HttpClientV2,
       .execute[HttpResponse]
       .map(readSeq.read("GET", filesUrl, _))
       .map(transform)
-
-
   }
 }

@@ -59,7 +59,6 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
 
       case _: InsufficientEnrolments => Redirect(routes.UnauthorisedController.onPageLoad())
       case _ => Redirect(routes.TechnicalDifficultiesController.onPageLoad())
-
     }
   }
 }

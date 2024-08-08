@@ -32,7 +32,9 @@ import org.mockito.ArgumentMatchers.any
 import org.scalatest.matchers.should.Matchers.shouldBe
 
 class ErrorSummarySpec extends SpecBase {
+
   "ErrorSummary component" must {
+
     "show correct error with unchanged key when isErrorKeyUpdateEnabled is false" in new SetUp {
       val errorSum: ErrorSummary = ErrorSummary(
         errorList = Seq(ErrorLink(Some("#start"), content = Text(msgs("cf.historic.document.request.form.error.end.year.date-number-invalid")))),
@@ -43,10 +45,8 @@ class ErrorSummarySpec extends SpecBase {
 
       when(mockGovSummary.apply(any[ErrorSummary])).thenReturn(govSummaryHtmlFormat)
 
-
       val view: errorSummary = app.injector.instanceOf[errorSummary]
       val formErrors: Seq[FormError] = Seq(FormError("start", "cf.historic.document.request.form.error.end.year.date-number-invalid"))
-
       val result: HtmlFormat.Appendable = view(formErrors, None)
 
       result.toString().contains(
@@ -66,10 +66,8 @@ class ErrorSummarySpec extends SpecBase {
 
       when(mockGovSummary.apply(any[ErrorSummary])).thenReturn(govSummaryHtmlFormat)
 
-
       val view: errorSummary = app.injector.instanceOf[errorSummary]
       val formErrors: Seq[FormError] = Seq(FormError("start", "cf.historic.document.request.form.error.start.month.invalid"))
-
       val result: HtmlFormat.Appendable = view(
         formErrors,
         None,
@@ -95,7 +93,6 @@ class ErrorSummarySpec extends SpecBase {
 
       val view: errorSummary = app.injector.instanceOf[errorSummary]
       val formErrors: Seq[FormError] = Seq(FormError("start", "cf.historic.document.request.form.error.year.invalid"))
-
       val result: HtmlFormat.Appendable = view(
         formErrors,
         None,
@@ -119,10 +116,8 @@ class ErrorSummarySpec extends SpecBase {
 
       when(mockGovSummary.apply(any[ErrorSummary])).thenReturn(govSummaryHtmlFormat)
 
-
       val view: errorSummary = app.injector.instanceOf[errorSummary]
       val formErrors: Seq[FormError] = Seq(FormError("end", "cf.form.error.end-future-date"))
-
       val result: HtmlFormat.Appendable = view(
         formErrors,
         None,
@@ -148,7 +143,6 @@ class ErrorSummarySpec extends SpecBase {
 
       val view: errorSummary = app.injector.instanceOf[errorSummary]
       val formErrors: Seq[FormError] = Seq(FormError("end", "cf.historic.document.request.form.error.year.invalid"))
-
       val result: HtmlFormat.Appendable = view(
         formErrors,
         None,
@@ -170,4 +164,3 @@ class ErrorSummarySpec extends SpecBase {
     ).build()
   }
 }
-
