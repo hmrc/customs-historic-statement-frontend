@@ -254,21 +254,6 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
     }
   }
 
-  private def createTestStatement(period: DutyDefermentStatementPeriod): DutyDefermentAccountStatement = {
-    DutyDefermentAccountStatement(
-      historyIndex = 0,
-      groupIndex = 0,
-      eorisStatements = Seq.empty,
-      group = DutyDefermentStatementPeriodsByMonth(
-        monthAndYear = period.monthAndYear,
-        periods = Seq(period)
-      ),
-      periodIndex = 0,
-      period = period,
-      periodsWithIndex = Seq((period, 0))
-    )
-  }
-
   private def shouldContainAccountNumber(implicit view: Document): Assertion = {
     view.getElementById("eori-heading").html().contains(
       msg("cf.account.detail.requested.deferment-account-secondary-heading")
@@ -373,8 +358,23 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       Seq(dutyDefermentStatementsForEori),
       isNiAccount = isNiAccount)
 
-    def view(isNiAccount: Boolean = false): Document = Jsoup.parse(
+    protected def view(isNiAccount: Boolean = false): Document = Jsoup.parse(
       app.injector.instanceOf[DutyDefermentRequestedStatements].
         apply(dutyDefermentModel(isNiAccount), config.returnLink("dutyDeferment")).body)
+
+    protected def createTestStatement(period: DutyDefermentStatementPeriod): DutyDefermentAccountStatement = {
+      DutyDefermentAccountStatement(
+        historyIndex = 0,
+        groupIndex = 0,
+        eorisStatements = Seq.empty,
+        group = DutyDefermentStatementPeriodsByMonth(
+          monthAndYear = period.monthAndYear,
+          periods = Seq(period)
+        ),
+        periodIndex = 0,
+        period = period,
+        periodsWithIndex = Seq((period, 0))
+      )
+    }
   }
 }
