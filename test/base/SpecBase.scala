@@ -18,7 +18,7 @@ package base
 
 import controllers.actions._
 import models.{C79Certificate, HistoricDates, UserAnswers}
-import org.mockito.scalatest.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.OptionValues
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -53,8 +53,8 @@ trait SpecBase extends AnyWordSpecLike
   private val day = 1
 
   def populatedUserAnswers: UserAnswers = emptyUserAnswers.set(
-      AccountNumber, "123").success.value.set(HistoricDateRequestPage(C79Certificate),
-        HistoricDates(LocalDate.of(year, month, day), LocalDate.of(year, month, day))).success.value
+    AccountNumber, "123").success.value.set(HistoricDateRequestPage(C79Certificate),
+    HistoricDates(LocalDate.of(year, month, day), LocalDate.of(year, month, day))).success.value
 
   def fakeRequest(method: String = emptyString, path: String = emptyString): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(method, path).withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]

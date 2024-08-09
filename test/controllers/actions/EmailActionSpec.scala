@@ -29,6 +29,8 @@ import uk.gov.hmrc.http.ServiceUnavailableException
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import utils.Utils.emptyString
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
 
 class EmailActionSpec extends SpecBase {
 

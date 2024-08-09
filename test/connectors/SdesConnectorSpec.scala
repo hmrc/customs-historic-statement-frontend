@@ -20,25 +20,33 @@ import base.SpecBase
 import config.FrontendAppConfig
 import models.DDStatementType.Weekly
 import models.FileFormat.Pdf
-import models._
+import models.*
 import play.api.http.Status
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.Helpers
-import play.api.test.Helpers._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import play.api.test.Helpers.*
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
 import utils.Utils.emptyString
-
-import scala.concurrent.Future
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.{eq => eqTo}
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import scala.concurrent.{ExecutionContext, Future}
 
 class SdesConnectorSpec extends SpecBase {
 
   "getDutyDefermentStatements" should {
     "return transformed duty deferment statements" in new Setup {
-      when[Future[HttpResponse]](mockHttp.GET(eqTo(sdesDutyDefermentStatementsUrl), any, any)(any, any, any))
+
+      when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(HttpResponse(Status.OK,
           Json.toJson(dutyDefermentStatementFilesSdesResponse).toString())))
+
+      when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
+      when(mockHttp.get(eqTo(url"$sdesDutyDefermentStatementsUrl"))(any()))
+        .thenReturn(requestBuilder)
 
       running(app) {
         val result: Seq[DutyDefermentStatementFile] = await(
@@ -51,9 +59,14 @@ class SdesConnectorSpec extends SpecBase {
 
   "getSecurityStatements" should {
     "return transformed security statements" in new Setup {
-      when[Future[HttpResponse]](mockHttp.GET(eqTo(sdesSecurityStatementsUrl), any, any)(any, any, any))
+
+      when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
+      when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(HttpResponse(Status.OK, Json.toJson(
           securityStatementFilesWithUnknownFileTypesSdesResponse).toString())))
+
+      when(mockHttp.get(eqTo(url"$sdesSecurityStatementsUrl"))(any()))
+        .thenReturn(requestBuilder)
 
       running(app) {
         val result: Seq[SecurityStatementFile] = await(sdesConnector.getSecurityStatements(someEori)(hc))
@@ -64,9 +77,14 @@ class SdesConnectorSpec extends SpecBase {
 
   "getVatCertificates" should {
     "return transformed vat certificates" in new Setup {
-      when[Future[HttpResponse]](mockHttp.GET(eqTo(sdesVatCertificatesUrl), any, any)(any, any, any))
+
+      when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
+      when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(HttpResponse(
           Status.OK, Json.toJson(vatCertificateFilesWithUnknownFileTypesSdesResponse).toString())))
+
+      when(mockHttp.get(eqTo(url"$sdesVatCertificatesUrl"))(any()))
+        .thenReturn(requestBuilder)
 
       running(app) {
         val result = await(sdesConnector.getVatCertificates(someEori)(hc))
@@ -76,9 +94,14 @@ class SdesConnectorSpec extends SpecBase {
 
     "getPostponedVatStatements" should {
       "return transformed postponed vat statements" in new Setup {
-        when[Future[HttpResponse]](mockHttp.GET(eqTo(sdesPostponedVatStatementssUrl), any, any)(any, any, any))
+
+        when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
+        when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
           .thenReturn(Future.successful(HttpResponse(
             Status.OK, Json.toJson(postponedVatStatementFilesWithUnknownFileTypesSdesResponse).toString())))
+
+        when(mockHttp.get(eqTo(url"$sdesPostponedVatStatementssUrl"))(any()))
+          .thenReturn(requestBuilder)
 
         running(app) {
           val result = await(sdesConnector.getPostponedVatStatements(someEori)(hc))
@@ -88,9 +111,14 @@ class SdesConnectorSpec extends SpecBase {
     }
 
     "throw exception when file with unknown fileRole" in new Setup {
-      when[Future[HttpResponse]](mockHttp.GET(eqTo(sdesVatCertificatesUrl), any, any)(any, any, any))
+
+      when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
+      when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(
           HttpResponse(Status.OK, Json.toJson(vatCertificateFilesWithUnknownFileRoleSdesResponse).toString())))
+
+      when(mockHttp.get(eqTo(url"$sdesVatCertificatesUrl"))(any()))
+        .thenReturn(requestBuilder)
 
       running(app) {
         intercept[Exception] {
@@ -253,7 +281,7 @@ class SdesConnectorSpec extends SpecBase {
     val postponedVatStatementFiles = List(
       PostponedVatStatementFile("name_04", "download_url_06", size2,
         PostponedVatStatementFileMetadata(year, startMonth3, Pdf,
-          PostponedVATStatement,"CDS", Some("a request id"))),
+          PostponedVATStatement, "CDS", Some("a request id"))),
       PostponedVatStatementFile("name_04", "download_url_04", size3,
         PostponedVatStatementFileMetadata(year, startMonth4, Pdf, PostponedVATStatement, "CHIEF", None)),
       PostponedVatStatementFile("name_03", "download_url_03", size4,
@@ -326,9 +354,12 @@ class SdesConnectorSpec extends SpecBase {
         MetadataItem("FileType", "bar"),
         MetadataItem("FileRole", "Invalid")))))
 
-    val mockHttp = mock[HttpClient]
+    val mockHttp: HttpClientV2 = mock[HttpClientV2]
+    val requestBuilder: RequestBuilder = mock[RequestBuilder]
+
     val app = applicationBuilder().overrides(
-      bind[HttpClient].toInstance(mockHttp)
+      bind[HttpClientV2].toInstance(mockHttp),
+      bind[RequestBuilder].toInstance(requestBuilder)
     ).build()
     val mockAppConfig = app.injector.instanceOf[FrontendAppConfig]
     val sdesConnector = app.injector.instanceOf[SdesConnector]

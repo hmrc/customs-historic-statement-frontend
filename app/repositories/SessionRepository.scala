@@ -20,6 +20,8 @@ import com.mongodb.client.model.Indexes.ascending
 import models.UserAnswers
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model.{IndexModel, IndexOptions, ReplaceOptions}
+import org.mongodb.scala.SingleObservableFuture
+import org.mongodb.scala.ToSingleObservablePublisher
 import play.api.Configuration
 import uk.gov.hmrc.mongo.play.PlayMongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
@@ -41,7 +43,7 @@ class DefaultSessionRepository @Inject()(mongoComponent: PlayMongoComponent, con
       IndexModel(
         ascending("lastUpdated"),
         IndexOptions().name("user-answers-last-updated-index")
-          .expireAfter(config.get[Int]("mongodb.timeToLiveInSeconds"), TimeUnit.SECONDS)
+          .expireAfter(config.get[Long]("mongodb.timeToLiveInSeconds"), TimeUnit.SECONDS)
       )
     )
   ) with SessionRepository {
@@ -53,9 +55,10 @@ class DefaultSessionRepository @Inject()(mongoComponent: PlayMongoComponent, con
 
   override def set(userAnswers: UserAnswers): Future[Boolean] =
     collection.replaceOne(
-      equal("_id", userAnswers.id),
-      userAnswers.copy(lastUpdated = LocalDateTime.now()),
-      ReplaceOptions().upsert(true))
+        equal("_id", userAnswers.id),
+        userAnswers.copy(lastUpdated = LocalDateTime.now()),
+        ReplaceOptions().upsert(true)
+      )
       .toFuture()
       .map(_.wasAcknowledged())
 

@@ -23,7 +23,8 @@ import play.api.test.Helpers._
 import play.api.{Application, inject}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderNames.xSessionId
-
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
 import scala.concurrent.Future
 
 class JourneyStartControllerSpec extends SpecBase {
@@ -50,7 +51,7 @@ class JourneyStartControllerSpec extends SpecBase {
         val request = fakeRequest(GET, routes.JourneyStartController.dutyDeferment("linkId").url)
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
+        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
       }
     }
 
@@ -62,7 +63,7 @@ class JourneyStartControllerSpec extends SpecBase {
         val request = fakeRequest(GET, routes.JourneyStartController.dutyDeferment("linkId").url).withHeaders(xSessionId -> "something")
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
+        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
       }
     }
   }
@@ -105,7 +106,7 @@ class JourneyStartControllerSpec extends SpecBase {
         val request = fakeRequest(GET, routes.JourneyStartController.nonDutyDeferment(DutyDefermentStatement).url)
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad.url
+        redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
       }
     }
   }

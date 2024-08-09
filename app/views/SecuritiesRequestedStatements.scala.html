@@ -26,7 +26,7 @@
 
 @(model: SecuritiesRequestedStatementsViewModel, backLink: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("cf.security-statements.requested.title")), backLink = Some(backLink)) {
+@layout(pageTitle = Some(messages("cf.security-statements.requested.title")), backLinkUrl = Some(backLink)) {
 
 @h1(id=Some("security-statements-heading"),
   classes="govuk-heading-xl govuk-!-margin-bottom-3",

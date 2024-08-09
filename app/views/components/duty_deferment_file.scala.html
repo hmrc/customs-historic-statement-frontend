@@ -21,7 +21,7 @@
 
 @(period: DutyDefermentStatementPeriod, fileFormat: FileFormat, idPrefix: String = "")(implicit messages: Messages)
 
-@defining(period.findStatementFileByFormat(fileFormat)) { files: Seq[DutyDefermentStatementFile] =>
+@defining(period.findStatementFileByFormat(fileFormat)) { (files: Seq[DutyDefermentStatementFile]) =>
     @if(files.isEmpty) {
         <div>
             <span id="@{idPrefix}-hidden" class="govuk-visually-hidden">@{period.unavailableLinkHiddenText(fileFormat)}</span>

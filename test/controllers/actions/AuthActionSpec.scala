@@ -28,17 +28,20 @@ import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Utils.emptyString
 
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthActionSpec extends SpecBase {
 
   class Harness(authAction: IdentifierAction) {
-    def onPageLoad(): Action[AnyContent]  = authAction { _ => Results.Ok }
+    def onPageLoad(): Action[AnyContent] = authAction { _ => Results.Ok }
   }
 
   implicit class Ops[A](a: A) {
-    def ~[B](b: B): A ~ B = new ~(a, b)
+    def ~[B](b: B): A ~ B = new~(a, b)
   }
 
   "Auth Action" when {
@@ -48,7 +51,7 @@ class AuthActionSpec extends SpecBase {
 
       when(mockAuthConnector.authorise[Option[String] ~ Enrolments](any, any)(any, any))
         .thenReturn(Future.successful(
-            Some("id") ~
+          Some("id") ~
             Enrolments(Set.empty)))
 
       val app = applicationBuilder().overrides().build()
@@ -165,7 +168,7 @@ class AuthActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad.url)
+        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
       }
     }
   }

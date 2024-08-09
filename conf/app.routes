@@ -6,11 +6,11 @@ GET         /assets/*file                                controllers.Assets.vers
 
 GET         /language/:lang                              controllers.LanguageSwitchController.switchToLanguage(lang: Language)
 
-GET         /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad
+GET         /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad()
 
-GET         /unauthorised                                controllers.UnauthorisedController.onPageLoad
+GET         /unauthorised                                controllers.UnauthorisedController.onPageLoad()
 
-GET         /technical-difficulties                      controllers.TechnicalDifficultiesController.onPageLoad
+GET         /technical-difficulties                      controllers.TechnicalDifficultiesController.onPageLoad()
 
 GET         /start-journey/duty-deferment/:linkId        controllers.JourneyStartController.dutyDeferment(linkId: String)
 GET         /start-journey/:fileRole                     controllers.JourneyStartController.nonDutyDeferment(fileRole: FileRole)
@@ -30,7 +30,7 @@ GET         /:fileRole/confirmation/return-to-statements controllers.Confirmatio
 GET         /requested/:fileRole                         controllers.HistoricStatementsController.historicStatements(fileRole: FileRole)
 GET         /requested/duty-deferment/:linkId            controllers.HistoricStatementsController.historicStatementsDutyDeferment(linkId: String)
 
-GET         /logout-survey                               controllers.LogoutController.logout
-GET         /logout                                      controllers.LogoutController.logoutNoSurvey
+GET         /logout-survey                               controllers.LogoutController.logout()
+GET         /logout                                      controllers.LogoutController.logoutNoSurvey()
 GET         /verify-your-email                           controllers.EmailController.showUnverified()
 GET         /undeliverable-email                         controllers.EmailController.showUndeliverable()

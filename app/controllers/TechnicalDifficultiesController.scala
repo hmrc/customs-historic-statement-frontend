@@ -21,16 +21,18 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class TechnicalDifficultiesController @Inject()(controllerComponents: MessagesControllerComponents,
                                                 errorHandler: ErrorHandler)
+                                               (implicit executionContext: ExecutionContext)
   extends FrontendController(controllerComponents) {
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    Ok(errorHandler.standardErrorTemplate(
+  def onPageLoad: Action[AnyContent] = Action.async { implicit request =>
+    errorHandler.standardErrorTemplate(
       "service-technical-difficulties.title",
       "service.technical-difficulties.heading",
       "service.technical-difficulties.p"
-    ))
+    ).map(html => Ok(html))
   }
 }

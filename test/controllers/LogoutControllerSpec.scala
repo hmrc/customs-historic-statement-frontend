@@ -22,7 +22,8 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import repositories.SessionRepository
-
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
 import scala.concurrent.Future
 
 class LogoutControllerSpec extends SpecBase {
@@ -32,7 +33,7 @@ class LogoutControllerSpec extends SpecBase {
     "redirect the user to logout with a continue url of the feedback survey" when {
 
       "sessionRepository clears the user session successfully" in new Setup {
-        val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logout.url)
+        val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logout().url)
 
         when(sessionRepoMock.clear(any)).thenReturn(Future.successful(true))
 
@@ -48,7 +49,7 @@ class LogoutControllerSpec extends SpecBase {
       }
 
       "error occurs in clearing user session" in new Setup {
-        val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logout.url)
+        val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logout().url)
 
         when(sessionRepoMock.clear(any)).thenReturn(Future.failed(new RuntimeException("error occurred")))
 
@@ -71,7 +72,7 @@ class LogoutControllerSpec extends SpecBase {
     "redirect the user to logout with no feedback survey continueUrl" when {
 
       "sessionRepository clears the user session successfully" in new Setup {
-        val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logoutNoSurvey.url)
+        val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logoutNoSurvey().url)
 
         when(sessionRepoMock.clear(any)).thenReturn(Future.successful(true))
 
@@ -87,7 +88,7 @@ class LogoutControllerSpec extends SpecBase {
       }
 
       "error occurs in clearing user session" in new Setup {
-        val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logoutNoSurvey.url)
+        val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logoutNoSurvey().url)
 
         when(sessionRepoMock.clear(any)).thenReturn(Future.failed(new RuntimeException("error occurred")))
 

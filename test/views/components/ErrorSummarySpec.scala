@@ -18,7 +18,6 @@ package views.components
 
 import base.SpecBase
 import helpers.FormHelper.updateFormErrorKeyForStartAndEndDate
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.data.FormError
 import play.api.i18n.Messages
 import play.api.inject.bind
@@ -28,9 +27,15 @@ import uk.gov.hmrc.govukfrontend.views.html.components.GovukErrorSummary
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.{ErrorLink, ErrorSummary}
 import views.html.components.errorSummary
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+import org.scalatest.matchers.should.Matchers.shouldBe
+import play.api.Application
 
 class ErrorSummarySpec extends SpecBase {
+
   "ErrorSummary component" must {
+
     "show correct error with unchanged key when isErrorKeyUpdateEnabled is false" in new SetUp {
       val errorSum: ErrorSummary = ErrorSummary(
         errorList = Seq(ErrorLink(Some("#start"), content = Text(msgs("cf.historic.document.request.form.error.end.year.date-number-invalid")))),
@@ -41,10 +46,8 @@ class ErrorSummarySpec extends SpecBase {
 
       when(mockGovSummary.apply(any[ErrorSummary])).thenReturn(govSummaryHtmlFormat)
 
-
       val view: errorSummary = app.injector.instanceOf[errorSummary]
       val formErrors: Seq[FormError] = Seq(FormError("start", "cf.historic.document.request.form.error.end.year.date-number-invalid"))
-
       val result: HtmlFormat.Appendable = view(formErrors, None)
 
       result.toString().contains(
@@ -64,10 +67,8 @@ class ErrorSummarySpec extends SpecBase {
 
       when(mockGovSummary.apply(any[ErrorSummary])).thenReturn(govSummaryHtmlFormat)
 
-
       val view: errorSummary = app.injector.instanceOf[errorSummary]
       val formErrors: Seq[FormError] = Seq(FormError("start", "cf.historic.document.request.form.error.start.month.invalid"))
-
       val result: HtmlFormat.Appendable = view(
         formErrors,
         None,
@@ -93,7 +94,6 @@ class ErrorSummarySpec extends SpecBase {
 
       val view: errorSummary = app.injector.instanceOf[errorSummary]
       val formErrors: Seq[FormError] = Seq(FormError("start", "cf.historic.document.request.form.error.year.invalid"))
-
       val result: HtmlFormat.Appendable = view(
         formErrors,
         None,
@@ -117,10 +117,8 @@ class ErrorSummarySpec extends SpecBase {
 
       when(mockGovSummary.apply(any[ErrorSummary])).thenReturn(govSummaryHtmlFormat)
 
-
       val view: errorSummary = app.injector.instanceOf[errorSummary]
       val formErrors: Seq[FormError] = Seq(FormError("end", "cf.form.error.end-future-date"))
-
       val result: HtmlFormat.Appendable = view(
         formErrors,
         None,
@@ -146,7 +144,6 @@ class ErrorSummarySpec extends SpecBase {
 
       val view: errorSummary = app.injector.instanceOf[errorSummary]
       val formErrors: Seq[FormError] = Seq(FormError("end", "cf.historic.document.request.form.error.year.invalid"))
-
       val result: HtmlFormat.Appendable = view(
         formErrors,
         None,
@@ -159,13 +156,12 @@ class ErrorSummarySpec extends SpecBase {
     }
   }
 
-    trait SetUp {
-        implicit val msgs: Messages = Helpers.stubMessages()
-        val mockGovSummary: GovukErrorSummary = mock[GovukErrorSummary]
+  trait SetUp {
+    implicit val msgs: Messages = Helpers.stubMessages()
+    val mockGovSummary: GovukErrorSummary = mock[GovukErrorSummary]
 
-        val app = applicationBuilder().overrides(
-            bind[GovukErrorSummary].toInstance(mockGovSummary)
-            ).build()
-    }
+    val app: Application = applicationBuilder().overrides(
+      bind[GovukErrorSummary].toInstance(mockGovSummary)
+    ).build()
+  }
 }
-

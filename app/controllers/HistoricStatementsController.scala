@@ -55,7 +55,7 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
       case SecurityStatement => showHistoricSecurityStatements()
       case C79Certificate => showHistoricC79Statements()
       case PostponedVATStatement => showHistoricPostponedVatStatements()
-      case _ => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
+      case _ => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
     }
   }
 
@@ -65,7 +65,7 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
     customsFinancialsApiConnector.deleteNotification(request.eori, DutyDefermentStatement)
     sessionCacheConnector.getAccountNumber(request.sessionId, linkId).flatMap {
       case Some(dan) => showHistoricDutyDefermentStatements(dan, linkId)
-      case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
+      case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
   }
 

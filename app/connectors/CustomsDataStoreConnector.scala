@@ -23,32 +23,38 @@ import play.api.http.Status.NOT_FOUND
 import play.api.libs.json._
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, UpstreamErrorResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps, UpstreamErrorResponse}
 
 import javax.inject.Inject
 import scala.concurrent._
 
-class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient)
+class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClientV2)
                                          (implicit executionContext: ExecutionContext)
   extends Logging {
 
   def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
     val dataStoreEndpoint = appConfig.customsDataStore + s"/eori/$eori/verified-email"
 
-    httpClient.GET[EmailResponse](dataStoreEndpoint).map {
-      case EmailResponse(Some(address), _, None) => Right(Email(address))
-      case EmailResponse(Some(email), _, Some(_)) => Left(UndeliverableEmail(email))
-      case _ => Left(UnverifiedEmail)
-    }.recover {
-      case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
-    }
+    httpClient.get(url"$dataStoreEndpoint")
+      .execute[EmailResponse]
+      .map {
+        case EmailResponse(Some(address), _, None) => Right(Email(address))
+        case EmailResponse(Some(email), _, Some(_)) => Left(UndeliverableEmail(email))
+        case _ => Left(UnverifiedEmail)
+      }
+      .recover {
+        case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
+      }
   }
 
   def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] = {
     val dataStoreEndpoint = appConfig.customsDataStore + s"/eori/$eori/eori-history"
     val emptyEoriHistory = Seq(EoriHistory(eori, None, None))
 
-    httpClient.GET[EoriHistoryResponse](dataStoreEndpoint).map(response => response.eoriHistory)
+    httpClient.get(url"$dataStoreEndpoint")
+      .execute[EoriHistoryResponse]
+      .map(response => response.eoriHistory)
       .recover { case e =>
         logger.error(s"DATASTORE-E-EORI-HISTORY-ERROR: ${e.getClass.getName}")
         emptyEoriHistory

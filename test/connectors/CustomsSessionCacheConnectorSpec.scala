@@ -20,21 +20,26 @@ import base.SpecBase
 import config.FrontendAppConfig
 import org.mockito.ArgumentMatchers
 import play.api.inject.bind
-import play.api.test.Helpers._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
-
-import scala.concurrent.Future
+import play.api.test.Helpers.*
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsSessionCacheConnectorSpec extends SpecBase {
 
   "getAccountNumber" should {
 
     "return account number for sessionId and linkId" in new Setup {
+
       val customsSessionCacheUrl = "http://localhost:9840/customs/session-cache/account-link/12345/Ab123"
 
-      when[Future[SessionCacheResponse]](mockHttpClient.GET(
-        ArgumentMatchers.eq(customsSessionCacheUrl), any, any)(any, any, any))
+      when(requestBuilder.execute(any[HttpReads[SessionCacheResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(SessionCacheResponse("45678")))
+
+      when(mockHttpClient.get(ArgumentMatchers.eq(url"$customsSessionCacheUrl"))(any()))
+        .thenReturn(requestBuilder)
 
       running(app) {
         val result = await(customsSessionCacheConnector.getAccountNumber("12345", "Ab123")(hc))
@@ -43,24 +48,30 @@ class CustomsSessionCacheConnectorSpec extends SpecBase {
     }
 
     "return account link for sessionId and linkId" in new Setup {
+
       val customsSessionCacheUrl = "http://localhost:9840/customs/session-cache/account-link/12345/Ab123"
 
-      when[Future[AccountLink]](mockHttpClient.GET(
-        ArgumentMatchers.eq(customsSessionCacheUrl), any, any)(any, any, any))
-        .thenReturn(Future.successful(AccountLink("GB123","1234567", "a67dhdfkd8sf","Open", Some(0), true)))
+      when(requestBuilder.execute(any[HttpReads[AccountLink]], any[ExecutionContext]))
+        .thenReturn(Future.successful(AccountLink("GB123", "1234567", "a67dhdfkd8sf", "Open", Some(0), true)))
+
+      when(mockHttpClient.get(ArgumentMatchers.eq(url"$customsSessionCacheUrl"))(any()))
+        .thenReturn(requestBuilder)
 
       running(app) {
         val result = await(customsSessionCacheConnector.getAccountLink("12345", "Ab123")(hc))
-        result mustBe Some(AccountLink("GB123","1234567", "a67dhdfkd8sf","Open", Some(0), true))
+        result mustBe Some(AccountLink("GB123", "1234567", "a67dhdfkd8sf", "Open", Some(0), true))
       }
     }
 
-  "return false when failed to submit the request" in new Setup {
+    "return false when failed to submit the request" in new Setup {
+
       val customsSessionCacheUrl = "http://localhost:9840/customs/session-cache/account-link/12345/Ab123"
 
-      when[Future[HttpResponse]](mockHttpClient.GET(
-        ArgumentMatchers.eq(customsSessionCacheUrl), any, any)(any, any, any))
+      when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.failed(new RuntimeException("failed")))
+
+      when(mockHttpClient.get(ArgumentMatchers.eq(url"$customsSessionCacheUrl"))(any()))
+        .thenReturn(requestBuilder)
 
       running(app) {
         val result = await(customsSessionCacheConnector.getAccountNumber("12345", "Ab123")(hc))
@@ -70,10 +81,14 @@ class CustomsSessionCacheConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient = mock[HttpClient]
+    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
+    val requestBuilder: RequestBuilder = mock[RequestBuilder]
+
     val app = applicationBuilder().overrides(
-      bind[HttpClient].toInstance(mockHttpClient)
+      bind[HttpClientV2].toInstance(mockHttpClient),
+      bind[RequestBuilder].toInstance(requestBuilder)
     ).build()
+
     val mockAppConfig = app.injector.instanceOf[FrontendAppConfig]
     val customsSessionCacheConnector = app.injector.instanceOf[CustomsSessionCacheConnector]
     implicit val hc: HeaderCarrier = HeaderCarrier()

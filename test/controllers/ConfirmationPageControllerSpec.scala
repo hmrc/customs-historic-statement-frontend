@@ -26,6 +26,9 @@ import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.retrieve.Email
 import views.html.ConfirmationPageView
 
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
+
 import scala.concurrent.Future
 
 class ConfirmationPageControllerSpec extends SpecBase {

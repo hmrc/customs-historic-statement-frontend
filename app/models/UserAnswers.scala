@@ -42,7 +42,7 @@ final case class UserAnswers(
 
     updatedData.flatMap {
       d =>
-        val updatedAnswers = copy (data = d)
+        val updatedAnswers = copy(data = d)
         page.cleanup(updatedAnswers)
     }
   }
@@ -58,7 +58,7 @@ final case class UserAnswers(
 
     updatedData.flatMap {
       d =>
-        val updatedAnswers = copy (data = d)
+        val updatedAnswers = copy(data = d)
         page.cleanup(updatedAnswers)
     }
   }
@@ -84,6 +84,7 @@ trait MongoJavatimeFormats {
 
   object Implicits extends Implicits
 }
+
 object MongoJavatimeFormats extends MongoJavatimeFormats
 
 object UserAnswers {
@@ -95,7 +96,7 @@ object UserAnswers {
     ((__ \ "_id").read[String] and
       (__ \ "data").read[JsObject] and
       (__ \ "lastUpdated").read(MongoJavatimeFormats.localDateTimeReads)
-    ) (UserAnswers.apply _)
+      )(UserAnswers.apply _)
   }
 
   implicit lazy val writes: OWrites[UserAnswers] = {
@@ -105,7 +106,7 @@ object UserAnswers {
     ((__ \ "_id").write[String] and
       (__ \ "data").write[JsObject] and
       (__ \ "lastUpdated").write(MongoJavatimeFormats.localDateTimeWrites)
-    ) (unlift(UserAnswers.unapply))
+      )(ead => Tuple.fromProductTyped(ead))
   }
 
   implicit lazy val format: Format[UserAnswers] = Format(reads, writes)
