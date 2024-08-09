@@ -117,7 +117,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient = mock[HttpClientV2]
+    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
 
     val app = applicationBuilder().overrides(

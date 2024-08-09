@@ -151,9 +151,9 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient = mock[HttpClientV2]
+    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
-    val eori = "GB11111"
+    val eori: String = "GB11111"
 
     val app = applicationBuilder().overrides(
       bind[HttpClientV2].to(mockHttpClient),

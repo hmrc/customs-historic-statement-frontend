@@ -45,8 +45,6 @@
         dutyDeferment: Boolean = false
 )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
-
-
     @phaseBannerContent = {
     @messages("feedback.before")
         <a class='govuk-link' href='/contact/beta-feedback-unauthenticated?service=CDS-FIN'>@messages("feedback.link")</a>
@@ -80,7 +78,6 @@
         }
     }
 
-
 @hmrcStandardPage(
 
 HmrcStandardPageParams(
@@ -99,5 +96,3 @@ HmrcStandardPageParams(
         ),
         isWelshTranslationAvailable = welshToggle
     ))(mainContent)
-
-

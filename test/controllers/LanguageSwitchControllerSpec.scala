@@ -22,7 +22,6 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-
 class LanguageSwitchControllerSpec extends SpecBase {
 
   "switching language" should {

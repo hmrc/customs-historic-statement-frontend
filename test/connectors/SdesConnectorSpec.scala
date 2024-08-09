@@ -354,7 +354,7 @@ class SdesConnectorSpec extends SpecBase {
         MetadataItem("FileType", "bar"),
         MetadataItem("FileRole", "Invalid")))))
 
-    val mockHttp = mock[HttpClientV2]
+    val mockHttp: HttpClientV2 = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
 
     val app = applicationBuilder().overrides(

@@ -42,7 +42,8 @@ class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig, httpClie
         case EmailResponse(Some(address), _, None) => Right(Email(address))
         case EmailResponse(Some(email), _, Some(_)) => Left(UndeliverableEmail(email))
         case _ => Left(UnverifiedEmail)
-      }.recover {
+      }
+      .recover {
         case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
       }
   }

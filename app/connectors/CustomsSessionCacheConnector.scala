@@ -32,6 +32,7 @@ class CustomsSessionCacheConnector @Inject()(httpClient: HttpClientV2,
   def getAccountNumber(sessionId: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
 
     val cacheUrl = appConfig.sessionCacheUrl(sessionId, linkId)
+
     httpClient.get(url"$cacheUrl")
       .execute[SessionCacheResponse]
       .map(
@@ -39,9 +40,10 @@ class CustomsSessionCacheConnector @Inject()(httpClient: HttpClientV2,
       ).recover { case _ => None }
   }
 
-  def getAccountLink(sessionId: String, linkId: String)(
-    implicit hc: HeaderCarrier): Future[Option[AccountLink]] = {
+  def getAccountLink(sessionId: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[AccountLink]] = {
+
     val cacheUrl = appConfig.sessionCacheUrl(sessionId, linkId)
+
     httpClient.get(url"$cacheUrl")
       .execute[AccountLink]
       .map(Some(_)).recover { case _ => None }

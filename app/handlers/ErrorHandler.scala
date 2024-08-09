@@ -39,7 +39,10 @@ class ErrorHandler @Inject()(val messagesApi: MessagesApi, view: ErrorTemplate, 
   override def notFoundTemplate(implicit request: RequestHeader): Future[Html] = Future.successful(notFound())
 
   def unauthorized()(implicit request: RequestHeader): Html = {
-    view(Messages("cf.error.unauthorized.title"), Messages("cf.error.unauthorized.heading"),
-      Messages("cf.error.unauthorized.message"))
+    view(
+      Messages("cf.error.unauthorized.title"),
+      Messages("cf.error.unauthorized.heading"),
+      Messages("cf.error.unauthorized.message")
+    )
   }
 }

@@ -57,7 +57,8 @@ class DefaultSessionRepository @Inject()(mongoComponent: PlayMongoComponent, con
     collection.replaceOne(
         equal("_id", userAnswers.id),
         userAnswers.copy(lastUpdated = LocalDateTime.now()),
-        ReplaceOptions().upsert(true))
+        ReplaceOptions().upsert(true)
+      )
       .toFuture()
       .map(_.wasAcknowledged())
 

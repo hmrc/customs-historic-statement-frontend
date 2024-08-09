@@ -30,6 +30,7 @@ import views.html.components.errorSummary
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import org.scalatest.matchers.should.Matchers.shouldBe
+import play.api.Application
 
 class ErrorSummarySpec extends SpecBase {
 
@@ -159,7 +160,7 @@ class ErrorSummarySpec extends SpecBase {
     implicit val msgs: Messages = Helpers.stubMessages()
     val mockGovSummary: GovukErrorSummary = mock[GovukErrorSummary]
 
-    val app = applicationBuilder().overrides(
+    val app: Application = applicationBuilder().overrides(
       bind[GovukErrorSummary].toInstance(mockGovSummary)
     ).build()
   }
