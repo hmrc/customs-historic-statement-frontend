@@ -16,13 +16,16 @@
 
 package views
 
-import models.DDStatementType.{Supplementary, Weekly}
+import helpers.Formatters
+import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileFormat.Pdf
 import models.{DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, DutyDefermentStatementsForEori, EoriHistory}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import viewmodels.DutyDefermentAccountViewModel
+import play.twirl.api.HtmlFormat
+import utils.Utils._
+import viewmodels.{DutyDefermentAccountRowContent, DutyDefermentAccountViewModel}
 import views.html.DutyDefermentRequestedStatements
 
 import java.time.LocalDate
@@ -52,6 +55,149 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
         headingShouldBeCorrect(viewDoc)
         subHeadingShouldBeCorrect(viewDoc)
         eoriNumberShouldBeCorrect(viewDoc)
+      }
+    }
+  }
+
+  "DutyDefermentAccountComponents" should {
+    "display correct content" when {
+      "calling renderNiAccountHeading component for Northern Ireland accounts" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
+          accountNumber,
+          statementsForAllEoris = Seq.empty,
+          isNiAccount = true
+        )
+
+        val result: HtmlFormat.Appendable = viewModel.component.renderAccountHeading
+        val expectedHtml: String = h2_extraContentComponent(
+          msg = "cf.account.detail.requested.deferment-account-secondary-heading.NiAccount",
+          id = Some("eori-heading"),
+          classes = "govuk-caption-xl",
+          extraContent = Some(accountNumber)
+        ).toString()
+
+        result.toString mustEqual expectedHtml
+      }
+
+      "calling renderNiAccountHeading component for Non-Northern Ireland accounts" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
+          accountNumber,
+          statementsForAllEoris = Seq.empty,
+          isNiAccount = false
+        )
+
+        val result: HtmlFormat.Appendable = viewModel.component.renderAccountHeading
+        val expectedHtml: String = h2_extraContentComponent(
+          msg = "cf.account.detail.requested.deferment-account-secondary-heading",
+          id = Some("eori-heading"),
+          classes = "govuk-caption-xl",
+          extraContent = Some(accountNumber)
+        ).toString()
+
+        result.toString mustEqual expectedHtml
+      }
+
+      "calling renderEoriHeading component" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
+          accountNumber,
+          Seq(dutyDefermentStatementsForEori, dutyDefermentStatementsForEori),
+          isNiAccount = true
+        )
+
+        val result: HtmlFormat.Appendable = viewModel.component.renderEoriHeading(viewModel.statementsData.last)
+        val expectedHtml: String = h2Component(
+          id = Some("historic-eori-0"),
+          classes = "govuk-heading-s",
+          msg = msg("cf.account.details.previous-eori", "12345678")
+        ).toString()
+
+        result.toString mustEqual expectedHtml
+      }
+
+      "calling renderMonthHeading component" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
+          accountNumber,
+          Seq(dutyDefermentStatementsForEori),
+          isNiAccount = true
+        )
+
+        val result: HtmlFormat.Appendable = viewModel.component.renderMonthHeading(viewModel.statementsData.head)
+        val expectedHtml: String = h3Component(
+          id = Some(s"requested-statements-month-heading-0-2018-2"),
+          msg = Formatters.dateAsMonthAndYear(monthAndYear)
+        ).toString()
+
+        result.toString mustEqual expectedHtml
+      }
+
+      "calling renderStatements component" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
+          accountNumber,
+          Seq(dutyDefermentStatementsForEori),
+          isNiAccount = true
+        )
+
+        val result: HtmlFormat.Appendable = viewModel.component.renderStatements(viewModel.statementsData.head)
+
+        val context: DutyDefermentAccountRowContent = DutyDefermentAccountRowContent(
+          viewModel.statementsData.head,
+          viewModel.statementsData.head.periodsWithIndex.head._1,
+          viewModel.statementsData.head.periodsWithIndex.head._2
+        )
+
+        val expectedPeriodDetailsHtml: String = context.period.defermentStatementType match {
+          case Supplementary =>
+            msg("cf.account.detail.row.supplementary.info")
+          case Excise =>
+            msg("cf.account.details.row.excise.info")
+          case _ =>
+            msg("cf.account.detail.period-group")
+        }
+
+        val expectedHtml: String = {
+          val periodDetailsHtml = dtComponent(
+            content = HtmlFormat.raw(expectedPeriodDetailsHtml),
+            classes = Some("govuk-summary-list__value"),
+            id = Some(s"requested-statements-list-" +
+              s"${context.statement.historyIndex}-${context.statement.group.year}-" +
+              s"${context.statement.group.month}-row-${context.index}-date-cell"
+            )
+          ).toString()
+
+          val dutyDefermentFileHtml = ddComponent(
+            content = dutyDefermentFileComponent(
+              context.period,
+              Pdf,
+              s"requested-statements-list-" +
+                s"${context.statement.historyIndex}-" +
+                s"${context.statement.group.year}-${context.statement.group.month}-row-${context.index}"
+            ),
+            classes = Some("govuk-summary-list__actions"),
+            id = Some(s"requested-statements-list-" +
+              s"${context.statement.historyIndex}-${context.statement.group.year}-" +
+              s"${context.statement.group.month}-row-${context.index}-link-cell")
+          ).toString()
+
+          dlComponent(
+            content = HtmlFormat.raw(
+              divComponent(
+                content = HtmlFormat.fill(
+                  List(
+                    HtmlFormat.raw(periodDetailsHtml),
+                    HtmlFormat.raw(dutyDefermentFileHtml)
+                  )
+                ),
+                classes = Some("govuk-summary-list__row"),
+                id = Some(s"requested-statements-list-" +
+                  s"${context.statement.historyIndex}-${context.statement.group.year}-" +
+                  s"${context.statement.group.month}-row-${context.index}")
+              ).toString()
+            ),
+            classes = Some("govuk-summary-list")
+          ).toString()
+        }
+
+        result.toString mustEqual expectedHtml
       }
     }
   }
@@ -104,6 +250,9 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
     private val periodEndDay = 8
     private val dutyPaymentType = "BACS"
 
+    protected val accountNumber = "123456"
+    protected val monthAndYear: LocalDate = LocalDate.of(periodStartYear, periodStartMonth2, periodStartDay)
+
     private val dutyDefermentFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(pdfFileName,
         pdfUrl,
@@ -149,7 +298,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
       Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)))
 
-    private val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori =
+    protected val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori =
       DutyDefermentStatementsForEori.apply(eoriHistory, Seq(dutyDefermentFile), Seq(dutyDefermentFile_2))
 
     private def dutyDefermentModel(isNiAccount: Boolean) = DutyDefermentAccountViewModel(
