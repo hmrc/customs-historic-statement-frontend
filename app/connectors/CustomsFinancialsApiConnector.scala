@@ -43,8 +43,8 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: FrontendAppConfig,
   }
 
   def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
-
     val deleteNotificationEndpoint = appConfig.deleteNotificationUrl(fileRole, eori)
+
     httpClient.delete(url"$deleteNotificationEndpoint")
       .execute[HttpResponse]
       .map(_.status == Status.OK)
@@ -52,16 +52,16 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: FrontendAppConfig,
   }
 
   def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
-
     val unVerifiedEmailEndpoint = s"${appConfig.customsFinancialsApi}/subscriptions/unverified-email-display"
+
     httpClient.get(url"$unVerifiedEmailEndpoint")
       .execute[EmailUnverifiedResponse]
       .map(res => res.unVerifiedEmail)
   }
 
   def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] = {
-
     val emailDisplayEndpoint = s"${appConfig.customsFinancialsApi}/subscriptions/email-display"
+
     httpClient.get(url"$emailDisplayEndpoint").execute[EmailVerifiedResponse]
   }
 }
