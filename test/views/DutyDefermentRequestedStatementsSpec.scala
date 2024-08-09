@@ -19,13 +19,13 @@ package views
 import helpers.Formatters
 import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileFormat.Pdf
-import models.{DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, DutyDefermentStatementsForEori, EoriHistory}
+import models._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
 import play.twirl.api.HtmlFormat
 import utils.Utils._
-import viewmodels.{DutyDefermentAccountRowContent, DutyDefermentAccountViewModel}
+import viewmodels.{DutyDefermentAccountRowContent, DutyDefermentAccountStatement, DutyDefermentAccountViewModel}
 import views.html.DutyDefermentRequestedStatements
 
 import java.time.LocalDate
@@ -199,7 +199,74 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
         result.toString mustEqual expectedHtml
       }
+
+      "handle different statement types in preparePeriodDetails" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel =
+          DutyDefermentAccountViewModel(accountNumber, Seq(dutyDefermentStatementsForEori), isNiAccount = false)
+
+        val supplementaryPeriod: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
+          fileRole = C79Certificate,
+          defermentStatementType = Supplementary,
+          monthAndYear = monthAndYear,
+          startDate = monthAndYear,
+          endDate = monthAndYear,
+          statementFiles = Seq.empty
+        )
+
+        val excisePeriod: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
+          fileRole = DutyDefermentStatement,
+          defermentStatementType = Excise,
+          monthAndYear = monthAndYear,
+          startDate = monthAndYear,
+          endDate = monthAndYear,
+          statementFiles = Seq.empty
+        )
+
+        val regularPeriod: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
+          fileRole = DutyDefermentStatement,
+          defermentStatementType = Weekly,
+          monthAndYear = monthAndYear,
+          startDate = monthAndYear,
+          endDate = monthAndYear,
+          statementFiles = Seq.empty
+        )
+
+        val supplementaryResult: HtmlFormat.Appendable =
+          viewModel.component.renderStatements(createTestStatement(supplementaryPeriod))
+
+        val exciseResult: HtmlFormat.Appendable =
+          viewModel.component.renderStatements(createTestStatement(excisePeriod))
+
+        val regularResult: HtmlFormat.Appendable =
+          viewModel.component.renderStatements(createTestStatement(regularPeriod))
+
+        supplementaryResult.body must include(msg("cf.account.detail.row.supplementary.info"))
+
+        exciseResult.body must include(msg("cf.account.details.row.excise.info"))
+
+        val expectedMessage: String = msg("cf.account.detail.period-group",
+          Formatters.dateAsDay(regularPeriod.startDate),
+          Formatters.dateAsDay(regularPeriod.endDate),
+          Formatters.dateAsMonth(regularPeriod.endDate))
+
+        regularResult.body must include(expectedMessage)
+      }
     }
+  }
+
+  private def createTestStatement(period: DutyDefermentStatementPeriod): DutyDefermentAccountStatement = {
+    DutyDefermentAccountStatement(
+      historyIndex = 0,
+      groupIndex = 0,
+      eorisStatements = Seq.empty,
+      group = DutyDefermentStatementPeriodsByMonth(
+        monthAndYear = period.monthAndYear,
+        periods = Seq(period)
+      ),
+      periodIndex = 0,
+      period = period,
+      periodsWithIndex = Seq((period, 0))
+    )
   }
 
   private def shouldContainAccountNumber(implicit view: Document): Assertion = {
