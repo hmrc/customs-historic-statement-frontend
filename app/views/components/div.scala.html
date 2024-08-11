@@ -16,10 +16,6 @@
 
 @this()
 
-@(
-  content: Html,
-  classes: Option[String] = None,
-  id: Option[String] = None,
-)
+@(content: Html, classes: Option[String] = None, id: Option[String] = None)
 
-<div @classes.map(c => s"class=$c") @id.map(i => s"id=$i")>@content</div>
+<div @id.map(i => s"id=$i") @classes.map(c => s"class=$c")>@content</div>

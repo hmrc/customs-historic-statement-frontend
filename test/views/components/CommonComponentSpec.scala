@@ -19,65 +19,79 @@ package views.components
 import base.SpecBase
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.jsoup.select.Elements
 import play.api.Application
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import views.html.components.{dd, div, dl, dt, h2_extraContent}
+import views.html.components.{dd, div, dl, dt, h2_extraContent, h3}
 
 class CommonComponentSpec extends SpecBaseWithSetup {
 
-  val tagElements: Seq[String] = List("div", "dl", "dt", "dd", "h2")
+  "CommonComponentSpec" must {
+    tagElements.foreach { tagElement =>
+      s"contain the right content and render $tagElement component correctly" when {
 
-  tagElements.foreach { tagElement =>
-    s"$tagElement component" must {
+        "id is supplied" in new SpecBaseWithSetup {
+          override def id: Option[String] = Some(myId)
 
-      "have an id when supplied" in new SpecBaseWithSetup {
-        override def id: Option[String] = Some(myId)
+          document.select(tagElement).hasAttr(idElement) mustBe true
+          document.select(tagElement).attr(idElement) mustBe myId
+        }
 
-        document.select(tagElement).hasAttr(idElement) mustBe true
-        document.select(tagElement).attr(idElement) mustBe myId
-      }
+        "id is not supplied" in new SpecBaseWithSetup {
+          override def id: Option[String] = None
 
-      "have no id when not supplied" in new SpecBaseWithSetup {
-        override def id: Option[String] = None
+          document.select(tagElement).hasAttr(idElement) mustBe false
+        }
 
-        document.select(tagElement).hasAttr(idElement) mustBe false
-      }
+        "a class is supplied" in new SpecBaseWithSetup {
+          override def classes: Option[String] = Some(myClass)
 
-      "have a class when supplied" in new SpecBaseWithSetup {
-        override def classes: Option[String] = Some(myClass)
+          document.select(tagElement).hasAttr(classElement) mustBe true
+          document.select(tagElement).attr(classElement) mustBe myClass
+        }
 
-        document.select(tagElement).hasAttr(classElement) mustBe true
-        document.select(tagElement).attr(classElement) mustBe myClass
-      }
+        "a class is not supplied" in new SpecBaseWithSetup {
+          override def classes: Option[String] = None
 
-      "have no class when not supplied" in new SpecBaseWithSetup {
-        override def classes: Option[String] = None
+          tagElements.foreach { tag =>
+            val hasClassAttr = document.select(tag).hasAttr(classElement)
 
-        tagElements.foreach { tag =>
-          val hasClassAttr = document.select(tag).hasAttr(classElement)
-
-          if (tag == "h2") {
-            hasClassAttr mustBe true
-          } else {
-            hasClassAttr mustBe false
+            if (tag == "h2" || tag == "h3") {
+              hasClassAttr mustBe true
+            } else {
+              hasClassAttr mustBe false
+            }
           }
         }
-      }
 
-      "contain the correct content" in new SpecBaseWithSetup {
-        override def content: Html = Html(myContent)
+        "contain the correct content" in new SpecBaseWithSetup {
+          override def content: Html = Html(myContent)
 
-        document.select(tagElement).html() mustBe myContent
+          document.select(tagElement).html() mustBe myContent
+        }
       }
     }
-  }
 
-  "h2_extraContent component" must {
-    "contain the correct extra content" in new SpecBaseWithSetup {
-      override def extraContent: Option[String] = Some(myExtraContent)
+    "render h2_extraContent component correctly" when {
+      "extra content is supplied" in new SpecBaseWithSetup {
+        override def extraContent: Option[String] = Some(myExtraContent)
 
-      document.select("h2").html() must include(myExtraContent)
+        val h2Elements: Elements = document.select("h2")
+
+        h2Elements.get(0).html() must include(myContent)
+        h2Elements.get(0).html() must include(myExtraContent)
+      }
+
+      "extra content is not supplied" in new SpecBaseWithSetup {
+        override def extraContent: Option[String] = None
+
+        val h2Elements: Elements = document.select("h2")
+
+        h2Elements.size() mustBe 1
+        h2Elements.get(0).html() mustBe myContent
+        h2Elements.get(0).html() must not include myExtraContent
+      }
     }
   }
 }
@@ -108,13 +122,17 @@ trait SpecBaseWithSetup extends SpecBase {
   protected val dt: dt = app.injector.instanceOf[dt]
   protected val dd: dd = app.injector.instanceOf[dd]
   protected val h2_extraContent: h2_extraContent = app.injector.instanceOf[h2_extraContent]
+  protected val h3: h3 = app.injector.instanceOf[h3]
+
+  val tagElements: Seq[String] = List("div", "dl", "dt", "dd", "h2", "h3")
 
   protected val html: Html = Html(
     div(content, classes = classes, id = id).toString +
       dl(content, classes = classes, id = id).toString +
-      dt(content, classes = classes, id = id).toString +
-      dd(content, classes = classes, id = id).toString +
-      h2_extraContent(myContent, id, classes.getOrElse("govuk-heading-m"), extraContent).toString
+      dt(content, classes = classes, id = id) +
+      dd(content, classes = classes, id = id) +
+      h2_extraContent(myContent, id, classes.getOrElse("govuk-heading-m"), extraContent) +
+      h3(myContent, classes = classes.getOrElse("govuk-heading-s"), id = id)
   )
 
   protected lazy val document: Document = Jsoup.parse(html.toString)
