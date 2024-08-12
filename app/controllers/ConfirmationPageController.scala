@@ -47,45 +47,45 @@ class ConfirmationPageController @Inject()(override val messagesApi: MessagesApi
   extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  implicit request =>
 
-      val dates = new CheckYourAnswersHelper(request.userAnswers)
-      val returnLink = routes.ConfirmationPageController.returnToStatementsPage(fileRole).url
+    val dates = new CheckYourAnswersHelper(request.userAnswers)
+    val returnLink = routes.ConfirmationPageController.returnToStatementsPage(fileRole).url
 
-      for {
-        _ <- sessionRepository.set(userAnswersWithNoHistoricDates(fileRole, request))
-        email <- retrieveEmail(request)
-      } yield Ok(
+    retrieveEmail(request).map { email =>
+      Ok(
         view(email,
           fileRole,
           returnLink,
           dates.dateRows(fileRole).getOrElse(emptyString))
       )
+    }
+}
+
+def returnToStatementsPage(fileRole: FileRole): Action[AnyContent] = {
+  (identify andThen getData andThen requireData).async {
+    implicit request =>
+
+      for {
+        _ <- sessionRepository.set(userAnswersWithNoHistoricDates(fileRole, request)).recover { case _ => true }
+      } yield {
+        Redirect(appConfig.returnLink(fileRole, request.userAnswers))
+      }
+  }
+}
+
+private def userAnswersWithNoHistoricDates(fileRole: FileRole,
+                                           request: DataRequest[AnyContent]): UserAnswers =
+  request.userAnswers.remove(HistoricDateRequestPage(fileRole)) match {
+    case scala.util.Success(value) => value
+    case _ => request.userAnswers
   }
 
-  def returnToStatementsPage(fileRole: FileRole): Action[AnyContent] = {
-    (identify andThen getData andThen requireData).async {
-      implicit request =>
-
-        for {
-          _ <- sessionRepository.clear(request.internalId).recover { case _ => true }
-        } yield {
-          Redirect(appConfig.returnLink(fileRole, request.userAnswers))
-        }
-    }
-  }
-
-  private def userAnswersWithNoHistoricDates(fileRole: FileRole,
-                                             request: DataRequest[AnyContent]): UserAnswers =
-    request.userAnswers.remove(HistoricDateRequestPage(fileRole)) match {
-      case scala.util.Success(value) => value
-      case _ => request.userAnswers
-    }
-
-  private def retrieveEmail(request: DataRequest[AnyContent])(implicit hc: HeaderCarrier): Future[Option[Email]] =
-    customsDataStoreConnector.getEmail(request.eori).map {
-      case Right(email) => Some(email)
-      case Left(_) => None
-    }.recover { case _ => None }
+private def retrieveEmail(request: DataRequest[AnyContent])(implicit hc: HeaderCarrier): Future[Option[Email]] =
+  customsDataStoreConnector.getEmail(request.eori).map {
+    case Right(email) => Some(email)
+    case Left(_) => None
+  }.recover { case _ => None }
 
 }
+

@@ -18,7 +18,7 @@ package connectors
 
 import base.SpecBase
 import config.FrontendAppConfig
-import models.{EoriHistory, UndeliverableEmail, UndeliverableInformation, UnverifiedEmail}
+import models.{EoriHistory, UndeliverableEmail, UndeliverableInformation, UnverifiedEmail, EmailVerifiedResponse, EmailUnverifiedResponse}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.Helpers.*
@@ -150,10 +150,37 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
     }
   }
 
+  // "verifiedEmail" must {
+  //   "return verified email when email-display api call is successful" in new Setup {
+
+  //     when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
+  //       .thenReturn(Future.successful(emailVerifiedRes))
+
+  //     when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+
+  //     connector.verifiedEmail.map {
+  //       _ mustBe emailVerifiedRes
+  //     }
+  //   }
+
+  //   "return none for verified email when exception occurs while calling email-display api" in new Setup {
+
+  //     when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
+  //       .thenReturn(Future.failed(new InternalServerException("error occurred")))
+
+  //     when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+
+  //     connector.verifiedEmail.map {
+  //       _.verifiedEmail mustBe empty
+  //     }
+  //   }
+  // }
+
   trait Setup {
     val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
     val eori: String = "GB11111"
+    val emailId = "test@test.com"
 
     val app = applicationBuilder().overrides(
       bind[HttpClientV2].to(mockHttpClient),
@@ -162,6 +189,9 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
     val mockAppConfig = app.injector.instanceOf[FrontendAppConfig]
     val customsDataStoreConnector = app.injector.instanceOf[CustomsDataStoreConnector]
+
+    val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
+    val emailVerifiedRes: EmailVerifiedResponse = EmailVerifiedResponse(Some(emailId))
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }

@@ -17,7 +17,7 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.{EmailUnverifiedResponse, EmailVerifiedResponse, FileRole, HistoricDocumentRequest}
+import models.{FileRole, HistoricDocumentRequest}
 import play.api.http.Status.NO_CONTENT
 import play.mvc.Http.Status
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -49,19 +49,5 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: FrontendAppConfig,
       .execute[HttpResponse]
       .map(_.status == Status.OK)
       .recover { case _ => false }
-  }
-
-  def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
-    val unVerifiedEmailEndpoint = s"${appConfig.customsFinancialsApi}/subscriptions/unverified-email-display"
-
-    httpClient.get(url"$unVerifiedEmailEndpoint")
-      .execute[EmailUnverifiedResponse]
-      .map(res => res.unVerifiedEmail)
-  }
-
-  def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] = {
-    val emailDisplayEndpoint = s"${appConfig.customsFinancialsApi}/subscriptions/email-display"
-
-    httpClient.get(url"$emailDisplayEndpoint").execute[EmailVerifiedResponse]
   }
 }
