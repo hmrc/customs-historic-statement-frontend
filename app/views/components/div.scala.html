@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,8 @@
  * limitations under the License.
  *@
 
-@import utils.Utils.emptyString
-@import utils.Utils.emptyStringWithSpace
-
 @this()
 
-@(msg: String,
-  id: Option[String] = None,
-  classes: String="govuk-heading-m",
-  extraContent: Option[String] = None
-)(implicit messages: Messages)
+@(content: Html, classes: Option[String] = None, id: Option[String] = None)
 
-<h2 @{id.fold(emptyString)(id => s"id=$id")} class="@classes">@{
- messages(msg) + (if (extraContent.isDefined) emptyStringWithSpace + extraContent.get else emptyString)
- }</h2>
+<div @id.map(i => s"id=$i") @classes.map(c => s"class=$c")>@content</div>

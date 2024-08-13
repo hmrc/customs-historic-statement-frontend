@@ -15,19 +15,12 @@
  *@
 
 @import viewmodels.DutyDefermentAccountViewModel
-@import helpers.Formatters
-@import models.DDStatementType.Supplementary
-@import models.DDStatementType.Excise
-@import models.FileFormat.Pdf
+@import viewmodels.DutyDefermentAccountComponent
 @import views.html.templates.Layout
 
 @this(
     layout: Layout,
-    missing_documents_guidance: components.missing_documents_guidance,
-    duty_deferment_file: components.duty_deferment_file,
     h1: components.h1,
-    h2: components.h2,
-    h3: components.h3,
     p: components.p
 )
 
@@ -35,60 +28,32 @@
 
 @layout(pageTitle = Some(messages("cf.account.detail.requested.title")), backLinkUrl = Some(backLink), dutyDeferment = true) {
 
-    <h2 class="govuk-caption-xl" id="eori-heading">
-        @if(model.isNiAccount) {
-            @messages("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
-            @{model.accountNumber}
-            } else {
-            @messages("cf.account.detail.requested.deferment-account-secondary-heading")
-            @{model.accountNumber}
-          }
-    </h2>
+  @model.component.accountHeading
 
-    @h1(id = Some("requested-statements-heading"),
-        msg = messages("cf.account.detail.requested.deferment-account-heading"),
-        classes = "govuk-heading-xl govuk-!-margin-bottom-3")
+  @h1(id = Some("requested-statements-heading"),
+    msg = messages("cf.account.detail.requested.deferment-account-heading"),
+    classes = "govuk-heading-xl govuk-!-margin-bottom-3")
 
+  @p(classes="govuk-body govuk-!-margin-bottom-8",
+    id=Some("requested-statements-available-text"),
+    content = Html(messages("cf.account.detail.requested.deferment-account-statements-available.text")))
 
-    @p(classes="govuk-body govuk-!-margin-bottom-8",
-        id=Some("requested-statements-available-text"),
-        content = Html(messages("cf.account.detail.requested.deferment-account-statements-available.text")))
+  @for(data <- model.statementsData) {
 
-    @for(historyIndex <- model.statementsForAllEoris.indices.reverse) {
-        @for((group, groupIndex) <- model.statementsForAllEoris(historyIndex).groupsRequested.reverse.zipWithIndex) {
-            <div id="requested-statements-list-@{historyIndex}-@{group.year}-@{group.month}" class="statement-list">
+    @defining(DutyDefermentAccountComponent(data)) { ddAccountComponent =>
 
-                @if(groupIndex == 0) {
-                    @h2(id=Some(s"historic-eori-$historyIndex"), classes="govuk-heading-s", msg=messages("cf.account.details.previous-eori", model.statementsForAllEoris(historyIndex).eoriHistory.eori))
-                }
-                @h3(id=Some(s"requested-statements-month-heading-${historyIndex}-${group.year}-${group.month}"), msg=Formatters.dateAsMonthAndYear(group.monthAndYear))
+      <div id="requested-statements-list-@{data.historyIndex}-@{data.group.year}-@{data.group.month}"
+         class="statement-list">
 
-                <dl class="govuk-summary-list" >
-                    @for((period, index) <- group.periods.reverse.zipWithIndex) {
-                        <div class="govuk-summary-list__row" id="requested-statements-list-@{historyIndex}-@{group.year}-@{group.month}-row-@{index}">
-                            <dt id="requested-statements-list-@{historyIndex}-@{group.year}-@{group.month}-row-@{index}-date-cell" class="govuk-summary-list__value">
-                                @if(period.defermentStatementType == Supplementary) {
-                                    @messages("cf.account.detail.row.supplementary.info")
-                                } else {
-                                    @if(period.defermentStatementType == Excise) {
-                                        @messages("cf.account.details.row.excise.info")
-                                    } else {
-                                        @messages("cf.account.detail.period-group",
-                                        Formatters.dateAsDay(period.startDate),
-                                        Formatters.dateAsDay(period.endDate),
-                                        Formatters.dateAsMonth(period.endDate))
-                                    }
-                                }
-                            </dt>
-                            <dd id="requested-statements-list-@{historyIndex}-@{group.year}-@{group.month}-row-@{index}-link-cell" class="govuk-summary-list__actions">
-                                @duty_deferment_file(period, Pdf, s"requested-statements-list-${historyIndex}-${group.year}-${group.month}-row-${index}")
-                            </dd>
-                        </div>
-                    }
-                </dl>
-            </div>
-        }
+        @ddAccountComponent.eoriHeading
+
+        @ddAccountComponent.monthHeading
+
+        @ddAccountComponent.statements
+
+      </div>
     }
+  }
 
-    @missing_documents_guidance("statement")
+  @model.component.missingDocumentsGuidance
 }
