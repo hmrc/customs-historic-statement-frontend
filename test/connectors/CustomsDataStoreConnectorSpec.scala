@@ -150,31 +150,62 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
     }
   }
 
-  // "verifiedEmail" must {
-  //   "return verified email when email-display api call is successful" in new Setup {
+  "retrieveUnverifiedEmail" must {
+    "return EmailUnverifiedResponse with unverified email value" in new Setup {
 
-  //     when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
-  //       .thenReturn(Future.successful(emailVerifiedRes))
+      when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(emailUnverifiedRes))
 
-  //     when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
-  //     connector.verifiedEmail.map {
-  //       _ mustBe emailVerifiedRes
-  //     }
-  //   }
+      running(app) {
+        val result = await(customsDataStoreConnector.retrieveUnverifiedEmail)
+        result mustBe emailUnverifiedRes
+      }
+    }
 
-  //   "return none for verified email when exception occurs while calling email-display api" in new Setup {
+    "return EmailUnverifiedResponse with None for unverified email if there is an error while" +
+      " fetching response from api" in new Setup {
 
-  //     when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
-  //       .thenReturn(Future.failed(new InternalServerException("error occurred")))
+      when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.failed(new RuntimeException("error occurred")))
 
-  //     when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+      when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
 
-  //     connector.verifiedEmail.map {
-  //       _.verifiedEmail mustBe empty
-  //     }
-  //   }
-  // }
+      running(app) {
+        val result = await(customsDataStoreConnector.retrieveUnverifiedEmail)
+        result.unVerifiedEmail mustBe empty
+      }
+    }
+  }
+
+  "verifiedEmail" must {
+    "return verified email when email-display api call is successful" in new Setup {
+
+      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(emailVerifiedRes))
+
+      when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+
+      running(app) {
+        val result = await(customsDataStoreConnector.verifiedEmail)
+        result mustBe emailVerifiedRes
+      }
+    }
+
+    "return none for verified email when exception occurs while calling email-display api" in new Setup {
+
+      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.failed(UpstreamErrorResponse("error occurred", 500, 500)))
+
+      when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+
+      running(app) {
+        val result = await(customsDataStoreConnector.verifiedEmail)
+        result.verifiedEmail mustBe empty
+      }
+    }
+  }
 
   trait Setup {
     val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
