@@ -24,7 +24,7 @@ import play.api.libs.json.Json
 import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps, UpstreamErrorResponse}
-import play.api.http.Status.NOT_FOUND
+import play.api.http.Status.{NOT_FOUND, INTERNAL_SERVER_ERROR}
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
@@ -196,7 +196,7 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
     "return none for verified email when exception occurs while calling email-display api" in new Setup {
 
       when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
-        .thenReturn(Future.failed(UpstreamErrorResponse("error occurred", 500, 500)))
+        .thenReturn(Future.failed(UpstreamErrorResponse("error occurred", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)))
 
       when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
 
