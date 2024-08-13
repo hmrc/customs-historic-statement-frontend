@@ -23,17 +23,17 @@ import models.{DutyDefermentStatementPeriod, DutyDefermentStatementPeriodsByMont
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import utils.Utils._
-
+import views.html.components.duty_deferment_file
 
 case class DutyDefermentAccountRowContent(statement: DutyDefermentAccountStatement,
                                           period: DutyDefermentStatementPeriod,
                                           index: Int)
 
-case class DutyDefermentAccountComponent(renderAccountHeading: HtmlFormat.Appendable,
-                                         renderEoriHeading: DutyDefermentAccountStatement => HtmlFormat.Appendable,
-                                         renderMonthHeading: DutyDefermentAccountStatement => HtmlFormat.Appendable,
-                                         renderStatements: DutyDefermentAccountStatement => HtmlFormat.Appendable,
-                                         renderMissingDocumentsGuidance: HtmlFormat.Appendable)
+case class DutyDefermentAccountComponent(accountHeading: HtmlFormat.Appendable,
+                                         eoriHeading: HtmlFormat.Appendable,
+                                         monthHeading: HtmlFormat.Appendable,
+                                         statements: HtmlFormat.Appendable,
+                                         missingDocumentsGuidance: HtmlFormat.Appendable)
 
 case class DutyDefermentAccountStatement(historyIndex: Int,
                                          groupIndex: Int,
@@ -41,30 +41,32 @@ case class DutyDefermentAccountStatement(historyIndex: Int,
                                          group: DutyDefermentStatementPeriodsByMonth,
                                          periodIndex: Int,
                                          period: DutyDefermentStatementPeriod,
-                                         periodsWithIndex: Seq[(DutyDefermentStatementPeriod, Int)])
-
-case class DutyDefermentAccountViewModel(accountNumber: String,
-                                         statementsForAllEoris: Seq[DutyDefermentStatementsForEori],
+                                         periodsWithIndex: Seq[(DutyDefermentStatementPeriod, Int)],
                                          isNiAccount: Boolean,
+                                         accountNumber: String)
+
+case class DutyDefermentAccountViewModel(statementsForAllEoris: Seq[DutyDefermentStatementsForEori],
                                          statementsData: Seq[DutyDefermentAccountStatement],
                                          component: DutyDefermentAccountComponent)
 
 object DutyDefermentAccountViewModel {
 
-  def apply(accountNumber: String,
-            statementsForAllEoris: Seq[DutyDefermentStatementsForEori],
-            isNiAccount: Boolean)(implicit messages: Messages): DutyDefermentAccountViewModel = {
+  def apply(accountNumber: String, statementsForAllEoris: Seq[DutyDefermentStatementsForEori], isNiAccount: Boolean)
+           (implicit messages: Messages): DutyDefermentAccountViewModel = {
+
+    val statementsData = createStatements(statementsForAllEoris, isNiAccount, accountNumber)
+    val components = DutyDefermentAccountComponent(statementsData.head)
 
     DutyDefermentAccountViewModel(
-      accountNumber,
       statementsForAllEoris,
-      isNiAccount,
-      createStatements(statementsForAllEoris),
-      createViewComponents(statementsForAllEoris, isNiAccount, accountNumber)
+      statementsData,
+      components
     )
   }
 
-  private def createStatements(statementsForAllEoris: Seq[DutyDefermentStatementsForEori]
+  private def createStatements(statementsForAllEoris: Seq[DutyDefermentStatementsForEori],
+                               isNiAccount: Boolean,
+                               accountNumber: String
                               ): Seq[DutyDefermentAccountStatement] = {
     for {
       (eorisStatements, historyIndex) <- statementsForAllEoris.zipWithIndex.reverse
@@ -77,26 +79,68 @@ object DutyDefermentAccountViewModel {
       group,
       periodIndex,
       period,
-      group.periods.reverse.zipWithIndex
+      group.periods.reverse.zipWithIndex,
+      isNiAccount,
+      accountNumber
     )
   }
+}
 
-  private def createViewComponents(statementsForAllEoris: Seq[DutyDefermentStatementsForEori],
-                                   isNiAccount: Boolean,
-                                   accountNumber: String)
-                                  (implicit messages: Messages): DutyDefermentAccountComponent = {
+object DutyDefermentAccountComponent {
+
+  def apply(statement: DutyDefermentAccountStatement)(implicit messages: Messages): DutyDefermentAccountComponent = {
 
     DutyDefermentAccountComponent(
-      accountHeading(isNiAccount, accountNumber),
-      eoriHeading(statementsForAllEoris),
-      monthHeading,
-      statements,
-      missingDocumentsGuidance
+      accountHeading = createAccountHeading(statement.isNiAccount, statement.accountNumber),
+      eoriHeading = createEoriHeading(statement),
+      monthHeading = createMonthHeading(statement),
+      statements = createStatements(statement),
+      missingDocumentsGuidance = createMissingDocumentsGuidance()
     )
   }
 
-  private def statements(statement: DutyDefermentAccountStatement)
-                        (implicit messages: Messages): HtmlFormat.Appendable = {
+  private def createAccountHeading(isNiAccount: Boolean, accountNumber: String)
+                                  (implicit messages: Messages): HtmlFormat.Appendable = {
+
+    val msgKey = if (isNiAccount) {
+      "cf.account.detail.requested.deferment-account-secondary-heading.NiAccount"
+    } else {
+      "cf.account.detail.requested.deferment-account-secondary-heading"
+    }
+
+    h2Component(
+      msg = msgKey,
+      id = Some("eori-heading"),
+      classes = "govuk-caption-xl",
+      extraContent = Some(accountNumber)
+    )
+  }
+
+  private def createEoriHeading(statement: DutyDefermentAccountStatement)
+                               (implicit messages: Messages): HtmlFormat.Appendable = {
+
+    val eori = statement.eorisStatements.head.eoriHistory.eori
+
+    h2Component(
+      id = Some(s"historic-eori-${statement.historyIndex}"),
+      classes = "govuk-heading-s",
+      msg = messages("cf.account.details.previous-eori", eori)
+    )
+  }
+
+  private def createMonthHeading(statement: DutyDefermentAccountStatement)
+                                (implicit messages: Messages): HtmlFormat.Appendable = {
+    h3Component(
+      id = Some(s"requested-statements-month-heading-" +
+        s"${statement.historyIndex}-" +
+        s"${statement.group.year}-${statement.group.month}"),
+
+      msg = Formatters.dateAsMonthAndYear(statement.group.monthAndYear)
+    )
+  }
+
+  private def createStatements(statement: DutyDefermentAccountStatement)
+                              (implicit messages: Messages): HtmlFormat.Appendable = {
 
     val result = statement.periodsWithIndex.map { case (period, index) =>
       statementRow(DutyDefermentAccountRowContent(statement, period, index))
@@ -108,9 +152,12 @@ object DutyDefermentAccountViewModel {
     )
   }
 
+  private def createMissingDocumentsGuidance()(implicit messages: Messages): HtmlFormat.Appendable = {
+    missingDocumentsGuidanceComponent("statement")
+  }
+
   private def statementRow(data: DutyDefermentAccountRowContent)
                           (implicit messages: Messages): HtmlFormat.Appendable = {
-
     divComponent(
       content = HtmlFormat.fill(List(periodDetails(data), dutyDefermentFile(data))),
       classes = Some("govuk-summary-list__row"),
@@ -122,7 +169,6 @@ object DutyDefermentAccountViewModel {
 
   private def periodDetails(data: DutyDefermentAccountRowContent)
                            (implicit messages: Messages): HtmlFormat.Appendable = {
-
     dtComponent(
       content = preparePeriodDetails(data.period),
       classes = Some("govuk-summary-list__value"),
@@ -135,7 +181,6 @@ object DutyDefermentAccountViewModel {
 
   private def dutyDefermentFile(data: DutyDefermentAccountRowContent)
                                (implicit messages: Messages): HtmlFormat.Appendable = {
-
     ddComponent(
       content = prepareDutyDefermentFile(data),
       classes = Some("govuk-summary-list__actions"),
@@ -143,49 +188,6 @@ object DutyDefermentAccountViewModel {
         s"${data.statement.historyIndex}-${data.statement.group.year}-" +
         s"${data.statement.group.month}-row-${data.index}-link-cell")
     )
-  }
-
-  private def accountHeading(isNiAccount: Boolean, accountNumber: String)
-                            (implicit messages: Messages): HtmlFormat.Appendable = {
-
-    val msgKey = if (isNiAccount) {
-      "cf.account.detail.requested.deferment-account-secondary-heading.NiAccount"
-    } else {
-      "cf.account.detail.requested.deferment-account-secondary-heading"
-    }
-
-    h2_extraContentComponent(
-      msg = msgKey,
-      id = Some("eori-heading"),
-      classes = "govuk-caption-xl",
-      extraContent = Some(accountNumber)
-    )
-  }
-
-  private def eoriHeading(statementsForAllEoris: Seq[DutyDefermentStatementsForEori])
-                         (implicit messages: Messages): DutyDefermentAccountStatement => HtmlFormat.Appendable = {
-
-    data => {
-      val eori = statementsForAllEoris(data.historyIndex).eoriHistory.eori
-      h2Component(
-        id = Some(s"historic-eori-${data.historyIndex}"),
-        classes = "govuk-heading-s",
-        msg = messages("cf.account.details.previous-eori", eori)
-      )
-    }
-  }
-
-  private def monthHeading(data: DutyDefermentAccountStatement)
-                          (implicit messages: Messages): HtmlFormat.Appendable = {
-
-    h3Component(
-      id = Some(s"requested-statements-month-heading-${data.historyIndex}-${data.group.year}-${data.group.month}"),
-      msg = Formatters.dateAsMonthAndYear(data.group.monthAndYear)
-    )
-  }
-
-  private def missingDocumentsGuidance(implicit messages: Messages): HtmlFormat.Appendable = {
-    missingDocumentsGuidanceComponent("statement")
   }
 
   private def preparePeriodDetails(period: DutyDefermentStatementPeriod)
@@ -209,8 +211,7 @@ object DutyDefermentAccountViewModel {
 
   private def prepareDutyDefermentFile(data: DutyDefermentAccountRowContent)
                                       (implicit messages: Messages): HtmlFormat.Appendable = {
-
-    dutyDefermentFileComponent(
+    new duty_deferment_file().apply(
       period = data.period,
       fileFormat = Pdf,
       idPrefix = s"requested-statements-list-" +

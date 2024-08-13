@@ -27,6 +27,7 @@ import play.twirl.api.HtmlFormat
 import utils.Utils._
 import viewmodels.{DutyDefermentAccountRowContent, DutyDefermentAccountStatement, DutyDefermentAccountViewModel}
 import views.html.DutyDefermentRequestedStatements
+import views.html.components.duty_deferment_file
 
 import java.time.LocalDate
 
@@ -63,9 +64,8 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
     "display correct content" when {
       "calling renderNiAccountHeading component for Northern Ireland accounts" in new Setup {
 
-        val result: HtmlFormat.Appendable = viewModel.component.renderAccountHeading
-
-        val expectedHtml: String = h2_extraContentComponent(
+        val result: HtmlFormat.Appendable = viewModel.component.accountHeading
+        val expectedHtml: String = h2Component(
           msg = "cf.account.detail.requested.deferment-account-secondary-heading.NiAccount",
           id = Some("eori-heading"),
           classes = "govuk-caption-xl",
@@ -79,12 +79,12 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
         val viewModelNiFalse: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
           accountNumber,
-          statementsForAllEoris = Seq.empty,
+          statementsForAllEoris = Seq(dutyDefermentStatementsForEori),
           isNiAccount = false
         )
 
-        val result: HtmlFormat.Appendable = viewModelNiFalse.component.renderAccountHeading
-        val expectedHtml: String = h2_extraContentComponent(
+        val result: HtmlFormat.Appendable = viewModelNiFalse.component.accountHeading
+        val expectedHtml: String = h2Component(
           msg = "cf.account.detail.requested.deferment-account-secondary-heading",
           id = Some("eori-heading"),
           classes = "govuk-caption-xl",
@@ -96,8 +96,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
       "calling renderEoriHeading component" in new Setup {
 
-        val result: HtmlFormat.Appendable = viewModel.component.renderEoriHeading(viewModel.statementsData.last)
-
+        val result: HtmlFormat.Appendable = viewModel.component.eoriHeading
         val expectedHtml: String = h2Component(
           id = Some("historic-eori-0"),
           classes = "govuk-heading-s",
@@ -109,8 +108,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
       "calling renderMonthHeading component" in new Setup {
 
-        val result: HtmlFormat.Appendable = viewModel.component.renderMonthHeading(viewModel.statementsData.head)
-
+        val result: HtmlFormat.Appendable = viewModel.component.monthHeading
         val expectedHtml: String = h3Component(
           id = Some(s"requested-statements-month-heading-0-2018-2"),
           msg = Formatters.dateAsMonthAndYear(monthAndYear)
@@ -121,8 +119,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
       "calling renderStatements component" in new Setup {
 
-        val result: HtmlFormat.Appendable = viewModel.component.renderStatements(statement)
-
+        val result: HtmlFormat.Appendable = viewModel.component.statements
         val expectedPeriodDetailsHtml: String = statementRowContent.period.defermentStatementType match {
           case Supplementary => msg("cf.account.detail.row.supplementary.info")
           case Excise => msg("cf.account.details.row.excise.info")
@@ -141,7 +138,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
                   id = Some(s"requested-statements-list-$rowId-date-cell")
                 ),
                 ddComponent(
-                  content = dutyDefermentFileComponent(statementPeriod, Pdf, s"requested-statements-list-$rowId"),
+                  content = new duty_deferment_file().apply(statementPeriod, Pdf, s"requested-statements-list-$rowId"),
                   classes = Some("govuk-summary-list__actions"),
                   id = Some(s"requested-statements-list-$rowId-link-cell")
                 )
@@ -154,31 +151,6 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
         ).toString()
 
         result.toString mustEqual expectedHtml
-      }
-
-      "handle different statement types in preparePeriodDetails" in new Setup {
-
-        val renderStatement: DutyDefermentAccountStatement => HtmlFormat.Appendable =
-          viewModel.component.renderStatements
-
-        val supplementaryPeriod: DutyDefermentStatementPeriod =
-          basePeriod.copy(fileRole = C79Certificate, defermentStatementType = Supplementary)
-
-        val supplementaryResult: HtmlFormat.Appendable = renderStatement(createTestStatement(supplementaryPeriod))
-        val supplementaryMessage: String = msg("cf.account.detail.row.supplementary.info")
-        supplementaryResult.body must include(supplementaryMessage)
-
-        val excisePeriod: DutyDefermentStatementPeriod = basePeriod.copy(defermentStatementType = Excise)
-        val exciseResult: HtmlFormat.Appendable = renderStatement(createTestStatement(excisePeriod))
-        val exciseMessage: String = msg("cf.account.details.row.excise.info")
-        exciseResult.body must include(exciseMessage)
-
-        val result: HtmlFormat.Appendable = renderStatement(createTestStatement(basePeriod))
-        val expectedMessage: String = msg("cf.account.detail.period-group",
-          Formatters.dateAsDay(basePeriod.startDate),
-          Formatters.dateAsDay(basePeriod.endDate),
-          Formatters.dateAsMonth(basePeriod.endDate))
-        result.body must include(expectedMessage)
       }
     }
   }
@@ -312,20 +284,5 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
     protected def view(isNiAccount: Boolean = false): Document = Jsoup.parse(
       app.injector.instanceOf[DutyDefermentRequestedStatements].
         apply(dutyDefermentModel(isNiAccount), config.returnLink("dutyDeferment")).body)
-
-    protected def createTestStatement(period: DutyDefermentStatementPeriod): DutyDefermentAccountStatement = {
-      DutyDefermentAccountStatement(
-        historyIndex = 0,
-        groupIndex = 0,
-        eorisStatements = Seq.empty,
-        group = DutyDefermentStatementPeriodsByMonth(
-          monthAndYear = period.monthAndYear,
-          periods = Seq(period)
-        ),
-        periodIndex = 0,
-        period = period,
-        periodsWithIndex = Seq((period, 0))
-      )
-    }
   }
 }

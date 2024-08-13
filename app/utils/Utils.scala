@@ -17,6 +17,7 @@
 package utils
 
 import views.html.components._
+import views.html.components.description_list.{dd, dl, dt}
 
 object Utils {
   val emptyString = ""
@@ -24,7 +25,6 @@ object Utils {
   val hyphen = "-"
 
   val h2Component = new h2()
-  val h2_extraContentComponent = new h2_extraContent()
   val h3Component = new h3()
   val pComponent = new p()
 
@@ -36,6 +36,5 @@ object Utils {
   val spanComponent = new span()
   val spanLinkComponent = new span_link()
 
-  val dutyDefermentFileComponent = new duty_deferment_file()
   val missingDocumentsGuidanceComponent = new missing_documents_guidance(h2Component, pComponent)
 }

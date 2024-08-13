@@ -15,6 +15,7 @@
  *@
 
 @import viewmodels.DutyDefermentAccountViewModel
+@import viewmodels.DutyDefermentAccountComponent
 @import views.html.templates.Layout
 
 @this(
@@ -27,7 +28,7 @@
 
 @layout(pageTitle = Some(messages("cf.account.detail.requested.title")), backLink = Some(backLink), dutyDeferment = true) {
 
-  @model.component.renderAccountHeading
+  @model.component.accountHeading
 
   @h1(id = Some("requested-statements-heading"),
     msg = messages("cf.account.detail.requested.deferment-account-heading"),
@@ -37,19 +38,22 @@
     id=Some("requested-statements-available-text"),
     content = Html(messages("cf.account.detail.requested.deferment-account-statements-available.text")))
 
-  @for(data <- model.statementsData) {
+@for(data <- model.statementsData) {
+
+  @defining(DutyDefermentAccountComponent(data)) { ddAccountComponent =>
 
     <div id="requested-statements-list-@{data.historyIndex}-@{data.group.year}-@{data.group.month}"
          class="statement-list">
 
-        @model.component.renderEoriHeading(data)
+      @ddAccountComponent.eoriHeading
 
-        @model.component.renderMonthHeading(data)
+      @ddAccountComponent.monthHeading
 
-        @model.component.renderStatements(data)
+      @ddAccountComponent.statements
 
     </div>
+  }
 }
 
-  @model.component.renderMissingDocumentsGuidance
+  @model.component.missingDocumentsGuidance
 }
