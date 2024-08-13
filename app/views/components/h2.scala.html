@@ -15,6 +15,7 @@
  *@
 
 @import utils.Utils.emptyString
+@import utils.Utils.emptyStringWithSpace
 
 @this()
 
@@ -25,5 +26,5 @@
 )(implicit messages: Messages)
 
 <h2 @{id.fold(emptyString)(id => s"id=$id")} class="@classes">@{
- messages(msg) + (if (extraContent.isDefined) " " + extraContent.get else "")
+ messages(msg) + (if (extraContent.isDefined) emptyStringWithSpace + extraContent.get else emptyString)
  }</h2>

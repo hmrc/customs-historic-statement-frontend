@@ -21,6 +21,7 @@ import views.html.components.description_list.{dd, dl, dt}
 
 object Utils {
   val emptyString = ""
+  val emptyStringWithSpace = " "
   val comma = ","
   val hyphen = "-"
 

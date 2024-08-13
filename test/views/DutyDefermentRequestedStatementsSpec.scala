@@ -152,6 +152,30 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
         result.toString mustEqual expectedHtml
       }
+
+      "handle different statement types in preparePeriodDetails" ignore new Setup {
+
+        val renderStatement: HtmlFormat.Appendable = viewModel.component.statements
+
+        val supplementaryPeriod: DutyDefermentStatementPeriod =
+          basePeriod.copy(fileRole = C79Certificate, defermentStatementType = Supplementary)
+
+        val supplementaryResult: HtmlFormat.Appendable = renderStatement
+        val supplementaryMessage: String = msg("cf.account.detail.row.supplementary.info")
+        supplementaryResult.body must include(supplementaryMessage)
+
+        val excisePeriod: DutyDefermentStatementPeriod = basePeriod.copy(defermentStatementType = Excise)
+        val exciseResult: HtmlFormat.Appendable = renderStatement
+        val exciseMessage: String = msg("cf.account.details.row.excise.info")
+        exciseResult.body must include(exciseMessage)
+
+        val result: HtmlFormat.Appendable = renderStatement
+        val expectedMessage: String = msg("cf.account.detail.period-group",
+          Formatters.dateAsDay(basePeriod.startDate),
+          Formatters.dateAsDay(basePeriod.endDate),
+          Formatters.dateAsMonth(basePeriod.endDate))
+        result.body must include(expectedMessage)
+      }
     }
   }
 
@@ -260,7 +284,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       isNiAccount = true
     )
 
-    val basePeriod: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
+    protected val basePeriod: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       fileRole = DutyDefermentStatement,
       defermentStatementType = Weekly,
       monthAndYear = monthAndYear,
@@ -284,5 +308,21 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
     protected def view(isNiAccount: Boolean = false): Document = Jsoup.parse(
       app.injector.instanceOf[DutyDefermentRequestedStatements].
         apply(dutyDefermentModel(isNiAccount), config.returnLink("dutyDeferment")).body)
+
+    protected def createTestStatement(period: DutyDefermentStatementPeriod): DutyDefermentAccountStatement = {
+      DutyDefermentAccountStatement(
+        historyIndex = 0,
+        groupIndex = 0,
+        eorisStatements = Seq.empty,
+        group = DutyDefermentStatementPeriodsByMonth(
+          monthAndYear = period.monthAndYear,
+          periods = Seq(period)
+        ),
+        periodIndex = 0,
+        period = period,
+        periodsWithIndex = Seq((period, 0)),
+        isNiAccount = true, accountNumber = accountNumber
+      )
+    }
   }
 }
