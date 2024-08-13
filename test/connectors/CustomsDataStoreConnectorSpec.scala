@@ -18,13 +18,13 @@ package connectors
 
 import base.SpecBase
 import config.FrontendAppConfig
-import models.{EoriHistory, UndeliverableEmail, UndeliverableInformation, UnverifiedEmail}
+import models.{EoriHistory, UndeliverableEmail, UndeliverableInformation, UnverifiedEmail, EmailVerifiedResponse, EmailUnverifiedResponse}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps, UpstreamErrorResponse}
-import play.api.http.Status.NOT_FOUND
+import play.api.http.Status.{NOT_FOUND, INTERNAL_SERVER_ERROR}
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
@@ -150,10 +150,68 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
     }
   }
 
+  "retrieveUnverifiedEmail" must {
+    "return EmailUnverifiedResponse with unverified email value" in new Setup {
+
+      when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(emailUnverifiedRes))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+
+      running(app) {
+        val result = await(customsDataStoreConnector.retrieveUnverifiedEmail)
+        result mustBe emailUnverifiedRes
+      }
+    }
+
+    "return EmailUnverifiedResponse with None for unverified email if there is an error while" +
+      " fetching response from api" in new Setup {
+
+      when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.failed(new RuntimeException("error occurred")))
+
+      when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+
+      running(app) {
+        val result = await(customsDataStoreConnector.retrieveUnverifiedEmail)
+        result.unVerifiedEmail mustBe empty
+      }
+    }
+  }
+
+  "verifiedEmail" must {
+    "return verified email when email-display api call is successful" in new Setup {
+
+      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(emailVerifiedRes))
+
+      when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+
+      running(app) {
+        val result = await(customsDataStoreConnector.verifiedEmail)
+        result mustBe emailVerifiedRes
+      }
+    }
+
+    "return none for verified email when exception occurs while calling email-display api" in new Setup {
+
+      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.failed(UpstreamErrorResponse("error occurred", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)))
+
+      when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+
+      running(app) {
+        val result = await(customsDataStoreConnector.verifiedEmail)
+        result.verifiedEmail mustBe empty
+      }
+    }
+  }
+
   trait Setup {
     val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
     val eori: String = "GB11111"
+    val emailId = "test@test.com"
 
     val app = applicationBuilder().overrides(
       bind[HttpClientV2].to(mockHttpClient),
@@ -162,6 +220,9 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
     val mockAppConfig = app.injector.instanceOf[FrontendAppConfig]
     val customsDataStoreConnector = app.injector.instanceOf[CustomsDataStoreConnector]
+
+    val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
+    val emailVerifiedRes: EmailVerifiedResponse = EmailVerifiedResponse(Some(emailId))
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }

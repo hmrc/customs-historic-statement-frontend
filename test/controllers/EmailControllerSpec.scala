@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.CustomsFinancialsApiConnector
 import models.{EmailUnverifiedResponse, EmailVerifiedResponse}
 import play.api.inject._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
@@ -34,8 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class EmailControllerSpec extends SpecBase {
 
   "EmailController" must {
-
-    "return unverified email" in new Setup {
+    "return unverified email response" in new Setup {
 
       when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(response))
@@ -43,17 +41,16 @@ class EmailControllerSpec extends SpecBase {
       when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
-        val connector = app.injector.instanceOf[CustomsFinancialsApiConnector]
-
-        val result: Future[Option[String]] = connector.isEmailUnverified(hc)
-        await(result) mustBe expectedResult
+        val request = fakeRequest(GET, routes.EmailController.showUnverified().url)
+        val result = route(app, request).value
+        status(result) shouldBe OK
       }
     }
 
-    "return unverified email response" in new Setup {
+    "display verify your email page when exception occurs while connector making the API call" in new Setup {
 
       when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(response))
+        .thenReturn(Future.failed(new RuntimeException("API call failed")))
 
       when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 

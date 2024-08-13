@@ -34,7 +34,7 @@ class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig, httpClie
   extends Logging {
 
   def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
-    val dataStoreEndpoint = appConfig.customsDataStore + s"/eori/$eori/verified-email"
+    val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/$eori/verified-email"
 
     httpClient.get(url"$dataStoreEndpoint")
       .execute[EmailResponse]
@@ -49,7 +49,7 @@ class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig, httpClie
   }
 
   def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] = {
-    val dataStoreEndpoint = appConfig.customsDataStore + s"/eori/$eori/eori-history"
+    val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/$eori/eori-history"
     val emptyEoriHistory = Seq(EoriHistory(eori, None, None))
 
     httpClient.get(url"$dataStoreEndpoint")
@@ -58,6 +58,32 @@ class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig, httpClie
       .recover { case e =>
         logger.error(s"DATASTORE-E-EORI-HISTORY-ERROR: ${e.getClass.getName}")
         emptyEoriHistory
+      }
+  }
+
+  def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] = {
+    val emailDisplayApiUrl = s"${appConfig.customsDataStore}/subscriptions/email-display"
+
+    httpClient
+      .get(url"$emailDisplayApiUrl")
+      .execute[EmailVerifiedResponse]
+      .recover {
+        case _ =>
+          logger.error(s"Error occurred while calling API $emailDisplayApiUrl")
+          EmailVerifiedResponse(None)
+      }
+  }
+
+  def retrieveUnverifiedEmail(implicit hc: HeaderCarrier): Future[EmailUnverifiedResponse] = {
+    val unverifiedEmailDisplayApiUrl = s"${appConfig.customsDataStore}/subscriptions/unverified-email-display"
+
+    httpClient
+      .get(url"$unverifiedEmailDisplayApiUrl")
+      .execute[EmailUnverifiedResponse]
+      .recover {
+        case _ =>
+          logger.error(s"Error occurred while calling API $unverifiedEmailDisplayApiUrl")
+          EmailUnverifiedResponse(None)
       }
   }
 }
