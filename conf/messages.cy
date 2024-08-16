@@ -78,25 +78,25 @@ cf.historic.document.request.heading.PostponedVATStatement=Pa ddatganiadau ar gy
 cf.historic.document.request.heading.SecurityStatement=Pa hysbysiad o ddatganiadau addasu sydd eu hangen arnoch?
 cf.historic.document.request.heading.DutyDefermentStatement=Pa ddatganiadau gohirio tollau sydd eu hangen arnoch?
 
-cf.historic.document.request.info-text.C79Certificate=Gallwch wneud cais am dystysgrifau TAW mewnforio am hyd at 6 mis y tro o fis Hydref 2019 ymlaen.
+cf.historic.document.request.info-text.C79Certificate=Gallwch ofyn am hyd at 6 mis o dystysgrifau TAW mewnforio ar y tro.
 cf.historic.document.request.info-text.PostponedVATStatement=Gallwch wneud cais am ddatganiadau TAW mewnforio ohiriedig am hyd at 6 mis y tro o fis Ionawr 2021 ymlaen.
 cf.historic.document.request.info-text.SecurityStatement=Gallwch wneud cais am hysbysiad o ddatganiadau addasu am hyd at 6 mis y tro o fis Hydref 2019 ymlaen.
 cf.historic.document.request.info-text.DutyDefermentStatement=Gallwch wneud cais am dystysgrifau TAW mewnforio am hyd at 6 mis y tro o fis Hydref 2019 ymlaen.
 cf.historic.document.request.continue=Yn eich blaen
 
-cf.historic.document.request.from=O ba ddyddiad dechrau y mae angen tystysgrifau arnoch?
+cf.historic.document.request.from=Dyddiad dechrau
 cf.historic.document.request.from.statements=O ba ddyddiad dechrau y mae angen datganiadau arnoch?
 cf.historic.document.request.whichStartDate.C79Certificate=ar gyfer pa ddyddiad dechrau y mae angen tystysgrifau TAW mewnforio arnoch?
 cf.historic.document.request.whichStartDate.PostponedVATStatement=ar gyfer pa ddyddiad dechrau y mae angen tystysgrifau TAW o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichStartDate.SecurityStatement=ar gyfer pa ddyddiad dechrau y mae angen hysbysiad o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichStartDate.DutyDefermentStatement=Ar gyfer pa ddyddiad dechrau y mae angen datganiadau gohirio tollau arnoch?
-cf.historic.document.request.to=I ba ddyddiad dod i ben y mae angen tystysgrifau arnoch?
+cf.historic.document.request.to=Dyddiad dod i ben
 cf.historic.document.request.to.statements=I ba ddyddiad dod i ben y mae angen datganiadau arnoch?
 cf.historic.document.request.whichEndDate.C79Certificate=ar gyfer pa ddyddiad dod i ben y mae angen tystysgrifau TAW mewnforio arnoch?
 cf.historic.document.request.whichEndDate.PostponedVATStatement=ar gyfer pa ddyddiad dod i ben y mae angen tystysgrifau TAW o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.SecurityStatement=ar gyfer pa ddyddiad dod i ben y mae angen hysbysiad o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement=ar gyfer pa ddyddiad dod i ben y mae angen datganiadau gohirio tollau arnoch?
-cf.historic.document.request.date.hint=Er enghraifft, 3 2019.
+cf.historic.document.request.date.hint=Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2019. Er enghraifft, 3 2021.
 cf.historic.document.request.date.pvat.hint=Er enghraifft, 3 2021.
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?
