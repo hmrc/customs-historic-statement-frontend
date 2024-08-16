@@ -28,7 +28,14 @@
         p: components.p
 )
 
-@(form: Form[_], mode: Mode, fileRole: FileRole, returnUrl: String, maybeDan: Option[String], niIndicator: Option[Boolean])(implicit request: Request[_], messages: Messages)
+@(
+    form: Form[_],
+    mode: Mode,
+    fileRole: FileRole,
+    returnUrl: String,
+    maybeDan: Option[String],
+    niIndicator: Option[Boolean]
+)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some(title(form, messages(s"cf.historic.document.request.${fileRole}.title"))),
         backLinkUrl = Some(returnUrl),
