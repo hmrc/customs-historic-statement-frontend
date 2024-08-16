@@ -18,7 +18,8 @@ package views
 
 import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
-import models.{C79Certificate, DateMessages, DutyDefermentStatement, FileRole, HistoricDates, NormalMode, PostponedVATStatement, SecurityStatement}
+import models.{C79Certificate, DateMessages, DutyDefermentStatement, FileRole, HistoricDates, NormalMode,
+  PostponedVATStatement, SecurityStatement}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import play.api.Application
@@ -123,7 +124,5 @@ trait SetUpWithSpecBase extends SpecBase {
   }
 
   val endDateText: String = msgs("cf.historic.document.request.to")
-
   val endDateHint: String = msgs("cf.historic.document.request.endDate.hint")
-
 }
