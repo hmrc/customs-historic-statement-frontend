@@ -96,7 +96,7 @@ cf.historic.document.request.whichEndDate.C79Certificate=ar gyfer pa ddyddiad do
 cf.historic.document.request.whichEndDate.PostponedVATStatement=ar gyfer pa ddyddiad dod i ben y mae angen tystysgrifau TAW o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.SecurityStatement=ar gyfer pa ddyddiad dod i ben y mae angen hysbysiad o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement=ar gyfer pa ddyddiad dod i ben y mae angen datganiadau gohirio tollau arnoch?
-cf.historic.document.request.date.hint=Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2021.
+cf.historic.document.request.date.hint=Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2019. Er enghraifft, 3 2021.
 cf.historic.document.request.date.pvat.hint=Er enghraifft, 3 2021.
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?

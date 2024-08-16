@@ -96,7 +96,7 @@ cf.historic.document.request.whichEndDate.C79Certificate=which end date do you n
 cf.historic.document.request.whichEndDate.PostponedVATStatement=which start date do you need Import Postponed VAT statements?
 cf.historic.document.request.whichEndDate.SecurityStatement=which end date do you need adjustment statements?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement=which end date do you need deferment statements?
-cf.historic.document.request.date.hint=Start date must be after October 2021.
+cf.historic.document.request.date.hint=Start date must be after October 2019. For example, 3 2021.
 cf.historic.document.request.date.pvat.hint=For example, 3 2021.
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = what end date do you need Import VAT certificates?
