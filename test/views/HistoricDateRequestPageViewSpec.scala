@@ -18,7 +18,7 @@ package views
 
 import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
-import models.{FileRole, HistoricDates, NormalMode, SecurityStatement, PostponedVATStatement, DutyDefermentStatement, C79Certificate}
+import models.{C79Certificate, DateMessages, DutyDefermentStatement, FileRole, HistoricDates, NormalMode, PostponedVATStatement, SecurityStatement}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import play.api.Application
@@ -53,13 +53,13 @@ class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
         }
 
         "statement start date text and hint text is displayed" in {
-          viewDoc.text().contains(msgs("cf.historic.document.request.from.statements")) mustBe true
-          viewDoc.getElementById("start-hint").text() mustBe msgs("cf.historic.document.request.date.pvat.hint")
+          viewDoc.text().contains(startDateText) mustBe true
+          viewDoc.getElementById("start-hint").text() mustBe startDateHint(fileRole)
         }
 
         "statement end date text and hint text is displayed" in {
-          viewDoc.text().contains(msgs("cf.historic.document.request.to.statements")) mustBe true
-          viewDoc.getElementById("end-hint").text() mustBe msgs("cf.historic.document.request.date.pvat.hint")
+          viewDoc.text().contains(endDateText) mustBe true
+          viewDoc.getElementById("end-hint").text() mustBe endDateHint
         }
 
         "start date check box month and year is displayed" in {
@@ -106,8 +106,24 @@ trait SetUpWithSpecBase extends SpecBase {
       NormalMode,
       fileRole,
       returnUrl,
+      DateMessages(fileRole),
       Some("accountNumber"),
       Some(false)
     ).body)
+
+  val startDateText: String = msgs("cf.historic.document.request.from")
+
+  protected def startDateHint(fileRole: FileRole): String = {
+    fileRole match {
+      case C79Certificate => msgs("cf.historic.document.request.date.C79Certificate.hint")
+      case PostponedVATStatement => msgs("cf.historic.document.request.date.PostponedVATStatement.hint")
+      case DutyDefermentStatement => msgs("cf.historic.document.request.date.DutyDefermentStatement.hint")
+      case SecurityStatement => msgs("cf.historic.document.request.date.SecurityStatement.hint")
+    }
+  }
+
+  val endDateText: String = msgs("cf.historic.document.request.to")
+
+  val endDateHint: String = msgs("cf.historic.document.request.endDate.hint")
 
 }

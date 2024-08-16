@@ -16,6 +16,7 @@
 
 @import views.html.templates.Layout
 @import helpers.FormHelper.updateFormErrorKeyForStartAndEndDate
+@import models.DateMessages
 
 
 @this(
@@ -33,6 +34,7 @@
     mode: Mode,
     fileRole: FileRole,
     returnUrl: String,
+    dateMessages: DateMessages,
     maybeDan: Option[String],
     niIndicator: Option[Boolean]
 )(implicit request: Request[_], messages: Messages)
@@ -54,41 +56,28 @@
     }
 
     @formHelper(action = controllers.routes.HistoricDateRequestPageController.onSubmit(mode, fileRole), Symbol("autoComplete") -> "off") {
+
         @errorSummary(form.errors,errorFieldName = None, isErrorKeyUpdateEnabled = true, Some(updateFormErrorKeyForStartAndEndDate()))
 
-            @h1(s"cf.historic.document.request.heading.$fileRole")        
+            @h1(s"cf.historic.document.request.heading.$fileRole")
+
             @p(Html(messages(s"cf.historic.document.request.info-text.$fileRole")))
 
-            @if(fileRole != C79Certificate){
+            @defining(dateMessages.startDate) { date =>
                 @inputDate(
                     form,
-                    messages("cf.historic.document.request.from.statements"),
-                    hintText = Some(messages("cf.historic.document.request.date.pvat.hint")),
+                    messages(date.labelMsgKey),
+                    hintText = Some(messages(date.hintMsgKey)),
                     id = "start",
                     legendAsPageHeading = false,
                 )
+            }
 
+            @defining(dateMessages.endDate) { date =>
                 @inputDate(
                     form,
-                    messages("cf.historic.document.request.to.statements"),
-                    hintText = Some(messages("cf.historic.document.request.date.pvat.hint")),
-                    id = "end",
-                    legendAsPageHeading = false,
-                )
-
-            } else {
-                @inputDate(
-                    form,
-                    messages("cf.historic.document.request.from"),
-                    hintText = Some(messages("cf.historic.document.request.date.hint")),
-                    id = "start",
-                    legendAsPageHeading = false,
-                )
-
-                @inputDate(
-                    form,
-                    messages("cf.historic.document.request.to"),
-                    hintText = Some(messages("cf.historic.document.request.date.pvat.hint")),
+                    messages(date.labelMsgKey),
+                    hintText = Some(messages(date.hintMsgKey)),
                     id = "end",
                     legendAsPageHeading = false,
                 )
