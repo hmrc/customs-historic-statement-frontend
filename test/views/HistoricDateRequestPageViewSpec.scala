@@ -18,7 +18,10 @@ package views
 
 import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
-import models.{HistoricDates, NormalMode, SecurityStatement}
+import models.{
+  C79Certificate, DateMessages, DutyDefermentStatement, FileRole, HistoricDates, NormalMode,
+  PostponedVATStatement, SecurityStatement
+}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import play.api.Application
@@ -28,89 +31,100 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.html.HistoricDateRequestPageView
 
-class HistoricDateRequestPageViewSpec extends SpecBase {
+class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
 
   "view" should {
-    "display correct text" when {
-      "title is displayed" in new SetUp {
-        view.title() mustBe s"${
-          message(
-            "cf.historic.document.request.SecurityStatement.title")
-        } - ${message("service.name")} - GOV.UK"
 
-      }
+    fileRoles.foreach { fileRole =>
 
-      "date is displayed" in new SetUp {
-        view.getElementsByTag("h1").text() mustBe
-          message("cf.historic.document.request.heading.SecurityStatement")
-      }
+      s"display correct text for $fileRole" when {
+        val viewDoc = view(fileRole)
 
-      "sub header text is displayed" in new SetUp {
-        view.text().contains(
-          message("cf.historic.document.request.info-text.SecurityStatement")) mustBe true
+        "title is displayed" in {
+          viewDoc.title() mustBe s"${
+            msgs(s"cf.historic.document.request.$fileRole.title")
+          } - ${msgs("service.name")} - GOV.UK"
+        }
 
-      }
+        "date is displayed" in {
+          viewDoc.getElementsByTag("h1").text() mustBe
+            msgs(s"cf.historic.document.request.heading.$fileRole")
+        }
 
-      "statement start date text and hint text is displayed" in new SetUp {
-        view.text().contains(
-          message("cf.historic.document.request.from.statements")) mustBe true
+        "sub header text is displayed" in {
+          viewDoc.text().contains(msgs(s"cf.historic.document.request.info-text.$fileRole")) mustBe true
+        }
 
-        view.getElementById("start-hint").text() mustBe message(
-          "cf.historic.document.request.date.pvat.hint"
-        )
+        "statement start date text and hint text is displayed" in {
+          viewDoc.text().contains(startDateText) mustBe true
+          viewDoc.getElementById("start-hint").text() mustBe startDateHint(fileRole)
+        }
 
-      }
+        "statement end date text and hint text is displayed" in {
+          viewDoc.text().contains(endDateText) mustBe true
+          viewDoc.getElementById("end-hint").text() mustBe endDateHint
+        }
 
-      "statement end date text and hint text is displayed" in new SetUp {
-        view.text().contains(message("cf.historic.document.request.to.statements")) mustBe true
+        "start date check box month and year is displayed" in {
+          viewDoc.text().contains(msgs("date.month")) mustBe true
 
-        view.getElementById("end-hint").text() mustBe message(
-          "cf.historic.document.request.date.pvat.hint"
-        )
-      }
+          val startMonth: Element = viewDoc.getElementById("start.month")
+          Option(startMonth) must not be empty
 
-      "start date check box month and year is displayed" in new SetUp {
-        view.text().contains(message("date.month")) mustBe true
+          viewDoc.text().contains(msgs("date.year")) mustBe true
 
-        val startMonth: Element = view.getElementById("start.month")
-        Option(startMonth) must not be empty
+          val endMonth: Element = viewDoc.getElementById("start.year")
+          Option(endMonth) must not be empty
+        }
 
-        view.text().contains(message("date.year")) mustBe true
+        "display a back link" in {
+          viewDoc.getElementsByClass("govuk-back-link").attr("href") mustBe returnUrl
+        }
 
-        val endMonth: Element = view.getElementById("start.year")
-        Option(endMonth) must not be empty
-
-      }
-
-      "display a back link" in new SetUp {
-        view.getElementsByClass("govuk-back-link").attr("href") mustBe returnUrl
-      }
-
-      "display a continue button" in new SetUp {
-        view.getElementsByClass("govuk-button").html().contains(message(
-          "cf.historic.document.request.continue"
-        )) mustBe true
+        "display a continue button" in {
+          viewDoc.getElementsByClass("govuk-button")
+            .html()
+            .contains(msgs("cf.historic.document.request.continue")) mustBe true
+        }
       }
     }
   }
 
-  trait SetUp {
-    val app: Application = applicationBuilder().build()
-    val returnUrl = "http://localhost:9398/customs/documents/adjustments"
+}
 
-    implicit val message: Messages = messages(app)
-    implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest()
+trait SetUpWithSpecBase extends SpecBase {
+  val app: Application = applicationBuilder().build()
+  val returnUrl = "http://localhost:9398/customs/documents/adjustments"
 
-    val form: Form[HistoricDates] = new HistoricDateRequestPageFormProvider().apply(SecurityStatement)
+  implicit val msgs: Messages = messages(app)
+  implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest()
 
-    val view: Document = Jsoup.parse(app.injector.instanceOf[HistoricDateRequestPageView].apply(
-      form,
+  private def form(fileRole: FileRole): Form[HistoricDates] = new HistoricDateRequestPageFormProvider().apply(fileRole)
+
+  val fileRoles: Seq[FileRole] = Seq(SecurityStatement, C79Certificate, PostponedVATStatement, DutyDefermentStatement)
+
+  protected def view(fileRole: FileRole): Document =
+    Jsoup.parse(app.injector.instanceOf[HistoricDateRequestPageView].apply(
+      form(fileRole),
       NormalMode,
-      SecurityStatement,
+      fileRole,
       returnUrl,
+      DateMessages(fileRole),
       Some("accountNumber"),
       Some(false)
     ).body)
+
+  val startDateText: String = msgs("cf.historic.document.request.from")
+
+  protected def startDateHint(fileRole: FileRole): String = {
+    fileRole match {
+      case C79Certificate => msgs("cf.historic.document.request.date.C79Certificate.hint")
+      case PostponedVATStatement => msgs("cf.historic.document.request.date.PostponedVATStatement.hint")
+      case DutyDefermentStatement => msgs("cf.historic.document.request.date.DutyDefermentStatement.hint")
+      case SecurityStatement => msgs("cf.historic.document.request.date.SecurityStatement.hint")
+    }
   }
 
+  val endDateText: String = msgs("cf.historic.document.request.to")
+  val endDateHint: String = msgs("cf.historic.document.request.endDate.hint")
 }
