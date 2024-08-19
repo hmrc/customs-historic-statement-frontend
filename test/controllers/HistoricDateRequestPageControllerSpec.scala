@@ -17,18 +17,23 @@
 package controllers
 
 import base.SpecBase
-import models._
+import config.FrontendAppConfig
+import forms.HistoricDateRequestPageFormProvider
+import models.*
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.{HistoricDateRequestPage, RequestedLinkId}
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.api.{Application, inject}
 import repositories.SessionRepository
 import utils.Utils.emptyString
-
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
+import play.api.data.Form
+import play.api.i18n.Messages
+import play.api.mvc.AnyContentAsFormUrlEncoded
+import play.api.test.FakeRequest
 
-import java.time._
+import java.time.*
 import scala.concurrent.Future
 
 class HistoricDateRequestPageControllerSpec extends SpecBase {
@@ -457,19 +462,76 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         status(result) mustBe BAD_REQUEST
       }
     }
+
+    "return BAD_REQUEST for the date that has greater range than accepted" when {
+
+      "fileRole is C79Certificate" in new Setup {
+        when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
+
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest(POST,
+          routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+          .withFormUrlEncodedBody(
+            "start.day" -> "10",
+            "start.month" -> "10",
+            "start.year" -> "2020",
+            "end.day" -> "10",
+            "end.month" -> "10",
+            "end.year" -> "2021")
+
+        running(app) {
+          val result = route(app, request).value
+          status(result) mustBe BAD_REQUEST
+
+          contentAsString(result)
+            .contains(msgs("cf.historic.document.request.form.error.date-range-too-wide.c79")) mustBe true
+
+        }
+      }
+
+      Seq(PostponedVATStatement, DutyDefermentStatement, SecurityStatement).foreach {
+        fileRole =>
+          s"fileRole is $fileRole" in new Setup {
+            when(mockConfig.returnLink(any, any)).thenReturn("test_link")
+            when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
+
+            val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest(POST,
+              routes.HistoricDateRequestPageController.onSubmit(NormalMode, fileRole).url)
+              .withFormUrlEncodedBody(
+                "start.day" -> "10",
+                "start.month" -> "10",
+                "start.year" -> "2021",
+                "end.day" -> "10",
+                "end.month" -> "10",
+                "end.year" -> "2022")
+
+            running(app) {
+              val result = route(app, request).value
+
+              status(result) mustBe BAD_REQUEST
+
+              contentAsString(result)
+                .contains(msgs("cf.historic.document.request.form.error.date-range-too-wide")) mustBe true
+            }
+          }
+      }
+    }
   }
 
   trait Setup {
     val offset = 6
     val latest = 1
 
-    val earliestMonthInCurrentPeriod = LocalDateTime.now().minusMonths(offset)
-    val lastestMonthInLastPeriod = earliestMonthInCurrentPeriod.minusMonths(latest)
+    val earliestMonthInCurrentPeriod: LocalDateTime = LocalDateTime.now().minusMonths(offset)
+    val lastestMonthInLastPeriod: LocalDateTime = earliestMonthInCurrentPeriod.minusMonths(latest)
 
     val mockSessionRepository: SessionRepository = mock[SessionRepository]
+    val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
     val app: Application = applicationBuilder(Some(populatedUserAnswers)).overrides(
-      inject.bind[SessionRepository].toInstance(mockSessionRepository)
+      inject.bind[SessionRepository].toInstance(mockSessionRepository),
+      inject.bind[FrontendAppConfig].toInstance(mockConfig)
     ).build()
+
+    val msgs: Messages = messages(app)
   }
 }
