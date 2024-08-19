@@ -167,10 +167,10 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       val request = fakeRequest(POST,
         routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody(
-          "start.month" -> lastestMonthInLastPeriod.getMonthValue.toString,
-          "start.year" -> lastestMonthInLastPeriod.getYear.toString,
-          "end.month" -> lastestMonthInLastPeriod.getMonthValue.toString,
-          "end.year" -> lastestMonthInLastPeriod.getYear.toString)
+          "start.month" -> latestMonthInLastPeriod.getMonthValue.toString,
+          "start.year" -> latestMonthInLastPeriod.getYear.toString,
+          "end.month" -> latestMonthInLastPeriod.getMonthValue.toString,
+          "end.year" -> latestMonthInLastPeriod.getYear.toString)
 
       running(app) {
         val result = route(app, request).value
@@ -465,52 +465,36 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
 
     "return BAD_REQUEST for the date that has greater range than accepted" when {
 
-      "fileRole is C79Certificate" in new Setup {
-        when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
-
-        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest(POST,
-          routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
-          .withFormUrlEncodedBody(
-            "start.day" -> "10",
-            "start.month" -> "10",
-            "start.year" -> "2020",
-            "end.day" -> "10",
-            "end.month" -> "10",
-            "end.year" -> "2021")
-
-        running(app) {
-          val result = route(app, request).value
-          status(result) mustBe BAD_REQUEST
-
-          contentAsString(result)
-            .contains(msgs("cf.historic.document.request.form.error.date-range-too-wide.c79")) mustBe true
-
-        }
-      }
-
-      Seq(PostponedVATStatement, DutyDefermentStatement, SecurityStatement).foreach {
+      Seq(C79Certificate, PostponedVATStatement, DutyDefermentStatement, SecurityStatement).foreach {
         fileRole =>
           s"fileRole is $fileRole" in new Setup {
             when(mockConfig.returnLink(any, any)).thenReturn("test_link")
-            when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
+
+            val startYear: String = if (fileRole == C79Certificate) "2020" else "2021"
+            val endYear: String = if (fileRole == C79Certificate) "2021" else "2022"
 
             val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest(POST,
               routes.HistoricDateRequestPageController.onSubmit(NormalMode, fileRole).url)
               .withFormUrlEncodedBody(
                 "start.day" -> "10",
                 "start.month" -> "10",
-                "start.year" -> "2021",
+                "start.year" -> startYear,
                 "end.day" -> "10",
                 "end.month" -> "10",
-                "end.year" -> "2022")
+                "end.year" -> endYear)
 
             running(app) {
               val result = route(app, request).value
 
               status(result) mustBe BAD_REQUEST
 
-              contentAsString(result)
-                .contains(msgs("cf.historic.document.request.form.error.date-range-too-wide")) mustBe true
+              val errorMsg = if (fileRole == C79Certificate) {
+                msgs("cf.historic.document.request.form.error.date-range-too-wide.c79")
+              } else {
+                msgs("cf.historic.document.request.form.error.date-range-too-wide")
+              }
+
+              contentAsString(result).contains(errorMsg) mustBe true
             }
           }
       }
@@ -522,7 +506,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
     val latest = 1
 
     val earliestMonthInCurrentPeriod: LocalDateTime = LocalDateTime.now().minusMonths(offset)
-    val lastestMonthInLastPeriod: LocalDateTime = earliestMonthInCurrentPeriod.minusMonths(latest)
+    val latestMonthInLastPeriod: LocalDateTime = earliestMonthInCurrentPeriod.minusMonths(latest)
 
     val mockSessionRepository: SessionRepository = mock[SessionRepository]
     val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
