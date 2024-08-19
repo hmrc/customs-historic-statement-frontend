@@ -18,7 +18,6 @@ package controllers
 
 import base.SpecBase
 import config.FrontendAppConfig
-import forms.HistoricDateRequestPageFormProvider
 import models.*
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.{HistoricDateRequestPage, RequestedLinkId}
@@ -28,7 +27,6 @@ import repositories.SessionRepository
 import utils.Utils.emptyString
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
-import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
