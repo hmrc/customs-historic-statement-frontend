@@ -25,7 +25,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.SortStatementsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import viewmodels.{DutyDefermentAccountViewModel, PostponedVatViewModel, SecuritiesRequestedStatementsViewModel, VatViewModel}
+import viewmodels._
 import views.html._
 
 import javax.inject.Inject
@@ -39,6 +39,7 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
                                              sessionCacheConnector: CustomsSessionCacheConnector,
                                              sdesConnector: SdesConnector,
                                              importVatView: ImportVatRequestedStatements,
+                                             importCashView: CashStatementView,
                                              importPostponedVatView: ImportPostponedVatRequestedStatements,
                                              securitiesView: SecuritiesRequestedStatements,
                                              sortStatementsService: SortStatementsService,
@@ -55,6 +56,7 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
       case SecurityStatement => showHistoricSecurityStatements()
       case C79Certificate => showHistoricC79Statements()
       case PostponedVATStatement => showHistoricPostponedVatStatements()
+      case CashStatement => showHistoricCashStatements()
       case _ => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
     }
   }
@@ -80,6 +82,20 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
       })
       viewModel = VatViewModel(allCertificates.sorted)
     } yield Ok(importVatView(viewModel, appConfig.returnLink(C79Certificate)))
+  }
+
+  private def showHistoricCashStatements()(
+    implicit request: IdentifierRequestWithEoriHistory[AnyContent]): Future[Result] = {
+
+    for {
+      allCertificates <- Future.sequence(request.eoriHistory.map { historicEori =>
+        sdesConnector
+          .getCashStatements(historicEori.eori)
+          .map(sortStatementsService.sortCashStatementsForEori(historicEori, _))
+      })
+
+      viewModel = CashStatementViewModel(allCertificates.sorted)
+    } yield Ok(importCashView(viewModel, appConfig.returnLink(CashStatement)))
   }
 
   private def showHistoricPostponedVatStatements()(

@@ -17,10 +17,10 @@
 package models
 
 import base.SpecBase
-import models.DDStatementType._
-import models.FileFormat.{Pdf, UnknownFileFormat}
+import models.DDStatementType.*
+import models.FileFormat.{Csv, Pdf, UnknownFileFormat}
 import org.scalatest.matchers.must.Matchers
-import org.scalatest.matchers.should.Matchers._
+import org.scalatest.matchers.should.Matchers.*
 import play.api.libs.json.{JsString, Json}
 
 class SdesFileSpec extends SpecBase with Matchers {
@@ -34,6 +34,7 @@ class SdesFileSpec extends SpecBase with Matchers {
 
       securityStatementFile2 compare securityStatementFile1 mustBe one
       vatCertificateFile1 compare vatCertificateFile2 mustBe zero
+      cashStatementFile1 compare cashStatementFile2 mustBe zero
       postponedVatStatementFile1 compare postponedVatStatementFile2 mustBe zero
 
       FileFormat.unapply(Pdf).value mustBe "PDF"
@@ -101,6 +102,40 @@ class SdesFileSpec extends SpecBase with Matchers {
 
     val vatCertificateFile2 = VatCertificateFile("file1", "/download", size,
       VatCertificateFileMetadata(year3, size, Pdf, C79Certificate, None), "123456789")
+
+    val cashStatementFile1: CashStatementFile = CashStatementFile(
+      "file1",
+      "/download",
+      size,
+      CashStatementFileMetadata(
+        periodStartYear = year,
+        periodStartMonth = month,
+        periodStartDay = day,
+        periodEndYear = year,
+        periodEndMonth = month,
+        periodEndDay = day,
+        fileFormat = Csv,
+        fileRole = CashStatement,
+        cashAccountNumber = None,
+        statementRequestId = None
+      ), "123456789")
+
+    val cashStatementFile2: CashStatementFile = CashStatementFile(
+      "file2",
+      "/download",
+      size,
+      CashStatementFileMetadata(
+        periodStartYear = year,
+        periodStartMonth = month,
+        periodStartDay = day,
+        periodEndYear = year,
+        periodEndMonth = month,
+        periodEndDay = day,
+        fileFormat = Csv,
+        fileRole = CashStatement,
+        cashAccountNumber = None,
+        statementRequestId = None
+      ), "123456789")
 
     val postponedVatStatementFile1 = PostponedVatStatementFile("file1", "/download", size,
       PostponedVatStatementFileMetadata(year3, size, Pdf, PostponedVATStatement,

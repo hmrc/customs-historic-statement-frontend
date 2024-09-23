@@ -17,7 +17,7 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
-import models.{C79Certificate, DutyDefermentStatement, FileRole, PostponedVATStatement, SecurityStatement, UserAnswers}
+import models._
 import pages.RequestedLinkId
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -57,10 +57,12 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   private lazy val c79ReturnLink: String = configuration.get[String]("urls.c79Return")
   private lazy val adjustmentsReturnLink: String = configuration.get[String]("urls.adjustmentsReturn")
   private lazy val postponedVatReturnLink: String = configuration.get[String]("urls.postponedVatReturn")
+  private lazy val cashStatementReturnLink: String = configuration.get[String]("urls.cashStatementReturn")
 
   lazy val sdesDutyDefermentStatementListUrl: String = sdesApi + "/files-available/list/DutyDefermentStatement"
   lazy val sdesImportVatCertificateListUrl: String = sdesApi + "/files-available/list/C79Certificate"
   lazy val sdesImportPostponedVatStatementListUrl: String = sdesApi + "/files-available/list/PostponedVATStatement"
+  lazy val sdesCashStatementListUrl: String = sdesApi + "/files-available/list/CashStatement"
 
   lazy val sdesSecurityStatementListUrl: String = sdesApi + "/files-available/list/SecurityStatement"
   lazy val historicDocumentsApiUrl: String = customsFinancialsApi + "/historic-document-request"
@@ -90,6 +92,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
       case C79Certificate => c79ReturnLink
       case SecurityStatement => adjustmentsReturnLink
       case PostponedVATStatement => postponedVatReturnLink
+      case CashStatement => cashStatementReturnLink
     }
   }
 
@@ -99,6 +102,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
       case C79Certificate => c79ReturnLink
       case SecurityStatement => adjustmentsReturnLink
       case PostponedVATStatement => postponedVatReturnLink
+      case CashStatement => cashStatementReturnLink
     }
   }
 

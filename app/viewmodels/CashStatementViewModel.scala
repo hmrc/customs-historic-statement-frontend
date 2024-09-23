@@ -1,0 +1,168 @@
+/*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package viewmodels
+
+import controllers.OrderedByEoriHistory
+import helpers.Formatters
+import models.FileFormat.{Csv, Pdf}
+import models.{CashStatementFile, EoriHistory, FileFormat}
+import play.api.i18n.Messages
+import play.twirl.api.Html
+import utils.Utils.{ddComponent, divComponent, dlComponent, dtComponent, emptyString, h2Component}
+import views.html.components.download_link_cash_account
+
+import java.time.LocalDate
+
+case class CashStatementViewModel(statementsForAllEoris: Seq[CashStatementForEori])
+
+case class CashStatementForEori(eoriHistory: EoriHistory,
+                                currentStatements: Seq[CashStatementByMonth],
+                                requestedStatements: Seq[CashStatementByMonth])
+  extends OrderedByEoriHistory[CashStatementForEori]
+
+case class CashStatementByMonth(date: LocalDate, files: Seq[CashStatementFile] = Seq.empty)
+                               (implicit messages: Messages) extends Ordered[CashStatementByMonth] {
+
+  val formattedMonthToMonth: String = files.headOption.map { file =>
+    Formatters.dateAsMonthToMonth(file.metadata.periodStartMonth, file.metadata.periodEndMonth)
+  }.getOrElse(emptyString)
+
+  val cashAccountNumber: Option[String] = files.headOption.flatMap(_.metadata.cashAccountNumber)
+  val formattedMonthYear: String = Formatters.dateAsMonthAndYear(date)
+
+  val pdf: Option[CashStatementFile] = files.find(_.fileFormat == Pdf)
+  val csv: Option[CashStatementFile] = files.find(_.fileFormat == Csv)
+
+  override def compare(that: CashStatementByMonth): Int = date.compareTo(that.date)
+}
+
+case class GroupedStatementsByEori(eoriIndex: Int,
+                                   eoriHistory: EoriHistory,
+                                   statementsByYear: Map[Int, Seq[CashStatementByMonth]])
+
+object CashStatementViewModel {
+
+  def generateCashAccountHeading(model: CashStatementViewModel)(implicit messages: Messages): Html = {
+    val cashAccountNumberHtml = getCashAccountHeading(model)
+
+    if (cashAccountNumberHtml.body.nonEmpty) {
+      cashAccountNumberHtml
+    } else {
+      Html(emptyString)
+    }
+  }
+
+  def getRequestedStatementsGroupedByYear(model: CashStatementViewModel): Seq[GroupedStatementsByEori] = {
+    model.statementsForAllEoris.zipWithIndex.collect {
+      case (eoriStatements, index) if eoriStatements.requestedStatements.nonEmpty =>
+        GroupedStatementsByEori(
+          eoriIndex = index,
+          eoriHistory = eoriStatements.eoriHistory,
+          statementsByYear = eoriStatements.requestedStatements.groupBy(_.date.getYear))
+    }
+  }
+
+  def generateStatementsByYear(groupedStatements: GroupedStatementsByEori)(implicit messages: Messages): Html = {
+    val statementRows = groupedStatements.statementsByYear.toSeq.sortBy(_._1).map {
+      case (year, statementsOfYear) =>
+        val statementList = createStatementList(groupedStatements.eoriIndex, statementsOfYear)
+        val yearHeading = h2Component(
+          msg = year.toString,
+          classes = "govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-top-7")
+
+        Html(yearHeading.body + statementList.body)
+    }.mkString
+
+    Html(statementRows)
+  }
+
+  private def getCashAccountHeading(model: CashStatementViewModel)(implicit messages: Messages): Html = {
+    model.statementsForAllEoris
+      .flatMap(_.requestedStatements)
+      .flatMap(_.cashAccountNumber)
+      .headOption match {
+      case Some(cashAccountNumber) => h2Component(
+        msg = messages("cf.cash-statement-requested-account-heading", cashAccountNumber),
+        classes = "govuk-caption-xl")
+
+      case None => Html(emptyString)
+    }
+  }
+
+  private def createStatementList(eoriIndex: Int, statementsOfYear: Seq[CashStatementByMonth])
+                                 (implicit messages: Messages): Html = {
+    val statementListItems = statementsOfYear.sorted.zipWithIndex.map {
+      case (statement, index) => createStatementRow(eoriIndex, statement, index).body
+    }.mkString
+
+    dlComponent(
+      content = Html(statementListItems),
+      id = Some(s"requested-statements-list-$eoriIndex"),
+      classes = Some("govuk-summary-list statement-list"))
+  }
+
+  private def createStatementRow(eoriIndex: Int, statement: CashStatementByMonth, index: Int)
+                                (implicit messages: Messages): Html = {
+
+    val dateCell = dtComponent(
+      content = Html(statement.formattedMonthToMonth),
+      id = Some(s"requested-statements-list-$eoriIndex-row-$index-date-cell"),
+      classes = Some("govuk-summary-list__value"))
+
+    val downloadLink = createDownloadLinks(eoriIndex, statement, index)
+
+    val downloadCell = ddComponent(
+      content = Html(downloadLink),
+      id = Some(s"requested-statements-list-$eoriIndex-row-$index-link-cell"),
+      classes = Some("govuk-summary-list__actions"))
+
+    divComponent(
+      content = Html(dateCell.body + downloadCell.body),
+      id = Some(s"requested-statements-list-$eoriIndex-row-$index"),
+      classes = Some("govuk-summary-list__row"))
+  }
+
+  private def createDownloadLinks(eoriIndex: Int, statement: CashStatementByMonth, index: Int)
+                                 (implicit messages: Messages): String = {
+    val formats = Seq(
+      ("csv", statement.csv, FileFormat.Csv.toString),
+      ("pdf", statement.pdf, FileFormat.Pdf.toString))
+
+    formats.flatMap { case (formatId, fileOpt, formatStr) =>
+      fileOpt.map { file =>
+        downloadLink(
+          file = Some(file),
+          format = formatStr,
+          id = s"requested-statements-list-$eoriIndex-row-$index-$formatId-download-link",
+          period = statement.formattedMonthYear).body
+      }
+    }.mkString
+  }
+
+  private def downloadLink(file: Option[CashStatementFile], format: String, id: String, period: String)
+                          (implicit messages: Messages): Html = {
+    file match {
+      case Some(f) => new download_link_cash_account().apply(
+        file = Some(f),
+        fileFormat = FileFormat(format),
+        id = id,
+        period = period)
+
+      case None => Html(emptyString)
+    }
+  }
+}

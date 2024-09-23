@@ -22,12 +22,12 @@ import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileFormat.Pdf
 import models._
 import play.api.i18n.Messages
-import play.api.test.Helpers
+import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers._
 import play.api.{Application, inject}
-
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
+import play.api.mvc.AnyContentAsEmpty
 
 import java.time._
 import scala.concurrent.Future
@@ -54,6 +54,19 @@ class HistoricStatementsControllerSpec extends SpecBase {
 
       val request = fakeRequest(GET,
         controllers.routes.HistoricStatementsController.historicStatements(C79Certificate).url)
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe OK
+      }
+    }
+
+    "return Cash Statement" in new Setup {
+      when(mockSdesConnector.getCashStatements(any)(any))
+        .thenReturn(Future.successful(cashStatementFiles))
+
+      val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET,
+        controllers.routes.HistoricStatementsController.historicStatements(CashStatement).url)
 
       running(app) {
         val result = route(app, request).value
@@ -150,6 +163,8 @@ class HistoricStatementsControllerSpec extends SpecBase {
     val fiveHundread = 500L
     val ninetynine = 99L
 
+    val size = 1024L
+
     val securityStatementFile = SecurityStatementFile("statementfile_00", "download_url_00", ninetynine,
       SecurityStatementFileMetadata(year17, twelve, twentyEight, year, one, one, Pdf,
         SecurityStatement, someEori, fiveHundread, "0000000"))
@@ -172,7 +187,19 @@ class HistoricStatementsControllerSpec extends SpecBase {
       PostponedVatStatementFileMetadata(year17, eleven, Pdf, PostponedVATStatement, "Chief", Some("a request id")))
     val postponedVatStatementFiles = Seq(postponedVatStatement, postponedVatStatement_2)
 
-    val size = 1024L
+    val cashStatementFile: CashStatementFile = CashStatementFile(
+      "statementfile_01",
+      "download_url_01",
+      size,
+      CashStatementFileMetadata(year, one, one, year, one, one, Pdf, CashStatement, None))
+
+    val cashStatementFiles: Seq[CashStatementFile] = Seq(
+      cashStatementFile,
+      CashStatementFile(
+        "statementfile_02",
+        "download_url_02",
+        size,
+        CashStatementFileMetadata(year, one, one, year, one, one, Pdf, CashStatement, None)))
 
     val dutyDeferementFile: DutyDefermentStatementFile = DutyDefermentStatementFile(
       "2018_03_01-08.pdf", "url.pdf", size,

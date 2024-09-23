@@ -45,6 +45,24 @@ class SortStatementsService @Inject()() {
     SecurityStatementsForEori(historicEori, current, requested)
   }
 
+  def sortCashStatementsForEori(historicEori: EoriHistory, cashStatementFiles: Seq[CashStatementFile])
+                               (implicit messages: Messages): CashStatementForEori = {
+
+    val groupedByMonth = cashStatementFiles.groupBy(_.monthAndYear).map {
+      case (month, filesForMonth) => CashStatementByMonth(month, filesForMonth)
+    }.toList
+
+    val filteredByStatementRequestId = groupedByMonth.map { statementByMonth =>
+      val filteredFiles = statementByMonth.files.filter(_.metadata.statementRequestId.isDefined)
+
+      CashStatementByMonth(statementByMonth.date, filteredFiles)
+    }
+
+    val (requested, current) = filteredByStatementRequestId.partition(_.files.nonEmpty)
+
+    CashStatementForEori(historicEori, current, requested)
+  }
+
   def sortVatCertificatesForEori(historicEori: EoriHistory, vatCertificateFiles: Seq[VatCertificateFile])
                                 (implicit messages: Messages): VatCertificatesForEori = {
 
