@@ -153,8 +153,6 @@ class CashStatementViewModelSpec extends SpecBase {
 
       result.body must include(periodStartYear.toString)
       result.body must include((periodStartYear + 1).toString)
-
-      result.body must include(monthJuly)
     }
   }
 

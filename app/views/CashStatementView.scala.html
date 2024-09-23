@@ -25,7 +25,7 @@
 @(viewModel: CashStatementViewModel, backLink: String)(implicit request: Request[_], messages: Messages)
 
 @statementsGroupedByYear = @{CashStatementViewModel.getRequestedStatementsGroupedByYear(viewModel)}
-@cashAccountHeading = @{CashStatementViewModel.generateCashAccountNumber(viewModel)}
+@cashAccountHeading = @{CashStatementViewModel.generateCashAccountHeading(viewModel)}
 
 @layout(pageTitle = Some(messages("cf.cash-statement-requested-account-title")), backLinkUrl = Some(backLink)) {
 
