@@ -198,7 +198,6 @@ cf.import-vat.requested.title=Requested import VAT certificates (C79)
 cf.import-vat.requested.available.text=Requested certificates are available to view for 10 days. We can only provide these in PDF format.
 
 # Cash Requested Statements View
-cf.cash-statement-requested-account-title=Requested cash statements
 cf.cash-statement-requested-account-heading=Account: {0}
 cf.cash-statement-requested-heading=Cash account transactions
 cf.cash-statement-requested-paragraph=The transactions you requested are available to download.

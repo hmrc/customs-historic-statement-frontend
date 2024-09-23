@@ -27,7 +27,7 @@
 @statementsGroupedByYear = @{CashStatementViewModel.getRequestedStatementsGroupedByYear(viewModel)}
 @cashAccountHeading = @{CashStatementViewModel.generateCashAccountHeading(viewModel)}
 
-@layout(pageTitle = Some(messages("cf.cash-statement-requested-account-title")), backLinkUrl = Some(backLink)) {
+@layout(pageTitle = Some(messages("cf.cash-statement-requested-heading")), backLinkUrl = Some(backLink)) {
 
   @cashAccountHeading
 

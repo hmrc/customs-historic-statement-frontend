@@ -17,7 +17,9 @@
 package helpers
 
 import base.SpecBase
-import helpers.Formatters.fileSize
+import helpers.Formatters.{dateAsMonthToMonth, fileSize}
+import play.api.Application
+import play.api.i18n.Messages
 
 class FormattersSpec extends SpecBase {
 
@@ -57,13 +59,26 @@ class FormattersSpec extends SpecBase {
       res mustBe "2.0MB"
     }
 
+    "display 'January to March' when given periodStartMonth and periodEndMonth" in new Setup {
+      private val res = dateAsMonthToMonth(january, march)(msg)
+
+      res mustBe "January to March"
+    }
+
     trait Setup {
+
+      val app: Application = applicationBuilder().build()
+      implicit val msg: Messages = messages(app)
+
       val belowKbThreshold = 100
       val kbValue = 30567
       val mbValue = 20567567
 
       val kbThreshold = 1024
       val mbThreshold: Int = 1024 * 1024
+
+      val january = 1
+      val march = 3
     }
   }
 }

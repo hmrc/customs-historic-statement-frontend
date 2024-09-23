@@ -201,7 +201,6 @@ cf.import-vat.requested.title=Tystysgrifau TAW mewnforio (C79) y gofynnwyd amdan
 cf.import-vat.requested.available.text=Mae tystysgrifau y gofynnwyd amdanynt ar gael i’w gweld am 10 diwrnod. Gallwn ddarparu’r rhain ar ffurf PDF yn unig.
 
 # Cash Requested Statements View
-cf.cash-statement-requested-account-title=
 cf.cash-statement-requested-account-heading=Cyfrif: {0}
 cf.cash-statement-requested-heading=Trafodion cyfrif arian parod
 cf.cash-statement-requested-paragraph=Mae’r trafodion y gwnaethoch gais amdanynt ar gael i’w lawrlwytho.
