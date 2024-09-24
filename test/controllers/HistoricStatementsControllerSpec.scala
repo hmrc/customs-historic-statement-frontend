@@ -61,7 +61,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
       }
     }
 
-    "return Cash Statement" in new Setup {
+    "return Cash Statements" in new Setup {
       when(mockSdesConnector.getCashStatements(any)(any))
         .thenReturn(Future.successful(cashStatementFiles))
 

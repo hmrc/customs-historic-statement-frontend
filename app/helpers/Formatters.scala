@@ -36,11 +36,11 @@ trait DateFormatters {
 
   def dateAsDay(date: LocalDate): String = DateTimeFormatter.ofPattern("d").format(date)
 
-  def dateAsMonthToMonth(periodStartMonth: Int, periodEndMonth: Int)(implicit messages: Messages): String = {
+  def periodAsStartToEndMonth(periodStartMonth: Int, periodEndMonth: Int)(implicit messages: Messages): String = {
     val startMonth = messages(s"month.$periodStartMonth")
     val endMonth = messages(s"month.$periodEndMonth")
 
-    s"$startMonth to $endMonth"
+    s"$startMonth ${messages("cf.cash-statement-requested-to")} $endMonth"
   }
 }
 

@@ -34,6 +34,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class SdesConnectorSpec extends SpecBase {
 
@@ -121,11 +122,8 @@ class SdesConnectorSpec extends SpecBase {
         when(mockHttp.get(eqTo(url"$sdesCashStatementsUrl"))(any()))
           .thenReturn(requestBuilder)
 
-        running(app) {
-          val result: Seq[CashStatementFile] = await(
-            sdesConnector.getCashStatements(someEori)(hc))
-
-          result must be(cashStatementFiles)
+        sdesConnector.getCashStatements(someEori)(hc).map {
+          cashStatements => cashStatements mustBe cashStatementFiles
         }
       }
     }

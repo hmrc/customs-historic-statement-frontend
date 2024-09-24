@@ -18,7 +18,15 @@ package views.components
 
 import helpers.Formatters
 import models.FileFormat.{Csv, Pdf}
-import models._
+import models.{
+  C79Certificate,
+  CashStatement,
+  CashStatementFile,
+  CashStatementFileMetadata,
+  FileFormat,
+  VatCertificateFile,
+  VatCertificateFileMetadata
+}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion

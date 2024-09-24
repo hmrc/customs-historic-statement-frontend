@@ -17,7 +17,7 @@
 package helpers
 
 import base.SpecBase
-import helpers.Formatters.{dateAsMonthToMonth, fileSize}
+import helpers.Formatters.{fileSize, periodAsStartToEndMonth}
 import play.api.Application
 import play.api.i18n.Messages
 
@@ -60,7 +60,7 @@ class FormattersSpec extends SpecBase {
     }
 
     "display 'January to March' when given periodStartMonth and periodEndMonth" in new Setup {
-      private val res = dateAsMonthToMonth(january, march)(msg)
+      private val res = periodAsStartToEndMonth(january, march)(msg)
 
       res mustBe "January to March"
     }

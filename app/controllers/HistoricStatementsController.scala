@@ -39,7 +39,7 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
                                              sessionCacheConnector: CustomsSessionCacheConnector,
                                              sdesConnector: SdesConnector,
                                              importVatView: ImportVatRequestedStatements,
-                                             importCashView: CashStatementView,
+                                             importCashStatementView: CashStatementView,
                                              importPostponedVatView: ImportPostponedVatRequestedStatements,
                                              securitiesView: SecuritiesRequestedStatements,
                                              sortStatementsService: SortStatementsService,
@@ -95,7 +95,7 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
       })
 
       viewModel = CashStatementViewModel(allCertificates.sorted)
-    } yield Ok(importCashView(viewModel, appConfig.returnLink(CashStatement)))
+    } yield Ok(importCashStatementView(viewModel, appConfig.returnLink(CashStatement)))
   }
 
   private def showHistoricPostponedVatStatements()(

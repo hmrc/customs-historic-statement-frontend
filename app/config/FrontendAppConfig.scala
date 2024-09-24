@@ -17,7 +17,15 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
-import models._
+import models.{
+  C79Certificate,
+  CashStatement,
+  DutyDefermentStatement,
+  FileRole,
+  PostponedVATStatement,
+  SecurityStatement,
+  UserAnswers
+}
 import pages.RequestedLinkId
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -62,7 +70,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   lazy val sdesDutyDefermentStatementListUrl: String = sdesApi + "/files-available/list/DutyDefermentStatement"
   lazy val sdesImportVatCertificateListUrl: String = sdesApi + "/files-available/list/C79Certificate"
   lazy val sdesImportPostponedVatStatementListUrl: String = sdesApi + "/files-available/list/PostponedVATStatement"
-  lazy val sdesCashStatementListUrl: String = sdesApi + "/files-available/list/CashStatement"
+  lazy val sdesCashStatementListUrl: String = s"$sdesApi/files-available/list/CashStatement"
 
   lazy val sdesSecurityStatementListUrl: String = sdesApi + "/files-available/list/SecurityStatement"
   lazy val historicDocumentsApiUrl: String = customsFinancialsApi + "/historic-document-request"

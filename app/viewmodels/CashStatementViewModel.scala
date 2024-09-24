@@ -38,7 +38,7 @@ case class CashStatementByMonth(date: LocalDate, files: Seq[CashStatementFile] =
                                (implicit messages: Messages) extends Ordered[CashStatementByMonth] {
 
   val formattedMonthToMonth: String = files.headOption.map { file =>
-    Formatters.dateAsMonthToMonth(file.metadata.periodStartMonth, file.metadata.periodEndMonth)
+    Formatters.periodAsStartToEndMonth(file.metadata.periodStartMonth, file.metadata.periodEndMonth)
   }.getOrElse(emptyString)
 
   val cashAccountNumber: Option[String] = files.headOption.flatMap(_.metadata.cashAccountNumber)

@@ -18,7 +18,17 @@ package views
 
 import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
-import models.{C79Certificate, CashStatement, DateMessages, DutyDefermentStatement, FileRole, HistoricDates, NormalMode, PostponedVATStatement, SecurityStatement}
+import models.{
+  C79Certificate,
+  CashStatement,
+  DateMessages,
+  DutyDefermentStatement,
+  FileRole,
+  HistoricDates,
+  NormalMode,
+  PostponedVATStatement,
+  SecurityStatement
+}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import play.api.Application

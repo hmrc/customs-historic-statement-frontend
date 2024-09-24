@@ -21,7 +21,7 @@
 @if(file.isDefined) {
     <a id="@id" class="file-link govuk-link" href="@{file.get.downloadURL}" download>
         <span>@fileFormat (@file.get.formattedSize)</span>
-        <span class="govuk-visually-hidden">@voiceover(fileFormat, period, file.get.formattedSize)</span>
+        <span class="govuk-visually-hidden" aria-hidden="true">@voiceover(fileFormat, period, file.get.formattedSize)</span>
     </a>
 } else {
     <div id="missing-file-@id">

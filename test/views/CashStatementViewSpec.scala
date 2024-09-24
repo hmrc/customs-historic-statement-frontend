@@ -29,7 +29,7 @@ import java.time.LocalDate
 class CashStatementViewSpec extends ViewTestHelper {
 
   "view" should {
-    
+
     "display correct title and contents" in new Setup {
       titleShouldBeCorrect(view, "cf.cash-statement-requested-heading")
       pageShouldContainBackLinkUrl(view, config.returnLink(CashStatement))
