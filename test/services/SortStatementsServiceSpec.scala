@@ -18,7 +18,7 @@ package services
 
 import base.SpecBase
 import models.DDStatementType.{Excise, Weekly}
-import models.FileFormat.Pdf
+import models.FileFormat.{Csv, Pdf}
 import models._
 import play.api.i18n.Messages
 import play.api.test.Helpers
@@ -35,6 +35,13 @@ class SortStatementsServiceSpec extends SpecBase {
         sortStatementsService.sortSecurityCertificatesForEori(eoriHistory, securityStatementFiles)
 
       securityStatementsForEori.requestedStatements mustBe requestedSecurityStatements
+    }
+
+    "return requested cash statements for EORI" in new Setup {
+      val cashStatementsForEori: CashStatementForEori =
+        sortStatementsService.sortCashStatementsForEori(eoriHistory, cashStatementFiles)
+
+      cashStatementsForEori.requestedStatements mustBe requestedCashStatements
     }
 
     "return requested c79 certificates for EORI" in new Setup {
@@ -74,6 +81,69 @@ class SortStatementsServiceSpec extends SpecBase {
     val periodEndDay = 8
     val fileSize = 500L
     val size = 99L
+    val someAccountNumber: Option[String] = Some("123456789")
+
+    val cashStatementFilePdf: CashStatementFile = CashStatementFile(
+      "file1",
+      "/download1",
+      size,
+      CashStatementFileMetadata(
+        periodStartYear,
+        periodStartMonth,
+        periodStartDay,
+        periodEndYear,
+        periodEndMonth,
+        periodEndDay,
+        Pdf,
+        CashStatement,
+        someAccountNumber,
+        someRequestId
+      ), someEori)
+
+    val cashStatementFileCsv: CashStatementFile = CashStatementFile(
+      "file2",
+      "/download2",
+      size,
+      CashStatementFileMetadata(
+        periodStartYear,
+        periodStartMonth,
+        periodStartDay,
+        periodEndYear,
+        periodEndMonth,
+        periodEndDay,
+        Csv,
+        CashStatement,
+        someAccountNumber,
+        someRequestId
+      ), someEori)
+
+    val cashStatementFilePdf_2: CashStatementFile = CashStatementFile(
+      "file3",
+      "/download3",
+      size,
+      CashStatementFileMetadata(
+        periodStartYear - 1,
+        periodStartMonth,
+        periodStartDay,
+        periodEndYear - 1,
+        periodEndMonth,
+        periodEndDay,
+        Pdf,
+        CashStatement,
+        someAccountNumber,
+        someRequestId
+      ), someEori)
+
+    val requestedCashStatements: Seq[CashStatementByMonth] = List(
+      CashStatementByMonth(
+        LocalDate.of(periodStartYear - 1, periodStartMonth, periodStartDay),
+        Seq(cashStatementFilePdf_2)),
+      CashStatementByMonth(
+        LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
+        Seq(cashStatementFilePdf, cashStatementFileCsv)))
+
+    val cashStatementFiles: Seq[CashStatementFile] =
+      Seq(cashStatementFilePdf, cashStatementFileCsv, cashStatementFilePdf_2)
 
     val securityStatementFile: SecurityStatementFile = SecurityStatementFile("statementfile_00", "download_url_00",
       size, SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,

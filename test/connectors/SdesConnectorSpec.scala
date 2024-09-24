@@ -34,6 +34,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class SdesConnectorSpec extends SpecBase {
 
@@ -110,6 +111,23 @@ class SdesConnectorSpec extends SpecBase {
       }
     }
 
+    "getCashStatements" should {
+      "return transformed cash statements" in new Setup {
+
+        when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
+          .thenReturn(Future.successful(HttpResponse(Status.OK,
+            Json.toJson(cashStatementFilesSdesResponse).toString())))
+
+        when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
+        when(mockHttp.get(eqTo(url"$sdesCashStatementsUrl"))(any()))
+          .thenReturn(requestBuilder)
+
+        sdesConnector.getCashStatements(someEori)(hc).map {
+          cashStatements => cashStatements mustBe cashStatementFiles
+        }
+      }
+    }
+
     "throw exception when file with unknown fileRole" in new Setup {
 
       when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
@@ -141,6 +159,36 @@ class SdesConnectorSpec extends SpecBase {
     val minute = 23
 
     val size = 111L
+
+    val sdesCashStatementsUrl =
+      "http://localhost:9754/customs-financials-sdes-stub/files-available/list/CashStatement"
+
+    val cashStatementFilesSdesResponse: Seq[FileInformation] = List(
+      FileInformation("cash_statement_01", "download_url_01", size, Metadata(List(
+        MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"),
+        MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
+        MetadataItem("PeriodEndMonth", "3"), MetadataItem("PeriodEndDay", "31"),
+        MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "CashStatement")))),
+
+      FileInformation("cash_statement_02", "download_url_02", size, Metadata(List(
+        MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "2"),
+        MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
+        MetadataItem("PeriodEndMonth", "2"), MetadataItem("PeriodEndDay", "28"),
+        MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "CashStatement")))))
+
+    val cashStatementFiles: Seq[CashStatementFile] = List(
+      CashStatementFile("cash_statement_01", "download_url_01", size, CashStatementFileMetadata(
+        year, month, day, year, month, day + 17, Pdf, CashStatement, None)),
+
+      CashStatementFile("cash_statement_02", "download_url_02", size, CashStatementFileMetadata(
+        year, month - 1, day, year, month - 1, day + 14, Pdf, CashStatement, None)))
+
+    val cashStatementFilesWithUnknownFileRoleSdesResponse: Seq[FileInformation] = List(
+      FileInformation("cash_statement_01", "download_url_01", size, Metadata(List(
+        MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"),
+        MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
+        MetadataItem("PeriodEndMonth", "3"), MetadataItem("PeriodEndDay", "31"),
+        MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "Invalid"))))) ++ cashStatementFilesSdesResponse
 
     val sdesDutyDefermentStatementsUrl =
       "http://localhost:9754/customs-financials-sdes-stub/files-available/list/DutyDefermentStatement"

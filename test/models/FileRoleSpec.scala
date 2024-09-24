@@ -25,15 +25,23 @@ class FileRoleSpec extends SpecBase {
     "return a JsSuccess for DutyDeferment" in {
       JsString("DutyDefermentStatement").as[FileRole] mustBe DutyDefermentStatement
     }
+
     "return a JsSuccess for C79Certificate" in {
       JsString("C79Certificate").as[FileRole] mustBe C79Certificate
     }
+
     "return a JsSuccess for SecurityStatement" in {
       JsString("SecurityStatement").as[FileRole] mustBe SecurityStatement
     }
+
     "return a JsSuccess for PostponedVATStatement" in {
       JsString("PostponedVATStatement").as[FileRole] mustBe PostponedVATStatement
     }
+
+    "return a JsSuccess for CashStatement" in {
+      JsString("CashStatement").as[FileRole] mustBe CashStatement
+    }
+
     "return exception for unknown file role" in {
       intercept[JsResultException] {
         JsString("Unknown").as[FileRole]

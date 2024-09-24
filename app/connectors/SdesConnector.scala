@@ -50,6 +50,12 @@ class SdesConnector @Inject()(http: HttpClientV2,
     getSdesFiles[FileInformation, VatCertificateFile](appConfig.sdesImportVatCertificateListUrl, eori, transform)
   }
 
+  def getCashStatements(eori: String)(implicit hc: HeaderCarrier): Future[Seq[CashStatementFile]] = {
+
+    val transform = convertTo[CashStatementFile] andThen filterFileFormats(SdesFileFormats)
+    getSdesFiles[FileInformation, CashStatementFile](appConfig.sdesCashStatementListUrl, eori, transform)
+  }
+
   def getPostponedVatStatements(eori: String)(implicit hc: HeaderCarrier): Future[Seq[PostponedVatStatementFile]] = {
 
     val transform = convertTo[PostponedVatStatementFile] andThen filterFileFormats(SdesFileFormats)

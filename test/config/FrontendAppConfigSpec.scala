@@ -17,7 +17,7 @@
 package config
 
 import base.SpecBase
-import models.{C79Certificate, DutyDefermentStatement, SecurityStatement}
+import models.{C79Certificate, CashStatement, DutyDefermentStatement, SecurityStatement}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.RequestedLinkId
 import play.api.Application
@@ -33,6 +33,11 @@ class FrontendAppConfigSpec extends SpecBase {
     "return the adjustments link if a C79Certificate FileRole provided" in new Setup {
       config.returnLink(C79Certificate, emptyUserAnswers) mustBe
         "http://localhost:9398/customs/documents/import-vat"
+    }
+
+    "return the adjustments link if a CashStatement FileRole provided" in new Setup {
+      config.returnLink(CashStatement, emptyUserAnswers) mustBe
+        "http://localhost:9394/customs/cash-account"
     }
 
     "return the DutyDeferment link if a DutyDeferment FileRole provided and linkId in user answers" in new Setup {

@@ -90,6 +90,7 @@ cf.historic.document.request.whichStartDate.PostponedVATStatement=which start da
 cf.historic.document.request.whichStartDate.SecurityStatement=which start date do you need adjustment statements?
 cf.historic.document.request.whichStartDate.DutyDefermentStatement=which start date do you need deferment statements?
 cf.historic.document.request.date.C79Certificate.hint = Start date must be after October 2019. For example, 3 2021.
+cf.historic.document.request.date.CashStatement.hint = Start date must be after October 2019. For example, 3 2021.
 cf.historic.document.request.date.PostponedVATStatement.hint = Start date must be after January 2021. For example, 3 2021.
 cf.historic.document.request.date.DutyDefermentStatement.hint = Start date must be after September 2019. For example, 3 2021.
 cf.historic.document.request.date.SecurityStatement.hint = Start date must be after October 2019. For example, 3 2021.
@@ -195,6 +196,17 @@ cf.common.missing-documents-guidance.text2={0} are only generated for periods in
 # Import VAT requested statements view
 cf.import-vat.requested.title=Requested import VAT certificates (C79)
 cf.import-vat.requested.available.text=Requested certificates are available to view for 10 days. We can only provide these in PDF format.
+
+# Cash Requested Statements View
+cf.cash-statement-requested-account-heading=Account: {0}
+cf.cash-statement-requested-heading=Cash account transactions
+cf.cash-statement-requested-paragraph=The transactions you requested are available to download.
+cf.cash-statement-requested-list-paragraph=This list was created on 19th August 2024. It will be available to view for 10 days.
+cf.cash-statement-requested-to=to
+
+cf.cash-statement-requested.download-link=Download {0} of {1} ({2})
+cf.cash-statement-requested.missing-file=Unavailable
+cf.cash-statement-requested.missing-file-hidden-text={0} for {1} unavailable
 
 # Import Postponed VAT requested statements view
 cf.import-postponed-vat.requested.title=Your requested Postponed import VAT statements

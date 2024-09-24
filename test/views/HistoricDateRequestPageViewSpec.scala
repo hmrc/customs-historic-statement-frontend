@@ -19,8 +19,15 @@ package views
 import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
 import models.{
-  C79Certificate, DateMessages, DutyDefermentStatement, FileRole, HistoricDates, NormalMode,
-  PostponedVATStatement, SecurityStatement
+  C79Certificate,
+  CashStatement,
+  DateMessages,
+  DutyDefermentStatement,
+  FileRole,
+  HistoricDates,
+  NormalMode,
+  PostponedVATStatement,
+  SecurityStatement
 }
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
@@ -122,6 +129,7 @@ trait SetUpWithSpecBase extends SpecBase {
       case PostponedVATStatement => msgs("cf.historic.document.request.date.PostponedVATStatement.hint")
       case DutyDefermentStatement => msgs("cf.historic.document.request.date.DutyDefermentStatement.hint")
       case SecurityStatement => msgs("cf.historic.document.request.date.SecurityStatement.hint")
+      case CashStatement => msgs("cf.historic.document.request.date.CashStatement.hint")
     }
   }
 

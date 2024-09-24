@@ -38,17 +38,22 @@ object FileFormat extends Logging {
     val order = 1
   }
 
+  case object Csv extends FileFormat(name = "CSV") {
+    val order = 2
+  }
+
   case object UnknownFileFormat extends FileFormat("UNKNOWN FILE FORMAT") {
     val order = 99
   }
 
-  val SdesFileFormats: SortedSet[FileFormat] = SortedSet(Pdf)
+  val SdesFileFormats: SortedSet[FileFormat] = SortedSet(Pdf, Csv)
 
   def filterFileFormats[T <: SdesFile](allowedFileFormats: SortedSet[FileFormat])(
     files: Seq[T]): Seq[T] = files.filter(file => allowedFileFormats(file.metadata.fileFormat))
 
   def apply(name: String): FileFormat = name.toUpperCase match {
     case Pdf.name => Pdf
+    case Csv.name => Csv
     case _ =>
       logger.warn(s"Unknown file format: $name")
       UnknownFileFormat
@@ -205,3 +210,26 @@ case class PostponedVatStatementFileMetadata(periodStartYear: Int,
                                              fileRole: FileRole,
                                              source: String,
                                              statementRequestId: Option[String]) extends SdesFileMetadata
+
+case class CashStatementFile(filename: String,
+                             downloadURL: String,
+                             size: Long,
+                             metadata: CashStatementFileMetadata,
+                             eori: String = emptyString)
+  extends Ordered[CashStatementFile] with SdesFile {
+
+  val formattedSize: String = Formatters.fileSize(size)
+
+  def compare(that: CashStatementFile): Int = that.metadata.fileFormat.compare(metadata.fileFormat)
+}
+
+case class CashStatementFileMetadata(periodStartYear: Int,
+                                     periodStartMonth: Int,
+                                     periodStartDay: Int,
+                                     periodEndYear: Int,
+                                     periodEndMonth: Int,
+                                     periodEndDay: Int,
+                                     fileFormat: FileFormat,
+                                     fileRole: FileRole,
+                                     cashAccountNumber: Option[String],
+                                     statementRequestId: Option[String] = None) extends SdesFileMetadata

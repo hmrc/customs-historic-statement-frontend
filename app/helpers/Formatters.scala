@@ -35,6 +35,13 @@ trait DateFormatters {
     s"${dateAsMonth(date)}-${date.getYear}"
 
   def dateAsDay(date: LocalDate): String = DateTimeFormatter.ofPattern("d").format(date)
+
+  def periodAsStartToEndMonth(periodStartMonth: Int, periodEndMonth: Int)(implicit messages: Messages): String = {
+    val startMonth = messages(s"month.$periodStartMonth")
+    val endMonth = messages(s"month.$periodEndMonth")
+
+    s"$startMonth ${messages("cf.cash-statement-requested-to")} $endMonth"
+  }
 }
 
 trait FileFormatters {

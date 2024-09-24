@@ -21,7 +21,6 @@ import models._
 import javax.inject.Singleton
 import scala.language.implicitConversions
 
-
 @Singleton
 class SdesGatekeeperService() {
 
@@ -37,6 +36,27 @@ class SdesGatekeeperService() {
         metadata("PeriodStartMonth").toInt,
         FileFormat(metadata("FileType")),
         mapFileRole(metadata("FileRole")),
+        metadata.get("statementRequestID"))
+    )
+  }
+
+  implicit def convertToCashStatementFile(sdesResponseFile: FileInformation): CashStatementFile = {
+    val metadata = sdesResponseFile.metadata.asMap
+
+    CashStatementFile(
+      sdesResponseFile.filename,
+      sdesResponseFile.downloadURL,
+      sdesResponseFile.fileSize,
+      CashStatementFileMetadata(
+        metadata("PeriodStartYear").toInt,
+        metadata("PeriodStartMonth").toInt,
+        metadata("PeriodStartDay").toInt,
+        metadata("PeriodEndYear").toInt,
+        metadata("PeriodEndMonth").toInt,
+        metadata("PeriodEndDay").toInt,
+        FileFormat(metadata("FileType")),
+        mapFileRole(metadata("FileRole")),
+        metadata.get("CashAccountNumber"),
         metadata.get("statementRequestID"))
     )
   }
@@ -115,6 +135,7 @@ class SdesGatekeeperService() {
       case "SecurityStatement" => SecurityStatement
       case "DutyDefermentStatement" => DutyDefermentStatement
       case "PostponedVATStatement" => PostponedVATStatement
+      case "CashStatement" => CashStatement
       case _ => throw new Exception(s"Unknown file role: $role")
     }
   }

@@ -48,6 +48,18 @@ class DateMessagesSpec extends SpecBase {
           hintMsgKey = "cf.historic.document.request.endDate.hint")
       }
 
+      "fileRole is CashStatement" in {
+        val actual = DateMessages(CashStatement)
+
+        actual.startDate mustBe DateMessage(
+          labelMsgKey = "cf.historic.document.request.from",
+          hintMsgKey = "cf.historic.document.request.date.CashStatement.hint")
+
+        actual.endDate mustBe DateMessage(
+          labelMsgKey = "cf.historic.document.request.to",
+          hintMsgKey = "cf.historic.document.request.endDate.hint")
+      }
+
       "fileRole is SecurityStatement" in {
         val actual = DateMessages(SecurityStatement)
 

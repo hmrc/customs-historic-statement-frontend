@@ -90,6 +90,7 @@ cf.historic.document.request.whichStartDate.PostponedVATStatement=ar gyfer pa dd
 cf.historic.document.request.whichStartDate.SecurityStatement=ar gyfer pa ddyddiad dechrau y mae angen hysbysiad o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichStartDate.DutyDefermentStatement=Ar gyfer pa ddyddiad dechrau y mae angen datganiadau gohirio tollau arnoch?
 cf.historic.document.request.date.C79Certificate.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2019. Er enghraifft, 3 2021.
+cf.historic.document.request.date.CashStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2019. Er enghraifft, 3 2021.
 cf.historic.document.request.date.PostponedVATStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Ionawr 2021. Er enghraifft, 3 2021.
 cf.historic.document.request.date.DutyDefermentStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Ionawr 2021. Er enghraifft, 3 2021.
 cf.historic.document.request.date.SecurityStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2019. Er enghraifft, 3 2021.
@@ -198,6 +199,17 @@ cf.common.missing-documents-guidance.text2=Cynhyrchir {0} dim ond ar gyfer cyfno
 # Import VAT requested statements view
 cf.import-vat.requested.title=Tystysgrifau TAW mewnforio (C79) y gofynnwyd amdanynt
 cf.import-vat.requested.available.text=Mae tystysgrifau y gofynnwyd amdanynt ar gael i’w gweld am 10 diwrnod. Gallwn ddarparu’r rhain ar ffurf PDF yn unig.
+
+# Cash Requested Statements View
+cf.cash-statement-requested-account-heading=Cyfrif: {0}
+cf.cash-statement-requested-heading=Trafodion cyfrif arian parod
+cf.cash-statement-requested-paragraph=Mae’r trafodion y gwnaethoch gais amdanynt ar gael i’w lawrlwytho.
+cf.cash-statement-requested-list-paragraph=Crëwyd y rhestr hon ar 19 Awst 2024. Bydd ar gael i’w gweld am 10 diwrnod.
+cf.cash-statement-requested-to=i
+
+cf.cash-statement-requested.download-link=Lawrlwytho {0} o {1} ({2})
+cf.cash-statement-requested.missing-file=Nid yw ar gael
+cf.cash-statement-requested.missing-file-hidden-text=Nid yw {0} ar gyfer {1} ar gael
 
 # Import Postponed VAT requested statements view
 cf.import-postponed-vat.requested.title=Y datganiadau ar gyfer TAW mewnforio ohiriedig y gofynnoch amdanynt
