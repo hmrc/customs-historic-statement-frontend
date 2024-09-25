@@ -47,6 +47,8 @@ object FileFormat extends Logging {
   }
 
   val SdesFileFormats: SortedSet[FileFormat] = SortedSet(Pdf, Csv)
+  val CashStatementFileFormats: Set[FileFormat] = SortedSet(Csv)
+  val OtherStatementFileFormats: Set[FileFormat] = SortedSet(Pdf)
 
   def filterFileFormats[T <: SdesFile](allowedFileFormats: SortedSet[FileFormat])(
     files: Seq[T]): Seq[T] = files.filter(file => allowedFileFormats(file.metadata.fileFormat))

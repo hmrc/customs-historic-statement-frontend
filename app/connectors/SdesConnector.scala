@@ -17,7 +17,7 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.FileFormat.{SdesFileFormats, filterFileFormats}
+import models.FileFormat.{CashStatementFileFormats, SdesFileFormats, filterFileFormats}
 import models._
 import services.SdesGatekeeperService
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -42,18 +42,21 @@ class SdesConnector @Inject()(http: HttpClientV2,
 
     val transform = convertTo[DutyDefermentStatementFile] andThen filterFileFormats(SdesFileFormats)
     getSdesFiles(appConfig.sdesDutyDefermentStatementListUrl, s"$eori-$dan", transform)
+      .map(_.filter(file => FileFormat.OtherStatementFileFormats.contains(file.metadata.fileFormat)))
   }
 
   def getVatCertificates(eori: String)(implicit hc: HeaderCarrier): Future[Seq[VatCertificateFile]] = {
 
     val transform = convertTo[VatCertificateFile] andThen filterFileFormats(SdesFileFormats)
     getSdesFiles[FileInformation, VatCertificateFile](appConfig.sdesImportVatCertificateListUrl, eori, transform)
+      .map(_.filter(file => FileFormat.OtherStatementFileFormats.contains(file.metadata.fileFormat)))
   }
 
   def getCashStatements(eori: String)(implicit hc: HeaderCarrier): Future[Seq[CashStatementFile]] = {
 
     val transform = convertTo[CashStatementFile] andThen filterFileFormats(SdesFileFormats)
     getSdesFiles[FileInformation, CashStatementFile](appConfig.sdesCashStatementListUrl, eori, transform)
+      .map(_.filter(file => FileFormat.CashStatementFileFormats.contains(file.metadata.fileFormat)))
   }
 
   def getPostponedVatStatements(eori: String)(implicit hc: HeaderCarrier): Future[Seq[PostponedVatStatementFile]] = {
@@ -61,12 +64,14 @@ class SdesConnector @Inject()(http: HttpClientV2,
     val transform = convertTo[PostponedVatStatementFile] andThen filterFileFormats(SdesFileFormats)
     getSdesFiles[FileInformation, PostponedVatStatementFile](
       appConfig.sdesImportPostponedVatStatementListUrl, eori, transform)
+      .map(_.filter(file => FileFormat.OtherStatementFileFormats.contains(file.metadata.fileFormat)))
   }
 
   def getSecurityStatements(eori: String)(implicit hc: HeaderCarrier): Future[Seq[SecurityStatementFile]] = {
 
     val transform = convertTo[SecurityStatementFile] andThen filterFileFormats(SdesFileFormats)
     getSdesFiles[FileInformation, SecurityStatementFile](appConfig.sdesSecurityStatementListUrl, eori, transform)
+      .map(_.filter(file => FileFormat.OtherStatementFileFormats.contains(file.metadata.fileFormat)))
   }
 
   def getSdesFiles[A, B <: SdesFile](filesUrl: String, key: String, transform: Seq[A] => Seq[B])
