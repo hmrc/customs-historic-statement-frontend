@@ -17,7 +17,7 @@
 package config
 
 import base.SpecBase
-import models.{C79Certificate, CashStatement, DutyDefermentStatement, SecurityStatement}
+import models.{C79Certificate, CashStatement, DutyDefermentStatement, PostponedVATStatement, SecurityStatement}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.RequestedLinkId
 import play.api.Application
@@ -68,14 +68,29 @@ class FrontendAppConfigSpec extends SpecBase {
   }
 
   "deleteNotificationUrl" should {
-    "return correct url for cash account filerole" in new Setup {
+    "return correct url for cash account FileRole" in new Setup {
       config.deleteNotificationUrl(CashStatement, "GB123456789000") mustBe
         "http://localhost:9878/customs-financials-api/eori/GB123456789000/notifications/CashStatement"
     }
 
-    "return correct url for C79 certificate filerole" in new Setup {
+    "return correct url for C79 certificate FileRole" in new Setup {
       config.deleteNotificationUrl(C79Certificate, "GB123456789000") mustBe
         "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/C79Certificate"
+    }
+
+    "return correct url for Duty deferment statement FileRole" in new Setup {
+      config.deleteNotificationUrl(DutyDefermentStatement, "GB123456789000") mustBe
+        "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/DutyDefermentStatement"
+    }
+
+    "return correct url for Postponed VAT Statement FileRole" in new Setup {
+      config.deleteNotificationUrl(PostponedVATStatement, "GB123456789000") mustBe
+        "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/PostponedVATStatement"
+    }
+
+    "return correct url for Security statement FileRole" in new Setup {
+      config.deleteNotificationUrl(SecurityStatement, "GB123456789000") mustBe
+        "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/SecurityStatement"
     }
   }
 

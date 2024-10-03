@@ -86,8 +86,8 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
 
   def deleteNotificationUrl(fileRole: FileRole, eori: String): String = {
     fileRole match {
-      case CashStatement => customsFinancialsApi + s"/eori/$eori/notifications/$fileRole"
-      case _ => customsFinancialsApi + s"/eori/$eori/requested-notifications/$fileRole"
+      case CashStatement => s"$customsFinancialsApi/eori/$eori/notifications/$fileRole"
+      case _ => s"$customsFinancialsApi/eori/$eori/requested-notifications/$fileRole"
     }
   }
 
