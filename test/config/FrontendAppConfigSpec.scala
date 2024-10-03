@@ -67,6 +67,18 @@ class FrontendAppConfigSpec extends SpecBase {
     }
   }
 
+  "deleteNotificationUrl" should {
+    "return correct url for cash account filerole" in new Setup {
+      config.deleteNotificationUrl(CashStatement, "GB123456789000") mustBe
+        "http://localhost:9878/customs-financials-api/eori/GB123456789000/notifications/CashStatement"
+    }
+
+    "return correct url for C79 certificate filerole" in new Setup {
+      config.deleteNotificationUrl(C79Certificate, "GB123456789000") mustBe
+        "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/C79Certificate"
+    }
+  }
+
   trait Setup {
     val app: Application = applicationBuilder().build()
     val config: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]

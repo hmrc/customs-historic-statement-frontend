@@ -84,8 +84,12 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   def sessionCacheUrl(sessionId: String, linkId: String): String =
     customsFinancialsSessionCacheUrl + s"/account-link/$sessionId/$linkId"
 
-  def deleteNotificationUrl(fileRole: FileRole, eori: String): String =
-    customsFinancialsApi + s"/eori/$eori/requested-notifications/$fileRole"
+  def deleteNotificationUrl(fileRole: FileRole, eori: String): String = {
+    fileRole match {
+      case CashStatement => customsFinancialsApi + s"/eori/$eori/notifications/$fileRole"
+      case _ => customsFinancialsApi + s"/eori/$eori/requested-notifications/$fileRole"
+    }
+  }
 
   private def dutyDefermentReturnLink(linkId: String): String = configuration.get[String](
     "urls.dutyDefermentReturn") + linkId + "/account"
