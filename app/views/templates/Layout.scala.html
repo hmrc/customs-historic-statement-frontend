@@ -87,7 +87,7 @@ HmrcStandardPageParams(
             signOutUrl = Some(routes.LogoutController.logout().url),
             accessibilityStatementUrl = Some("/accessibility-statement/customs-financials")
         ),
-        backLink = Some(BackLink(href = backLinkUrl.getOrElse(emptyString))),
+        backLink = backLinkUrl.fold(None)(url => Some(BackLink(href = url))),
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = Some(additionalHead)
         ),
