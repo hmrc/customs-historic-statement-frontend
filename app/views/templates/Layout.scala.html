@@ -45,42 +45,44 @@
         dutyDeferment: Boolean = false
 )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
-    @phaseBannerContent = {
-    @messages("feedback.before")
-        <a class='govuk-link' href='/contact/beta-feedback-unauthenticated?service=CDS-FIN'>@messages("feedback.link")</a>
-    @messages("feedback.after")
-    }
+@phaseBannerContent = {
+@messages("feedback.before")
+    <a class='govuk-link' href='/contact/beta-feedback-unauthenticated?service=CDS-FIN'>@messages("feedback.link")</a>
+@messages("feedback.after")
+}
 
-    @fullPageTitle = @{
-        pageTitle match {
-            case Some(text) => Some(s"$text - ${messages("service.name")} - GOV.UK")
-            case _ => Some(s"${messages("service.name")} - GOV.UK")
-        }
+@fullPageTitle = @{
+    pageTitle match {
+        case Some(text) => Some(s"$text - ${messages("service.name")} - GOV.UK")
+        case _ => Some(s"${messages("service.name")} - GOV.UK")
     }
+}
 
-    @additionalHead = {
-        <link @{CSPNonce.attr} href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="screen" rel="stylesheet" type="text/css"/>
-        @hmrcTimeoutDialog(TimeoutDialog(
-            title = Some(messages("timeout.title")),
-            timeout = Some(appConfig.timeout),
-            countdown = Some(appConfig.countdown),
-            keepAliveUrl = Some(request.uri),
-            signOutUrl = Some(routes.LogoutController.logout().url),
-            timeoutUrl = Some(routes.LogoutController.logoutNoSurvey().url))
-        )
-    }
+@additionalHead = {
+    <link @{
+        CSPNonce.attr
+    } href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="screen" rel="stylesheet" type="text/css"/>
+@hmrcTimeoutDialog(TimeoutDialog(
+    title = Some(messages("timeout.title")),
+    timeout = Some(appConfig.timeout),
+    countdown = Some(appConfig.countdown),
+    keepAliveUrl = Some(request.uri),
+    signOutUrl = Some(routes.LogoutController.logout().url),
+    timeoutUrl = Some(routes.LogoutController.logoutNoSurvey().url))
+)
+}
 
-    @mainContent = {
-        @contentBlock
+@mainContent = {
+@contentBlock
 
-        @if(deskpro) {
-            @hmrcReportTechnicalIssueHelper()
-        }
-    }
+@if(deskpro) {
+    @hmrcReportTechnicalIssueHelper()
+}
+}
 
 @hmrcStandardPage(
 
-HmrcStandardPageParams(
+    HmrcStandardPageParams(
         pageTitle = fullPageTitle,
         serviceURLs = ServiceURLs(
             serviceUrl = Some(appConfig.financialsHomepage),
