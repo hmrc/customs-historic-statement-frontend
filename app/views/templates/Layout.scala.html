@@ -89,7 +89,7 @@
             signOutUrl = Some(routes.LogoutController.logout().url),
             accessibilityStatementUrl = Some("/accessibility-statement/customs-financials")
         ),
-        backLink = backLinkUrl.map(url => Some(BackLink(href = url))),
+        backLink = backLinkUrl.map(url => BackLink(href = url)),
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = Some(additionalHead)
         ),
