@@ -17,15 +17,21 @@
 @import viewmodels.CashStatementViewModel
 @import views.html.templates.Layout
 @import models.FileFormat.Csv
+@import config.FrontendAppConfig
 
 @this(layout: Layout,
       h1: components.h1,
       p: components.p)
 
-@(viewModel: CashStatementViewModel, backLink: String)(implicit request: Request[_], messages: Messages)
+@(viewModel: CashStatementViewModel,
+  backLink: String
+)(implicit request: Request[_],
+  messages: Messages,
+  appConfig: FrontendAppConfig)
 
 @statementsGroupedByYear = @{CashStatementViewModel.getRequestedStatementsGroupedByYear(viewModel)}
 @cashAccountHeading = @{CashStatementViewModel.generateCashAccountHeading(viewModel)}
+@helpAndSupportGuidance = @{CashStatementViewModel.helpAndSupport}
 
 @layout(pageTitle = Some(messages("cf.cash-statement-requested-heading")), backLinkUrl = Some(backLink)) {
 
@@ -49,4 +55,6 @@
       @viewModel.generateStatementsByYear(groupedStatements)
     }
   }
+
+  @helpAndSupportGuidance
 }
