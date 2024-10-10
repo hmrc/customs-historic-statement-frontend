@@ -201,7 +201,7 @@ cf.import-vat.requested.available.text=Requested certificates are available to v
 cf.cash-statement-requested-account-heading=Account: {0}
 cf.cash-statement-requested-heading=Cash account transactions
 cf.cash-statement-requested-paragraph=The transactions you requested are available to download.
-cf.cash-statement-requested-list-paragraph=This list was created on 19th August 2024. It will be available to view for 10 days.
+cf.cash-statement-requested-list-paragraph=Requested transactions are available to view for 10 days.
 cf.cash-statement-requested-to=to
 
 cf.cash-statement-requested.download-link=Download {0} of {1} ({2})
