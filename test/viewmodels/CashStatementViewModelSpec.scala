@@ -17,8 +17,10 @@
 package viewmodels
 
 import base.SpecBase
+import config.FrontendAppConfig
 import models.FileFormat.{Csv, Pdf}
 import models.*
+import org.mockito.Mockito.when
 import play.api.Application
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
@@ -154,12 +156,29 @@ class CashStatementViewModelSpec extends SpecBase {
       result.body must include(periodStartYear.toString)
       result.body must include((periodStartYear + 1).toString)
     }
+
+    "helpAndSupport" should {
+
+      "generate the correct help and support content" in new Setup {
+        when(appConfig.cashAccountForCdsDeclarationsUrl)
+          .thenReturn("https://www.gov.uk/guidance/use-a-cash-account-for-cds-declarations")
+
+        val result: HtmlFormat.Appendable = CashStatementViewModel.helpAndSupport
+
+        result.body must include(msg("search-transactions-support-message-heading"))
+        result.body must include(msg("cf.help-and-support.link.text"))
+        result.body must include(msg("cf.help-and-support.link.text.pre"))
+        result.body must include(msg("cf.help-and-support.link.text.post"))
+        result.body must include(appConfig.cashAccountForCdsDeclarationsUrl)
+      }
+    }
   }
 
   trait Setup {
 
     val app: Application = applicationBuilder().build()
     implicit val msg: Messages = messages(app)
+    implicit val appConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
     val eoriNumber = "EORI456"
     val startDateJuly: LocalDate = LocalDate.parse("2023-07-10")

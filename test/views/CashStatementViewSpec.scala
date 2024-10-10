@@ -36,7 +36,14 @@ class CashStatementViewSpec extends ViewTestHelper {
       headingShouldBeCorrect
       requestedParagraphTextShouldBeCorrect
       requestedListParagraphTextShouldBeCorrect
+      helpAndSupportGuidanceShouldBePresent
     }
+  }
+
+  private def helpAndSupportGuidanceShouldBePresent(implicit view: Document): Assertion = {
+    view.getElementById("search-transactions-support-message-heading")
+      .html()
+      .contains(msg("site.support.heading")) mustBe true
   }
 
   private def headingShouldBeCorrect(implicit view: Document): Assertion = {

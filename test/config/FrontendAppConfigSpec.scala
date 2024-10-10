@@ -24,6 +24,13 @@ import play.api.Application
 
 class FrontendAppConfigSpec extends SpecBase {
 
+  "FrontendAppConfig" should {
+    "contain correct values for the provided configuration" in new Setup {
+      config.cashAccountForCdsDeclarationsUrl mustBe
+        "https://www.gov.uk/guidance/use-a-cash-account-for-cds-declarations"
+    }
+  }
+
   "returnLink" should {
     "return the adjustments link if a SecurityStatement FileRole provided" in new Setup {
       config.returnLink(SecurityStatement, emptyUserAnswers) mustBe
