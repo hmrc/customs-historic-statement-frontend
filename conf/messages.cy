@@ -205,7 +205,7 @@ cf.import-vat.requested.available.text=Mae tystysgrifau y gofynnwyd amdanynt ar 
 cf.cash-statement-requested-account-heading=Cyfrif: {0}
 cf.cash-statement-requested-heading=Trafodion cyfrif arian parod
 cf.cash-statement-requested-paragraph=Mae’r trafodion y gwnaethoch gais amdanynt ar gael i’w lawrlwytho.
-cf.cash-statement-requested-list-paragraph=Crëwyd y rhestr hon ar 19 Awst 2024. Bydd ar gael i’w gweld am 10 diwrnod.
+cf.cash-statement-requested-list-paragraph=Mae trafodion y gofynnir amdanynt ar gael i’w gweld am 10 diwrnod.
 cf.cash-statement-requested-to=i
 
 cf.cash-statement-requested.download-link=Lawrlwytho {0} o {1} ({2})
