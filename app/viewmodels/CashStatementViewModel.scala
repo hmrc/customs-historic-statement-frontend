@@ -62,7 +62,7 @@ object CashStatementViewModel {
     val heading = h2Component(
       id = Some("search-transactions-support-message-heading"),
       msg = "site.support.heading",
-      classes = "govuk-heading-m govuk-!-padding-top-8")
+      classes = "govuk-heading-m govuk-!-padding-top-9")
 
     val link = hmrcNewTabLinkComponent(
       linkMessage = "cf.help-and-support.link.text",
