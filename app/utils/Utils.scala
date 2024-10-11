@@ -16,7 +16,11 @@
 
 package utils
 
-import views.html.components._
+import config.FrontendAppConfig
+import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
+import views.html.components.*
 import views.html.components.description_list.{dd, dl, dt}
 
 object Utils {
@@ -24,6 +28,7 @@ object Utils {
   val emptyStringWithSpace = " "
   val comma = ","
   val hyphen = "-"
+  val period = "."
 
   val h2Component = new h2()
   val h3Component = new h3()
@@ -38,4 +43,19 @@ object Utils {
   val spanLinkComponent = new span_link()
 
   val missingDocumentsGuidanceComponent = new missing_documents_guidance(h2Component, pComponent)
+  val emptyHmrcNewTabLink: HmrcNewTabLink = new HmrcNewTabLink()
+
+  def hmrcNewTabLinkComponent(linkMessage: String,
+                              href: String,
+                              preLinkMessage: Option[String] = None,
+                              postLinkMessage: Option[String] = None,
+                              classes: String = "govuk-body")
+                             (implicit messages: Messages, config: FrontendAppConfig): HtmlFormat.Appendable = {
+    new newTabLink(emptyHmrcNewTabLink).apply(
+      linkMessage = linkMessage,
+      href = href,
+      preLinkMessage = preLinkMessage,
+      postLinkMessage = postLinkMessage,
+      classes = classes)
+  }
 }

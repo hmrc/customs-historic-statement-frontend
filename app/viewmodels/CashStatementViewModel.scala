@@ -16,13 +16,14 @@
 
 package viewmodels
 
+import config.FrontendAppConfig
 import controllers.OrderedByEoriHistory
 import helpers.Formatters
 import models.FileFormat.{Csv, Pdf}
 import models.{CashStatementFile, EoriHistory, FileFormat}
 import play.api.i18n.Messages
-import play.twirl.api.Html
-import utils.Utils.{ddComponent, divComponent, dlComponent, dtComponent, emptyString, h2Component}
+import play.twirl.api.{Html, HtmlFormat}
+import utils.Utils.{ddComponent, divComponent, dlComponent, dtComponent, emptyString, h2Component, hmrcNewTabLinkComponent}
 import views.html.components.download_link_cash_account
 
 import java.time.LocalDate
@@ -55,6 +56,22 @@ case class GroupedStatementsByEori(eoriIndex: Int,
                                    statementsByYear: Map[Int, Seq[CashStatementByMonth]])
 
 object CashStatementViewModel {
+
+  def helpAndSupport(implicit appConfig: FrontendAppConfig, messages: Messages): HtmlFormat.Appendable = {
+
+    val heading = h2Component(
+      id = Some("search-transactions-support-message-heading"),
+      msg = "site.support.heading",
+      classes = "govuk-heading-m govuk-!-padding-top-9")
+
+    val link = hmrcNewTabLinkComponent(
+      linkMessage = "cf.help-and-support.link.text",
+      href = appConfig.cashAccountForCdsDeclarationsUrl,
+      preLinkMessage = Some("cf.help-and-support.link.text.pre"),
+      postLinkMessage = Some("cf.help-and-support.link.text.post"))
+
+    HtmlFormat.fill(Seq(heading, link))
+  }
 
   def generateCashAccountHeading(model: CashStatementViewModel)(implicit messages: Messages): Html = {
     val cashAccountNumberHtml = getCashAccountHeading(model)

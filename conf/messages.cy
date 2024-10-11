@@ -36,6 +36,7 @@ feedback.after = yn ein helpu i’w wella.
 
 site.change = Newid
 site.continue = Cadarnhau ac anfon
+site.support.heading = Help a chymorth
 
 # Unauthorised Error
 unauthorised.title=Heb gofrestru â’r Gwasanaeth Datgan Tollau
@@ -204,7 +205,7 @@ cf.import-vat.requested.available.text=Mae tystysgrifau y gofynnwyd amdanynt ar 
 cf.cash-statement-requested-account-heading=Cyfrif: {0}
 cf.cash-statement-requested-heading=Trafodion cyfrif arian parod
 cf.cash-statement-requested-paragraph=Mae’r trafodion y gwnaethoch gais amdanynt ar gael i’w lawrlwytho.
-cf.cash-statement-requested-list-paragraph=Crëwyd y rhestr hon ar 19 Awst 2024. Bydd ar gael i’w gweld am 10 diwrnod.
+cf.cash-statement-requested-list-paragraph=Mae trafodion y gofynnir amdanynt ar gael i’w gweld am 10 diwrnod.
 cf.cash-statement-requested-to=i
 
 cf.cash-statement-requested.download-link=Lawrlwytho {0} o {1} ({2})
@@ -307,3 +308,8 @@ cf.undeliverable.email.change.text.p1=Os nad yw’r cyfeiriad e-bost yn gywir, g
 cf.undeliverable.email.change.text.p2=Mae’r Gwasanaeth Datganiadau Tollau yn defnyddio un cyfeiriad e-bost ar gyfer nifer o wasanaethau sy’n gysylltiedig â thollau. Os ydych yn newid y cyfeiriad e-bost hwn, sicrhewch fod modd i bobl eraill yn eich cwmni gael y negeseuon sydd eu hangen arnynt.
 cf.undeliverable.email.link-text=Dilysu neu newid y cyfeiriad e-bost
 # ------------------------------------------------------------------------
+
+# Help and support
+cf.help-and-support.link.text.pre = Gallwch
+cf.help-and-support.link.text.post = os oes angen help arnoch
+cf.help-and-support.link.text = gysylltu â chanolfan cyfrifyddu CThEF (yn agor tab newydd)
