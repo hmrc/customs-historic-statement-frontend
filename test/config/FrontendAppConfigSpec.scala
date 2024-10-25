@@ -17,7 +17,7 @@
 package config
 
 import base.SpecBase
-import models.{C79Certificate, CashStatement, DutyDefermentStatement, PostponedVATStatement, SecurityStatement}
+import models.{C79Certificate, CDSCashAccount, DutyDefermentStatement, PostponedVATStatement, SecurityStatement}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.RequestedLinkId
 import play.api.Application
@@ -43,7 +43,7 @@ class FrontendAppConfigSpec extends SpecBase {
     }
 
     "return the adjustments link if a CashStatement FileRole provided" in new Setup {
-      config.returnLink(CashStatement, emptyUserAnswers) mustBe
+      config.returnLink(CDSCashAccount, emptyUserAnswers) mustBe
         "http://localhost:9394/customs/cash-account"
     }
 
@@ -76,8 +76,8 @@ class FrontendAppConfigSpec extends SpecBase {
 
   "deleteNotificationUrl" should {
     "return correct url for cash account FileRole" in new Setup {
-      config.deleteNotificationUrl(CashStatement, "GB123456789000") mustBe
-        "http://localhost:9878/customs-financials-api/eori/GB123456789000/notifications/CashStatement"
+      config.deleteNotificationUrl(CDSCashAccount, "GB123456789000") mustBe
+        "http://localhost:9878/customs-financials-api/eori/GB123456789000/notifications/CDSCashAccount"
     }
 
     "return correct url for C79 certificate FileRole" in new Setup {

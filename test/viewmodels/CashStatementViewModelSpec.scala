@@ -209,7 +209,7 @@ class CashStatementViewModelSpec extends SpecBase {
       periodEndMonth = periodEndMonth - 1,
       periodEndDay = periodEndDay,
       fileFormat = Csv,
-      fileRole = CashStatement,
+      fileRole = CDSCashAccount,
       cashAccountNumber = accountNumber,
       statementRequestId = None)
 
@@ -221,7 +221,7 @@ class CashStatementViewModelSpec extends SpecBase {
       periodEndMonth = periodEndMonth,
       periodEndDay = periodEndDay,
       fileFormat = Pdf,
-      fileRole = CashStatement,
+      fileRole = CDSCashAccount,
       cashAccountNumber = accountNumber,
       statementRequestId = None)
 

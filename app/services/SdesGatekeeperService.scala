@@ -135,7 +135,7 @@ class SdesGatekeeperService() {
       case "SecurityStatement" => SecurityStatement
       case "DutyDefermentStatement" => DutyDefermentStatement
       case "PostponedVATStatement" => PostponedVATStatement
-      case "CashStatement" => CashStatement
+      case "CDSCashAccount" => CDSCashAccount
       case _ => throw new Exception(s"Unknown file role: $role")
     }
   }

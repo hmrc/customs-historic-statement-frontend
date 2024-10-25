@@ -25,7 +25,7 @@ object DateMessages {
   def apply(fileRole: FileRole): DateMessages = {
 
     fileRole match {
-      case CashStatement =>
+      case CDSCashAccount =>
         DateMessages(
           startDate =
             DateMessage("cf.historic.document.request.from", "cf.historic.document.request.date.CashStatement.hint"),

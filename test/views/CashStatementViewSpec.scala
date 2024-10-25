@@ -17,7 +17,7 @@
 package views
 
 import models.FileFormat.Csv
-import models.{CashStatement, CashStatementFile, CashStatementFileMetadata, EoriHistory}
+import models.{CDSCashAccount, CashStatementFile, CashStatementFileMetadata, EoriHistory}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
@@ -32,7 +32,7 @@ class CashStatementViewSpec extends ViewTestHelper {
 
     "display correct title and contents" in new Setup {
       titleShouldBeCorrect(view, "cf.cash-statement-requested-heading")
-      pageShouldContainBackLinkUrl(view, config.returnLink(CashStatement))
+      pageShouldContainBackLinkUrl(view, config.returnLink(CDSCashAccount))
       headingShouldBeCorrect
       requestedParagraphTextShouldBeCorrect
       requestedListParagraphTextShouldBeCorrect
@@ -93,7 +93,7 @@ class CashStatementViewSpec extends ViewTestHelper {
         periodStartMonth,
         periodStartDay,
         Csv,
-        CashStatement,
+        CDSCashAccount,
         Some("requestId")
       ), someEori)
 
@@ -112,6 +112,6 @@ class CashStatementViewSpec extends ViewTestHelper {
 
     implicit val view: Document = Jsoup.parse(app.injector.instanceOf[CashStatementView].apply(
       cashStatementViewModel,
-      config.returnLink(CashStatement)).body)
+      config.returnLink(CDSCashAccount)).body)
   }
 }

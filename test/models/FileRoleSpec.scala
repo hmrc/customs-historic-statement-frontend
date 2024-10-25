@@ -39,7 +39,7 @@ class FileRoleSpec extends SpecBase {
     }
 
     "return a JsSuccess for CashStatement" in {
-      JsString("CashStatement").as[FileRole] mustBe CashStatement
+      JsString("CDSCashAccount").as[FileRole] mustBe CDSCashAccount
     }
 
     "return exception for unknown file role" in {

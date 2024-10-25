@@ -66,7 +66,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
         .thenReturn(Future.successful(cashStatementFiles))
 
       val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET,
-        controllers.routes.HistoricStatementsController.historicStatements(CashStatement).url)
+        controllers.routes.HistoricStatementsController.historicStatements(CDSCashAccount).url)
 
       running(app) {
         val result = route(app, request).value
@@ -191,7 +191,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
       "statementfile_01",
       "download_url_01",
       size,
-      CashStatementFileMetadata(year, one, one, year, one, one, Pdf, CashStatement, None))
+      CashStatementFileMetadata(year, one, one, year, one, one, Pdf, CDSCashAccount, None))
 
     val cashStatementFiles: Seq[CashStatementFile] = Seq(
       cashStatementFile,
@@ -199,7 +199,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
         "statementfile_02",
         "download_url_02",
         size,
-        CashStatementFileMetadata(year, one, one, year, one, one, Pdf, CashStatement, None)))
+        CashStatementFileMetadata(year, one, one, year, one, one, Pdf, CDSCashAccount, None)))
 
     val dutyDeferementFile: DutyDefermentStatementFile = DutyDefermentStatementFile(
       "2018_03_01-08.pdf", "url.pdf", size,
