@@ -169,13 +169,13 @@ class SdesConnectorSpec extends SpecBase {
         MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"),
         MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
         MetadataItem("PeriodEndMonth", "3"), MetadataItem("PeriodEndDay", "31"),
-        MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "CashStatement")))),
+        MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "CDSCashAccount")))),
 
       FileInformation("cash_statement_02", "download_url_02", size, Metadata(List(
         MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "2"),
         MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
         MetadataItem("PeriodEndMonth", "2"), MetadataItem("PeriodEndDay", "28"),
-        MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "CashStatement")))))
+        MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "CDSCashAccount")))))
 
     val cashStatementFiles: Seq[CashStatementFile] = List(
       CashStatementFile("cash_statement_01", "download_url_01", size, CashStatementFileMetadata(
