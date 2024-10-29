@@ -20,7 +20,7 @@ import helpers.Formatters
 import models.FileFormat.{Csv, Pdf}
 import models.{
   C79Certificate,
-  CashStatement,
+  CDSCashAccount,
   CashStatementFile,
   CashStatementFileMetadata,
   FileFormat,
@@ -138,7 +138,7 @@ class DownloadLinkSpec extends ViewTestHelper {
         periodStartMonth,
         periodStartDay,
         Csv,
-        CashStatement,
+        CDSCashAccount,
         Some("requestId")
       ), "12345678")
 

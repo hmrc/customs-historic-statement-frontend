@@ -33,6 +33,7 @@ import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -161,27 +162,27 @@ class SdesConnectorSpec extends SpecBase {
     val size = 111L
 
     val sdesCashStatementsUrl =
-      "http://localhost:9754/customs-financials-sdes-stub/files-available/list/CashStatement"
+      "http://localhost:9754/customs-financials-sdes-stub/files-available/list/CDSCashAccount"
 
     val cashStatementFilesSdesResponse: Seq[FileInformation] = List(
       FileInformation("cash_statement_01", "download_url_01", size, Metadata(List(
         MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "3"),
         MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
         MetadataItem("PeriodEndMonth", "3"), MetadataItem("PeriodEndDay", "31"),
-        MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "CashStatement")))),
+        MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "CDSCashAccount")))),
 
       FileInformation("cash_statement_02", "download_url_02", size, Metadata(List(
         MetadataItem("PeriodStartYear", "2018"), MetadataItem("PeriodStartMonth", "2"),
         MetadataItem("PeriodStartDay", "14"), MetadataItem("PeriodEndYear", "2018"),
         MetadataItem("PeriodEndMonth", "2"), MetadataItem("PeriodEndDay", "28"),
-        MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "CashStatement")))))
+        MetadataItem("FileType", "PDF"), MetadataItem("FileRole", "CDSCashAccount")))))
 
     val cashStatementFiles: Seq[CashStatementFile] = List(
       CashStatementFile("cash_statement_01", "download_url_01", size, CashStatementFileMetadata(
-        year, month, day, year, month, day + 17, Pdf, CashStatement, None)),
+        year, month, day, year, month, day + 17, Pdf, CDSCashAccount, None)),
 
       CashStatementFile("cash_statement_02", "download_url_02", size, CashStatementFileMetadata(
-        year, month - 1, day, year, month - 1, day + 14, Pdf, CashStatement, None)))
+        year, month - 1, day, year, month - 1, day + 14, Pdf, CDSCashAccount, None)))
 
     val cashStatementFilesWithUnknownFileRoleSdesResponse: Seq[FileInformation] = List(
       FileInformation("cash_statement_01", "download_url_01", size, Metadata(List(

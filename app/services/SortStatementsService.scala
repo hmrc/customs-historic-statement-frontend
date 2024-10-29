@@ -53,7 +53,7 @@ class SortStatementsService @Inject()() {
     }.toList
 
     val filteredByStatementRequestId = groupedByMonth.map { statementByMonth =>
-      val filteredFiles = statementByMonth.files.filter(_.metadata.statementRequestId.isDefined)
+      val filteredFiles = statementByMonth.files.filter(_.metadata.statementRequestId.isEmpty)
 
       CashStatementByMonth(statementByMonth.date, filteredFiles)
     }

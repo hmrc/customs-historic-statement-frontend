@@ -40,7 +40,7 @@ class SdesGatekeeperServiceSpec extends SpecBase {
       result.metadata.periodEndMonth mustBe periodEndMonth
       result.metadata.periodEndDay mustBe periodEndDay
       result.metadata.fileFormat mustBe FileFormat(csv)
-      result.metadata.fileRole mustBe CashStatement
+      result.metadata.fileRole mustBe CDSCashAccount
       result.metadata.cashAccountNumber mustBe someAccountNumber
       result.metadata.statementRequestId mustBe someRequestId
     }
@@ -134,7 +134,7 @@ class SdesGatekeeperServiceSpec extends SpecBase {
         periodEndDay = periodEndDay,
         fileFormat = FileFormat(csv),
         statementRequestId = someRequestId,
-        fileRole = CashStatement,
+        fileRole = CDSCashAccount,
         cashAccountNumber = someAccountNumber
       ), eori = emptyString)
 
@@ -150,7 +150,7 @@ class SdesGatekeeperServiceSpec extends SpecBase {
         MetadataItem("PeriodEndMonth", periodEndMonth.toString),
         MetadataItem("PeriodEndDay", periodEndDay.toString),
         MetadataItem("FileType", csv),
-        MetadataItem("FileRole", "CashStatement"),
+        MetadataItem("FileRole", "CDSCashAccount"),
         MetadataItem("CashAccountNumber", someAccountNumber.getOrElse(emptyString)),
         MetadataItem("statementRequestID", someRequestId.getOrElse(emptyString)))))
 

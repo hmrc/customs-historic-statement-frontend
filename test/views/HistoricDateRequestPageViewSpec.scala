@@ -20,7 +20,7 @@ import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
 import models.{
   C79Certificate,
-  CashStatement,
+  CDSCashAccount,
   DateMessages,
   DutyDefermentStatement,
   FileRole,
@@ -129,7 +129,7 @@ trait SetUpWithSpecBase extends SpecBase {
       case PostponedVATStatement => msgs("cf.historic.document.request.date.PostponedVATStatement.hint")
       case DutyDefermentStatement => msgs("cf.historic.document.request.date.DutyDefermentStatement.hint")
       case SecurityStatement => msgs("cf.historic.document.request.date.SecurityStatement.hint")
-      case CashStatement => msgs("cf.historic.document.request.date.CashStatement.hint")
+      case CDSCashAccount => msgs("cf.historic.document.request.date.CashStatement.hint")
     }
   }
 

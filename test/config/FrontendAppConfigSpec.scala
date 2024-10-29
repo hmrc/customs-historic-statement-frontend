@@ -17,7 +17,7 @@
 package config
 
 import base.SpecBase
-import models.{C79Certificate, CashStatement, DutyDefermentStatement, PostponedVATStatement, SecurityStatement}
+import models.{C79Certificate, CDSCashAccount, DutyDefermentStatement, PostponedVATStatement, SecurityStatement}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.RequestedLinkId
 import play.api.Application
@@ -28,6 +28,13 @@ class FrontendAppConfigSpec extends SpecBase {
     "contain correct values for the provided configuration" in new Setup {
       config.cashAccountForCdsDeclarationsUrl mustBe
         "https://www.gov.uk/guidance/use-a-cash-account-for-cds-declarations"
+    }
+  }
+
+  "sdesCashStatementListUrl" should {
+    "return correct sdes url" in new Setup {
+      config.sdesCashStatementListUrl mustBe
+        "http://localhost:9754/customs-financials-sdes-stub/files-available/list/CDSCashAccount"
     }
   }
 
@@ -42,8 +49,8 @@ class FrontendAppConfigSpec extends SpecBase {
         "http://localhost:9398/customs/documents/import-vat"
     }
 
-    "return the adjustments link if a CashStatement FileRole provided" in new Setup {
-      config.returnLink(CashStatement, emptyUserAnswers) mustBe
+    "return the cash account link if a CDSCashAccount FileRole and User Answers provided" in new Setup {
+      config.returnLink(CDSCashAccount, emptyUserAnswers) mustBe
         "http://localhost:9394/customs/cash-account"
     }
 
@@ -52,6 +59,11 @@ class FrontendAppConfigSpec extends SpecBase {
         DutyDefermentStatement,
         emptyUserAnswers.set(RequestedLinkId, "someLink").success.value) mustBe
         "http://localhost:9397/customs/duty-deferment/someLink/account"
+    }
+
+    "return the cash account link if a CDSCashAccount FileRole provided" in new Setup {
+      config.returnLink(CDSCashAccount) mustBe
+        "http://localhost:9394/customs/cash-account"
     }
 
     "throw an exception if DutyDeferment FileRole and no linkId in user answers" in new Setup {
@@ -76,8 +88,8 @@ class FrontendAppConfigSpec extends SpecBase {
 
   "deleteNotificationUrl" should {
     "return correct url for cash account FileRole" in new Setup {
-      config.deleteNotificationUrl(CashStatement, "GB123456789000") mustBe
-        "http://localhost:9878/customs-financials-api/eori/GB123456789000/notifications/CashStatement"
+      config.deleteNotificationUrl(CDSCashAccount, "GB123456789000") mustBe
+        "http://localhost:9878/customs-financials-api/eori/GB123456789000/notifications/CDSCashAccount"
     }
 
     "return correct url for C79 certificate FileRole" in new Setup {

@@ -95,9 +95,9 @@ class SortStatementsServiceSpec extends SpecBase {
         periodEndMonth,
         periodEndDay,
         Pdf,
-        CashStatement,
+        CDSCashAccount,
         someAccountNumber,
-        someRequestId
+        None
       ), someEori)
 
     val cashStatementFileCsv: CashStatementFile = CashStatementFile(
@@ -112,9 +112,9 @@ class SortStatementsServiceSpec extends SpecBase {
         periodEndMonth,
         periodEndDay,
         Csv,
-        CashStatement,
+        CDSCashAccount,
         someAccountNumber,
-        someRequestId
+        None
       ), someEori)
 
     val cashStatementFilePdf_2: CashStatementFile = CashStatementFile(
@@ -129,15 +129,12 @@ class SortStatementsServiceSpec extends SpecBase {
         periodEndMonth,
         periodEndDay,
         Pdf,
-        CashStatement,
+        CDSCashAccount,
         someAccountNumber,
         someRequestId
       ), someEori)
 
     val requestedCashStatements: Seq[CashStatementByMonth] = List(
-      CashStatementByMonth(
-        LocalDate.of(periodStartYear - 1, periodStartMonth, periodStartDay),
-        Seq(cashStatementFilePdf_2)),
       CashStatementByMonth(
         LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
         Seq(cashStatementFilePdf, cashStatementFileCsv)))

@@ -56,7 +56,7 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
       case SecurityStatement => showHistoricSecurityStatements()
       case C79Certificate => showHistoricC79Statements()
       case PostponedVATStatement => showHistoricPostponedVatStatements()
-      case CashStatement => showHistoricCashStatements()
+      case CDSCashAccount => showHistoricCashStatements()
       case _ => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
     }
   }
@@ -95,7 +95,7 @@ class HistoricStatementsController @Inject()(identify: IdentifierAction,
       })
 
       viewModel = CashStatementViewModel(allCertificates.sorted)
-    } yield Ok(importCashStatementView(viewModel, appConfig.returnLink(CashStatement)))
+    } yield Ok(importCashStatementView(viewModel, appConfig.returnLink(CDSCashAccount)))
   }
 
   private def showHistoricPostponedVatStatements()(

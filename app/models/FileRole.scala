@@ -25,7 +25,7 @@ case object DutyDefermentStatement extends FileRole("DutyDefermentStatement")
 case object C79Certificate extends FileRole("C79Certificate")
 case object SecurityStatement extends FileRole("SecurityStatement")
 case object PostponedVATStatement extends FileRole("PostponedVATStatement")
-case object CashStatement extends FileRole("CashStatement")
+case object CDSCashAccount extends FileRole("CDSCashAccount")
 
 object FileRole {
   implicit val format: Format[FileRole] = new Format[FileRole] {
@@ -35,7 +35,7 @@ object FileRole {
         case JsString("C79Certificate") => JsSuccess(C79Certificate)
         case JsString("SecurityStatement") => JsSuccess(SecurityStatement)
         case JsString("PostponedVATStatement") => JsSuccess(PostponedVATStatement)
-        case JsString("CashStatement") => JsSuccess(CashStatement)
+        case JsString("CDSCashAccount") => JsSuccess(CDSCashAccount)
         case e => JsError(s"Invalid file role: $e")
       }
     }
@@ -49,7 +49,7 @@ object FileRole {
         case "duty-deferment" => Right(DutyDefermentStatement)
         case "adjustments" => Right(SecurityStatement)
         case "postponed-vat" => Right(PostponedVATStatement)
-        case "cash-statement" => Right(CashStatement)
+        case "cash-statement" => Right(CDSCashAccount)
         case fileRole => Left(s"unknown file role: $fileRole")
       }
     }
@@ -60,7 +60,7 @@ object FileRole {
         case DutyDefermentStatement => "duty-deferment"
         case SecurityStatement => "adjustments"
         case PostponedVATStatement => "postponed-vat"
-        case CashStatement => "cash-statement"
+        case CDSCashAccount => "cash-statement"
       }
     }
   }

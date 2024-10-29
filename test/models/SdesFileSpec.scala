@@ -115,7 +115,7 @@ class SdesFileSpec extends SpecBase with Matchers {
         periodEndMonth = month,
         periodEndDay = day,
         fileFormat = Csv,
-        fileRole = CashStatement,
+        fileRole = CDSCashAccount,
         cashAccountNumber = None,
         statementRequestId = None
       ), "123456789")
@@ -132,7 +132,7 @@ class SdesFileSpec extends SpecBase with Matchers {
         periodEndMonth = month,
         periodEndDay = day,
         fileFormat = Csv,
-        fileRole = CashStatement,
+        fileRole = CDSCashAccount,
         cashAccountNumber = None,
         statementRequestId = None
       ), "123456789")

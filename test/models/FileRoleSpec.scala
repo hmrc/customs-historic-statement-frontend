@@ -18,6 +18,7 @@ package models
 
 import base.SpecBase
 import play.api.libs.json.{JsResultException, JsString}
+import play.api.mvc.PathBindable
 
 class FileRoleSpec extends SpecBase {
 
@@ -38,14 +39,31 @@ class FileRoleSpec extends SpecBase {
       JsString("PostponedVATStatement").as[FileRole] mustBe PostponedVATStatement
     }
 
-    "return a JsSuccess for CashStatement" in {
-      JsString("CashStatement").as[FileRole] mustBe CashStatement
+    "return a JsSuccess for CDSCashAccount" in {
+      JsString("CDSCashAccount").as[FileRole] mustBe CDSCashAccount
     }
 
     "return exception for unknown file role" in {
       intercept[JsResultException] {
         JsString("Unknown").as[FileRole]
       }
+    }
+  }
+
+  "FileRole.pathBinder" should {
+    val pathBindable: PathBindable[FileRole] = implicitly[PathBindable[FileRole]]
+
+    "bind 'cash-statement' to Right(CDSCashAccount)" in {
+      pathBindable.bind("fileRole", "cash-statement") mustBe Right(CDSCashAccount)
+    }
+
+    "unbind CDSCashAccount to 'cash-statement'" in {
+      pathBindable.unbind("fileRole", CDSCashAccount) mustBe "cash-statement"
+    }
+
+    "return Left with error for unknown file role in bind" in {
+      val unknownRole = "unknown-role"
+      pathBindable.bind("fileRole", unknownRole) mustBe Left(s"unknown file role: $unknownRole")
     }
   }
 }
