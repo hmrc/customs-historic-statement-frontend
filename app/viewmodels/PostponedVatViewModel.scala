@@ -22,7 +22,7 @@ import models.FileFormat.Pdf
 import models.{EoriHistory, PostponedVatStatementFile}
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import utils.PostponedVatViewUtil.downloadLink
+import views.html.components.download_link_pvat
 
 import java.time.LocalDate
 
@@ -109,13 +109,12 @@ object PostponedVatViewModel {
                                 date: String)
                                (implicit messages: Messages): Html = {
     Html(files.map { file =>
-      downloadLink(
+      new download_link_pvat().apply(
         Some(file),
         Pdf,
         file.metadata.source,
-        s"requested-${file.metadata.source}-statements-list-${historyIndex}-row-${index}-pdf-download-link",
-        date
-      ).toString
+        s"requested-${file.metadata.source}-statements-list-$historyIndex-row-$index-pdf-download-link",
+        date)
     }.mkString)
   }
 
