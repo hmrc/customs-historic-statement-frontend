@@ -22,9 +22,14 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
 import play.twirl.api.Html
-import viewmodels.{PostponedVatStatementsByMonth, PostponedVatStatementsForEori, PostponedVatViewModel, SourceDisplay, StatementDisplayData}
+import viewmodels.{
+  PostponedVatStatementsByMonth,
+  PostponedVatStatementsForEori,
+  PostponedVatViewModel,
+  SourceDisplay,
+  StatementDisplayData
+}
 import views.html.ImportPostponedVatRequestedStatements
-
 import java.time.LocalDate
 
 class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
@@ -40,12 +45,16 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
 
   "PostponedVatViewModel" should {
     "correctly handle historiesWithDisplayData" in new Setup {
-      val result: Seq[StatementDisplayData] = PostponedVatViewModel.historiesWithDisplayData(postponedVatViewModel.statementsForAllEoris)
+      val result: Seq[StatementDisplayData] =
+        PostponedVatViewModel.historiesWithDisplayData(postponedVatViewModel.statementsForAllEoris)
+
       displayStatementsShouldBeCorrect(result)
     }
 
     "correctly handle groupedStatementsBySource" in new Setup {
-      val result: Map[String, Seq[PostponedVatStatementFile]] = PostponedVatViewModel.groupedStatementsBySource(postponedVatStatementsByMonth_2)
+      val result: Map[String, Seq[PostponedVatStatementFile]] =
+        PostponedVatViewModel.groupedStatementsBySource(postponedVatStatementsByMonth_2)
+
       result.size mustBe 1
       result("CDS").length mustBe 1
       result("CDS").head mustBe postponedVatStatementFile_2
@@ -54,16 +63,19 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     "correctly handle renderSourceDisplay" in new Setup {
       val sourceDisplay: SourceDisplay = SourceDisplay("CDS", Seq(postponedVatStatementFile))
       val result: Html = PostponedVatViewModel.renderSourceDisplay(sourceDisplay, 0, 0, "October 2020")
+
       result.body must include(postponedVatStatementFile.downloadURL)
     }
 
     "correctly handle missingFileMessage for CDS" in new Setup {
       val result: String = PostponedVatViewModel.missingFileMessage("CDS")
+
       result mustBe "No CDS statements available."
     }
 
     "correctly handle missingFileMessage for CHIEF" in new Setup {
       val result: String = PostponedVatViewModel.missingFileMessage("CHIEF")
+
       result mustBe "No CHIEF statements available."
     }
   }
