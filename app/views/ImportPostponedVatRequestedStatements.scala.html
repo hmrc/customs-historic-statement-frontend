@@ -36,24 +36,10 @@
     id=Some("available-text"),
     content=Html(messages("cf.import-postponed-vat.requested.available.text")))
 
-  @for(history <- PostponedVatViewModel.historiesWithDisplayData(model.statementsForAllEoris)) {
-
-    <div id="requested-@history.monthYearId">
-
-      @h2(msg = history.monthYear, id = Some(s"period-${history.monthYearId}"))
-
-        <ul class="govuk-list" id="requested-statements-list-@history.historyIndex-row-@history.index">
-
-          @for(sourceDisplay <- history.sources) {
-            <li>
-              @PostponedVatViewModel.renderSourceDisplay(
-                sourceDisplay,
-                history.historyIndex,
-                history.index,
-                history.monthYear)
-            </li>
-          }
-        </ul>
+  @for(statement <- model.statementDisplayData) {
+    <div id="requested-@statement.monthYearId">
+      @statement.dateHeader
+      @statement.statementItem
     </div>
   }
 }
