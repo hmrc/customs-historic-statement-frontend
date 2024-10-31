@@ -46,9 +46,7 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
 
   "PostponedVatViewModel" should {
     "correctly handle statementsDisplayData" in new Setup {
-      val result: Seq[StatementDisplayData] = viewModel.statementDisplayData
-
-      displayStatementsShouldBeCorrect(result)
+      displayStatementsShouldBeCorrect(viewModel.statementDisplayData)
     }
 
     "correctly group statements by source" in new Setup {
