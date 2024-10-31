@@ -14,53 +14,32 @@
  * limitations under the License.
  *@
 
-@import models.FileFormat.Pdf
 @import viewmodels.PostponedVatViewModel
-@import models.PostponedVatStatementFile
 @import views.html.templates.Layout
 
 @this(
-    layout: Layout,
-    download_link: components.download_link_pvat,
-    missing_documents_guidance: components.missing_documents_guidance,
-    p: components.p,
-    h1: components.h1,
-    h2: components.h2
+  layout: Layout,
+  p: components.p,
+  h1: components.h1,
+  h2: components.h2
 )
 
 @(model: PostponedVatViewModel, backLink: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some(messages("cf.import-postponed-vat.requested.title")), backLinkUrl = Some(backLink)) {
 
-    @h1(id=Some("requested-import-postponed-vat-statements-heading"),
-        classes="govuk-heading-xl govuk-!-margin-bottom-3",
-        msg=messages("cf.import-postponed-vat.requested.title")
-    )
+  @h1(id=Some("requested-import-postponed-vat-statements-heading"),
+    classes="govuk-heading-xl govuk-!-margin-bottom-3",
+    msg=messages("cf.import-postponed-vat.requested.title"))
 
-    @p(classes="govuk-body govuk-!-margin-bottom-8",
-        id=Some("available-text"),
-        content=Html(messages("cf.import-postponed-vat.requested.available.text"))
-    )
+  @p(classes="govuk-body govuk-!-margin-bottom-8",
+    id=Some("available-text"),
+    content=Html(messages("cf.import-postponed-vat.requested.available.text")))
 
-    @for(history <- PostponedVatViewModel.historiesWithDisplayData(model.statementsForAllEoris)) {
-
-        <div id="requested-@history.monthYearId">
-
-            @h2(msg = history.monthYear, id = Some(s"period-${history.monthYearId}"))
-
-                <ul class="govuk-list" id="requested-statements-list-@history.historyIndex-row-@history.index">
-
-                    @for(sourceDisplay <- history.sources) {
-                        <li>
-                            @PostponedVatViewModel.renderSourceDisplay(
-                                sourceDisplay,
-                                history.historyIndex,
-                                history.index,
-                                history.monthYear
-                            )
-                        </li>
-                    }
-                </ul>
-        </div>
-    }
+  @for(statement <- model.statementDisplayData) {
+    <div id="requested-@statement.monthYearId">
+      @statement.dateHeader
+      @statement.statementItem
+    </div>
+  }
 }
