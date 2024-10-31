@@ -21,19 +21,24 @@ import helpers.Formatters
 import models.FileFormat.Pdf
 import models.{EoriHistory, PostponedVatStatementFile}
 import play.api.i18n.Messages
-import play.twirl.api.Html
+import play.twirl.api.HtmlFormat
+import utils.Utils
+import utils.Utils.h2Component
 import views.html.components.download_link_pvat
 
 import java.time.LocalDate
 
-case class PostponedVatViewModel(statementsForAllEoris: Seq[PostponedVatStatementsForEori])
+case class PostponedVatViewModel(statementsForAllEoris: Seq[PostponedVatStatementsForEori],
+                                 statementDisplayData: Seq[StatementDisplayData])
 
 case class StatementDisplayData(historyIndex: Int,
                                 monthYear: String,
                                 monthYearId: String,
                                 formattedMonth: String,
                                 sources: Seq[SourceDisplay],
-                                index: Int)
+                                index: Int,
+                                dateHeader: HtmlFormat.Appendable,
+                                statementItem: HtmlFormat.Appendable)
 
 case class SourceDisplay(source: String, files: Seq[PostponedVatStatementFile])
 
@@ -57,68 +62,93 @@ case class PostponedVatStatementsByMonth(date: LocalDate,
 }
 
 object PostponedVatViewModel {
-  val sources: Seq[String] = Seq("CDS", "CHIEF")
 
-  def historiesWithDisplayData(statementsForAllEoris: Seq[PostponedVatStatementsForEori]): Seq[StatementDisplayData] = {
-    for {
-      (statementsForEori, historyIndex) <- statementsForAllEoris.zipWithIndex
-      if statementsForEori.requestedStatements.nonEmpty
-      (statement, index) <- statementsForEori.requestedStatements.sorted.zipWithIndex
-    } yield createStatementDisplayData(historyIndex, statement, index)
+  def apply(statementsForAllEoris: Seq[PostponedVatStatementsForEori])(implicit messages: Messages): PostponedVatViewModel = {
+
+    val statementItems = generateStatementData(statementsForAllEoris)
+
+    PostponedVatViewModel(statementsForAllEoris, statementItems)
   }
 
-  private def createStatementDisplayData(historyIndex: Int,
-                                         statementsOfOneMonth: PostponedVatStatementsByMonth,
-                                         index: Int): StatementDisplayData = {
-    val groupedStatements = groupedStatementsBySource(statementsOfOneMonth)
-    val sourceDisplays = sources.map { source =>
-      SourceDisplay(source, groupedStatements.getOrElse(source, Seq.empty))
+  private def generateStatementData(statementsForAllEoris: Seq[PostponedVatStatementsForEori])
+                                   (implicit messages: Messages): Seq[StatementDisplayData] = {
+    statementsForAllEoris.zipWithIndex.flatMap {
+      case (statementsForEori, historyIndex) =>
+        statementsForEori.requestedStatements.sorted.zipWithIndex.map {
+          case (statement, index) => generateStatementDataItem(historyIndex, statement, index)
+        }
     }
+  }
+
+  private def generateStatementDataItem(historyIndex: Int, statementsByMonth: PostponedVatStatementsByMonth, index: Int)
+                                       (implicit messages: Messages): StatementDisplayData = {
+    val sources: Seq[String] = Seq("CDS", "CHIEF")
+
+    val sourceDisplay = sources.map(source => SourceDisplay(
+      source, groupStatementsBySource(statementsByMonth).getOrElse(source, Seq.empty)))
+
+    val dateHeader = generateDateHeaderHtml(
+      statementsByMonth.formattedMonthYear, statementsByMonth.formattedMonthYearAsId)
+
+    val statementItem = generateStatementItemHtml(
+      sourceDisplay, historyIndex, index, statementsByMonth.formattedMonthYear)
 
     StatementDisplayData(
-      historyIndex,
-      statementsOfOneMonth.formattedMonthYear,
-      statementsOfOneMonth.formattedMonthYearAsId,
-      statementsOfOneMonth.formattedMonth,
-      sourceDisplays,
-      index
-    )
+      historyIndex = historyIndex,
+      monthYear = statementsByMonth.formattedMonthYear,
+      monthYearId = statementsByMonth.formattedMonthYearAsId,
+      formattedMonth = statementsByMonth.formattedMonth,
+      sources = sourceDisplay,
+      index = index,
+      dateHeader = dateHeader,
+      statementItem = statementItem)
   }
 
-  def groupedStatementsBySource(
-                                 statementsOfOneMonth: PostponedVatStatementsByMonth
-                               ): Map[String, Seq[PostponedVatStatementFile]] = {
-    statementsOfOneMonth.files.groupBy(_.metadata.source)
+  private def groupStatementsBySource(statementsByMonth: PostponedVatStatementsByMonth
+                                     ): Map[String, Seq[PostponedVatStatementFile]] =
+    statementsByMonth.files.groupBy(_.metadata.source)
+
+  private def generateStatementItemHtml(sourceDisplays: Seq[SourceDisplay],
+                                        historyIndex: Int,
+                                        index: Int,
+                                        date: String)(implicit messages: Messages): HtmlFormat.Appendable = {
+    val items = sourceDisplays.map { sourceDisplay =>
+      s"<li>${generateSourceItemHtml(sourceDisplay, historyIndex, index, date).body}</li>"
+    }.mkString
+
+    HtmlFormat
+      .raw(s"""<ul class="govuk-list" id="requested-statements-list-$historyIndex-row-$index">$items</ul>""")
   }
 
-  def renderSourceDisplay(sourceDisplay: SourceDisplay,
-                          historyIndex: Int,
-                          index: Int,
-                          date: String)
-                         (implicit messages: Messages): Html = {
+  private def generateSourceItemHtml(sourceDisplay: SourceDisplay,
+                                     historyIndex: Int,
+                                     index: Int,
+                                     date: String)(implicit messages: Messages): HtmlFormat.Appendable = {
     if (sourceDisplay.files.isEmpty) {
-      Html(missingFileMessage(sourceDisplay.source))
+      HtmlFormat.raw(generateMissingFileMessage(sourceDisplay.source))
     } else {
-      renderDisplayRows(sourceDisplay.files, historyIndex, index, date)
+      generateDownloadLinkHtml(sourceDisplay.files, historyIndex, index, date)
     }
   }
 
-  private def renderDisplayRows(files: Seq[PostponedVatStatementFile],
-                                historyIndex: Int,
-                                index: Int,
-                                date: String)
-                               (implicit messages: Messages): Html = {
-    Html(files.map { file =>
+  private def generateDownloadLinkHtml(files: Seq[PostponedVatStatementFile],
+                                       historyIndex: Int,
+                                       index: Int,
+                                       date: String)(implicit messages: Messages): HtmlFormat.Appendable = {
+    HtmlFormat.raw(files.map { file =>
       new download_link_pvat().apply(
-        Some(file),
-        Pdf,
-        file.metadata.source,
-        s"requested-${file.metadata.source}-statements-list-$historyIndex-row-$index-pdf-download-link",
-        date)
+        file = Some(file),
+        fileFormat = Pdf,
+        source = file.metadata.source,
+        id = s"requested-${file.metadata.source}-statements-list-$historyIndex-row-$index-pdf-download-link",
+        period = date)
     }.mkString)
   }
 
-  def missingFileMessage(source: String)(implicit messages: Messages): String = {
+  private def generateDateHeaderHtml(monthYear: String,
+                                     monthYearId: String)(implicit messages: Messages): HtmlFormat.Appendable =
+    HtmlFormat.raw(h2Component(msg = monthYear, id = Some(s"period-$monthYearId")).toString)
+
+  private def generateMissingFileMessage(source: String)(implicit messages: Messages): String =
     messages("cf.account.postponed-vat.missing-file-type", source)
-  }
 }

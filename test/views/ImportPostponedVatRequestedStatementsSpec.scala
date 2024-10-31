@@ -21,7 +21,8 @@ import models.{EoriHistory, PostponedVATStatement, PostponedVatStatementFile, Po
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import play.twirl.api.Html
+import play.api.Application
+import play.api.i18n.Messages
 import viewmodels.{
   PostponedVatStatementsByMonth,
   PostponedVatStatementsForEori,
@@ -44,39 +45,27 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
   }
 
   "PostponedVatViewModel" should {
-    "correctly handle historiesWithDisplayData" in new Setup {
-      val result: Seq[StatementDisplayData] =
-        PostponedVatViewModel.historiesWithDisplayData(postponedVatViewModel.statementsForAllEoris)
+    "correctly handle statementsDisplayData" in new Setup {
+      val result: Seq[StatementDisplayData] = viewModel.statementDisplayData
 
       displayStatementsShouldBeCorrect(result)
     }
 
-    "correctly handle groupedStatementsBySource" in new Setup {
-      val result: Map[String, Seq[PostponedVatStatementFile]] =
-        PostponedVatViewModel.groupedStatementsBySource(postponedVatStatementsByMonth_2)
+    "correctly group statements by source" in new Setup {
+      val cdsSource: SourceDisplay = statementData.sources.find(_.source == "CDS").get
 
-      result.size mustBe 1
-      result("CDS").length mustBe 1
-      result("CDS").head mustBe postponedVatStatementFile_2
+      statementData.sources.length mustBe 2
+      cdsSource.files.length mustBe 1
+      cdsSource.files.head mustBe postponedVatStatementFile_2
     }
 
-    "correctly handle renderSourceDisplay" in new Setup {
-      val sourceDisplay: SourceDisplay = SourceDisplay("CDS", Seq(postponedVatStatementFile))
-      val result: Html = PostponedVatViewModel.renderSourceDisplay(sourceDisplay, 0, 0, "October 2020")
-
-      result.body must include(postponedVatStatementFile.downloadURL)
+    "correctly display statement content" in new Setup {
+      statementData.statementItem.body must include(monthAndYear)
+      statementData.statementItem.body must include(postponedVatStatementFile.downloadURL)
     }
 
-    "correctly handle missingFileMessage for CDS" in new Setup {
-      val result: String = PostponedVatViewModel.missingFileMessage("CDS")
-
-      result mustBe "No CDS statements available."
-    }
-
-    "correctly handle missingFileMessage for CHIEF" in new Setup {
-      val result: String = PostponedVatViewModel.missingFileMessage("CHIEF")
-
-      result mustBe "No CHIEF statements available."
+    "correctly handle missing files" in new Setup {
+      statementData.statementItem.body must include(msg("cf.account.postponed-vat.missing-file-type", "CHIEF"))
     }
   }
 
@@ -104,11 +93,15 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
 
   trait Setup {
 
+    val app: Application = applicationBuilder().build()
+    implicit val msg: Messages = messages(app)
+
     private val someEori = "12345678"
     private val localDateYear = 2020
     private val localDateMonth = 10
     private val localDateMonth2 = 10
     private val localDateDay = 1
+    protected val monthAndYear = "October 2020"
 
     private val filename: String = "name_04"
     private val downloadURL: String = "download_url_06"
@@ -162,5 +155,9 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     implicit val view: Document = Jsoup.parse(
       app.injector.instanceOf[ImportPostponedVatRequestedStatements].apply(
         postponedVatViewModel, config.returnLink("postponedVATStatement")).body)
+
+    protected val viewModel: PostponedVatViewModel = PostponedVatViewModel(Seq(postponedVatStatementsForEori))
+    protected val statementDisplayData: Seq[StatementDisplayData] = viewModel.statementDisplayData
+    protected val statementData: StatementDisplayData = statementDisplayData.head
   }
 }
