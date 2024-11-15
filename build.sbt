@@ -71,9 +71,7 @@ lazy val root = (project in file("."))
   .settings(uglifyCompressOptions := turnoffJSUglifyWarningsTask.value)
   .settings(
     scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all")),
-    scalacOptions ++= Seq("-feature",
-      "-Wconf:src=routes/.*:s",
-      "-Wconf:msg=Flag.*repeatedly:s"),
+    scalacOptions ++= Seq("-Wconf:src=routes/.*:s", "-Wconf:msg=Flag.*repeatedly:s"),
 
       Test / scalacOptions ++= Seq(
       "-Wunused:imports",
