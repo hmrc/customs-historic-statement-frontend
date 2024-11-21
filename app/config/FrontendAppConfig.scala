@@ -53,6 +53,9 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   lazy val sdesApi: String = servicesConfig.baseUrl("sdes") +
     configuration.get[String]("microservice.services.sdes.context")
 
+  lazy val sdesCashStatementUrl: String =
+    configuration.get[String]("microservice.services.sdes.cashStatementsUrl")
+
   lazy val xClientIdHeader: String = configuration.get[String]("microservice.services.sdes.x-client-id")
 
   lazy val loginUrl: String = configuration.get[String]("urls.login")
@@ -71,7 +74,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   lazy val sdesDutyDefermentStatementListUrl: String = sdesApi + "/files-available/list/DutyDefermentStatement"
   lazy val sdesImportVatCertificateListUrl: String = sdesApi + "/files-available/list/C79Certificate"
   lazy val sdesImportPostponedVatStatementListUrl: String = sdesApi + "/files-available/list/PostponedVATStatement"
-  lazy val sdesCashStatementListUrl: String = s"$sdesApi/files-available/list/CDSCashAccount"
+  lazy val sdesCashStatementListUrl: String = s"$sdesApi$sdesCashStatementUrl"
 
   lazy val sdesSecurityStatementListUrl: String = sdesApi + "/files-available/list/SecurityStatement"
   lazy val historicDocumentsApiUrl: String = customsFinancialsApi + "/historic-document-request"
