@@ -126,7 +126,7 @@ class CashStatementViewModelSpec extends SpecBase {
       val statements: Seq[CashStatementMonthToMonth] = Seq(
         CashStatementMonthToMonth(startDate, endDate.minusMonths(1), Seq(csvFile)),
         CashStatementMonthToMonth(startDate, endDate, Seq(csvFile2)),
-        CashStatementMonthToMonth(startDate.plusMonths(1), endDate, Seq(pdfFile, csvFile4)),
+        CashStatementMonthToMonth(startDate.plusMonths(1), endDate, Seq(pdfFile, csvFile4, pdfFile2)),
         CashStatementMonthToMonth(startDate.plusMonths(1), endDate.plusMonths(2), Seq(csvFile3))
       )
 
@@ -153,10 +153,29 @@ class CashStatementViewModelSpec extends SpecBase {
       julyStartMonthRow2.select("dt").first.ownText() mustBe "July to August"
       augustStartMonthRow1.select("dt").first.ownText() mustBe "August to August"
       augustStartMonthRow2.select("dt").first.ownText() mustBe "August to October"
-      augustStartMonthRow1Links.eachText().asScala(0) mustBe "CSV (1.0MB) Download CSV of August to August (1.0MB)"
-      augustStartMonthRow1Links.eachText().asScala(1) mustBe "PDF (2.0MB) Download PDF of August to August (2.0MB)"
+      augustStartMonthRow1Links.eachText().asScala(0) mustBe "PDF (2.0MB) Download PDF of August to August (2.0MB)"
+      augustStartMonthRow1Links.eachText().asScala(1) mustBe "CSV (1.0MB) Download CSV of August to August (1.0MB)"
       csvLinks.size() mustBe 4
       pdfLinks.size() mustBe 1
+    }
+
+    "only show the link to the latest version of the file if same format and date period" in new Setup {
+      val statements: Seq[CashStatementMonthToMonth] = Seq(
+        CashStatementMonthToMonth(startDate.plusMonths(1), endDate, Seq(pdfFile, csvFile4, pdfFile2)),
+      )
+
+      val groupedStatements: GroupedStatementsByEori = GroupedStatementsByEori(
+        eoriIndex = 0,
+        eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+        statementsByYear = Map(periodStartYear -> statements)
+      )
+
+      val result: Html = CashStatementViewModel.generateStatementsByYear(groupedStatements)
+      val document: Document = Jsoup.parse(result.body)
+      private val pdfLinks = document.select("a[href$=.pdf]")
+
+      pdfLinks.size() mustBe 1
+      pdfLinks.first.attr("href") mustBe pdfFile2.filename
     }
 
     "generate HTML correctly for multiple years in the grouped statements" in new Setup {
@@ -284,32 +303,38 @@ class CashStatementViewModelSpec extends SpecBase {
       statementRequestId = None)
 
     val csvFile: CashStatementFile = CashStatementFile(
-      filename = "file.csv",
-      downloadURL = "file.csv",
+      filename = "file0.csv",
+      downloadURL = "file0.csv",
       size = expectedFileSizeCsv,
       metadata = csvFileMetadata)
 
     val csvFile2: CashStatementFile = CashStatementFile(
-      filename = "file.csv",
-      downloadURL = "file.csv",
+      filename = "file0.csv",
+      downloadURL = "file0.csv",
       size = expectedFileSizeCsv,
       metadata = csvFileMetadata2)
 
     val csvFile3: CashStatementFile = CashStatementFile(
-      filename = "file.csv",
-      downloadURL = "file.csv",
+      filename = "file0.csv",
+      downloadURL = "file0.csv",
       size = expectedFileSizeCsv,
       metadata = csvFileMetadata3)
 
     val csvFile4: CashStatementFile = CashStatementFile(
-      filename = "file.csv",
-      downloadURL = "file.csv",
+      filename = "file0.csv",
+      downloadURL = "file0.csv",
       size = expectedFileSizeCsv,
       metadata = csvFileMetadata4)
 
     val pdfFile: CashStatementFile = CashStatementFile(
-      filename = "file.pdf",
-      downloadURL = "file.pdf",
+      filename = "file0.pdf",
+      downloadURL = "file0.pdf",
+      size = expectedFileSizePdf,
+      metadata = pdfFileMetadata)
+
+    val pdfFile2: CashStatementFile = CashStatementFile(
+      filename = "file1.pdf",
+      downloadURL = "file1.pdf",
       size = expectedFileSizePdf,
       metadata = pdfFileMetadata)
   }

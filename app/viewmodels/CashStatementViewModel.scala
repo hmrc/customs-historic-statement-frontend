@@ -159,16 +159,24 @@ object CashStatementViewModel {
   private def createDownloadLinks(eoriIndex: Int, statement: CashStatementMonthToMonth, index: Int)
                                  (implicit messages: Messages): String = {
 
-    val groupedFiles = statement.files.groupBy(_.fileFormat)
+    def extractFileNumber(filename: String): Option[Int] = {
+      """\d+""".r.findAllIn(filename).map(_.toInt).toSeq.lastOption
+    }
 
-    groupedFiles.flatMap { case (format, files) =>
-      files.zipWithIndex.map { case (file, fileIndex) =>
-        downloadLink(
-          file = Some(file),
-          format = format.toString,
-          id = s"requested-statements-list-$eoriIndex-row-$index-${format.toString.toLowerCase}-$fileIndex-download-link",
-          period = statement.formattedMonthToMonth).body
-      }
+    val groupedFiles = statement.files
+      .groupBy(file => (file.fileFormat, file.metadata.periodStartDate, file.metadata.periodEndDate))
+      .flatMap { case ((format, periodStart, _), files) =>
+        val latestFile = files.maxBy(file => extractFileNumber(file.filename).getOrElse(0))
+        Some((format, periodStart, latestFile))
+      }.zipWithIndex
+
+    groupedFiles.map { case ((format, period, file), fileIndex) =>
+      downloadLink(
+        file = Some(file),
+        format = format.toString,
+        id = s"requested-statements-list-$eoriIndex-row-$index-${format.toString.toLowerCase}-$fileIndex-download-link",
+        period = statement.formattedMonthToMonth
+      ).body
     }.mkString
   }
 
