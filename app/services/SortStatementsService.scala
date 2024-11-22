@@ -16,14 +16,15 @@
 
 package services
 
-import models._
+import models.*
 import play.api.i18n.Messages
-import viewmodels._
+import viewmodels.*
 
+import java.time.YearMonth
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class SortStatementsService @Inject()() {
+class SortStatementsService @Inject() {
 
   def sortDutyDefermentStatementsForEori(historicEori: EoriHistory,
                                          dutyDefermentFiles: Seq[DutyDefermentStatementFile]): DutyDefermentStatementsForEori = {
@@ -48,14 +49,20 @@ class SortStatementsService @Inject()() {
   def sortCashStatementsForEori(historicEori: EoriHistory, cashStatementFiles: Seq[CashStatementFile])
                                (implicit messages: Messages): CashStatementForEori = {
 
-    val groupedByMonth = cashStatementFiles.groupBy(_.monthAndYear).map {
-      case (month, filesForMonth) => CashStatementByMonth(month, filesForMonth)
+    val groupedByStartAndEndMonth = cashStatementFiles.groupBy { file =>
+      val startMonthYear = YearMonth.of(file.metadata.periodStartYear, file.metadata.periodStartMonth)
+      val endMonthYear = YearMonth.of(file.metadata.periodEndYear, file.metadata.periodEndMonth)
+      (startMonthYear, endMonthYear)
+    }.map {
+      case ((startMonthYear, endMonthYear), filesForGroup) =>
+        val start = startMonthYear.atDay(1)
+        val end = endMonthYear.atEndOfMonth()
+        CashStatementMonthToMonth(start, end, filesForGroup)
     }.toList
 
-    val filteredByStatementRequestId = groupedByMonth.map { statementByMonth =>
-      val filteredFiles = statementByMonth.files.filter(_.metadata.statementRequestId.isEmpty)
-
-      CashStatementByMonth(statementByMonth.date, filteredFiles)
+    val filteredByStatementRequestId = groupedByStartAndEndMonth.map { statementByMonthToMonth =>
+      val filteredFiles = statementByMonthToMonth.files.filter(_.metadata.statementRequestId.isEmpty)
+      statementByMonthToMonth.copy(files = filteredFiles)
     }
 
     val (requested, current) = filteredByStatementRequestId.partition(_.files.nonEmpty)
