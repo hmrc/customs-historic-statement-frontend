@@ -19,13 +19,13 @@ package services
 import base.SpecBase
 import models.DDStatementType.{Excise, Weekly}
 import models.FileFormat.{Csv, Pdf}
-import models._
+import models.*
 import play.api.i18n.Messages
 import play.api.test.Helpers
-import viewmodels._
+import viewmodels.*
 import utils.Utils.emptyString
 
-import java.time.LocalDate
+import java.time.{LocalDate, YearMonth}
 
 class SortStatementsServiceSpec extends SpecBase {
 
@@ -134,10 +134,10 @@ class SortStatementsServiceSpec extends SpecBase {
         someRequestId
       ), someEori)
 
-    val requestedCashStatements: Seq[CashStatementByMonth] = List(
-      CashStatementByMonth(
-        LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
-        Seq(cashStatementFilePdf, cashStatementFileCsv)))
+    val requestedCashStatements: Seq[CashStatementMonthToMonth] = List(
+      CashStatementMonthToMonth(LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
+        YearMonth.of(periodEndYear, periodEndMonth).atEndOfMonth(),
+        Seq(cashStatementFilePdf, cashStatementFileCsv))())
 
     val cashStatementFiles: Seq[CashStatementFile] =
       Seq(cashStatementFilePdf, cashStatementFileCsv, cashStatementFilePdf_2)

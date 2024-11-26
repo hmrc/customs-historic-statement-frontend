@@ -234,4 +234,8 @@ case class CashStatementFileMetadata(periodStartYear: Int,
                                      fileFormat: FileFormat,
                                      fileRole: FileRole,
                                      cashAccountNumber: Option[String],
-                                     statementRequestId: Option[String] = None) extends SdesFileMetadata
+                                     statementRequestId: Option[String] = None) extends SdesFileMetadata {
+
+  val periodStartDate: LocalDate = LocalDate.of(periodStartYear, periodStartMonth, periodStartDay)
+  val periodEndDate: LocalDate = LocalDate.of(periodEndYear, periodEndMonth, periodEndDay)
+}

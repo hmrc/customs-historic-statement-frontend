@@ -21,7 +21,7 @@ import models.{CDSCashAccount, CashStatementFile, CashStatementFileMetadata, Eor
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import viewmodels.{CashStatementByMonth, CashStatementForEori, CashStatementViewModel}
+import viewmodels.{CashStatementMonthToMonth, CashStatementForEori, CashStatementViewModel}
 import views.html.CashStatementView
 
 import java.time.LocalDate
@@ -77,9 +77,9 @@ class CashStatementViewSpec extends ViewTestHelper {
     val periodStartMonth: Int = 7
     val periodStartDay: Int = 10
 
-    val eoriHistory: EoriHistory = EoriHistory(someEori,
-      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
-      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)))
+    val date = LocalDate.of(localDateYear, localDateMonth, localDateDay)
+
+    val eoriHistory: EoriHistory = EoriHistory(someEori, Some(date), Some(date))
 
     val cashStatementFile: CashStatementFile = CashStatementFile(
       filename,
@@ -97,9 +97,7 @@ class CashStatementViewSpec extends ViewTestHelper {
         Some("requestId")
       ), someEori)
 
-    val cashStatementsByMonth: CashStatementByMonth = CashStatementByMonth(
-      LocalDate.of(localDateYear, localDateMonth, localDateDay),
-      Seq(cashStatementFile))
+    val cashStatementsByMonth: CashStatementMonthToMonth = CashStatementMonthToMonth(date, date, Seq(cashStatementFile))()
 
     val cashStatementsForEori: CashStatementForEori = CashStatementForEori(
       eoriHistory,

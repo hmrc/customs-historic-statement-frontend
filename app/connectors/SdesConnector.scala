@@ -17,12 +17,12 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.FileFormat.{CashStatementFileFormats, SdesFileFormats, filterFileFormats}
-import models._
+import models.*
+import models.FileFormat.{SdesFileFormats, filterFileFormats}
 import services.SdesGatekeeperService
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.*
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http._
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,7 +32,7 @@ class SdesConnector @Inject()(http: HttpClientV2,
                               sdesGatekeeperService: SdesGatekeeperService)
                              (implicit appConfig: FrontendAppConfig, ec: ExecutionContext) {
 
-  import sdesGatekeeperService._
+  import sdesGatekeeperService.*
 
   private def addXHeaders(hc: HeaderCarrier, key: String): HeaderCarrier =
     hc.copy(extraHeaders = hc.extraHeaders ++ Seq("x-client-id" -> appConfig.xClientIdHeader, "X-SDES-Key" -> key))

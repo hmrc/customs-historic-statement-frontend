@@ -31,29 +31,32 @@ import java.time.LocalDate
 case class CashStatementViewModel(statementsForAllEoris: Seq[CashStatementForEori])
 
 case class CashStatementForEori(eoriHistory: EoriHistory,
-                                currentStatements: Seq[CashStatementByMonth],
-                                requestedStatements: Seq[CashStatementByMonth])
+                                currentStatements: Seq[CashStatementMonthToMonth],
+                                requestedStatements: Seq[CashStatementMonthToMonth])
   extends OrderedByEoriHistory[CashStatementForEori]
 
-case class CashStatementByMonth(date: LocalDate, files: Seq[CashStatementFile] = Seq.empty)
-                               (implicit messages: Messages) extends Ordered[CashStatementByMonth] {
+case class CashStatementMonthToMonth(startDate: LocalDate, endDate: LocalDate, files: Seq[CashStatementFile] = Seq.empty)
+                                    (implicit messages: Messages) extends Ordered[CashStatementMonthToMonth] {
 
   val formattedMonthToMonth: String = files.headOption.map { file =>
-    Formatters.periodAsStartToEndMonth(file.metadata.periodStartMonth, file.metadata.periodEndMonth)
+    Formatters.periodAsStartToEndMonth(startDate.getMonthValue, endDate.getMonthValue)
   }.getOrElse(emptyString)
 
   val cashAccountNumber: Option[String] = files.headOption.flatMap(_.metadata.cashAccountNumber)
-  val formattedMonthYear: String = Formatters.dateAsMonthAndYear(date)
+  val formattedMonthYear: String = Formatters.dateAsMonthAndYear(startDate)
 
   val pdf: Option[CashStatementFile] = files.find(_.fileFormat == Pdf)
   val csv: Option[CashStatementFile] = files.find(_.fileFormat == Csv)
 
-  override def compare(that: CashStatementByMonth): Int = date.compareTo(that.date)
+  override def compare(that: CashStatementMonthToMonth): Int = {
+    val priorityComparison = this.startDate.compareTo(that.startDate)
+    if (priorityComparison != 0) priorityComparison else this.endDate.compareTo(that.endDate)
+  }
 }
 
 case class GroupedStatementsByEori(eoriIndex: Int,
                                    eoriHistory: EoriHistory,
-                                   statementsByYear: Map[Int, Seq[CashStatementByMonth]])
+                                   statementsByYear: Map[Int, Seq[CashStatementMonthToMonth]])
 
 object CashStatementViewModel {
 
@@ -89,7 +92,7 @@ object CashStatementViewModel {
         GroupedStatementsByEori(
           eoriIndex = index,
           eoriHistory = eoriStatements.eoriHistory,
-          statementsByYear = eoriStatements.requestedStatements.groupBy(_.date.getYear))
+          statementsByYear = eoriStatements.requestedStatements.groupBy(_.startDate.getYear))
     }
   }
 
@@ -120,7 +123,7 @@ object CashStatementViewModel {
     }
   }
 
-  private def createStatementList(eoriIndex: Int, statementsOfYear: Seq[CashStatementByMonth])
+  private def createStatementList(eoriIndex: Int, statementsOfYear: Seq[CashStatementMonthToMonth])
                                  (implicit messages: Messages): Html = {
     val statementListItems = statementsOfYear.sorted.zipWithIndex.map {
       case (statement, index) => createStatementRow(eoriIndex, statement, index).body
@@ -132,7 +135,7 @@ object CashStatementViewModel {
       classes = Some("govuk-summary-list statement-list"))
   }
 
-  private def createStatementRow(eoriIndex: Int, statement: CashStatementByMonth, index: Int)
+  private def createStatementRow(eoriIndex: Int, statement: CashStatementMonthToMonth, index: Int)
                                 (implicit messages: Messages): Html = {
 
     val dateCell = dtComponent(
@@ -153,20 +156,27 @@ object CashStatementViewModel {
       classes = Some("govuk-summary-list__row"))
   }
 
-  private def createDownloadLinks(eoriIndex: Int, statement: CashStatementByMonth, index: Int)
+  private def createDownloadLinks(eoriIndex: Int, statement: CashStatementMonthToMonth, index: Int)
                                  (implicit messages: Messages): String = {
-    val formats = Seq(
-      ("csv", statement.csv, FileFormat.Csv.toString),
-      ("pdf", statement.pdf, FileFormat.Pdf.toString))
 
-    formats.flatMap { case (formatId, fileOpt, formatStr) =>
-      fileOpt.map { file =>
-        downloadLink(
-          file = Some(file),
-          format = formatStr,
-          id = s"requested-statements-list-$eoriIndex-row-$index-$formatId-download-link",
-          period = statement.formattedMonthYear).body
-      }
+    def extractFileNumber(filename: String): Option[Int] = {
+      """\d+""".r.findAllIn(filename).map(_.toInt).toSeq.lastOption
+    }
+
+    val groupedFiles = statement.files
+      .groupBy(file => (file.fileFormat, file.metadata.periodStartDate, file.metadata.periodEndDate))
+      .flatMap { case ((format, periodStart, _), files) =>
+        val latestFile = files.maxBy(file => extractFileNumber(file.filename).getOrElse(0))
+        Some((format, periodStart, latestFile))
+      }.zipWithIndex
+
+    groupedFiles.map { case ((format, period, file), fileIndex) =>
+      downloadLink(
+        file = Some(file),
+        format = format.toString,
+        id = s"requested-statements-list-$eoriIndex-row-$index-${format.toString.toLowerCase}-$fileIndex-download-link",
+        period = statement.formattedMonthToMonth
+      ).body
     }.mkString
   }
 
