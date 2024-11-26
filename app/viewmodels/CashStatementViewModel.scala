@@ -49,8 +49,8 @@ case class CashStatementMonthToMonth(startDate: LocalDate, endDate: LocalDate, f
   val csv: Option[CashStatementFile] = files.find(_.fileFormat == Csv)
 
   override def compare(that: CashStatementMonthToMonth): Int = {
-    val startComparison = this.startDate.compareTo(that.startDate)
-    if (startComparison != 0) startComparison else this.endDate.compareTo(that.endDate)
+    val priorityComparison = this.startDate.compareTo(that.startDate)
+    if (priorityComparison != 0) priorityComparison else this.endDate.compareTo(that.endDate)
   }
 }
 

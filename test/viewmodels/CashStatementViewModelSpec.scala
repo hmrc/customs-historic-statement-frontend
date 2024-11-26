@@ -148,20 +148,20 @@ class CashStatementViewModelSpec extends SpecBase {
       private val csvLinks = document.select("a[href$=.csv]")
       private val pdfLinks = document.select("a[href$=.pdf]")
 
-      rowsByMonth.size() mustBe 4
-      julyStartMonthRow1.select("dt").first.ownText() mustBe "July to July"
-      julyStartMonthRow2.select("dt").first.ownText() mustBe "July to August"
-      augustStartMonthRow1.select("dt").first.ownText() mustBe "August to August"
-      augustStartMonthRow2.select("dt").first.ownText() mustBe "August to October"
-      augustStartMonthRow1Links.eachText().asScala(0) mustBe "PDF (2.0MB) Download PDF of August to August (2.0MB)"
-      augustStartMonthRow1Links.eachText().asScala(1) mustBe "CSV (1.0MB) Download CSV of August to August (1.0MB)"
-      csvLinks.size() mustBe 4
-      pdfLinks.size() mustBe 1
+      rowsByMonth.size mustBe 4
+      julyStartMonthRow1.select("dt").first.ownText mustBe "July to July"
+      julyStartMonthRow2.select("dt").first.ownText mustBe "July to August"
+      augustStartMonthRow1.select("dt").first.ownText mustBe "August to August"
+      augustStartMonthRow2.select("dt").first.ownText mustBe "August to October"
+      augustStartMonthRow1Links.eachText.asScala(0) mustBe "PDF (2.0MB) Download PDF of August to August (2.0MB)"
+      augustStartMonthRow1Links.eachText.asScala(1) mustBe "CSV (1.0MB) Download CSV of August to August (1.0MB)"
+      csvLinks.size mustBe 4
+      pdfLinks.size mustBe 1
     }
 
     "only show the link to the latest version of the file if same format and date period" in new Setup {
       val statements: Seq[CashStatementMonthToMonth] = Seq(
-        CashStatementMonthToMonth(startDate.plusMonths(1), endDate, Seq(pdfFile, csvFile4, pdfFile2)),
+        CashStatementMonthToMonth(startDate.plusMonths(1), endDate, Seq(pdfFile, csvFile4, pdfFile2))
       )
 
       val groupedStatements: GroupedStatementsByEori = GroupedStatementsByEori(
@@ -174,13 +174,13 @@ class CashStatementViewModelSpec extends SpecBase {
       val document: Document = Jsoup.parse(result.body)
       private val pdfLinks = document.select("a[href$=.pdf]")
 
-      pdfLinks.size() mustBe 1
+      pdfLinks.size mustBe 1
       pdfLinks.first.attr("href") mustBe pdfFile2.filename
     }
 
     "generate HTML correctly for multiple years in the grouped statements" in new Setup {
-      val statements2023: Seq[CashStatementMonthToMonth] = Seq(CashStatementMonthToMonth(startDate, endDate)())
-      val statements2024: Seq[CashStatementMonthToMonth] = Seq(CashStatementMonthToMonth(startDate.plusYears(1), endDate.plusYears(1))())
+      val statements2023: Seq[CashStatementMonthToMonth] = Seq(CashStatementMonthToMonth(startDate, endDate))
+      val statements2024: Seq[CashStatementMonthToMonth] = Seq(CashStatementMonthToMonth(startDate.plusYears(1), endDate.plusYears(1)))
       val groupedStatements: GroupedStatementsByEori = GroupedStatementsByEori(
         eoriIndex = 0,
         eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
