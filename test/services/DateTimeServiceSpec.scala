@@ -54,10 +54,10 @@ class DateTimeServiceSpec extends SpecBase {
 
   trait Setup {
 
-    val year = 2027
-    val month = 12
-    val day = 20
-    val hour = 12
+    val year   = 2027
+    val month  = 12
+    val day    = 20
+    val hour   = 12
     val minute = 30
 
     val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]

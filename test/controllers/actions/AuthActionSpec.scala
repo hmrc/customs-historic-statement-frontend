@@ -20,7 +20,7 @@ import base.SpecBase
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import controllers.routes
-import play.api.mvc.{BodyParsers, Results, Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -37,11 +37,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuthActionSpec extends SpecBase {
 
   class Harness(authAction: IdentifierAction) {
-    def onPageLoad(): Action[AnyContent] = authAction { _ => Results.Ok }
+    def onPageLoad(): Action[AnyContent] = authAction(_ => Results.Ok)
   }
 
   implicit class Ops[A](a: A) {
-    def ~[B](b: B): A ~ B = new~(a, b)
+    def ~[B](b: B): A ~ B = new ~(a, b)
   }
 
   "Auth Action" when {
@@ -50,12 +50,15 @@ class AuthActionSpec extends SpecBase {
       val mockAuthConnector = mock[AuthConnector]
 
       when(mockAuthConnector.authorise[Option[String] ~ Enrolments](any, any)(any, any))
-        .thenReturn(Future.successful(
-          Some("id") ~
-            Enrolments(Set.empty)))
+        .thenReturn(
+          Future.successful(
+            Some("id") ~
+              Enrolments(Set.empty)
+          )
+        )
 
-      val app = applicationBuilder().overrides().build()
-      val config = app.injector.instanceOf[FrontendAppConfig]
+      val app         = applicationBuilder().overrides().build()
+      val config      = app.injector.instanceOf[FrontendAppConfig]
       val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
 
       val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers)
@@ -74,8 +77,8 @@ class AuthActionSpec extends SpecBase {
       when(mockAuthConnector.authorise[Option[String] ~ Enrolments](any, any)(any, any))
         .thenReturn(Future.successful(Option.empty[String] ~ Enrolments(Set.empty)))
 
-      val app = applicationBuilder().overrides().build()
-      val config = app.injector.instanceOf[FrontendAppConfig]
+      val app         = applicationBuilder().overrides().build()
+      val config      = app.injector.instanceOf[FrontendAppConfig]
       val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
 
       val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers)
@@ -92,12 +95,15 @@ class AuthActionSpec extends SpecBase {
       val mockAuthConnector = mock[AuthConnector]
 
       when(mockAuthConnector.authorise[Option[String] ~ Enrolments](any, any)(any, any))
-        .thenReturn(Future.successful(
-          Some("id") ~
-            Enrolments(Set(Enrolment("HMRC-CUS-ORG", Seq(EnrolmentIdentifier("EORINumber", "test")), "Active")))))
+        .thenReturn(
+          Future.successful(
+            Some("id") ~
+              Enrolments(Set(Enrolment("HMRC-CUS-ORG", Seq(EnrolmentIdentifier("EORINumber", "test")), "Active")))
+          )
+        )
 
-      val app = applicationBuilder().overrides().build()
-      val config = app.injector.instanceOf[FrontendAppConfig]
+      val app         = applicationBuilder().overrides().build()
+      val config      = app.injector.instanceOf[FrontendAppConfig]
       val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
 
       val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers)
@@ -115,14 +121,17 @@ class AuthActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val bodyParsers       = application.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = application.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(
-          new MissingBearerToken), frontendAppConfig, bodyParsers)
+        val authAction = new AuthenticatedIdentifierAction(
+          new FakeFailingAuthConnector(new MissingBearerToken),
+          frontendAppConfig,
+          bodyParsers
+        )
 
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest())
+        val result     = controller.onPageLoad()(fakeRequest())
 
         status(result) mustBe SEE_OTHER
 
@@ -136,14 +145,17 @@ class AuthActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val bodyParsers       = application.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = application.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(
-          new BearerTokenExpired), frontendAppConfig, bodyParsers)
+        val authAction = new AuthenticatedIdentifierAction(
+          new FakeFailingAuthConnector(new BearerTokenExpired),
+          frontendAppConfig,
+          bodyParsers
+        )
 
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest())
+        val result     = controller.onPageLoad()(fakeRequest())
 
         status(result) mustBe SEE_OTHER
 
@@ -157,14 +169,17 @@ class AuthActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val bodyParsers       = application.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = application.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(
-          new InsufficientEnrolments), frontendAppConfig, bodyParsers)
+        val authAction = new AuthenticatedIdentifierAction(
+          new FakeFailingAuthConnector(new InsufficientEnrolments),
+          frontendAppConfig,
+          bodyParsers
+        )
 
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest())
+        val result     = controller.onPageLoad()(fakeRequest())
 
         status(result) mustBe SEE_OTHER
 
@@ -174,10 +189,12 @@ class AuthActionSpec extends SpecBase {
   }
 }
 
-class FakeFailingAuthConnector @Inject()(exceptionToReturn: Throwable) extends AuthConnector {
+class FakeFailingAuthConnector @Inject() (exceptionToReturn: Throwable) extends AuthConnector {
   val serviceUrl: String = emptyString
 
-  override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])
-                           (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
+  override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[A] =
     Future.failed(exceptionToReturn)
 }

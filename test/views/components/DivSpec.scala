@@ -52,13 +52,13 @@ class DivSpec extends SpecBase {
 
   trait Setup {
 
-    protected val content: Html = Html("Test content")
+    protected val content: Html             = Html("Test content")
     protected val testClass: Option[String] = Some("test-class")
-    protected val testId: Option[String] = Some("test-id")
+    protected val testId: Option[String]    = Some("test-id")
 
     protected val divExpectedContent: HtmlFormat.Appendable = divComponent(content)
-    protected val divWithClass: HtmlFormat.Appendable = divComponent(content, classes = testClass)
-    protected val divWithId: HtmlFormat.Appendable = divComponent(content, id = testId)
-    protected val divWithClassAndId: HtmlFormat.Appendable = divComponent(content, classes = testClass, id = testId)
+    protected val divWithClass: HtmlFormat.Appendable       = divComponent(content, classes = testClass)
+    protected val divWithId: HtmlFormat.Appendable          = divComponent(content, id = testId)
+    protected val divWithClassAndId: HtmlFormat.Appendable  = divComponent(content, classes = testClass, id = testId)
   }
 }

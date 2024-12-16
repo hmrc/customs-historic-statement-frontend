@@ -20,22 +20,20 @@ import config.FrontendAppConfig
 import java.time._
 import javax.inject.Inject
 
-class DateTimeService @Inject()(appConfig: FrontendAppConfig) {
+class DateTimeService @Inject() (appConfig: FrontendAppConfig) {
 
-  val year = 2027
-  val month = 12
-  val day = 20
-  val hour = 12
+  val year   = 2027
+  val month  = 12
+  val day    = 20
+  val hour   = 12
   val minute = 30
 
-  def systemDateTime(zoneId: ZoneId): LocalDateTime = {
-
+  def systemDateTime(zoneId: ZoneId): LocalDateTime =
     if (appConfig.fixedDateTime) {
       LocalDateTime.of(LocalDate.of(year, month, day), LocalTime.of(hour, minute))
     } else {
       LocalDateTime.now(zoneId)
     }
-  }
 
   def utcDateTime(): LocalDateTime = systemDateTime(ZoneId.of("UTC"))
 

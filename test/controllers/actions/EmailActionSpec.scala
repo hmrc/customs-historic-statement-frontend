@@ -37,14 +37,13 @@ class EmailActionSpec extends SpecBase {
   "filter" should {
     "Let requests with validated email through" in new Setup {
       running(app) {
-        when(mockDataStoreService.getEmail(any)(any)).thenReturn(
-          Future.successful(Right(Email("last.man@standing.co.uk"))))
+        when(mockDataStoreService.getEmail(any)(any))
+          .thenReturn(Future.successful(Right(Email("last.man@standing.co.uk"))))
 
         val response = await(emailAction.filter(authenticatedRequest))
         response mustBe None
       }
     }
-
 
     "Let request through, when getEmail throws service unavailable exception" in new Setup {
       running(app) {
@@ -85,9 +84,11 @@ class EmailActionSpec extends SpecBase {
 
     val mockDataStoreService: CustomsDataStoreConnector = org.mockito.Mockito.mock(classOf[CustomsDataStoreConnector])
 
-    val app: Application = applicationBuilder().overrides(
-      inject.bind[CustomsDataStoreConnector].toInstance(mockDataStoreService)
-    ).build()
+    val app: Application = applicationBuilder()
+      .overrides(
+        inject.bind[CustomsDataStoreConnector].toInstance(mockDataStoreService)
+      )
+      .build()
 
     val emailAction: EmailAction = app.injector.instanceOf[EmailAction]
 

@@ -22,14 +22,12 @@ case class DateMessages(startDate: DateMessage, endDate: DateMessage)
 
 object DateMessages {
 
-  def apply(fileRole: FileRole): DateMessages = {
-
+  def apply(fileRole: FileRole): DateMessages =
     fileRole match {
       case CDSCashAccount =>
         DateMessages(
           startDate =
             DateMessage("cf.historic.document.request.from", "cf.historic.document.request.date.CashStatement.hint"),
-
           endDate = DateMessage("cf.historic.document.request.to", "cf.historic.document.request.endDate.hint")
         )
 
@@ -37,38 +35,34 @@ object DateMessages {
         DateMessages(
           startDate =
             DateMessage("cf.historic.document.request.from", "cf.historic.document.request.date.C79Certificate.hint"),
-
           endDate = DateMessage("cf.historic.document.request.to", "cf.historic.document.request.endDate.hint")
         )
 
       case PostponedVATStatement =>
         DateMessages(
-          startDate =
-            DateMessage(
-              "cf.historic.document.request.from", "cf.historic.document.request.date.PostponedVATStatement.hint"),
-
-          endDate =
-            DateMessage("cf.historic.document.request.to", "cf.historic.document.request.endDate.hint")
+          startDate = DateMessage(
+            "cf.historic.document.request.from",
+            "cf.historic.document.request.date.PostponedVATStatement.hint"
+          ),
+          endDate = DateMessage("cf.historic.document.request.to", "cf.historic.document.request.endDate.hint")
         )
 
       case DutyDefermentStatement =>
         DateMessages(
-          startDate =
-            DateMessage(
-              "cf.historic.document.request.from", "cf.historic.document.request.date.DutyDefermentStatement.hint"),
-
-          endDate =
-            DateMessage("cf.historic.document.request.to", "cf.historic.document.request.endDate.hint")
+          startDate = DateMessage(
+            "cf.historic.document.request.from",
+            "cf.historic.document.request.date.DutyDefermentStatement.hint"
+          ),
+          endDate = DateMessage("cf.historic.document.request.to", "cf.historic.document.request.endDate.hint")
         )
 
       case SecurityStatement =>
         DateMessages(
-          startDate =
-            DateMessage("cf.historic.document.request.from", "cf.historic.document.request.date.SecurityStatement.hint"),
-
-          endDate =
-            DateMessage("cf.historic.document.request.to", "cf.historic.document.request.endDate.hint")
+          startDate = DateMessage(
+            "cf.historic.document.request.from",
+            "cf.historic.document.request.date.SecurityStatement.hint"
+          ),
+          endDate = DateMessage("cf.historic.document.request.to", "cf.historic.document.request.endDate.hint")
         )
     }
-  }
 }

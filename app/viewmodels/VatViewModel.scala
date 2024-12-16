@@ -26,15 +26,17 @@ import java.time.LocalDate
 
 case class VatViewModel(certificatesForAllEoris: Seq[VatCertificatesForEori])
 
-case class VatCertificatesForEori(eoriHistory: EoriHistory,
-                                  currentCertificates: Seq[VatCertificatesByMonth],
-                                  requestedCertificates: Seq[VatCertificatesByMonth])
-  extends OrderedByEoriHistory[VatCertificatesForEori]
+case class VatCertificatesForEori(
+  eoriHistory: EoriHistory,
+  currentCertificates: Seq[VatCertificatesByMonth],
+  requestedCertificates: Seq[VatCertificatesByMonth]
+) extends OrderedByEoriHistory[VatCertificatesForEori]
 
-case class VatCertificatesByMonth(date: LocalDate, files: Seq[VatCertificateFile] = Seq.empty)(implicit messages: Messages)
-  extends Ordered[VatCertificatesByMonth] {
+case class VatCertificatesByMonth(date: LocalDate, files: Seq[VatCertificateFile] = Seq.empty)(implicit
+  messages: Messages
+) extends Ordered[VatCertificatesByMonth] {
 
-  val formattedMonthYear: String = Formatters.dateAsMonthAndYear(date)
+  val formattedMonthYear: String      = Formatters.dateAsMonthAndYear(date)
   val pdf: Option[VatCertificateFile] = files.find(_.fileFormat == Pdf)
 
   override def compare(that: VatCertificatesByMonth): Int = date.compareTo(that.date)

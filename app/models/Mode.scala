@@ -27,6 +27,6 @@ object Mode {
 
   implicit val jsLiteral: JavascriptLiteral[Mode] = {
     case NormalMode => "NormalMode"
-    case CheckMode => "CheckMode"
+    case CheckMode  => "CheckMode"
   }
 }

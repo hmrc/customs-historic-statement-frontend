@@ -23,30 +23,35 @@ import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import utils.Utils.{h2Component, missingDocumentsGuidanceComponent, spanComponent, spanLinkComponent}
 
-case class StatementRow(historyIndex: Int,
-                        eori: Option[String],
-                        date: String,
-                        pdf: Option[PdfLink],
-                        dlRowId: String,
-                        rowId: String,
-                        dateCellId: String,
-                        linkCellId: String,
-                        renderEoriHeading: Option[HtmlFormat.Appendable],
-                        renderPdfLink: Html)
+case class StatementRow(
+  historyIndex: Int,
+  eori: Option[String],
+  date: String,
+  pdf: Option[PdfLink],
+  dlRowId: String,
+  rowId: String,
+  dateCellId: String,
+  linkCellId: String,
+  renderEoriHeading: Option[HtmlFormat.Appendable],
+  renderPdfLink: Html
+)
 
 case class PdfLink(downloadURL: String, formattedSize: String, ariaText: String)
 
-case class SecuritiesRequestedStatementsViewModel(statementRows: Seq[StatementRow],
-                                                  hasStatements: Boolean,
-                                                  renderMissingDocumentsGuidance: HtmlFormat.Appendable)
+case class SecuritiesRequestedStatementsViewModel(
+  statementRows: Seq[StatementRow],
+  hasStatements: Boolean,
+  renderMissingDocumentsGuidance: HtmlFormat.Appendable
+)
 
 object SecuritiesRequestedStatementsViewModel {
 
-  def apply(securityStatementsForEori: Seq[SecurityStatementsForEori])
-           (implicit messages: Messages): SecuritiesRequestedStatementsViewModel = {
+  def apply(
+    securityStatementsForEori: Seq[SecurityStatementsForEori]
+  )(implicit messages: Messages): SecuritiesRequestedStatementsViewModel = {
 
     val preparedStatementRows = prepareStatementRows(securityStatementsForEori)
-    val hasStatements = hasSecurityStatementsForEori(securityStatementsForEori)
+    val hasStatements         = hasSecurityStatementsForEori(securityStatementsForEori)
 
     SecuritiesRequestedStatementsViewModel(
       statementRows = preparedStatementRows,
@@ -55,19 +60,20 @@ object SecuritiesRequestedStatementsViewModel {
     )
   }
 
-  private def prepareStatementRows(securityStatements: Seq[SecurityStatementsForEori])
-                                  (implicit messages: Messages): Seq[StatementRow] = {
+  private def prepareStatementRows(
+    securityStatements: Seq[SecurityStatementsForEori]
+  )(implicit messages: Messages): Seq[StatementRow] =
     for {
-      (statement, statementIndex) <- securityStatements.zipWithIndex
+      (statement, statementIndex)          <- securityStatements.zipWithIndex
       (requestedStatement, requestedIndex) <- statement.requestedStatements.sorted.zipWithIndex
     } yield createStatementRow(statement, statementIndex, requestedStatement, requestedIndex)
-  }
 
-  private def createStatementRow(statement: SecurityStatementsForEori,
-                                 statementIndex: Int,
-                                 requestedStatement: SecurityStatementsByPeriod,
-                                 requestedIndex: Int)
-                                (implicit messages: Messages): StatementRow = {
+  private def createStatementRow(
+    statement: SecurityStatementsForEori,
+    statementIndex: Int,
+    requestedStatement: SecurityStatementsByPeriod,
+    requestedIndex: Int
+  )(implicit messages: Messages): StatementRow = {
 
     val eori = if (statementIndex > 0) Some(statement.eoriHistory.eori) else None
 
@@ -79,9 +85,11 @@ object SecuritiesRequestedStatementsViewModel {
       )
     }
 
-    val date = messages("cf.security-statements.requested.period",
+    val date = messages(
+      "cf.security-statements.requested.period",
       dateAsDayMonthAndYear(requestedStatement.startDate),
-      dateAsDayMonthAndYear(requestedStatement.endDate))
+      dateAsDayMonthAndYear(requestedStatement.endDate)
+    )
 
     val pdf = requestedStatement.pdf.map { pdf =>
       PdfLink(
@@ -111,11 +119,10 @@ object SecuritiesRequestedStatementsViewModel {
     )
   }
 
-  private def hasSecurityStatementsForEori(securityStatements: Seq[SecurityStatementsForEori]): Boolean = {
+  private def hasSecurityStatementsForEori(securityStatements: Seq[SecurityStatementsForEori]): Boolean =
     securityStatements.exists(_.requestedStatements.nonEmpty)
-  }
 
-  private def renderPdfLink(pdf: Option[PdfLink])(implicit messages: Messages): Html = {
+  private def renderPdfLink(pdf: Option[PdfLink])(implicit messages: Messages): Html =
     pdf.fold(
       spanComponent(
         key = s"${messages("cf.security-statements.no-statements", Pdf)}",
@@ -132,9 +139,7 @@ object SecuritiesRequestedStatementsViewModel {
         download = true
       )
     }
-  }
 
-  private def renderMissingDocumentsGuidance(implicit messages: Messages): HtmlFormat.Appendable = {
+  private def renderMissingDocumentsGuidance(implicit messages: Messages): HtmlFormat.Appendable =
     missingDocumentsGuidanceComponent("statement")
-  }
 }

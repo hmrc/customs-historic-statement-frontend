@@ -67,17 +67,17 @@ class UndeliverableEmailSpec extends SpecBase {
   }
 
   trait Setup {
-    val app: Application = applicationBuilder().build()
-    val nextPageUrl = "test_url"
-    val email: Option[String] = Some("test@test.com")
-    implicit val msges: Messages = messages(app)
-    implicit val appConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+    val app: Application                                      = applicationBuilder().build()
+    val nextPageUrl                                           = "test_url"
+    val email: Option[String]                                 = Some("test@test.com")
+    implicit val msges: Messages                              = messages(app)
+    implicit val appConfig: FrontendAppConfig                 = app.injector.instanceOf[FrontendAppConfig]
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val view: Document = Jsoup.parse(
-      app.injector.instanceOf[undeliverable_email].apply(nextPageUrl, email)(request, msges, appConfig).body)
+      app.injector.instanceOf[undeliverable_email].apply(nextPageUrl, email)(request, msges, appConfig).body
+    )
 
-    val viewWithNoEmail: Document = Jsoup.parse(
-      app.injector.instanceOf[undeliverable_email].apply(nextPageUrl).body)
+    val viewWithNoEmail: Document = Jsoup.parse(app.injector.instanceOf[undeliverable_email].apply(nextPageUrl).body)
   }
 }

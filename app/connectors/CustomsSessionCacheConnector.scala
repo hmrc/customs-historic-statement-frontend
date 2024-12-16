@@ -25,28 +25,30 @@ import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CustomsSessionCacheConnector @Inject()(httpClient: HttpClientV2,
-                                             appConfig: FrontendAppConfig)
-                                            (implicit executionContext: ExecutionContext) {
+class CustomsSessionCacheConnector @Inject() (httpClient: HttpClientV2, appConfig: FrontendAppConfig)(implicit
+  executionContext: ExecutionContext
+) {
 
   def getAccountNumber(sessionId: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
 
     val cacheUrl = appConfig.sessionCacheUrl(sessionId, linkId)
 
-    httpClient.get(url"$cacheUrl")
+    httpClient
+      .get(url"$cacheUrl")
       .execute[SessionCacheResponse]
-      .map(
-        response => Some(response.accountNumber)
-      ).recover { case _ => None }
+      .map(response => Some(response.accountNumber))
+      .recover { case _ => None }
   }
 
   def getAccountLink(sessionId: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[AccountLink]] = {
 
     val cacheUrl = appConfig.sessionCacheUrl(sessionId, linkId)
 
-    httpClient.get(url"$cacheUrl")
+    httpClient
+      .get(url"$cacheUrl")
       .execute[AccountLink]
-      .map(Some(_)).recover { case _ => None }
+      .map(Some(_))
+      .recover { case _ => None }
   }
 }
 
@@ -56,10 +58,14 @@ object SessionCacheResponse {
   implicit val format: OFormat[SessionCacheResponse] = Json.format[SessionCacheResponse]
 }
 
-case class AccountLink(eori: String, accountNumber: String,
-                       linkId: String,
-                       accountStatus: String,
-                       accountStatusId: Option[Int], isNiAccount: Boolean)
+case class AccountLink(
+  eori: String,
+  accountNumber: String,
+  linkId: String,
+  accountStatus: String,
+  accountStatusId: Option[Int],
+  isNiAccount: Boolean
+)
 
 object AccountLink {
   implicit val format: OFormat[AccountLink] = Json.format[AccountLink]

@@ -29,10 +29,8 @@ class LinkSpec extends ViewTestHelper {
     "display correct contents" when {
 
       "it contains linkId, preLinkMessage and postLinkMessage" in new Setup {
-        implicit val linkView: Document = viewDoc(
-          linkId = Some(id),
-          preLinkMessage = Some(preLinkMsgKey),
-          postLinkMessage = Some(postLinkMsgKey))
+        implicit val linkView: Document =
+          viewDoc(linkId = Some(id), preLinkMessage = Some(preLinkMsgKey), postLinkMessage = Some(postLinkMsgKey))
 
         shouldContainLocation(Some(id), location)
         shouldContainPreAndPostLinkMessages(preLinkMsgKey, postLinkMsgKey)
@@ -40,26 +38,20 @@ class LinkSpec extends ViewTestHelper {
       }
 
       "it contains linkId but no preLinkMessage and postLinkMessage" in new Setup {
-        implicit val linkView: Document = viewDoc(
-          linkId = Some(id),
-          pClass = testClass)
+        implicit val linkView: Document = viewDoc(linkId = Some(id), pClass = testClass)
 
         shouldContainLocation(Some(id), location)
         shouldContainCorrectStyleClasses(pClass = testClass, linkMessage = linkMessage)
       }
 
       "it contains pId and pClass" in new Setup {
-        implicit val linkView: Document = viewDoc(pId = Some(pId),
-          pClass = testClass)
+        implicit val linkView: Document = viewDoc(pId = Some(pId), pClass = testClass)
 
         shouldContainCorrectStyleClasses(pClass = testClass, linkMessage = linkMessage)
       }
 
       "it contains linkSentence" in new Setup {
-        implicit val linkView: Document = viewDoc(
-          linkId = Some(id),
-          pClass = testClass,
-          linkSentence = true)
+        implicit val linkView: Document = viewDoc(linkId = Some(id), pClass = testClass, linkSentence = true)
 
         shouldContainLocation(Some(id), location)
         shouldContainCorrectStyleClasses(pClass = testClass, linkMessage = linkMessage)
@@ -72,38 +64,40 @@ class LinkSpec extends ViewTestHelper {
           pWrapped = false,
           preLinkMessage = Some(preLinkMsgKey),
           postLinkMessage = Some(postLinkMsgKey),
-          pClass = testClass)
+          pClass = testClass
+        )
 
         shouldNotContainPreAndPostLinkMessages(preLinkMsgKey, postLinkMsgKey)
       }
     }
   }
 
-  private def shouldContainLocation(id: Option[String],
-                                    location: String)(implicit view: Document): Assertion =
+  private def shouldContainLocation(id: Option[String], location: String)(implicit view: Document): Assertion =
     if (id.nonEmpty) {
       view.getElementById(id.get).getElementsByAttribute("href").attr("href") mustBe location
     } else {
       view.html().contains(location) mustBe true
     }
 
-  private def shouldContainPreAndPostLinkMessages(preLinkMessage: String,
-                                                  postLinkMessage: String
-                                                 )(implicit view: Document): Assertion = {
+  private def shouldContainPreAndPostLinkMessages(preLinkMessage: String, postLinkMessage: String)(implicit
+    view: Document
+  ): Assertion = {
     view.text().contains(msg(preLinkMessage)) mustBe true
     view.text().contains(msg(postLinkMessage)) mustBe true
   }
 
-  private def shouldNotContainPreAndPostLinkMessages(preLinkMessage: String,
-                                                     postLinkMessage: String
-                                                    )(implicit view: Document): Assertion = {
+  private def shouldNotContainPreAndPostLinkMessages(preLinkMessage: String, postLinkMessage: String)(implicit
+    view: Document
+  ): Assertion = {
     view.text().contains(msg(preLinkMessage)) mustBe false
     view.text().contains(msg(postLinkMessage)) mustBe false
   }
 
-  private def shouldContainCorrectStyleClasses(linkClass: String = "govuk-link",
-                                               pClass: String = "govuk-body",
-                                               linkMessage: String)(implicit view: Document): Assertion = {
+  private def shouldContainCorrectStyleClasses(
+    linkClass: String = "govuk-link",
+    pClass: String = "govuk-body",
+    linkMessage: String
+  )(implicit view: Document): Assertion = {
     view.getElementsByClass(linkClass).text() mustBe msg(linkMessage)
     view.getElementsByClass(pClass).text().contains(msg(linkMessage)) mustBe true
   }
@@ -112,33 +106,39 @@ class LinkSpec extends ViewTestHelper {
     view.text().contains(s"${msg(linkMessage)}.") mustBe true
 
   trait Setup {
-    val linkMessage = "cf.undeliverable.email.change.text.p1"
-    val location = "test_location"
-    val id = "test_id"
-    val pId = "test_pid"
-    val preLinkMsgKey = "cf.undeliverable.email.link-text"
+    val linkMessage    = "cf.undeliverable.email.change.text.p1"
+    val location       = "test_location"
+    val id             = "test_id"
+    val pId            = "test_pid"
+    val preLinkMsgKey  = "cf.undeliverable.email.link-text"
     val postLinkMsgKey = "cf.undeliverable.email.change.text.p2"
-    val testClass = "test_link_class"
+    val testClass      = "test_link_class"
 
-    def viewDoc(location: String = location,
-                linkId: Option[String] = None,
-                pWrapped: Boolean = true,
-                linkSentence: Boolean = false,
-                preLinkMessage: Option[String] = None,
-                postLinkMessage: Option[String] = None,
-                pId: Option[String] = None,
-                pClass: String = "govuk-body"): Document =
-
-      Jsoup.parse(app.injector.instanceOf[link].apply(
-        linkMessage = linkMessage,
-        location = location,
-        linkId = linkId,
-        pWrapped = pWrapped,
-        linkSentence = linkSentence,
-        preLinkMessage = preLinkMessage,
-        postLinkMessage = postLinkMessage,
-        pId = pId,
-        pClass = pClass
-      ).body)
+    def viewDoc(
+      location: String = location,
+      linkId: Option[String] = None,
+      pWrapped: Boolean = true,
+      linkSentence: Boolean = false,
+      preLinkMessage: Option[String] = None,
+      postLinkMessage: Option[String] = None,
+      pId: Option[String] = None,
+      pClass: String = "govuk-body"
+    ): Document =
+      Jsoup.parse(
+        app.injector
+          .instanceOf[link]
+          .apply(
+            linkMessage = linkMessage,
+            location = location,
+            linkId = linkId,
+            pWrapped = pWrapped,
+            linkSentence = linkSentence,
+            preLinkMessage = preLinkMessage,
+            postLinkMessage = postLinkMessage,
+            pId = pId,
+            pClass = pClass
+          )
+          .body
+      )
   }
 }

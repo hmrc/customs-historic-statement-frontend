@@ -69,18 +69,18 @@ class SortStatementsServiceSpec extends SpecBase {
   trait Setup {
     implicit val messages: Messages = Helpers.stubMessages()
 
-    val someEori = "12345678"
-    val someDan = "12345"
-    val someRequestId = Some("Ab1234")
-    val periodStartYear = 2017
-    val periodStartMonth = 11
-    val periodStartMonth_2 = 10
-    val periodStartDay = 1
-    val periodEndYear = 2017
-    val periodEndMonth = 11
-    val periodEndDay = 8
-    val fileSize = 500L
-    val size = 99L
+    val someEori                          = "12345678"
+    val someDan                           = "12345"
+    val someRequestId                     = Some("Ab1234")
+    val periodStartYear                   = 2017
+    val periodStartMonth                  = 11
+    val periodStartMonth_2                = 10
+    val periodStartDay                    = 1
+    val periodEndYear                     = 2017
+    val periodEndMonth                    = 11
+    val periodEndDay                      = 8
+    val fileSize                          = 500L
+    val size                              = 99L
     val someAccountNumber: Option[String] = Some("123456789")
 
     val cashStatementFilePdf: CashStatementFile = CashStatementFile(
@@ -98,7 +98,9 @@ class SortStatementsServiceSpec extends SpecBase {
         CDSCashAccount,
         someAccountNumber,
         None
-      ), someEori)
+      ),
+      someEori
+    )
 
     val cashStatementFileCsv: CashStatementFile = CashStatementFile(
       "file2",
@@ -115,7 +117,9 @@ class SortStatementsServiceSpec extends SpecBase {
         CDSCashAccount,
         someAccountNumber,
         None
-      ), someEori)
+      ),
+      someEori
+    )
 
     val cashStatementFilePdf_2: CashStatementFile = CashStatementFile(
       "file3",
@@ -132,121 +136,382 @@ class SortStatementsServiceSpec extends SpecBase {
         CDSCashAccount,
         someAccountNumber,
         someRequestId
-      ), someEori)
+      ),
+      someEori
+    )
 
     val requestedCashStatements: Seq[CashStatementMonthToMonth] = List(
-      CashStatementMonthToMonth(LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
+      CashStatementMonthToMonth(
+        LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
         YearMonth.of(periodEndYear, periodEndMonth).atEndOfMonth(),
-        Seq(cashStatementFilePdf, cashStatementFileCsv))())
+        Seq(cashStatementFilePdf, cashStatementFileCsv)
+      )()
+    )
 
     val cashStatementFiles: Seq[CashStatementFile] =
       Seq(cashStatementFilePdf, cashStatementFileCsv, cashStatementFilePdf_2)
 
-    val securityStatementFile: SecurityStatementFile = SecurityStatementFile("statementfile_00", "download_url_00",
-      size, SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-        periodEndMonth, periodEndDay, Pdf, SecurityStatement, someEori, fileSize, "0000000", None))
+    val securityStatementFile: SecurityStatementFile = SecurityStatementFile(
+      "statementfile_00",
+      "download_url_00",
+      size,
+      SecurityStatementFileMetadata(
+        periodStartYear,
+        periodStartMonth,
+        periodStartDay,
+        periodEndYear,
+        periodEndMonth,
+        periodEndDay,
+        Pdf,
+        SecurityStatement,
+        someEori,
+        fileSize,
+        "0000000",
+        None
+      )
+    )
 
-    val securityStatementFile_2: SecurityStatementFile = SecurityStatementFile("statementfile_00", "download_url_00",
-      size, SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-        periodEndMonth, periodEndDay, Pdf, SecurityStatement, someEori, fileSize, "0000000", None))
+    val securityStatementFile_2: SecurityStatementFile = SecurityStatementFile(
+      "statementfile_00",
+      "download_url_00",
+      size,
+      SecurityStatementFileMetadata(
+        periodStartYear,
+        periodStartMonth,
+        periodStartDay,
+        periodEndYear,
+        periodEndMonth,
+        periodEndDay,
+        Pdf,
+        SecurityStatement,
+        someEori,
+        fileSize,
+        "0000000",
+        None
+      )
+    )
 
-    val securityStatementFile_3: SecurityStatementFile = SecurityStatementFile("statementfile_00", "download_url_00",
-      size, SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-        periodEndMonth, periodEndDay, Pdf, SecurityStatement, someEori, fileSize, "0000000", someRequestId))
+    val securityStatementFile_3: SecurityStatementFile = SecurityStatementFile(
+      "statementfile_00",
+      "download_url_00",
+      size,
+      SecurityStatementFileMetadata(
+        periodStartYear,
+        periodStartMonth,
+        periodStartDay,
+        periodEndYear,
+        periodEndMonth,
+        periodEndDay,
+        Pdf,
+        SecurityStatement,
+        someEori,
+        fileSize,
+        "0000000",
+        someRequestId
+      )
+    )
 
     val securityStatementFiles = List(securityStatementFile, securityStatementFile_2, securityStatementFile_3)
 
     val requestedSecurityStatements =
-      List(SecurityStatementsByPeriod(LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
-        LocalDate.of(periodEndYear, periodEndMonth, periodEndDay),
-        List(SecurityStatementFile("statementfile_00", "download_url_00", size,
-          SecurityStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-            periodEndMonth, periodEndDay, Pdf, SecurityStatement, "12345678", fileSize, "0000000", someRequestId)))))
+      List(
+        SecurityStatementsByPeriod(
+          LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
+          LocalDate.of(periodEndYear, periodEndMonth, periodEndDay),
+          List(
+            SecurityStatementFile(
+              "statementfile_00",
+              "download_url_00",
+              size,
+              SecurityStatementFileMetadata(
+                periodStartYear,
+                periodStartMonth,
+                periodStartDay,
+                periodEndYear,
+                periodEndMonth,
+                periodEndDay,
+                Pdf,
+                SecurityStatement,
+                "12345678",
+                fileSize,
+                "0000000",
+                someRequestId
+              )
+            )
+          )
+        )
+      )
 
-    val c79Certificates: VatCertificateFile = VatCertificateFile("statementfile_00", "download_url_00", size,
-      VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, None))
+    val c79Certificates: VatCertificateFile = VatCertificateFile(
+      "statementfile_00",
+      "download_url_00",
+      size,
+      VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, None)
+    )
 
-    val c79Certificates_2: VatCertificateFile = VatCertificateFile("statementfile_00", "download_url_00", size,
-      VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate, None))
+    val c79Certificates_2: VatCertificateFile = VatCertificateFile(
+      "statementfile_00",
+      "download_url_00",
+      size,
+      VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate, None)
+    )
 
-    val c79Certificates_3: VatCertificateFile = VatCertificateFile("statementfile_00", "download_url_00", size,
-      VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, someRequestId))
+    val c79Certificates_3: VatCertificateFile = VatCertificateFile(
+      "statementfile_00",
+      "download_url_00",
+      size,
+      VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, someRequestId)
+    )
 
-    val c79Certificates_4: VatCertificateFile = VatCertificateFile("statementfile_00", "download_url_00", size,
-      VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate, someRequestId))
+    val c79Certificates_4: VatCertificateFile = VatCertificateFile(
+      "statementfile_00",
+      "download_url_00",
+      size,
+      VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate, someRequestId)
+    )
 
     val c79CertificateFiles = Seq(c79Certificates, c79Certificates_2, c79Certificates_3, c79Certificates_4)
 
     val requestedC79Certificates = List(
-      VatCertificatesByMonth(LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
-        List(VatCertificateFile("statementfile_00", "download_url_00", size,
-          VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf,
-            C79Certificate, someRequestId), emptyString))),
-      VatCertificatesByMonth(LocalDate.of(periodStartYear, periodStartMonth_2, periodStartDay),
-        List(VatCertificateFile("statementfile_00", "download_url_00", size,
-          VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf,
-            C79Certificate, someRequestId), emptyString))))
+      VatCertificatesByMonth(
+        LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
+        List(
+          VatCertificateFile(
+            "statementfile_00",
+            "download_url_00",
+            size,
+            VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, someRequestId),
+            emptyString
+          )
+        )
+      ),
+      VatCertificatesByMonth(
+        LocalDate.of(periodStartYear, periodStartMonth_2, periodStartDay),
+        List(
+          VatCertificateFile(
+            "statementfile_00",
+            "download_url_00",
+            size,
+            VatCertificateFileMetadata(periodStartYear, periodStartMonth_2, Pdf, C79Certificate, someRequestId),
+            emptyString
+          )
+        )
+      )
+    )
 
     val postponedVatStatement: PostponedVatStatementFile =
-      PostponedVatStatementFile("statementfile_00", "download_url_00", size,
-        PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth, Pdf, PostponedVATStatement, "CDS", None))
+      PostponedVatStatementFile(
+        "statementfile_00",
+        "download_url_00",
+        size,
+        PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth, Pdf, PostponedVATStatement, "CDS", None)
+      )
 
     val postponedVatStatement_2: PostponedVatStatementFile =
-      PostponedVatStatementFile("statementfile_00", "download_url_00", size,
-        PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth_2, Pdf, PostponedVATStatement, "Chief",
-          someRequestId))
+      PostponedVatStatementFile(
+        "statementfile_00",
+        "download_url_00",
+        size,
+        PostponedVatStatementFileMetadata(
+          periodStartYear,
+          periodStartMonth_2,
+          Pdf,
+          PostponedVATStatement,
+          "Chief",
+          someRequestId
+        )
+      )
 
     val postponedVatStatement_3: PostponedVatStatementFile =
-      PostponedVatStatementFile("statementfile_00", "download_url_00", size,
-        PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth, Pdf, PostponedVATStatement, "CDS",
-          someRequestId))
+      PostponedVatStatementFile(
+        "statementfile_00",
+        "download_url_00",
+        size,
+        PostponedVatStatementFileMetadata(
+          periodStartYear,
+          periodStartMonth,
+          Pdf,
+          PostponedVATStatement,
+          "CDS",
+          someRequestId
+        )
+      )
 
     val postponedVatStatementFiles = Seq(postponedVatStatement, postponedVatStatement_2, postponedVatStatement_3)
 
     val requestedPVATStatements = List(
-      PostponedVatStatementsByMonth(LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
-        List(PostponedVatStatementFile("statementfile_00", "download_url_00", size,
-          PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth, Pdf, PostponedVATStatement, "CDS",
-            someRequestId), emptyString))),
-      PostponedVatStatementsByMonth(LocalDate.of(periodStartYear, periodStartMonth_2, periodStartDay),
-        List(PostponedVatStatementFile("statementfile_00", "download_url_00", size,
-          PostponedVatStatementFileMetadata(periodStartYear, periodStartMonth_2, Pdf, PostponedVATStatement, "Chief",
-            someRequestId), emptyString))))
+      PostponedVatStatementsByMonth(
+        LocalDate.of(periodStartYear, periodStartMonth, periodStartDay),
+        List(
+          PostponedVatStatementFile(
+            "statementfile_00",
+            "download_url_00",
+            size,
+            PostponedVatStatementFileMetadata(
+              periodStartYear,
+              periodStartMonth,
+              Pdf,
+              PostponedVATStatement,
+              "CDS",
+              someRequestId
+            ),
+            emptyString
+          )
+        )
+      ),
+      PostponedVatStatementsByMonth(
+        LocalDate.of(periodStartYear, periodStartMonth_2, periodStartDay),
+        List(
+          PostponedVatStatementFile(
+            "statementfile_00",
+            "download_url_00",
+            size,
+            PostponedVatStatementFileMetadata(
+              periodStartYear,
+              periodStartMonth_2,
+              Pdf,
+              PostponedVATStatement,
+              "Chief",
+              someRequestId
+            ),
+            emptyString
+          )
+        )
+      )
+    )
 
     val dutyDeferementFile: DutyDefermentStatementFile =
-      DutyDefermentStatementFile("2018_03_01-08.pdf", "url.pdf", size,
-        DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-          periodEndMonth, periodEndDay, Pdf, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), someDan,
-          someRequestId))
+      DutyDefermentStatementFile(
+        "2018_03_01-08.pdf",
+        "url.pdf",
+        size,
+        DutyDefermentStatementFileMetadata(
+          periodStartYear,
+          periodStartMonth,
+          periodStartDay,
+          periodEndYear,
+          periodEndMonth,
+          periodEndDay,
+          Pdf,
+          DutyDefermentStatement,
+          Weekly,
+          Some(true),
+          Some("BACS"),
+          someDan,
+          someRequestId
+        )
+      )
 
     val dutyDeferementFile_2: DutyDefermentStatementFile =
-      DutyDefermentStatementFile("2018_03_01-08.pdf", "url.pdf", size,
-        DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-          periodEndMonth, periodEndDay, Pdf, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), someDan, None))
+      DutyDefermentStatementFile(
+        "2018_03_01-08.pdf",
+        "url.pdf",
+        size,
+        DutyDefermentStatementFileMetadata(
+          periodStartYear,
+          periodStartMonth,
+          periodStartDay,
+          periodEndYear,
+          periodEndMonth,
+          periodEndDay,
+          Pdf,
+          DutyDefermentStatement,
+          Weekly,
+          Some(true),
+          Some("BACS"),
+          someDan,
+          None
+        )
+      )
 
     val dutyDeferementFile_3: DutyDefermentStatementFile =
-      DutyDefermentStatementFile("2018_02_01-08.pdf", "url.pdf", size,
-        DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth_2, periodStartDay, periodEndYear,
-          periodStartMonth_2, periodEndDay, Pdf, DutyDefermentStatement, Excise, Some(true), Some("BACS"), someDan,
-          someRequestId))
+      DutyDefermentStatementFile(
+        "2018_02_01-08.pdf",
+        "url.pdf",
+        size,
+        DutyDefermentStatementFileMetadata(
+          periodStartYear,
+          periodStartMonth_2,
+          periodStartDay,
+          periodEndYear,
+          periodStartMonth_2,
+          periodEndDay,
+          Pdf,
+          DutyDefermentStatement,
+          Excise,
+          Some(true),
+          Some("BACS"),
+          someDan,
+          someRequestId
+        )
+      )
 
     val dutyDeferementFile_4: DutyDefermentStatementFile =
-      DutyDefermentStatementFile("2018_02_01-08.pdf", "url.pdf", size,
-        DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth_2, periodStartDay, periodEndYear,
-          periodStartMonth_2, periodEndDay, Pdf, DutyDefermentStatement, Excise, Some(true), Some("BACS"), someDan,
-          None))
+      DutyDefermentStatementFile(
+        "2018_02_01-08.pdf",
+        "url.pdf",
+        size,
+        DutyDefermentStatementFileMetadata(
+          periodStartYear,
+          periodStartMonth_2,
+          periodStartDay,
+          periodEndYear,
+          periodStartMonth_2,
+          periodEndDay,
+          Pdf,
+          DutyDefermentStatement,
+          Excise,
+          Some(true),
+          Some("BACS"),
+          someDan,
+          None
+        )
+      )
 
     val dutyDefermentFiles = Seq(dutyDeferementFile, dutyDeferementFile_2, dutyDeferementFile_3, dutyDeferementFile_4)
 
     val requestedDutyDefermentStatements = List(
-      DutyDefermentStatementFile("2018_03_01-08.pdf", "url.pdf", size,
-        DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
-          periodStartMonth, periodEndDay, Pdf, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "12345",
-          someRequestId)),
-      DutyDefermentStatementFile("2018_02_01-08.pdf", "url.pdf", size,
-        DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth_2, periodStartDay, periodEndYear,
-          periodStartMonth_2, periodEndDay, Pdf, DutyDefermentStatement, Excise, Some(true), Some("BACS"), "12345",
-          someRequestId)))
+      DutyDefermentStatementFile(
+        "2018_03_01-08.pdf",
+        "url.pdf",
+        size,
+        DutyDefermentStatementFileMetadata(
+          periodStartYear,
+          periodStartMonth,
+          periodStartDay,
+          periodEndYear,
+          periodStartMonth,
+          periodEndDay,
+          Pdf,
+          DutyDefermentStatement,
+          Weekly,
+          Some(true),
+          Some("BACS"),
+          "12345",
+          someRequestId
+        )
+      ),
+      DutyDefermentStatementFile(
+        "2018_02_01-08.pdf",
+        "url.pdf",
+        size,
+        DutyDefermentStatementFileMetadata(
+          periodStartYear,
+          periodStartMonth_2,
+          periodStartDay,
+          periodEndYear,
+          periodStartMonth_2,
+          periodEndDay,
+          Pdf,
+          DutyDefermentStatement,
+          Excise,
+          Some(true),
+          Some("BACS"),
+          "12345",
+          someRequestId
+        )
+      )
+    )
 
     val eoriHistory: EoriHistory = EoriHistory("eori1", Some(LocalDate.now()), Some(LocalDate.now()))
 

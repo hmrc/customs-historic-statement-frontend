@@ -40,7 +40,9 @@ class CashStatementViewModelSpec extends SpecBase {
         CashStatementForEori(
           eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq.empty,
-          requestedStatements = Seq(CashStatementMonthToMonth(startDate, endDate))))
+          requestedStatements = Seq(CashStatementMonthToMonth(startDate, endDate))
+        )
+      )
 
       val viewModel: CashStatementViewModel =
         CashStatementViewModel(statementsForAllEoris = cashStatements)
@@ -58,7 +60,9 @@ class CashStatementViewModelSpec extends SpecBase {
         CashStatementForEori(
           eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq(CashStatementMonthToMonth(startDate, endDate)),
-          requestedStatements = Seq.empty))
+          requestedStatements = Seq.empty
+        )
+      )
 
       val viewModel: CashStatementViewModel =
         CashStatementViewModel(statementsForAllEoris = cashStatements)
@@ -93,7 +97,9 @@ class CashStatementViewModelSpec extends SpecBase {
         CashStatementForEori(
           eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq.empty,
-          requestedStatements = Seq.empty))
+          requestedStatements = Seq.empty
+        )
+      )
 
       val viewModel: CashStatementViewModel =
         CashStatementViewModel(statementsForAllEoris = cashStatements)
@@ -111,13 +117,15 @@ class CashStatementViewModelSpec extends SpecBase {
       val groupedStatements: GroupedStatementsByEori = GroupedStatementsByEori(
         eoriIndex = 0,
         eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
-        statementsByYear = Map(periodStartYear -> statements))
+        statementsByYear = Map(periodStartYear -> statements)
+      )
 
       val result: Html = CashStatementViewModel.generateStatementsByYear(groupedStatements)
 
       val expectedYearHeading: HtmlFormat.Appendable = h2Component(
         msg = periodStartYear.toString,
-        classes = "govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-top-7")
+        classes = "govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-top-7"
+      )
 
       result.body must include(expectedYearHeading.body)
     }
@@ -136,17 +144,17 @@ class CashStatementViewModelSpec extends SpecBase {
         statementsByYear = Map(periodStartYear -> statements)
       )
 
-      val result: Html = CashStatementViewModel.generateStatementsByYear(groupedStatements)
+      val result: Html       = CashStatementViewModel.generateStatementsByYear(groupedStatements)
       val document: Document = Jsoup.parse(result.body)
 
-      private val rowsByMonth = document.select("div[id^=requested-statements-list-0-row-]")
-      private val julyStartMonthRow1 = rowsByMonth.asScala(0)
-      private val julyStartMonthRow2 = rowsByMonth.asScala(1)
-      private val augustStartMonthRow1 = rowsByMonth.asScala(2)
-      private val augustStartMonthRow2 = rowsByMonth.asScala(3)
+      private val rowsByMonth               = document.select("div[id^=requested-statements-list-0-row-]")
+      private val julyStartMonthRow1        = rowsByMonth.asScala(0)
+      private val julyStartMonthRow2        = rowsByMonth.asScala(1)
+      private val augustStartMonthRow1      = rowsByMonth.asScala(2)
+      private val augustStartMonthRow2      = rowsByMonth.asScala(3)
       private val augustStartMonthRow1Links = augustStartMonthRow1.select("a")
-      private val csvLinks = document.select("a[href$=.csv]")
-      private val pdfLinks = document.select("a[href$=.pdf]")
+      private val csvLinks                  = document.select("a[href$=.csv]")
+      private val pdfLinks                  = document.select("a[href$=.pdf]")
 
       rowsByMonth.size mustBe 4
       julyStartMonthRow1.select("dt").first.ownText mustBe "July to July"
@@ -170,9 +178,9 @@ class CashStatementViewModelSpec extends SpecBase {
         statementsByYear = Map(periodStartYear -> statements)
       )
 
-      val result: Html = CashStatementViewModel.generateStatementsByYear(groupedStatements)
+      val result: Html       = CashStatementViewModel.generateStatementsByYear(groupedStatements)
       val document: Document = Jsoup.parse(result.body)
-      private val pdfLinks = document.select("a[href$=.pdf]")
+      private val pdfLinks   = document.select("a[href$=.pdf]")
 
       pdfLinks.size mustBe 1
       pdfLinks.first.attr("href") mustBe pdfFile2.filename
@@ -180,12 +188,13 @@ class CashStatementViewModelSpec extends SpecBase {
 
     "generate HTML correctly for multiple years in the grouped statements" in new Setup {
       val statements2023: Seq[CashStatementMonthToMonth] = Seq(CashStatementMonthToMonth(startDate, endDate))
-      val statements2024: Seq[CashStatementMonthToMonth] = Seq(CashStatementMonthToMonth(startDate.plusYears(1), endDate.plusYears(1)))
-      val groupedStatements: GroupedStatementsByEori = GroupedStatementsByEori(
+      val statements2024: Seq[CashStatementMonthToMonth] =
+        Seq(CashStatementMonthToMonth(startDate.plusYears(1), endDate.plusYears(1)))
+      val groupedStatements: GroupedStatementsByEori     = GroupedStatementsByEori(
         eoriIndex = 0,
         eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
         statementsByYear = Map(
-          periodStartYear -> statements2023,
+          periodStartYear     -> statements2023,
           periodStartYear + 1 -> statements2024
         )
       )
@@ -215,29 +224,29 @@ class CashStatementViewModelSpec extends SpecBase {
 
   trait Setup {
 
-    val app: Application = applicationBuilder().build()
-    implicit val msg: Messages = messages(app)
+    val app: Application                      = applicationBuilder().build()
+    implicit val msg: Messages                = messages(app)
     implicit val appConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
-    val eoriNumber = "EORI456"
+    val eoriNumber               = "EORI456"
     val startDateJuly: LocalDate = LocalDate.parse("2023-07-10")
-    val endDateJuly: LocalDate = LocalDate.parse("2023-07-20")
+    val endDateJuly: LocalDate   = LocalDate.parse("2023-07-20")
     val startDateJune: LocalDate = LocalDate.parse("2023-06-01")
-    val endDateJune: LocalDate = LocalDate.parse("2023-06-30")
+    val endDateJune: LocalDate   = LocalDate.parse("2023-06-30")
 
     val accountNumber: Option[String] = Some("123456789")
-    val monthJuly = "July"
-    val monthAugust = "August"
+    val monthJuly                     = "July"
+    val monthAugust                   = "August"
 
-    val periodStartYear = 2023
+    val periodStartYear  = 2023
     val periodStartMonth = 7
-    val periodStartDay = 1
-    val startDate = LocalDate.of(periodStartYear, periodStartMonth, periodStartDay)
+    val periodStartDay   = 1
+    val startDate        = LocalDate.of(periodStartYear, periodStartMonth, periodStartDay)
 
-    val periodEndYear = 2023
+    val periodEndYear  = 2023
     val periodEndMonth = 8
-    val periodEndDay = 31
-    val endDate = LocalDate.of(periodEndYear, periodEndMonth, periodEndDay)
+    val periodEndDay   = 31
+    val endDate        = LocalDate.of(periodEndYear, periodEndMonth, periodEndDay)
 
     val expectedFileSizeCsv = 1048576L
     val expectedFileSizePdf = 2097152L
@@ -252,7 +261,8 @@ class CashStatementViewModelSpec extends SpecBase {
       fileFormat = Csv,
       fileRole = CDSCashAccount,
       cashAccountNumber = accountNumber,
-      statementRequestId = None)
+      statementRequestId = None
+    )
 
     val csvFileMetadata2: CashStatementFileMetadata = CashStatementFileMetadata(
       periodStartYear = periodStartYear,
@@ -264,7 +274,8 @@ class CashStatementViewModelSpec extends SpecBase {
       fileFormat = Csv,
       fileRole = CDSCashAccount,
       cashAccountNumber = accountNumber,
-      statementRequestId = None)
+      statementRequestId = None
+    )
 
     val csvFileMetadata3: CashStatementFileMetadata = CashStatementFileMetadata(
       periodStartYear = periodStartYear,
@@ -276,7 +287,8 @@ class CashStatementViewModelSpec extends SpecBase {
       fileFormat = Csv,
       fileRole = CDSCashAccount,
       cashAccountNumber = accountNumber,
-      statementRequestId = None)
+      statementRequestId = None
+    )
 
     val csvFileMetadata4: CashStatementFileMetadata = CashStatementFileMetadata(
       periodStartYear = periodStartYear,
@@ -288,7 +300,8 @@ class CashStatementViewModelSpec extends SpecBase {
       fileFormat = Csv,
       fileRole = CDSCashAccount,
       cashAccountNumber = accountNumber,
-      statementRequestId = None)
+      statementRequestId = None
+    )
 
     val pdfFileMetadata: CashStatementFileMetadata = CashStatementFileMetadata(
       periodStartYear = periodStartYear,
@@ -300,42 +313,49 @@ class CashStatementViewModelSpec extends SpecBase {
       fileFormat = Pdf,
       fileRole = CDSCashAccount,
       cashAccountNumber = accountNumber,
-      statementRequestId = None)
+      statementRequestId = None
+    )
 
     val csvFile: CashStatementFile = CashStatementFile(
       filename = "file0.csv",
       downloadURL = "file0.csv",
       size = expectedFileSizeCsv,
-      metadata = csvFileMetadata)
+      metadata = csvFileMetadata
+    )
 
     val csvFile2: CashStatementFile = CashStatementFile(
       filename = "file0.csv",
       downloadURL = "file0.csv",
       size = expectedFileSizeCsv,
-      metadata = csvFileMetadata2)
+      metadata = csvFileMetadata2
+    )
 
     val csvFile3: CashStatementFile = CashStatementFile(
       filename = "file0.csv",
       downloadURL = "file0.csv",
       size = expectedFileSizeCsv,
-      metadata = csvFileMetadata3)
+      metadata = csvFileMetadata3
+    )
 
     val csvFile4: CashStatementFile = CashStatementFile(
       filename = "file0.csv",
       downloadURL = "file0.csv",
       size = expectedFileSizeCsv,
-      metadata = csvFileMetadata4)
+      metadata = csvFileMetadata4
+    )
 
     val pdfFile: CashStatementFile = CashStatementFile(
       filename = "file0.pdf",
       downloadURL = "file0.pdf",
       size = expectedFileSizePdf,
-      metadata = pdfFileMetadata)
+      metadata = pdfFileMetadata
+    )
 
     val pdfFile2: CashStatementFile = CashStatementFile(
       filename = "file1.pdf",
       downloadURL = "file1.pdf",
       size = expectedFileSizePdf,
-      metadata = pdfFileMetadata)
+      metadata = pdfFileMetadata
+    )
   }
 }

@@ -65,7 +65,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       "calling renderNiAccountHeading component for Northern Ireland accounts" in new Setup {
 
         val result: HtmlFormat.Appendable = viewModel.component.accountHeading
-        val expectedHtml: String = h2Component(
+        val expectedHtml: String          = h2Component(
           msg = "cf.account.detail.requested.deferment-account-secondary-heading.NiAccount",
           id = Some("eori-heading"),
           classes = "govuk-caption-xl",
@@ -84,7 +84,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
         )
 
         val result: HtmlFormat.Appendable = viewModelNiFalse.component.accountHeading
-        val expectedHtml: String = h2Component(
+        val expectedHtml: String          = h2Component(
           msg = "cf.account.detail.requested.deferment-account-secondary-heading",
           id = Some("eori-heading"),
           classes = "govuk-caption-xl",
@@ -97,7 +97,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       "calling renderEoriHeading component" in new Setup {
 
         val result: HtmlFormat.Appendable = viewModel.component.eoriHeading
-        val expectedHtml: String = h2Component(
+        val expectedHtml: String          = h2Component(
           id = Some("historic-eori-0"),
           classes = "govuk-heading-s",
           msg = msg("cf.account.details.previous-eori", "12345678")
@@ -109,7 +109,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       "calling renderMonthHeading component" in new Setup {
 
         val result: HtmlFormat.Appendable = viewModel.component.monthHeading
-        val expectedHtml: String = h3Component(
+        val expectedHtml: String          = h3Component(
           id = Some(s"requested-statements-month-heading-0-2018-2"),
           msg = Formatters.dateAsMonthAndYear(monthAndYear)
         ).toString()
@@ -119,11 +119,11 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
       "calling renderStatements component" in new Setup {
 
-        val result: HtmlFormat.Appendable = viewModel.component.statements
+        val result: HtmlFormat.Appendable     = viewModel.component.statements
         val expectedPeriodDetailsHtml: String = statementRowContent.period.defermentStatementType match {
           case Supplementary => msg("cf.account.detail.row.supplementary.info")
-          case Excise => msg("cf.account.details.row.excise.info")
-          case _ => msg("cf.account.detail.period-group")
+          case Excise        => msg("cf.account.details.row.excise.info")
+          case _             => msg("cf.account.detail.period-group")
         }
 
         val rowId = s"${statement.historyIndex}-${statement.group.year}-${statement.group.month}-row-$statementIndex"
@@ -131,18 +131,21 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
         val expectedHtml: String = dlComponent(
           content = HtmlFormat.raw(
             divComponent(
-              content = HtmlFormat.fill(List(
-                dtComponent(
-                  content = HtmlFormat.raw(expectedPeriodDetailsHtml),
-                  classes = Some("govuk-summary-list__value"),
-                  id = Some(s"requested-statements-list-$rowId-date-cell")
-                ),
-                ddComponent(
-                  content = new duty_deferment_file().apply(statementPeriod, Pdf, s"requested-statements-list-$rowId"),
-                  classes = Some("govuk-summary-list__actions"),
-                  id = Some(s"requested-statements-list-$rowId-link-cell")
+              content = HtmlFormat.fill(
+                List(
+                  dtComponent(
+                    content = HtmlFormat.raw(expectedPeriodDetailsHtml),
+                    classes = Some("govuk-summary-list__value"),
+                    id = Some(s"requested-statements-list-$rowId-date-cell")
+                  ),
+                  ddComponent(
+                    content =
+                      new duty_deferment_file().apply(statementPeriod, Pdf, s"requested-statements-list-$rowId"),
+                    classes = Some("govuk-summary-list__actions"),
+                    id = Some(s"requested-statements-list-$rowId-link-cell")
+                  )
                 )
-              )),
+              ),
               classes = Some("govuk-summary-list__row"),
               id = Some(s"requested-statements-list-$rowId")
             ).toString()
@@ -161,80 +164,94 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
           basePeriod.copy(fileRole = C79Certificate, defermentStatementType = Supplementary)
 
         val supplementaryResult: HtmlFormat.Appendable = renderStatement
-        val supplementaryMessage: String = msg("cf.account.detail.row.supplementary.info")
+        val supplementaryMessage: String               = msg("cf.account.detail.row.supplementary.info")
         supplementaryResult.body must include(supplementaryMessage)
 
         val excisePeriod: DutyDefermentStatementPeriod = basePeriod.copy(defermentStatementType = Excise)
-        val exciseResult: HtmlFormat.Appendable = renderStatement
-        val exciseMessage: String = msg("cf.account.details.row.excise.info")
+        val exciseResult: HtmlFormat.Appendable        = renderStatement
+        val exciseMessage: String                      = msg("cf.account.details.row.excise.info")
         exciseResult.body must include(exciseMessage)
 
         val result: HtmlFormat.Appendable = renderStatement
-        val expectedMessage: String = msg("cf.account.detail.period-group",
+        val expectedMessage: String       = msg(
+          "cf.account.detail.period-group",
           Formatters.dateAsDay(basePeriod.startDate),
           Formatters.dateAsDay(basePeriod.endDate),
-          Formatters.dateAsMonth(basePeriod.endDate))
+          Formatters.dateAsMonth(basePeriod.endDate)
+        )
         result.body must include(expectedMessage)
       }
     }
   }
 
-  private def shouldContainAccountNumber(implicit view: Document): Assertion = {
-    view.getElementById("eori-heading").html().contains(
-      msg("cf.account.detail.requested.deferment-account-secondary-heading")
-    ) mustBe true
-  }
+  private def shouldContainAccountNumber(implicit view: Document): Assertion =
+    view
+      .getElementById("eori-heading")
+      .html()
+      .contains(
+        msg("cf.account.detail.requested.deferment-account-secondary-heading")
+      ) mustBe true
 
-  private def shouldContainNiAccountNumber(implicit view: Document): Assertion = {
-    view.getElementById("eori-heading").html().contains(
-      msg("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
-    ) mustBe true
-  }
+  private def shouldContainNiAccountNumber(implicit view: Document): Assertion =
+    view
+      .getElementById("eori-heading")
+      .html()
+      .contains(
+        msg("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
+      ) mustBe true
 
-  private def headingShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("requested-statements-heading").html().contains(
-      msg("cf.account.detail.requested.deferment-account-heading")
-    ) mustBe true
-  }
+  private def headingShouldBeCorrect(implicit view: Document): Assertion =
+    view
+      .getElementById("requested-statements-heading")
+      .html()
+      .contains(
+        msg("cf.account.detail.requested.deferment-account-heading")
+      ) mustBe true
 
-  private def subHeadingShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("requested-statements-available-text").html().contains(
-      msg("cf.account.detail.requested.deferment-account-statements-available.text")
-    ) mustBe true
-  }
+  private def subHeadingShouldBeCorrect(implicit view: Document): Assertion =
+    view
+      .getElementById("requested-statements-available-text")
+      .html()
+      .contains(
+        msg("cf.account.detail.requested.deferment-account-statements-available.text")
+      ) mustBe true
 
-  private def eoriNumberShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("historic-eori-0").html().contains(
-      msg("cf.account.details.previous-eori", "12345678")
-    ) mustBe true
-  }
+  private def eoriNumberShouldBeCorrect(implicit view: Document): Assertion =
+    view
+      .getElementById("historic-eori-0")
+      .html()
+      .contains(
+        msg("cf.account.details.previous-eori", "12345678")
+      ) mustBe true
 
   trait Setup {
 
-    private val someEori = "12345678"
-    private val someDan = "12345"
+    private val someEori                      = "12345678"
+    private val someDan                       = "12345"
     private val someRequestId: Option[String] = Some("Ab1234")
-    private val pdfFileName = "2018_03_01-08.pdf"
-    private val pdfUrl = "url.pdf"
-    private val pdfSize = 1024L
-    private val periodStartYear = 2018
-    private val periodStartMonth = 3
-    private val periodStartMonth2 = 2
-    private val periodStartDay = 1
-    private val periodEndYear = 2018
-    private val periodEndMonth2 = 3
-    private val periodEndMonth = 2
-    private val periodEndDay = 8
-    private val dutyPaymentType = "BACS"
+    private val pdfFileName                   = "2018_03_01-08.pdf"
+    private val pdfUrl                        = "url.pdf"
+    private val pdfSize                       = 1024L
+    private val periodStartYear               = 2018
+    private val periodStartMonth              = 3
+    private val periodStartMonth2             = 2
+    private val periodStartDay                = 1
+    private val periodEndYear                 = 2018
+    private val periodEndMonth2               = 3
+    private val periodEndMonth                = 2
+    private val periodEndDay                  = 8
+    private val dutyPaymentType               = "BACS"
 
-    protected val accountNumber = "123456"
+    protected val accountNumber           = "123456"
     protected val monthAndYear: LocalDate = LocalDate.of(periodStartYear, periodStartMonth2, periodStartDay)
 
     private val dutyDefermentFile: DutyDefermentStatementFile =
-      DutyDefermentStatementFile(pdfFileName,
+      DutyDefermentStatementFile(
+        pdfFileName,
         pdfUrl,
         pdfSize,
-        DutyDefermentStatementFileMetadata(periodStartYear,
+        DutyDefermentStatementFileMetadata(
+          periodStartYear,
           periodStartMonth,
           periodStartDay,
           periodEndYear,
@@ -246,12 +263,16 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
           Some(true),
           Some(dutyPaymentType),
           someDan,
-          someRequestId))
+          someRequestId
+        )
+      )
 
-    private val dutyDefermentFile_2: DutyDefermentStatementFile = DutyDefermentStatementFile(pdfFileName,
+    private val dutyDefermentFile_2: DutyDefermentStatementFile = DutyDefermentStatementFile(
+      pdfFileName,
       pdfUrl,
       pdfSize,
-      DutyDefermentStatementFileMetadata(periodStartYear,
+      DutyDefermentStatementFileMetadata(
+        periodStartYear,
         periodStartMonth2,
         periodStartDay,
         periodEndYear,
@@ -267,13 +288,15 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       )
     )
 
-    private val localDateYear = 2019
+    private val localDateYear  = 2019
     private val localDateMonth = 11
-    private val localDateDay = 10
+    private val localDateDay   = 10
 
-    private val eoriHistory = EoriHistory(someEori,
+    private val eoriHistory = EoriHistory(
+      someEori,
       Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
-      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)))
+      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay))
+    )
 
     protected val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori =
       DutyDefermentStatementsForEori.apply(eoriHistory, Seq(dutyDefermentFile), Seq(dutyDefermentFile_2))
@@ -293,23 +316,24 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       statementFiles = Seq.empty
     )
 
-    protected val statement: DutyDefermentAccountStatement = viewModel.statementsData.head
+    protected val statement: DutyDefermentAccountStatement      = viewModel.statementsData.head
     protected val statementPeriod: DutyDefermentStatementPeriod = statement.periodsWithIndex.head._1
-    protected val statementIndex: Int = statement.periodsWithIndex.head._2
+    protected val statementIndex: Int                           = statement.periodsWithIndex.head._2
 
     protected val statementRowContent: DutyDefermentAccountRowContent =
       DutyDefermentAccountRowContent(statement, statementPeriod, statementIndex)
 
-    private def dutyDefermentModel(isNiAccount: Boolean) = DutyDefermentAccountViewModel(
-      "accountNumber",
-      Seq(dutyDefermentStatementsForEori),
-      isNiAccount = isNiAccount)
+    private def dutyDefermentModel(isNiAccount: Boolean) =
+      DutyDefermentAccountViewModel("accountNumber", Seq(dutyDefermentStatementsForEori), isNiAccount = isNiAccount)
 
     protected def view(isNiAccount: Boolean = false): Document = Jsoup.parse(
-      app.injector.instanceOf[DutyDefermentRequestedStatements].
-        apply(dutyDefermentModel(isNiAccount), config.returnLink("dutyDeferment")).body)
+      app.injector
+        .instanceOf[DutyDefermentRequestedStatements]
+        .apply(dutyDefermentModel(isNiAccount), config.returnLink("dutyDeferment"))
+        .body
+    )
 
-    protected def createTestStatement(period: DutyDefermentStatementPeriod): DutyDefermentAccountStatement = {
+    protected def createTestStatement(period: DutyDefermentStatementPeriod): DutyDefermentAccountStatement =
       DutyDefermentAccountStatement(
         historyIndex = 0,
         groupIndex = 0,
@@ -321,8 +345,8 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
         periodIndex = 0,
         period = period,
         periodsWithIndex = Seq((period, 0)),
-        isNiAccount = true, accountNumber = accountNumber
+        isNiAccount = true,
+        accountNumber = accountNumber
       )
-    }
   }
 }

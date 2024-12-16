@@ -20,31 +20,23 @@ object FormHelper {
 
   def updateFormErrorKeyForStartAndEndDate(): (String, String) => String = (key: String, errorMsg: String) => {
 
-    val emptyStartMonthKey = "cf.historic.document.request.form.error.start.month.date-number-invalid"
-    val emptyStartYearKey = "cf.historic.document.request.form.error.start.year.date-number-invalid"
-    val emptyStartDateKey = "cf.historic.document.request.form.error.start.date-missing"
+    val emptyStartMonthKey   = "cf.historic.document.request.form.error.start.month.date-number-invalid"
+    val emptyStartYearKey    = "cf.historic.document.request.form.error.start.year.date-number-invalid"
+    val emptyStartDateKey    = "cf.historic.document.request.form.error.start.date-missing"
     val invalidStartMonthKey = "cf.historic.document.request.form.error.start.month.invalid"
-    val invalidStartYearKey = "cf.historic.document.request.form.error.year.invalid"
+    val invalidStartYearKey  = "cf.historic.document.request.form.error.year.invalid"
 
-    val emptyEndMonthKey = "cf.historic.document.request.form.error.end.month.date-number-invalid"
-    val emptyEndYearKey = "cf.historic.document.request.form.error.end.year.date-number-invalid"
-    val emptyEndDateKey = "cf.historic.document.request.form.error.end.date-missing"
+    val emptyEndMonthKey   = "cf.historic.document.request.form.error.end.month.date-number-invalid"
+    val emptyEndYearKey    = "cf.historic.document.request.form.error.end.year.date-number-invalid"
+    val emptyEndDateKey    = "cf.historic.document.request.form.error.end.date-missing"
     val invalidEndMonthKey = "cf.historic.document.request.form.error.end.month.invalid"
-    val invalidEndYearKey = "cf.historic.document.request.form.error.year.invalid"
+    val invalidEndYearKey  = "cf.historic.document.request.form.error.year.invalid"
 
-    val startDateMsgKeyList = List(
-      emptyStartMonthKey,
-      emptyStartYearKey,
-      emptyStartDateKey,
-      invalidStartMonthKey,
-      invalidStartYearKey)
+    val startDateMsgKeyList =
+      List(emptyStartMonthKey, emptyStartYearKey, emptyStartDateKey, invalidStartMonthKey, invalidStartYearKey)
 
-    val endDateMsgKeyList = List(
-      emptyEndMonthKey,
-      emptyEndYearKey,
-      emptyEndDateKey,
-      invalidEndMonthKey,
-      invalidEndYearKey)
+    val endDateMsgKeyList =
+      List(emptyEndMonthKey, emptyEndYearKey, emptyEndDateKey, invalidEndMonthKey, invalidEndYearKey)
 
     if (key.equals("start") || key.equals("end")) {
       if (startDateMsgKeyList.contains(errorMsg) || endDateMsgKeyList.contains(errorMsg)) {

@@ -29,27 +29,23 @@ class SessionRepositorySpec extends SpecBase {
 
     "get the document for the given id" in new Setup {
       for {
-        _ <- defaultSessionRepository.set(userAnswers)
+        _                           <- defaultSessionRepository.set(userAnswers)
         result: Option[UserAnswers] <- defaultSessionRepository.get("id")
-      } yield {
-        result mustBe Some(userAnswers)
-      }
+      } yield result mustBe Some(userAnswers)
     }
 
     "delete the document for the given id" in new Setup {
       for {
-        _ <- defaultSessionRepository.set(userAnswers)
+        _               <- defaultSessionRepository.set(userAnswers)
         result: Boolean <- defaultSessionRepository.clear("id")
-      } yield {
-        result mustBe true
-      }
+      } yield result mustBe true
     }
   }
 
   trait Setup {
     val app: Application = applicationBuilder().build()
 
-    val appConfig: Configuration = app.injector.instanceOf[Configuration]
+    val appConfig: Configuration           = app.injector.instanceOf[Configuration]
     val mongoComponent: PlayMongoComponent = app.injector.instanceOf[PlayMongoComponent]
 
     val defaultSessionRepository = new DefaultSessionRepository(mongoComponent, appConfig)

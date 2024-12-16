@@ -31,113 +31,107 @@ import views.html._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HistoricStatementsController @Inject()(identify: IdentifierAction,
-                                             getEoriHistory: EoriHistoryAction,
-                                             getSessionId: SessionIdFilter,
-                                             mcc: MessagesControllerComponents,
-                                             customsFinancialsApiConnector: CustomsFinancialsApiConnector,
-                                             sessionCacheConnector: CustomsSessionCacheConnector,
-                                             sdesConnector: SdesConnector,
-                                             importVatView: ImportVatRequestedStatements,
-                                             importCashStatementView: CashStatementView,
-                                             importPostponedVatView: ImportPostponedVatRequestedStatements,
-                                             securitiesView: SecuritiesRequestedStatements,
-                                             sortStatementsService: SortStatementsService,
-                                             dutyDefermentView: DutyDefermentRequestedStatements)
-                                            (implicit executionContext: ExecutionContext,
-                                             appConfig: FrontendAppConfig)
-  extends FrontendController(mcc) with I18nSupport {
+class HistoricStatementsController @Inject() (
+  identify: IdentifierAction,
+  getEoriHistory: EoriHistoryAction,
+  getSessionId: SessionIdFilter,
+  mcc: MessagesControllerComponents,
+  customsFinancialsApiConnector: CustomsFinancialsApiConnector,
+  sessionCacheConnector: CustomsSessionCacheConnector,
+  sdesConnector: SdesConnector,
+  importVatView: ImportVatRequestedStatements,
+  importCashStatementView: CashStatementView,
+  importPostponedVatView: ImportPostponedVatRequestedStatements,
+  securitiesView: SecuritiesRequestedStatements,
+  sortStatementsService: SortStatementsService,
+  dutyDefermentView: DutyDefermentRequestedStatements
+)(implicit executionContext: ExecutionContext, appConfig: FrontendAppConfig)
+    extends FrontendController(mcc)
+    with I18nSupport {
 
-  def historicStatements(fileRole: FileRole): Action[AnyContent] = (
-    identify andThen getEoriHistory).async { implicit request =>
-    customsFinancialsApiConnector.deleteNotification(request.eori, fileRole)
+  def historicStatements(fileRole: FileRole): Action[AnyContent] = (identify andThen getEoriHistory).async {
+    implicit request =>
+      customsFinancialsApiConnector.deleteNotification(request.eori, fileRole)
 
-    fileRole match {
-      case SecurityStatement => showHistoricSecurityStatements()
-      case C79Certificate => showHistoricC79Statements()
-      case PostponedVATStatement => showHistoricPostponedVatStatements()
-      case CDSCashAccount => showHistoricCashStatements()
-      case _ => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
-    }
+      fileRole match {
+        case SecurityStatement     => showHistoricSecurityStatements()
+        case C79Certificate        => showHistoricC79Statements()
+        case PostponedVATStatement => showHistoricPostponedVatStatements()
+        case CDSCashAccount        => showHistoricCashStatements()
+        case _                     => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+      }
   }
 
-  def historicStatementsDutyDeferment(linkId: String): Action[AnyContent] = (
-    identify andThen getEoriHistory andThen getSessionId).async { implicit request =>
+  def historicStatementsDutyDeferment(linkId: String): Action[AnyContent] =
+    (identify andThen getEoriHistory andThen getSessionId).async { implicit request =>
 
-    customsFinancialsApiConnector.deleteNotification(request.eori, DutyDefermentStatement)
-    sessionCacheConnector.getAccountNumber(request.sessionId, linkId).flatMap {
-      case Some(dan) => showHistoricDutyDefermentStatements(dan, linkId)
-      case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+      customsFinancialsApiConnector.deleteNotification(request.eori, DutyDefermentStatement)
+      sessionCacheConnector.getAccountNumber(request.sessionId, linkId).flatMap {
+        case Some(dan) => showHistoricDutyDefermentStatements(dan, linkId)
+        case None      => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+      }
     }
-  }
 
-  private def showHistoricC79Statements()(
-    implicit request: IdentifierRequestWithEoriHistory[AnyContent]): Future[Result] = {
-
+  private def showHistoricC79Statements()(implicit
+    request: IdentifierRequestWithEoriHistory[AnyContent]
+  ): Future[Result] =
     for {
       allCertificates <- Future.sequence(request.eoriHistory.map { historicEori =>
-        sdesConnector
-          .getVatCertificates(historicEori.eori)
-          .map(sortStatementsService.sortVatCertificatesForEori(historicEori, _))
-      })
-      viewModel = VatViewModel(allCertificates.sorted)
+                           sdesConnector
+                             .getVatCertificates(historicEori.eori)
+                             .map(sortStatementsService.sortVatCertificatesForEori(historicEori, _))
+                         })
+      viewModel        = VatViewModel(allCertificates.sorted)
     } yield Ok(importVatView(viewModel, appConfig.returnLink(C79Certificate)))
-  }
 
-  private def showHistoricCashStatements()(
-    implicit request: IdentifierRequestWithEoriHistory[AnyContent]): Future[Result] = {
-
+  private def showHistoricCashStatements()(implicit
+    request: IdentifierRequestWithEoriHistory[AnyContent]
+  ): Future[Result] =
     for {
       allCertificates <- Future.sequence(request.eoriHistory.map { historicEori =>
-        sdesConnector
-          .getCashStatements(historicEori.eori)
-          .map(sortStatementsService.sortCashStatementsForEori(historicEori, _))
-      })
+                           sdesConnector
+                             .getCashStatements(historicEori.eori)
+                             .map(sortStatementsService.sortCashStatementsForEori(historicEori, _))
+                         })
 
       viewModel = CashStatementViewModel(allCertificates.sorted)
     } yield Ok(importCashStatementView(viewModel, appConfig.returnLink(CDSCashAccount)))
-  }
 
-  private def showHistoricPostponedVatStatements()(
-    implicit request: IdentifierRequestWithEoriHistory[AnyContent]): Future[Result] = {
-
+  private def showHistoricPostponedVatStatements()(implicit
+    request: IdentifierRequestWithEoriHistory[AnyContent]
+  ): Future[Result] =
     for {
       allCertificates <- Future.sequence(request.eoriHistory.map { historicEori =>
-        sdesConnector
-          .getPostponedVatStatements(historicEori.eori)
-          .map(sortStatementsService.sortPostponedVatStatementsForEori(historicEori, _))
-      })
-      viewModel = PostponedVatViewModel(allCertificates.sorted)
+                           sdesConnector
+                             .getPostponedVatStatements(historicEori.eori)
+                             .map(sortStatementsService.sortPostponedVatStatementsForEori(historicEori, _))
+                         })
+      viewModel        = PostponedVatViewModel(allCertificates.sorted)
     } yield Ok(importPostponedVatView(viewModel, appConfig.returnLink(PostponedVATStatement)))
-  }
 
-  private def showHistoricSecurityStatements()(
-    implicit request: IdentifierRequestWithEoriHistory[AnyContent]): Future[Result] = {
-
+  private def showHistoricSecurityStatements()(implicit
+    request: IdentifierRequestWithEoriHistory[AnyContent]
+  ): Future[Result] =
     for {
-      allCertificates <- Future.sequence(request.eoriHistory.map {
-        historicEori =>
-          sdesConnector
-            .getSecurityStatements(historicEori.eori)
-            .map(sortStatementsService.sortSecurityCertificatesForEori(historicEori, _))
-      })
+      allCertificates <- Future.sequence(request.eoriHistory.map { historicEori =>
+                           sdesConnector
+                             .getSecurityStatements(historicEori.eori)
+                             .map(sortStatementsService.sortSecurityCertificatesForEori(historicEori, _))
+                         })
     } yield {
       val model = SecuritiesRequestedStatementsViewModel(allCertificates)
       Ok(securitiesView(model, appConfig.returnLink(SecurityStatement)))
     }
-  }
 
-  private def showHistoricDutyDefermentStatements(dan: String, linkId: String)(
-    implicit request: IdentifierRequestWithEoriHistoryAndSessionId[AnyContent]): Future[Result] = {
-
+  private def showHistoricDutyDefermentStatements(dan: String, linkId: String)(implicit
+    request: IdentifierRequestWithEoriHistoryAndSessionId[AnyContent]
+  ): Future[Result] =
     for {
-      allStatements <- Future.sequence(request.eoriHistory.map {
-        historicEori =>
-          sdesConnector
-            .getDutyDefermentStatements(historicEori.eori, dan)
-            .map(sortStatementsService.sortDutyDefermentStatementsForEori(historicEori, _))
-      })
-      viewModel = DutyDefermentAccountViewModel(dan, allStatements, isNiAccount = false)
+      allStatements <- Future.sequence(request.eoriHistory.map { historicEori =>
+                         sdesConnector
+                           .getDutyDefermentStatements(historicEori.eori, dan)
+                           .map(sortStatementsService.sortDutyDefermentStatementsForEori(historicEori, _))
+                       })
+      viewModel      = DutyDefermentAccountViewModel(dan, allStatements, isNiAccount = false)
     } yield Ok(dutyDefermentView(viewModel, appConfig.returnLink(linkId)))
-  }
 }

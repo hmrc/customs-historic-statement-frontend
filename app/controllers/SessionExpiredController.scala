@@ -23,10 +23,9 @@ import views.html.SessionExpiredView
 
 import javax.inject.Inject
 
-class SessionExpiredController @Inject()(controllerComponents: MessagesControllerComponents,
-                                         view: SessionExpiredView)(
-  implicit appConfig: FrontendAppConfig)
-  extends FrontendController(controllerComponents) {
+class SessionExpiredController @Inject() (controllerComponents: MessagesControllerComponents, view: SessionExpiredView)(
+  implicit appConfig: FrontendAppConfig
+) extends FrontendController(controllerComponents) {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(view())

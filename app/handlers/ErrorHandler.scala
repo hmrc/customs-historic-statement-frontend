@@ -27,22 +27,23 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ErrorHandler @Inject()(val messagesApi: MessagesApi, view: ErrorTemplate, notFound: not_found)
-                            (implicit appConfig: FrontendAppConfig, protected val ec: ExecutionContext)
-  extends FrontendErrorHandler with I18nSupport {
+class ErrorHandler @Inject() (val messagesApi: MessagesApi, view: ErrorTemplate, notFound: not_found)(implicit
+  appConfig: FrontendAppConfig,
+  protected val ec: ExecutionContext
+) extends FrontendErrorHandler
+    with I18nSupport {
 
-  override def standardErrorTemplate(pageTitle: String,
-                                     heading: String,
-                                     message: String)(implicit rh: RequestHeader): Future[Html] =
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
+    rh: RequestHeader
+  ): Future[Html] =
     Future.successful(view(pageTitle, heading, message))
 
   override def notFoundTemplate(implicit request: RequestHeader): Future[Html] = Future.successful(notFound())
 
-  def unauthorized()(implicit request: RequestHeader): Html = {
+  def unauthorized()(implicit request: RequestHeader): Html =
     view(
       Messages("cf.error.unauthorized.title"),
       Messages("cf.error.unauthorized.heading"),
       Messages("cf.error.unauthorized.message")
     )
-  }
 }

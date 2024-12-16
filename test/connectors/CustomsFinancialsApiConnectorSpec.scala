@@ -39,8 +39,8 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
     "submit request successfully" in new Setup {
       val customsFinancialsApiUrl = "http://localhost:9878/customs-financials-api/historic-document-request"
 
-      val historicDocumentRequest = HistoricDocumentRequest(C79Certificate,
-        LocalDate.now(), LocalDate.now().plusMonths(1), Some("1234"))
+      val historicDocumentRequest =
+        HistoricDocumentRequest(C79Certificate, LocalDate.now(), LocalDate.now().plusMonths(1), Some("1234"))
 
       when(requestBuilder.withBody(ArgumentMatchers.eq(historicDocumentRequest))(any(), any(), any()))
         .thenReturn(requestBuilder)
@@ -59,8 +59,8 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
     "return false when failed to submit the request" in new Setup {
       val customsFinancialsApiUrl = "http://localhost:9878/customs-financials-api/historic-document-request"
 
-      val historicDocumentRequest = HistoricDocumentRequest(C79Certificate,
-        LocalDate.now(), LocalDate.now().plusMonths(1), Some("1234"))
+      val historicDocumentRequest =
+        HistoricDocumentRequest(C79Certificate, LocalDate.now(), LocalDate.now().plusMonths(1), Some("1234"))
 
       when(requestBuilder.withBody(ArgumentMatchers.eq(historicDocumentRequest))(any(), any(), any()))
         .thenReturn(requestBuilder)
@@ -117,16 +117,18 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
+    val mockHttpClient: HttpClientV2   = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
 
-    val app = applicationBuilder().overrides(
-      bind[HttpClientV2].toInstance(mockHttpClient),
-      bind[RequestBuilder].toInstance(requestBuilder)
-    ).build()
+    val app = applicationBuilder()
+      .overrides(
+        bind[HttpClientV2].toInstance(mockHttpClient),
+        bind[RequestBuilder].toInstance(requestBuilder)
+      )
+      .build()
 
-    val mockAppConfig = app.injector.instanceOf[FrontendAppConfig]
+    val mockAppConfig                 = app.injector.instanceOf[FrontendAppConfig]
     val customsFinancialsApiConnector = app.injector.instanceOf[CustomsFinancialsApiConnector]
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier    = HeaderCarrier()
   }
 }

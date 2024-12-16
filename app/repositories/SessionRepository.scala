@@ -32,29 +32,32 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DefaultSessionRepository @Inject()(mongoComponent: PlayMongoComponent, config: Configuration)
-                                        (implicit executionContext: ExecutionContext)
-
-  extends PlayMongoRepository[UserAnswers](
-    collectionName = "user-session",
-    mongoComponent = mongoComponent,
-    domainFormat = UserAnswers.format,
-    indexes = Seq(
-      IndexModel(
-        ascending("lastUpdated"),
-        IndexOptions().name("user-answers-last-updated-index")
-          .expireAfter(config.get[Long]("mongodb.timeToLiveInSeconds"), TimeUnit.SECONDS)
+class DefaultSessionRepository @Inject() (mongoComponent: PlayMongoComponent, config: Configuration)(implicit
+  executionContext: ExecutionContext
+) extends PlayMongoRepository[UserAnswers](
+      collectionName = "user-session",
+      mongoComponent = mongoComponent,
+      domainFormat = UserAnswers.format,
+      indexes = Seq(
+        IndexModel(
+          ascending("lastUpdated"),
+          IndexOptions()
+            .name("user-answers-last-updated-index")
+            .expireAfter(config.get[Long]("mongodb.timeToLiveInSeconds"), TimeUnit.SECONDS)
+        )
       )
     )
-  ) with SessionRepository {
+    with SessionRepository {
 
   override def get(id: String): Future[Option[UserAnswers]] =
-    collection.find(equal("_id", id))
+    collection
+      .find(equal("_id", id))
       .toSingle()
       .toFutureOption()
 
   override def set(userAnswers: UserAnswers): Future[Boolean] =
-    collection.replaceOne(
+    collection
+      .replaceOne(
         equal("_id", userAnswers.id),
         userAnswers.copy(lastUpdated = LocalDateTime.now()),
         ReplaceOptions().upsert(true)
@@ -63,7 +66,8 @@ class DefaultSessionRepository @Inject()(mongoComponent: PlayMongoComponent, con
       .map(_.wasAcknowledged())
 
   override def clear(id: String): Future[Boolean] =
-    collection.deleteOne(equal("_id", id))
+    collection
+      .deleteOne(equal("_id", id))
       .toFuture()
       .map(_.wasAcknowledged())
 }

@@ -29,26 +29,29 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EmailAction @Inject()(dataStoreService: CustomsDataStoreConnector)
-                           (implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi)
-  extends ActionFilter[IdentifierRequest] with I18nSupport {
+class EmailAction @Inject() (dataStoreService: CustomsDataStoreConnector)(implicit
+  val executionContext: ExecutionContext,
+  val messagesApi: MessagesApi
+) extends ActionFilter[IdentifierRequest]
+    with I18nSupport {
 
   def filter[A](request: IdentifierRequest[A]): Future[Option[Result]] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    dataStoreService.getEmail(request.eori).map {
+    dataStoreService
+      .getEmail(request.eori)
+      .map {
         case Left(value) => checkEmailResponseAndRedirect(value)
-        case Right(_) => None
+        case Right(_)    => None
       }
       .recover { case _ =>
         None
       }
   }
 
-  private def checkEmailResponseAndRedirect(value: EmailResponses): Option[Result] = {
+  private def checkEmailResponseAndRedirect(value: EmailResponses): Option[Result] =
     value match {
-      case UnverifiedEmail => Some(Redirect(controllers.routes.EmailController.showUnverified()))
+      case UnverifiedEmail       => Some(Redirect(controllers.routes.EmailController.showUnverified()))
       case UndeliverableEmail(_) => Some(Redirect(controllers.routes.EmailController.showUndeliverable()))
     }
-  }
 }
