@@ -29,11 +29,13 @@ class DateMessagesSpec extends SpecBase {
 
         actual.startDate mustBe DateMessage(
           labelMsgKey = "cf.historic.document.request.from",
-          hintMsgKey = "cf.historic.document.request.date.DutyDefermentStatement.hint")
+          hintMsgKey = "cf.historic.document.request.date.DutyDefermentStatement.hint"
+        )
 
         actual.endDate mustBe DateMessage(
           labelMsgKey = "cf.historic.document.request.to",
-          hintMsgKey = "cf.historic.document.request.endDate.hint")
+          hintMsgKey = "cf.historic.document.request.endDate.hint"
+        )
       }
 
       "fileRole is C79Certificate" in {
@@ -41,11 +43,13 @@ class DateMessagesSpec extends SpecBase {
 
         actual.startDate mustBe DateMessage(
           labelMsgKey = "cf.historic.document.request.from",
-          hintMsgKey = "cf.historic.document.request.date.C79Certificate.hint")
+          hintMsgKey = "cf.historic.document.request.date.C79Certificate.hint"
+        )
 
         actual.endDate mustBe DateMessage(
           labelMsgKey = "cf.historic.document.request.to",
-          hintMsgKey = "cf.historic.document.request.endDate.hint")
+          hintMsgKey = "cf.historic.document.request.endDate.hint"
+        )
       }
 
       "fileRole is CDSCashAccount" in {
@@ -53,11 +57,13 @@ class DateMessagesSpec extends SpecBase {
 
         actual.startDate mustBe DateMessage(
           labelMsgKey = "cf.historic.document.request.from",
-          hintMsgKey = "cf.historic.document.request.date.CashStatement.hint")
+          hintMsgKey = "cf.historic.document.request.date.CashStatement.hint"
+        )
 
         actual.endDate mustBe DateMessage(
           labelMsgKey = "cf.historic.document.request.to",
-          hintMsgKey = "cf.historic.document.request.endDate.hint")
+          hintMsgKey = "cf.historic.document.request.endDate.hint"
+        )
       }
 
       "fileRole is SecurityStatement" in {
@@ -65,11 +71,13 @@ class DateMessagesSpec extends SpecBase {
 
         actual.startDate mustBe DateMessage(
           labelMsgKey = "cf.historic.document.request.from",
-          hintMsgKey = "cf.historic.document.request.date.SecurityStatement.hint")
+          hintMsgKey = "cf.historic.document.request.date.SecurityStatement.hint"
+        )
 
         actual.endDate mustBe DateMessage(
           labelMsgKey = "cf.historic.document.request.to",
-          hintMsgKey = "cf.historic.document.request.endDate.hint")
+          hintMsgKey = "cf.historic.document.request.endDate.hint"
+        )
       }
 
       "fileRole is PostponedVATStatement" in {
@@ -77,11 +85,13 @@ class DateMessagesSpec extends SpecBase {
 
         actual.startDate mustBe DateMessage(
           labelMsgKey = "cf.historic.document.request.from",
-          hintMsgKey = "cf.historic.document.request.date.PostponedVATStatement.hint")
+          hintMsgKey = "cf.historic.document.request.date.PostponedVATStatement.hint"
+        )
 
         actual.endDate mustBe DateMessage(
           labelMsgKey = "cf.historic.document.request.to",
-          hintMsgKey = "cf.historic.document.request.endDate.hint")
+          hintMsgKey = "cf.historic.document.request.endDate.hint"
+        )
       }
     }
   }

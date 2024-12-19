@@ -22,12 +22,10 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Actions, Value}
 
 trait SummaryListRowHelper {
 
-  def summaryListRow(value: String,
-                     secondValue: Option[String] = None,
-                     actions: Actions): SummaryListRow =
+  def summaryListRow(value: String, secondValue: Option[String] = None, actions: Actions): SummaryListRow =
     SummaryListRow(
       value = Value(content = HtmlContent(value)),
-      secondValue = secondValue.map { value => Value(content = HtmlContent(value)) },
+      secondValue = secondValue.map(value => Value(content = HtmlContent(value))),
       actions = Some(actions)
     )
 

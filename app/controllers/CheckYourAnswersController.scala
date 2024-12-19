@@ -31,28 +31,30 @@ import views.html.CheckYourAnswersView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersController @Inject()(override val messagesApi: MessagesApi,
-                                           identify: IdentifierAction,
-                                           getData: DataRetrievalAction,
-                                           requireData: DataRequiredAction,
-                                           controllerComponents: MessagesControllerComponents,
-                                           view: CheckYourAnswersView,
-                                           customsFinancialsApiConnector: CustomsFinancialsApiConnector,
-                                           sessionRepository: SessionRepository)
-                                          (implicit execution: ExecutionContext)
-  extends FrontendController(controllerComponents) with I18nSupport {
+class CheckYourAnswersController @Inject() (
+  override val messagesApi: MessagesApi,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  controllerComponents: MessagesControllerComponents,
+  view: CheckYourAnswersView,
+  customsFinancialsApiConnector: CustomsFinancialsApiConnector,
+  sessionRepository: SessionRepository
+)(implicit execution: ExecutionContext)
+    extends FrontendController(controllerComponents)
+    with I18nSupport {
 
   def onPageLoad(fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
-      val maybeAccountNumber = request.userAnswers.get(AccountNumber)
-      val niIndicator = request.userAnswers.get(IsNiAccount)
-      val historicDates = request.userAnswers.get(HistoricDateRequestPage(fileRole))
+      val maybeAccountNumber     = request.userAnswers.get(AccountNumber)
+      val niIndicator            = request.userAnswers.get(IsNiAccount)
+      val historicDates          = request.userAnswers.get(HistoricDateRequestPage(fileRole))
 
       historicDates match {
         case None => clearUserSessionIfUserReturnsFromConfirmationPage(request)
-        case _ => Future.successful(Ok(view(checkYourAnswersHelper, fileRole, maybeAccountNumber, niIndicator)))
+        case _    => Future.successful(Ok(view(checkYourAnswersHelper, fileRole, maybeAccountNumber, niIndicator)))
       }
   }
 
@@ -74,9 +76,8 @@ class CheckYourAnswersController @Inject()(override val messagesApi: MessagesApi
       }
   }
 
-  private def clearUserSessionIfUserReturnsFromConfirmationPage(request: DataRequest[AnyContent]): Future[Result] = {
+  private def clearUserSessionIfUserReturnsFromConfirmationPage(request: DataRequest[AnyContent]): Future[Result] =
     for {
       _ <- sessionRepository.clear(request.internalId).recover { case _ => true }
     } yield Redirect(routes.SessionExpiredController.onPageLoad())
-  }
 }

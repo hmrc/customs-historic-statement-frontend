@@ -24,38 +24,39 @@ import views.html.components.*
 import views.html.components.description_list.{dd, dl, dt}
 
 object Utils {
-  val emptyString = ""
+  val emptyString          = ""
   val emptyStringWithSpace = " "
-  val comma = ","
-  val hyphen = "-"
-  val period = "."
+  val comma                = ","
+  val hyphen               = "-"
+  val period               = "."
 
   val h2Component = new h2()
   val h3Component = new h3()
-  val pComponent = new p()
+  val pComponent  = new p()
 
   val divComponent = new div()
-  val dtComponent = new dt()
-  val ddComponent = new dd()
-  val dlComponent = new dl()
+  val dtComponent  = new dt()
+  val ddComponent  = new dd()
+  val dlComponent  = new dl()
 
-  val spanComponent = new span()
+  val spanComponent     = new span()
   val spanLinkComponent = new span_link()
 
-  val missingDocumentsGuidanceComponent = new missing_documents_guidance(h2Component, pComponent)
+  val missingDocumentsGuidanceComponent   = new missing_documents_guidance(h2Component, pComponent)
   val emptyHmrcNewTabLink: HmrcNewTabLink = new HmrcNewTabLink()
 
-  def hmrcNewTabLinkComponent(linkMessage: String,
-                              href: String,
-                              preLinkMessage: Option[String] = None,
-                              postLinkMessage: Option[String] = None,
-                              classes: String = "govuk-body")
-                             (implicit messages: Messages, config: FrontendAppConfig): HtmlFormat.Appendable = {
+  def hmrcNewTabLinkComponent(
+    linkMessage: String,
+    href: String,
+    preLinkMessage: Option[String] = None,
+    postLinkMessage: Option[String] = None,
+    classes: String = "govuk-body"
+  )(implicit messages: Messages, config: FrontendAppConfig): HtmlFormat.Appendable =
     new newTabLink(emptyHmrcNewTabLink).apply(
       linkMessage = linkMessage,
       href = href,
       preLinkMessage = preLinkMessage,
       postLinkMessage = postLinkMessage,
-      classes = classes)
-  }
+      classes = classes
+    )
 }

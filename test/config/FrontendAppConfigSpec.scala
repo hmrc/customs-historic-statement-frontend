@@ -55,9 +55,7 @@ class FrontendAppConfigSpec extends SpecBase {
     }
 
     "return the DutyDeferment link if a DutyDeferment FileRole provided and linkId in user answers" in new Setup {
-      config.returnLink(
-        DutyDefermentStatement,
-        emptyUserAnswers.set(RequestedLinkId, "someLink").success.value) mustBe
+      config.returnLink(DutyDefermentStatement, emptyUserAnswers.set(RequestedLinkId, "someLink").success.value) mustBe
         "http://localhost:9397/customs/duty-deferment/someLink/account"
     }
 
@@ -114,7 +112,7 @@ class FrontendAppConfigSpec extends SpecBase {
   }
 
   trait Setup {
-    val app: Application = applicationBuilder().build()
+    val app: Application          = applicationBuilder().build()
     val config: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
   }
 }

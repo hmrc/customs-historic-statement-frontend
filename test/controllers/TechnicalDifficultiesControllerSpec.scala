@@ -24,7 +24,7 @@ class TechnicalDifficultiesControllerSpec extends SpecBase {
   "onPageLoad" should {
     "display a technical difficulties page" in {
 
-      val app = applicationBuilder().build()
+      val app     = applicationBuilder().build()
       val request = fakeRequest(GET, routes.TechnicalDifficultiesController.onPageLoad().url)
 
       running(app) {

@@ -21,7 +21,7 @@ import models.{CDSCashAccount, CashStatementFile, CashStatementFileMetadata, Eor
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import viewmodels.{CashStatementMonthToMonth, CashStatementForEori, CashStatementViewModel}
+import viewmodels.{CashStatementForEori, CashStatementMonthToMonth, CashStatementViewModel}
 import views.html.CashStatementView
 
 import java.time.LocalDate
@@ -40,42 +40,42 @@ class CashStatementViewSpec extends ViewTestHelper {
     }
   }
 
-  private def helpAndSupportGuidanceShouldBePresent(implicit view: Document): Assertion = {
-    view.getElementById("search-transactions-support-message-heading")
+  private def helpAndSupportGuidanceShouldBePresent(implicit view: Document): Assertion =
+    view
+      .getElementById("search-transactions-support-message-heading")
       .html()
       .contains(msg("site.support.heading")) mustBe true
-  }
 
-  private def headingShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("requested-cash-statement-heading")
+  private def headingShouldBeCorrect(implicit view: Document): Assertion =
+    view
+      .getElementById("requested-cash-statement-heading")
       .html()
       .contains(msg("cf.cash-statement-requested-heading")) mustBe true
-  }
 
-  private def requestedParagraphTextShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("requested-cash-statement-paragraph")
+  private def requestedParagraphTextShouldBeCorrect(implicit view: Document): Assertion =
+    view
+      .getElementById("requested-cash-statement-paragraph")
       .html()
       .contains(msg("cf.cash-statement-requested-paragraph")) mustBe true
-  }
 
-  private def requestedListParagraphTextShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("requested-cash-statement-list-paragraph")
+  private def requestedListParagraphTextShouldBeCorrect(implicit view: Document): Assertion =
+    view
+      .getElementById("requested-cash-statement-list-paragraph")
       .html()
       .contains(msg("cf.cash-statement-requested-list-paragraph")) mustBe true
-  }
 
   trait Setup {
 
-    val someEori = "12345678"
-    val localDateYear = 2020
-    val localDateMonth = 10
-    val localDateDay = 1
-    val filename: String = "statement_file_01"
-    val downloadURL: String = "download_url_01"
-    val size = 120L
-    val periodStartYear: Int = 2019
+    val someEori              = "12345678"
+    val localDateYear         = 2020
+    val localDateMonth        = 10
+    val localDateDay          = 1
+    val filename: String      = "statement_file_01"
+    val downloadURL: String   = "download_url_01"
+    val size                  = 120L
+    val periodStartYear: Int  = 2019
     val periodStartMonth: Int = 7
-    val periodStartDay: Int = 10
+    val periodStartDay: Int   = 10
 
     val date = LocalDate.of(localDateYear, localDateMonth, localDateDay)
 
@@ -95,21 +95,22 @@ class CashStatementViewSpec extends ViewTestHelper {
         Csv,
         CDSCashAccount,
         Some("requestId")
-      ), someEori)
+      ),
+      someEori
+    )
 
-    val cashStatementsByMonth: CashStatementMonthToMonth = CashStatementMonthToMonth(date, date, Seq(cashStatementFile))()
+    val cashStatementsByMonth: CashStatementMonthToMonth =
+      CashStatementMonthToMonth(date, date, Seq(cashStatementFile))()
 
-    val cashStatementsForEori: CashStatementForEori = CashStatementForEori(
-      eoriHistory,
-      Seq(cashStatementsByMonth),
-      Seq.empty)
+    val cashStatementsForEori: CashStatementForEori =
+      CashStatementForEori(eoriHistory, Seq(cashStatementsByMonth), Seq.empty)
 
     val accountNumber = "12345"
 
     val cashStatementViewModel: CashStatementViewModel = CashStatementViewModel(Seq(cashStatementsForEori))
 
-    implicit val view: Document = Jsoup.parse(app.injector.instanceOf[CashStatementView].apply(
-      cashStatementViewModel,
-      config.returnLink(CDSCashAccount)).body)
+    implicit val view: Document = Jsoup.parse(
+      app.injector.instanceOf[CashStatementView].apply(cashStatementViewModel, config.returnLink(CDSCashAccount)).body
+    )
   }
 }

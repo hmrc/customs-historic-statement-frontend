@@ -46,17 +46,17 @@ object FileFormat extends Logging {
     val order = 99
   }
 
-  val SdesFileFormats: SortedSet[FileFormat] = SortedSet(Pdf, Csv)
-  val CashStatementFileFormats: Set[FileFormat] = SortedSet(Csv)
+  val SdesFileFormats: SortedSet[FileFormat]     = SortedSet(Pdf, Csv)
+  val CashStatementFileFormats: Set[FileFormat]  = SortedSet(Csv)
   val OtherStatementFileFormats: Set[FileFormat] = SortedSet(Pdf)
 
-  def filterFileFormats[T <: SdesFile](allowedFileFormats: SortedSet[FileFormat])(
-    files: Seq[T]): Seq[T] = files.filter(file => allowedFileFormats(file.metadata.fileFormat))
+  def filterFileFormats[T <: SdesFile](allowedFileFormats: SortedSet[FileFormat])(files: Seq[T]): Seq[T] =
+    files.filter(file => allowedFileFormats(file.metadata.fileFormat))
 
   def apply(name: String): FileFormat = name.toUpperCase match {
     case Pdf.name => Pdf
     case Csv.name => Csv
-    case _ =>
+    case _        =>
       logger.warn(s"Unknown file format: $name")
       UnknownFileFormat
   }
@@ -94,10 +94,10 @@ object DDStatementType extends Logging {
   }
 
   def apply(name: String): DDStatementType = name match {
-    case Weekly.name => Weekly
+    case Weekly.name        => Weekly
     case Supplementary.name => Supplementary
-    case Excise.name => Excise
-    case _ =>
+    case Excise.name        => Excise
+    case _                  =>
       logger.warn(s"Unknown duty deferment statement type: $name")
       UnknownStatementType
   }
@@ -120,122 +120,142 @@ trait SdesFile {
 
   def downloadURL: String
 
-  val fileFormat: FileFormat = metadata.fileFormat
+  val fileFormat: FileFormat  = metadata.fileFormat
   val monthAndYear: LocalDate = LocalDate.of(metadata.periodStartYear, metadata.periodStartMonth, 1)
 }
 
-case class DutyDefermentStatementFile(filename: String,
-                                      downloadURL: String,
-                                      size: Long,
-                                      metadata: DutyDefermentStatementFileMetadata)
-  extends Ordered[DutyDefermentStatementFile] with SdesFile {
+case class DutyDefermentStatementFile(
+  filename: String,
+  downloadURL: String,
+  size: Long,
+  metadata: DutyDefermentStatementFileMetadata
+) extends Ordered[DutyDefermentStatementFile]
+    with SdesFile {
 
   def compare(that: DutyDefermentStatementFile): Int = fileFormat.compare(that.fileFormat)
 
   val startDate: LocalDate = LocalDate.of(metadata.periodStartYear, metadata.periodStartMonth, metadata.periodStartDay)
-  val endDate: LocalDate = LocalDate.of(metadata.periodEndYear, metadata.periodEndMonth, metadata.periodEndDay)
+  val endDate: LocalDate   = LocalDate.of(metadata.periodEndYear, metadata.periodEndMonth, metadata.periodEndDay)
 }
 
-case class DutyDefermentStatementFileMetadata(periodStartYear: Int,
-                                              periodStartMonth: Int,
-                                              periodStartDay: Int,
-                                              periodEndYear: Int,
-                                              periodEndMonth: Int,
-                                              periodEndDay: Int,
-                                              fileFormat: FileFormat,
-                                              fileRole: FileRole,
-                                              defermentStatementType: DDStatementType,
-                                              dutyOverLimit: Option[Boolean],
-                                              dutyPaymentType: Option[String],
-                                              dan: String,
-                                              statementRequestId: Option[String] = None) extends SdesFileMetadata
+case class DutyDefermentStatementFileMetadata(
+  periodStartYear: Int,
+  periodStartMonth: Int,
+  periodStartDay: Int,
+  periodEndYear: Int,
+  periodEndMonth: Int,
+  periodEndDay: Int,
+  fileFormat: FileFormat,
+  fileRole: FileRole,
+  defermentStatementType: DDStatementType,
+  dutyOverLimit: Option[Boolean],
+  dutyPaymentType: Option[String],
+  dan: String,
+  statementRequestId: Option[String] = None
+) extends SdesFileMetadata
 
-case class SecurityStatementFile(filename: String,
-                                 downloadURL: String,
-                                 size: Long,
-                                 metadata: SecurityStatementFileMetadata
-                                ) extends Ordered[SecurityStatementFile] with SdesFile {
+case class SecurityStatementFile(
+  filename: String,
+  downloadURL: String,
+  size: Long,
+  metadata: SecurityStatementFileMetadata
+) extends Ordered[SecurityStatementFile]
+    with SdesFile {
 
-  val startDate: LocalDate = LocalDate.of(metadata.periodStartYear, metadata.periodStartMonth, metadata.periodStartDay)
-  val endDate: LocalDate = LocalDate.of(metadata.periodEndYear, metadata.periodEndMonth, metadata.periodEndDay)
+  val startDate: LocalDate  = LocalDate.of(metadata.periodStartYear, metadata.periodStartMonth, metadata.periodStartDay)
+  val endDate: LocalDate    = LocalDate.of(metadata.periodEndYear, metadata.periodEndMonth, metadata.periodEndDay)
   val formattedSize: String = Formatters.fileSize(metadata.fileSize)
 
   def compare(that: SecurityStatementFile): Int = startDate.compareTo(that.startDate)
 }
 
-case class SecurityStatementFileMetadata(periodStartYear: Int,
-                                         periodStartMonth: Int,
-                                         periodStartDay: Int,
-                                         periodEndYear: Int,
-                                         periodEndMonth: Int,
-                                         periodEndDay: Int,
-                                         fileFormat: FileFormat,
-                                         fileRole: FileRole,
-                                         eoriNumber: String,
-                                         fileSize: Long,
-                                         checksum: String,
-                                         statementRequestId: Option[String] = None) extends SdesFileMetadata
+case class SecurityStatementFileMetadata(
+  periodStartYear: Int,
+  periodStartMonth: Int,
+  periodStartDay: Int,
+  periodEndYear: Int,
+  periodEndMonth: Int,
+  periodEndDay: Int,
+  fileFormat: FileFormat,
+  fileRole: FileRole,
+  eoriNumber: String,
+  fileSize: Long,
+  checksum: String,
+  statementRequestId: Option[String] = None
+) extends SdesFileMetadata
 
-case class VatCertificateFile(filename: String,
-                              downloadURL: String,
-                              size: Long,
-                              metadata: VatCertificateFileMetadata,
-                              eori: String = emptyString)
-  extends Ordered[VatCertificateFile] with SdesFile {
+case class VatCertificateFile(
+  filename: String,
+  downloadURL: String,
+  size: Long,
+  metadata: VatCertificateFileMetadata,
+  eori: String = emptyString
+) extends Ordered[VatCertificateFile]
+    with SdesFile {
 
   val formattedSize: String = Formatters.fileSize(size)
 
   def compare(that: VatCertificateFile): Int = that.metadata.fileFormat.compare(metadata.fileFormat)
 }
 
-case class VatCertificateFileMetadata(periodStartYear: Int,
-                                      periodStartMonth: Int,
-                                      fileFormat: FileFormat,
-                                      fileRole: FileRole,
-                                      statementRequestId: Option[String]) extends SdesFileMetadata
+case class VatCertificateFileMetadata(
+  periodStartYear: Int,
+  periodStartMonth: Int,
+  fileFormat: FileFormat,
+  fileRole: FileRole,
+  statementRequestId: Option[String]
+) extends SdesFileMetadata
 
-case class PostponedVatStatementFile(filename: String,
-                                     downloadURL: String,
-                                     size: Long,
-                                     metadata: PostponedVatStatementFileMetadata,
-                                     eori: String = emptyString)
-  extends Ordered[PostponedVatStatementFile] with SdesFile {
+case class PostponedVatStatementFile(
+  filename: String,
+  downloadURL: String,
+  size: Long,
+  metadata: PostponedVatStatementFileMetadata,
+  eori: String = emptyString
+) extends Ordered[PostponedVatStatementFile]
+    with SdesFile {
 
   val formattedSize: String = Formatters.fileSize(size)
 
   def compare(that: PostponedVatStatementFile): Int = that.metadata.fileFormat.compare(metadata.fileFormat)
 }
 
-case class PostponedVatStatementFileMetadata(periodStartYear: Int,
-                                             periodStartMonth: Int,
-                                             fileFormat: FileFormat,
-                                             fileRole: FileRole,
-                                             source: String,
-                                             statementRequestId: Option[String]) extends SdesFileMetadata
+case class PostponedVatStatementFileMetadata(
+  periodStartYear: Int,
+  periodStartMonth: Int,
+  fileFormat: FileFormat,
+  fileRole: FileRole,
+  source: String,
+  statementRequestId: Option[String]
+) extends SdesFileMetadata
 
-case class CashStatementFile(filename: String,
-                             downloadURL: String,
-                             size: Long,
-                             metadata: CashStatementFileMetadata,
-                             eori: String = emptyString)
-  extends Ordered[CashStatementFile] with SdesFile {
+case class CashStatementFile(
+  filename: String,
+  downloadURL: String,
+  size: Long,
+  metadata: CashStatementFileMetadata,
+  eori: String = emptyString
+) extends Ordered[CashStatementFile]
+    with SdesFile {
 
   val formattedSize: String = Formatters.fileSize(size)
 
   def compare(that: CashStatementFile): Int = that.metadata.fileFormat.compare(metadata.fileFormat)
 }
 
-case class CashStatementFileMetadata(periodStartYear: Int,
-                                     periodStartMonth: Int,
-                                     periodStartDay: Int,
-                                     periodEndYear: Int,
-                                     periodEndMonth: Int,
-                                     periodEndDay: Int,
-                                     fileFormat: FileFormat,
-                                     fileRole: FileRole,
-                                     cashAccountNumber: Option[String],
-                                     statementRequestId: Option[String] = None) extends SdesFileMetadata {
+case class CashStatementFileMetadata(
+  periodStartYear: Int,
+  periodStartMonth: Int,
+  periodStartDay: Int,
+  periodEndYear: Int,
+  periodEndMonth: Int,
+  periodEndDay: Int,
+  fileFormat: FileFormat,
+  fileRole: FileRole,
+  cashAccountNumber: Option[String],
+  statementRequestId: Option[String] = None
+) extends SdesFileMetadata {
 
   val periodStartDate: LocalDate = LocalDate.of(periodStartYear, periodStartMonth, periodStartDay)
-  val periodEndDate: LocalDate = LocalDate.of(periodEndYear, periodEndMonth, periodEndDay)
+  val periodEndDate: LocalDate   = LocalDate.of(periodEndYear, periodEndMonth, periodEndDay)
 }

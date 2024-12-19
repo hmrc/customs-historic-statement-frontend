@@ -36,7 +36,8 @@ class SdesGatekeeperService() {
         metadata("PeriodStartMonth").toInt,
         FileFormat(metadata("FileType")),
         mapFileRole(metadata("FileRole")),
-        metadata.get("statementRequestID"))
+        metadata.get("statementRequestID")
+      )
     )
   }
 
@@ -57,7 +58,8 @@ class SdesGatekeeperService() {
         FileFormat(metadata("FileType")),
         mapFileRole(metadata("FileRole")),
         metadata.get("CashAccountNumber"),
-        metadata.get("statementRequestID"))
+        metadata.get("statementRequestID")
+      )
     )
   }
 
@@ -74,7 +76,8 @@ class SdesGatekeeperService() {
         FileFormat(metadata("FileType")),
         mapFileRole(metadata("FileRole")),
         mapDutyPaymentMethod(metadata("DutyPaymentMethod")),
-        metadata.get("statementRequestID"))
+        metadata.get("statementRequestID")
+      )
     )
   }
 
@@ -97,7 +100,8 @@ class SdesGatekeeperService() {
         metadata.getOrElse("eoriNumber", "MISSING EORI NUMBER"),
         metadata.getOrElse("fileSize", sdesResponseFile.fileSize.toString).toLong,
         metadata.getOrElse("checksum", "MISSING CHECKSUM"),
-        metadata.get("statementRequestID"))
+        metadata.get("statementRequestID")
+      )
     )
   }
 
@@ -121,36 +125,33 @@ class SdesGatekeeperService() {
         Some(mapDutyOverLimit(metadata.getOrElse("DutyOverLimit", "false"))),
         Some(metadata.getOrElse("DutyPaymentType", "Unknown")),
         metadata.getOrElse("DAN", "Unknown"),
-        metadata.get("statementRequestID"))
+        metadata.get("statementRequestID")
+      )
     )
   }
 
-  def convertTo[T <: SdesFile](implicit converter: FileInformation => T): Seq[FileInformation] => Seq[T] = {
+  def convertTo[T <: SdesFile](implicit converter: FileInformation => T): Seq[FileInformation] => Seq[T] =
     _.map(converter)
-  }
 
-  private def mapFileRole(role: String): FileRole = {
+  private def mapFileRole(role: String): FileRole =
     role match {
-      case "C79Certificate" => C79Certificate
-      case "SecurityStatement" => SecurityStatement
+      case "C79Certificate"         => C79Certificate
+      case "SecurityStatement"      => SecurityStatement
       case "DutyDefermentStatement" => DutyDefermentStatement
-      case "PostponedVATStatement" => PostponedVATStatement
-      case "CDSCashAccount" => CDSCashAccount
-      case _ => throw new Exception(s"Unknown file role: $role")
+      case "PostponedVATStatement"  => PostponedVATStatement
+      case "CDSCashAccount"         => CDSCashAccount
+      case _                        => throw new Exception(s"Unknown file role: $role")
     }
-  }
 
-  private def mapDutyPaymentMethod(dutyPaymentMethod: String): String = {
+  private def mapDutyPaymentMethod(dutyPaymentMethod: String): String =
     dutyPaymentMethod match {
       case "Chief" => "CHIEF"
-      case _ => "CDS"
+      case _       => "CDS"
     }
-  }
 
-  private def mapDutyOverLimit(MDGDutyOverLimitResponse: String): Boolean = {
+  private def mapDutyOverLimit(MDGDutyOverLimitResponse: String): Boolean =
     MDGDutyOverLimitResponse match {
       case "Y" => true
-      case _ => false
+      case _   => false
     }
-  }
 }

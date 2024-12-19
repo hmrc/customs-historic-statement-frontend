@@ -17,7 +17,7 @@
 package controllers
 
 import connectors.CustomsSessionCacheConnector
-import controllers.actions.{DataRetrievalAction, IdentifierAction, EmailAction}
+import controllers.actions.{DataRetrievalAction, EmailAction, IdentifierAction}
 import models.{DutyDefermentStatement, FileRole, NormalMode, UserAnswers}
 
 import pages.{AccountNumber, IsNiAccount, RequestedLinkId}
@@ -28,50 +28,50 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class JourneyStartController @Inject()(customsSessionCacheConnector: CustomsSessionCacheConnector,
-                                       identify: IdentifierAction,
-                                       checkEmailIsVerified: EmailAction,
-                                       getData: DataRetrievalAction,
-                                       sessionRepository: SessionRepository,
-                                       mcc: MessagesControllerComponents)
-                                      (implicit executionContext: ExecutionContext) extends FrontendController(mcc) {
+class JourneyStartController @Inject() (
+  customsSessionCacheConnector: CustomsSessionCacheConnector,
+  identify: IdentifierAction,
+  checkEmailIsVerified: EmailAction,
+  getData: DataRetrievalAction,
+  sessionRepository: SessionRepository,
+  mcc: MessagesControllerComponents
+)(implicit executionContext: ExecutionContext)
+    extends FrontendController(mcc) {
 
-  def dutyDeferment(linkId: String): Action[AnyContent] = (
-    identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
-    hc.sessionId match {
+  def dutyDeferment(linkId: String): Action[AnyContent] =
+    (identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
+      hc.sessionId match {
 
-      case Some(sessionId) =>
-        customsSessionCacheConnector.getAccountLink(sessionId.value, linkId).flatMap {
-          case Some(accountLink) =>
-            val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId))
-            for {
-              userAnswersAccountNumber <- Future.fromTry(
-                userAnswers.set(AccountNumber, accountLink.accountNumber))
+        case Some(sessionId) =>
+          customsSessionCacheConnector.getAccountLink(sessionId.value, linkId).flatMap {
+            case Some(accountLink) =>
+              val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId))
+              for {
+                userAnswersAccountNumber <- Future.fromTry(userAnswers.set(AccountNumber, accountLink.accountNumber))
 
-              userAnswersNiIndicator <- Future.fromTry(
-                userAnswersAccountNumber.set(IsNiAccount, accountLink.isNiAccount))
+                userAnswersNiIndicator <-
+                  Future.fromTry(userAnswersAccountNumber.set(IsNiAccount, accountLink.isNiAccount))
 
-              userAnswersLinkId <- Future.fromTry(
-                userAnswersNiIndicator.set(RequestedLinkId, linkId))
+                userAnswersLinkId <- Future.fromTry(userAnswersNiIndicator.set(RequestedLinkId, linkId))
 
-              _ <- sessionRepository.set(userAnswersLinkId)
-            } yield Redirect(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, DutyDefermentStatement))
+                _ <- sessionRepository.set(userAnswersLinkId)
+              } yield Redirect(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, DutyDefermentStatement))
 
-          case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
-        }
-      case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+            case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+          }
+        case None            => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+      }
     }
-  }
 
-  def nonDutyDeferment(fileRole: FileRole): Action[AnyContent] = (
-    identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
-    fileRole match {
-      case DutyDefermentStatement => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
-      case _ =>
-        val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId))
-        for {
-          _ <- sessionRepository.set(userAnswers)
-        } yield Redirect(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole))
+  def nonDutyDeferment(fileRole: FileRole): Action[AnyContent] =
+    (identify andThen checkEmailIsVerified andThen getData).async { implicit request =>
+      fileRole match {
+        case DutyDefermentStatement => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+        case _                      =>
+          val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId))
+          for {
+            _ <- sessionRepository.set(userAnswers)
+          } yield Redirect(routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole))
+      }
     }
-  }
 }

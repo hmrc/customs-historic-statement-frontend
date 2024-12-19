@@ -28,24 +28,25 @@ import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CustomsFinancialsApiConnector @Inject()(appConfig: FrontendAppConfig,
-                                              httpClient: HttpClientV2)
-                                             (implicit executionContext: ExecutionContext) {
+class CustomsFinancialsApiConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClientV2)(implicit
+  executionContext: ExecutionContext
+) {
 
-  def postHistoricDocumentRequest(historicDocumentRequest: HistoricDocumentRequest)
-                                 (implicit hc: HeaderCarrier): Future[Boolean] = {
-
-    httpClient.post(url"${appConfig.historicDocumentsApiUrl}")
+  def postHistoricDocumentRequest(
+    historicDocumentRequest: HistoricDocumentRequest
+  )(implicit hc: HeaderCarrier): Future[Boolean] =
+    httpClient
+      .post(url"${appConfig.historicDocumentsApiUrl}")
       .withBody[HistoricDocumentRequest](historicDocumentRequest)
       .execute[HttpResponse]
       .map(_.status == NO_CONTENT)
       .recover { case _ => false }
-  }
 
   def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
     val deleteNotificationEndpoint = appConfig.deleteNotificationUrl(fileRole, eori)
 
-    httpClient.delete(url"$deleteNotificationEndpoint")
+    httpClient
+      .delete(url"$deleteNotificationEndpoint")
       .execute[HttpResponse]
       .map(_.status == Status.OK)
       .recover { case _ => false }

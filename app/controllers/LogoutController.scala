@@ -26,31 +26,25 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class LogoutController @Inject()(override val authConnector: AuthConnector,
-                                 authenticate: IdentifierAction,
-                                 sessionRepository: SessionRepository,
-                                 mcc: MessagesControllerComponents)
-                                (implicit val appConfig: FrontendAppConfig, ec: ExecutionContext)
-  extends FrontendController(mcc) with AuthorisedFunctions {
+class LogoutController @Inject() (
+  override val authConnector: AuthConnector,
+  authenticate: IdentifierAction,
+  sessionRepository: SessionRepository,
+  mcc: MessagesControllerComponents
+)(implicit val appConfig: FrontendAppConfig, ec: ExecutionContext)
+    extends FrontendController(mcc)
+    with AuthorisedFunctions {
 
-  def logout: Action[AnyContent] = authenticate.async {
-    implicit request =>
-
-      for {
-        _ <- sessionRepository.clear(request.identifier).recover { case _ => true }
-      } yield {
-        Redirect(appConfig.signOutUrl, Map("continue" -> Seq(appConfig.feedbackService)))
-      }
+  def logout: Action[AnyContent] = authenticate.async { implicit request =>
+    for {
+      _ <- sessionRepository.clear(request.identifier).recover { case _ => true }
+    } yield Redirect(appConfig.signOutUrl, Map("continue" -> Seq(appConfig.feedbackService)))
 
   }
 
-  def logoutNoSurvey: Action[AnyContent] = authenticate.async {
-    implicit request =>
-
-      for {
-        _ <- sessionRepository.clear(request.identifier).recover { case _ => true }
-      } yield {
-        Results.Redirect(appConfig.signOutUrl, Map("continue" -> Seq(appConfig.loginContinueUrl)))
-      }
+  def logoutNoSurvey: Action[AnyContent] = authenticate.async { implicit request =>
+    for {
+      _ <- sessionRepository.clear(request.identifier).recover { case _ => true }
+    } yield Results.Redirect(appConfig.signOutUrl, Map("continue" -> Seq(appConfig.loginContinueUrl)))
   }
 }

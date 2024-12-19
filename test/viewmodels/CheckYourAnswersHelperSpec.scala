@@ -17,7 +17,7 @@
 package viewmodels
 
 import base.SpecBase
-import models.{C79Certificate, SecurityStatement, DutyDefermentStatement, PostponedVATStatement, FileRole}
+import models.{C79Certificate, DutyDefermentStatement, FileRole, PostponedVATStatement, SecurityStatement}
 import play.api.Application
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.ActionItem
@@ -30,10 +30,27 @@ class CheckYourAnswersHelperSpec extends SpecBase {
   "rows" should {
     "return a sequence of historicDatesRow" in new Setup {
 
-      val compare = List(SummaryListRow(Value(
-        HtmlContent("October 2019 to October 2019"), emptyString), None, emptyString,
-        Some(Actions(emptyString, List(ActionItem("/customs/historic-statement/import-vat/change-request-date",
-          HtmlContent("Change"), Some("statement period"), emptyString, Map()))))))
+      val compare = List(
+        SummaryListRow(
+          Value(HtmlContent("October 2019 to October 2019"), emptyString),
+          None,
+          emptyString,
+          Some(
+            Actions(
+              emptyString,
+              List(
+                ActionItem(
+                  "/customs/historic-statement/import-vat/change-request-date",
+                  HtmlContent("Change"),
+                  Some("statement period"),
+                  emptyString,
+                  Map()
+                )
+              )
+            )
+          )
+        )
+      )
 
       helperOb.rows(c79FileRole) mustBe compare
     }
@@ -41,19 +58,19 @@ class CheckYourAnswersHelperSpec extends SpecBase {
 
   "dateRows" should {
     "return correct date range string for C79Certificate file role" in new Setup {
-      helperOb.dateRows(c79FileRole) mustBe Some(messages(app)("date.range","October 2019", "October 2019"))
+      helperOb.dateRows(c79FileRole) mustBe Some(messages(app)("date.range", "October 2019", "October 2019"))
     }
   }
 
   trait Setup {
 
-    val c79FileRole: FileRole = C79Certificate
-    val dutyFileRole: FileRole = DutyDefermentStatement
+    val c79FileRole: FileRole      = C79Certificate
+    val dutyFileRole: FileRole     = DutyDefermentStatement
     val securityFileRole: FileRole = SecurityStatement
-    val postFileRole: FileRole = PostponedVATStatement
+    val postFileRole: FileRole     = PostponedVATStatement
 
-    val app: Application = applicationBuilder(userAnswers = Some(populatedUserAnswers)).build()
+    val app: Application        = applicationBuilder(userAnswers = Some(populatedUserAnswers)).build()
     implicit val msgs: Messages = messages(app)
-    val helperOb = new CheckYourAnswersHelper(populatedUserAnswers)
+    val helperOb                = new CheckYourAnswersHelper(populatedUserAnswers)
   }
 }
