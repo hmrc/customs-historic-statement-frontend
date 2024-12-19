@@ -26,39 +26,49 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class SortStatementsService @Inject() {
 
-  def sortDutyDefermentStatementsForEori(historicEori: EoriHistory,
-                                         dutyDefermentFiles: Seq[DutyDefermentStatementFile]): DutyDefermentStatementsForEori = {
-
+  def sortDutyDefermentStatementsForEori(
+    historicEori: EoriHistory,
+    dutyDefermentFiles: Seq[DutyDefermentStatementFile]
+  ): DutyDefermentStatementsForEori =
     dutyDefermentFiles.partition(_.metadata.statementRequestId.isDefined) match {
       case (requested, current) => DutyDefermentStatementsForEori(historicEori, current, requested)
     }
-  }
 
-  def sortSecurityCertificatesForEori(historicEori: EoriHistory,
-                                      securityStatementsFiles: Seq[SecurityStatementFile]): SecurityStatementsForEori = {
+  def sortSecurityCertificatesForEori(
+    historicEori: EoriHistory,
+    securityStatementsFiles: Seq[SecurityStatementFile]
+  ): SecurityStatementsForEori = {
 
-    val groupedByStartAndEndDates = securityStatementsFiles.groupBy(file => (file.startDate, file.endDate)).map {
-      case ((startDate, endDate), filesForMonth) => SecurityStatementsByPeriod(startDate, endDate, filesForMonth)
-    }.toList.sorted.reverse
+    val groupedByStartAndEndDates = securityStatementsFiles
+      .groupBy(file => (file.startDate, file.endDate))
+      .map { case ((startDate, endDate), filesForMonth) =>
+        SecurityStatementsByPeriod(startDate, endDate, filesForMonth)
+      }
+      .toList
+      .sorted
+      .reverse
 
     val (requested, current) = filteredByStatementReqId(groupedByStartAndEndDates).partition(_.files.nonEmpty)
 
     SecurityStatementsForEori(historicEori, current, requested)
   }
 
-  def sortCashStatementsForEori(historicEori: EoriHistory, cashStatementFiles: Seq[CashStatementFile])
-                               (implicit messages: Messages): CashStatementForEori = {
+  def sortCashStatementsForEori(historicEori: EoriHistory, cashStatementFiles: Seq[CashStatementFile])(implicit
+    messages: Messages
+  ): CashStatementForEori = {
 
-    val groupedByStartAndEndMonth = cashStatementFiles.groupBy { file =>
-      val startMonthYear = YearMonth.of(file.metadata.periodStartYear, file.metadata.periodStartMonth)
-      val endMonthYear = YearMonth.of(file.metadata.periodEndYear, file.metadata.periodEndMonth)
-      (startMonthYear, endMonthYear)
-    }.map {
-      case ((startMonthYear, endMonthYear), filesForGroup) =>
+    val groupedByStartAndEndMonth = cashStatementFiles
+      .groupBy { file =>
+        val startMonthYear = YearMonth.of(file.metadata.periodStartYear, file.metadata.periodStartMonth)
+        val endMonthYear   = YearMonth.of(file.metadata.periodEndYear, file.metadata.periodEndMonth)
+        (startMonthYear, endMonthYear)
+      }
+      .map { case ((startMonthYear, endMonthYear), filesForGroup) =>
         val start = startMonthYear.atDay(1)
-        val end = endMonthYear.atEndOfMonth()
+        val end   = endMonthYear.atEndOfMonth()
         CashStatementMonthToMonth(start, end, filesForGroup)
-    }.toList
+      }
+      .toList
 
     val filteredByStatementRequestId = groupedByStartAndEndMonth.map { statementByMonthToMonth =>
       val filteredFiles = statementByMonthToMonth.files.filter(_.metadata.statementRequestId.isEmpty)
@@ -70,12 +80,16 @@ class SortStatementsService @Inject() {
     CashStatementForEori(historicEori, current, requested)
   }
 
-  def sortVatCertificatesForEori(historicEori: EoriHistory, vatCertificateFiles: Seq[VatCertificateFile])
-                                (implicit messages: Messages): VatCertificatesForEori = {
+  def sortVatCertificatesForEori(historicEori: EoriHistory, vatCertificateFiles: Seq[VatCertificateFile])(implicit
+    messages: Messages
+  ): VatCertificatesForEori = {
 
-    val groupedByMonth = vatCertificateFiles.groupBy(_.monthAndYear).map {
-      case (month, filesForMonth) => VatCertificatesByMonth(month, filesForMonth)
-    }.toList
+    val groupedByMonth = vatCertificateFiles
+      .groupBy(_.monthAndYear)
+      .map { case (month, filesForMonth) =>
+        VatCertificatesByMonth(month, filesForMonth)
+      }
+      .toList
 
     val filteredByStatementRequestId = groupedByMonth.map { statementByMonth =>
       val filteredFiles = statementByMonth.files.filter(_.metadata.statementRequestId.isDefined)
@@ -88,13 +102,17 @@ class SortStatementsService @Inject() {
     VatCertificatesForEori(historicEori, current, requested)
   }
 
-  def sortPostponedVatStatementsForEori(historicEori: EoriHistory,
-                                        postponedVatStatementsFile: Seq[PostponedVatStatementFile])
-                                       (implicit messages: Messages): PostponedVatStatementsForEori = {
+  def sortPostponedVatStatementsForEori(
+    historicEori: EoriHistory,
+    postponedVatStatementsFile: Seq[PostponedVatStatementFile]
+  )(implicit messages: Messages): PostponedVatStatementsForEori = {
 
-    val groupedByMonth = postponedVatStatementsFile.groupBy(_.monthAndYear).map {
-      case (month, filesForMonth) => PostponedVatStatementsByMonth(month, filesForMonth)
-    }.toList
+    val groupedByMonth = postponedVatStatementsFile
+      .groupBy(_.monthAndYear)
+      .map { case (month, filesForMonth) =>
+        PostponedVatStatementsByMonth(month, filesForMonth)
+      }
+      .toList
 
     val filteredByStatementRequestId = groupedByMonth.map { statementByMonth =>
       val filteredFiles = statementByMonth.files.filter(_.metadata.statementRequestId.isDefined)
@@ -107,16 +125,17 @@ class SortStatementsService @Inject() {
     PostponedVatStatementsForEori(historicEori, current, requested)
   }
 
-  private def filteredByStatementReqId(securityStatements: List[SecurityStatementsByPeriod]): List[SecurityStatementsByPeriod] =
+  private def filteredByStatementReqId(
+    securityStatements: List[SecurityStatementsByPeriod]
+  ): List[SecurityStatementsByPeriod] =
+    securityStatements.map { statementsByStartAndEndDatePeriod =>
 
-    securityStatements.map {
-      statementsByStartAndEndDatePeriod =>
+      val filteredFiles = statementsByStartAndEndDatePeriod.files.filter(_.metadata.statementRequestId.isDefined)
 
-        val filteredFiles = statementsByStartAndEndDatePeriod.files.filter(_.metadata.statementRequestId.isDefined)
-
-        SecurityStatementsByPeriod(
-          statementsByStartAndEndDatePeriod.startDate,
-          statementsByStartAndEndDatePeriod.endDate,
-          filteredFiles)
+      SecurityStatementsByPeriod(
+        statementsByStartAndEndDatePeriod.startDate,
+        statementsByStartAndEndDatePeriod.endDate,
+        filteredFiles
+      )
     }
 }

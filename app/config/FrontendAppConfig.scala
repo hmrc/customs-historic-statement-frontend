@@ -18,12 +18,7 @@ package config
 
 import com.google.inject.{Inject, Singleton}
 import models.{
-  C79Certificate,
-  CDSCashAccount,
-  DutyDefermentStatement,
-  FileRole,
-  PostponedVATStatement,
-  SecurityStatement,
+  C79Certificate, CDSCashAccount, DutyDefermentStatement, FileRole, PostponedVATStatement, SecurityStatement,
   UserAnswers
 }
 import pages.RequestedLinkId
@@ -31,11 +26,11 @@ import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: ServicesConfig) {
+class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig: ServicesConfig) {
 
   lazy val host: String = configuration.get[String]("host")
 
-  lazy val timeout: Int = configuration.get[Int]("timeout.timeout")
+  lazy val timeout: Int   = configuration.get[Int]("timeout.timeout")
   lazy val countdown: Int = configuration.get[Int]("timeout.countdown")
 
   val feedbackService: String = configuration.get[String]("microservice.services.feedback.url") +
@@ -58,26 +53,26 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
 
   lazy val xClientIdHeader: String = configuration.get[String]("microservice.services.sdes.x-client-id")
 
-  lazy val loginUrl: String = configuration.get[String]("urls.login")
-  lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  lazy val signOutUrl: String = configuration.get[String]("urls.signOut")
-  lazy val subscribeCdsUrl: String = configuration.get[String]("urls.cdsSubscribeUrl")
+  lazy val loginUrl: String                         = configuration.get[String]("urls.login")
+  lazy val loginContinueUrl: String                 = configuration.get[String]("urls.loginContinue")
+  lazy val signOutUrl: String                       = configuration.get[String]("urls.signOut")
+  lazy val subscribeCdsUrl: String                  = configuration.get[String]("urls.cdsSubscribeUrl")
   lazy val cashAccountForCdsDeclarationsUrl: String = configuration.get[String]("urls.cashAccountForCdsDeclarationsUrl")
-  lazy val financialsHomepage: String = configuration.get[String]("urls.financialsHomepage")
-  lazy val helpMakeGovUkBetterUrl: String = configuration.get[String]("urls.helpMakeGovUkBetterUrl")
+  lazy val financialsHomepage: String               = configuration.get[String]("urls.financialsHomepage")
+  lazy val helpMakeGovUkBetterUrl: String           = configuration.get[String]("urls.helpMakeGovUkBetterUrl")
 
-  private lazy val c79ReturnLink: String = configuration.get[String]("urls.c79Return")
-  private lazy val adjustmentsReturnLink: String = configuration.get[String]("urls.adjustmentsReturn")
-  private lazy val postponedVatReturnLink: String = configuration.get[String]("urls.postponedVatReturn")
+  private lazy val c79ReturnLink: String           = configuration.get[String]("urls.c79Return")
+  private lazy val adjustmentsReturnLink: String   = configuration.get[String]("urls.adjustmentsReturn")
+  private lazy val postponedVatReturnLink: String  = configuration.get[String]("urls.postponedVatReturn")
   private lazy val cashStatementReturnLink: String = configuration.get[String]("urls.cashStatementReturn")
 
-  lazy val sdesDutyDefermentStatementListUrl: String = sdesApi + "/files-available/list/DutyDefermentStatement"
-  lazy val sdesImportVatCertificateListUrl: String = sdesApi + "/files-available/list/C79Certificate"
+  lazy val sdesDutyDefermentStatementListUrl: String      = sdesApi + "/files-available/list/DutyDefermentStatement"
+  lazy val sdesImportVatCertificateListUrl: String        = sdesApi + "/files-available/list/C79Certificate"
   lazy val sdesImportPostponedVatStatementListUrl: String = sdesApi + "/files-available/list/PostponedVATStatement"
-  lazy val sdesCashStatementListUrl: String = s"$sdesApi$sdesCashStatementUrl"
+  lazy val sdesCashStatementListUrl: String               = s"$sdesApi$sdesCashStatementUrl"
 
   lazy val sdesSecurityStatementListUrl: String = sdesApi + "/files-available/list/SecurityStatement"
-  lazy val historicDocumentsApiUrl: String = customsFinancialsApi + "/historic-document-request"
+  lazy val historicDocumentsApiUrl: String      = customsFinancialsApi + "/historic-document-request"
 
   lazy val emailFrontendUrl: String = servicesConfig.baseUrl("customs-email-frontend") +
     configuration.get[String]("microservice.services.customs-email-frontend.context") +
@@ -88,39 +83,36 @@ class FrontendAppConfig @Inject()(configuration: Configuration, servicesConfig: 
   def sessionCacheUrl(sessionId: String, linkId: String): String =
     customsFinancialsSessionCacheUrl + s"/account-link/$sessionId/$linkId"
 
-  def deleteNotificationUrl(fileRole: FileRole, eori: String): String = {
+  def deleteNotificationUrl(fileRole: FileRole, eori: String): String =
     fileRole match {
       case CDSCashAccount => s"$customsFinancialsApi/eori/$eori/notifications/$fileRole"
-      case _ => s"$customsFinancialsApi/eori/$eori/requested-notifications/$fileRole"
+      case _              => s"$customsFinancialsApi/eori/$eori/requested-notifications/$fileRole"
     }
-  }
 
-  private def dutyDefermentReturnLink(linkId: String): String = configuration.get[String](
-    "urls.dutyDefermentReturn") + linkId + "/account"
+  private def dutyDefermentReturnLink(linkId: String): String =
+    configuration.get[String]("urls.dutyDefermentReturn") + linkId + "/account"
 
-  def returnLink(fileRole: FileRole, userAnswers: UserAnswers): String = {
+  def returnLink(fileRole: FileRole, userAnswers: UserAnswers): String =
     fileRole match {
       case DutyDefermentStatement =>
         userAnswers.get(RequestedLinkId) match {
           case Some(value) => dutyDefermentReturnLink(value)
-          case None => throw new RuntimeException("Unable to retrieve linkId")
+          case None        => throw new RuntimeException("Unable to retrieve linkId")
         }
-      case C79Certificate => c79ReturnLink
-      case SecurityStatement => adjustmentsReturnLink
-      case PostponedVATStatement => postponedVatReturnLink
-      case CDSCashAccount => cashStatementReturnLink
+      case C79Certificate         => c79ReturnLink
+      case SecurityStatement      => adjustmentsReturnLink
+      case PostponedVATStatement  => postponedVatReturnLink
+      case CDSCashAccount         => cashStatementReturnLink
     }
-  }
 
-  def returnLink(fileRole: FileRole): String = {
+  def returnLink(fileRole: FileRole): String =
     fileRole match {
       case DutyDefermentStatement => throw new RuntimeException("Invalid file role")
-      case C79Certificate => c79ReturnLink
-      case SecurityStatement => adjustmentsReturnLink
-      case PostponedVATStatement => postponedVatReturnLink
-      case CDSCashAccount => cashStatementReturnLink
+      case C79Certificate         => c79ReturnLink
+      case SecurityStatement      => adjustmentsReturnLink
+      case PostponedVATStatement  => postponedVatReturnLink
+      case CDSCashAccount         => cashStatementReturnLink
     }
-  }
 
   def returnLink(linkId: String): String = dutyDefermentReturnLink(linkId)
 }

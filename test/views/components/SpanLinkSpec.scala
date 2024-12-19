@@ -53,21 +53,17 @@ class SpanLinkSpec extends ViewTestHelper {
     }
   }
 
-  private def displayVisuallyHiddenMessage(expectedMsg: String)(implicit view: Document) = {
+  private def displayVisuallyHiddenMessage(expectedMsg: String)(implicit view: Document) =
     view.getElementsByClass("govuk-visually-hidden").text() mustBe expectedMsg.trim
-  }
 
-  private def shouldNotDisplayVisuallyHiddenMessage()(implicit view: Document) = {
+  private def shouldNotDisplayVisuallyHiddenMessage()(implicit view: Document) =
     view.getElementsByClass("govuk-visually-hidden").text() mustBe empty
-  }
 
-  private def shouldDisplaySpanWithMessageKey(expectedMsg: String)(implicit view: Document) = {
+  private def shouldDisplaySpanWithMessageKey(expectedMsg: String)(implicit view: Document) =
     view.getElementsByTag("span").last().text() mustBe expectedMsg.trim
-  }
 
-  private def shouldNotDisplaySpanMessage()(implicit view: Document) = {
+  private def shouldNotDisplaySpanMessage()(implicit view: Document) =
     view.getElementsByTag("span").last().text() mustBe empty
-  }
 
   private def shouldRenderLinkWithId(expectedId: String, expectedMsg: String)(implicit view: Document) = {
     view.getElementsByTag("a").attr("id") mustBe expectedId
@@ -78,20 +74,24 @@ class SpanLinkSpec extends ViewTestHelper {
   trait Setup {
 
     val msgKey = "timeout.title"
-    val url = "/example"
+    val url    = "/example"
 
-    def view(msgKey: String = msgKey,
-             spanMsg: Option[String] = None,
-             spanClass: Option[String] = None,
-             id: Option[String] = None): Document = {
+    def view(
+      msgKey: String = msgKey,
+      spanMsg: Option[String] = None,
+      spanClass: Option[String] = None,
+      id: Option[String] = None
+    ): Document = {
 
-      val component = app.injector.instanceOf[span_link].apply(
-        msg = msgKey,
-        url = url,
-        spanMsg = spanMsg,
-        spanClass = spanClass,
-        id = id
-      )
+      val component = app.injector
+        .instanceOf[span_link]
+        .apply(
+          msg = msgKey,
+          url = url,
+          spanMsg = spanMsg,
+          spanClass = spanClass,
+          id = id
+        )
 
       Jsoup.parse(component.body)
     }

@@ -18,13 +18,16 @@ package connectors
 
 import base.SpecBase
 import config.FrontendAppConfig
-import models.{EoriHistory, UndeliverableEmail, UndeliverableInformation, UnverifiedEmail, EmailVerifiedResponse, EmailUnverifiedResponse}
+import models.{
+  EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, UndeliverableEmail, UndeliverableInformation,
+  UnverifiedEmail
+}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps, UpstreamErrorResponse}
-import play.api.http.Status.{NOT_FOUND, INTERNAL_SERVER_ERROR}
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND}
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
@@ -38,7 +41,7 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
   "getEmail" should {
     "return email address from customs data store" in new Setup {
-      val emailResponse = EmailResponse(Some("a@a.com"), Some("time"), None)
+      val emailResponse       = EmailResponse(Some("a@a.com"), Some("time"), None)
       val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/GB12345/verified-email"
 
       when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
@@ -54,9 +57,11 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
     "return undeliverable email address from customs data store" in new Setup {
 
-      val emailResponse = EmailResponse(Some("noresponse@email.com"),
-        Some("time"), Some(UndeliverableInformation(
-          "subject-example", "ex-event-id-01", "ex-group-id-01")))
+      val emailResponse = EmailResponse(
+        Some("noresponse@email.com"),
+        Some("time"),
+        Some(UndeliverableInformation("subject-example", "ex-event-id-01", "ex-group-id-01"))
+      )
 
       val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/GB12346/verified-email"
 
@@ -87,38 +92,37 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
   "getAllEoriHistory" should {
     "parse eoriHistory correctly" in new Setup {
-      val jsonObject = Json.obj("eori" -> "eori1",
-        "validFrom" -> "2019-11-10", "validUntil" -> "2019-12-10T10:15:30+01:00")
+      val jsonObject =
+        Json.obj("eori" -> "eori1", "validFrom" -> "2019-11-10", "validUntil" -> "2019-12-10T10:15:30+01:00")
 
-      val jsonObject2 = Json.obj("eori" -> "eori1",
-        "validFrom" -> "2019-11-10", "validUntil" -> "2019-12-10T10:15:30")
+      val jsonObject2 = Json.obj("eori" -> "eori1", "validFrom" -> "2019-11-10", "validUntil" -> "2019-12-10T10:15:30")
 
-      val year = 2019
-      val day = 10
+      val year   = 2019
+      val day    = 10
       val eleven = 11
       val twelve = 12
 
-      val eoriHistory1 = EoriHistory("eori1",
-        Some(LocalDate.of(year, eleven, day)), Some(LocalDate.of(year, twelve, day)))
+      val eoriHistory1 =
+        EoriHistory("eori1", Some(LocalDate.of(year, eleven, day)), Some(LocalDate.of(year, twelve, day)))
 
       jsonObject.as[EoriHistory] mustBe eoriHistory1
       jsonObject2.as[EoriHistory] mustBe EoriHistory("eori1", Some(LocalDate.of(year, eleven, day)), None)
 
       Json.toJson[EoriHistory](eoriHistory1) mustBe Json.obj(
-        "eori" -> "eori1", "validFrom" -> "2019-11-10", "validUntil" -> "2019-12-10")
+        "eori"       -> "eori1",
+        "validFrom"  -> "2019-11-10",
+        "validUntil" -> "2019-12-10"
+      )
     }
 
     "return eoriHistory from customs data store" in new Setup {
 
       val offset = 10
 
-      val eoriHistory1 = EoriHistory("eori1",
-        Some(LocalDate.now()),
-        Some(LocalDate.now()))
+      val eoriHistory1 = EoriHistory("eori1", Some(LocalDate.now()), Some(LocalDate.now()))
 
-      val eoriHistory2 = EoriHistory("eori2",
-        Some(LocalDate.now().minusDays(offset)),
-        Some(LocalDate.now().minusDays(offset)))
+      val eoriHistory2 =
+        EoriHistory("eori2", Some(LocalDate.now().minusDays(offset)), Some(LocalDate.now().minusDays(offset)))
 
       val eoriHistoryResponse = EoriHistoryResponse(Seq(eoriHistory1, eoriHistory2))
       val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/eori1/eori-history"
@@ -167,16 +171,16 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
     "return EmailUnverifiedResponse with None for unverified email if there is an error while" +
       " fetching response from api" in new Setup {
 
-      when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
-        .thenReturn(Future.failed(new RuntimeException("error occurred")))
+        when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
+          .thenReturn(Future.failed(new RuntimeException("error occurred")))
 
-      when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+        when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
 
-      running(app) {
-        val result = await(customsDataStoreConnector.retrieveUnverifiedEmail)
-        result.unVerifiedEmail mustBe empty
+        running(app) {
+          val result = await(customsDataStoreConnector.retrieveUnverifiedEmail)
+          result.unVerifiedEmail mustBe empty
+        }
       }
-    }
   }
 
   "verifiedEmail" must {
@@ -196,7 +200,9 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
     "return none for verified email when exception occurs while calling email-display api" in new Setup {
 
       when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
-        .thenReturn(Future.failed(UpstreamErrorResponse("error occurred", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)))
+        .thenReturn(
+          Future.failed(UpstreamErrorResponse("error occurred", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR))
+        )
 
       when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
 
@@ -208,21 +214,23 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
+    val mockHttpClient: HttpClientV2   = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
-    val eori: String = "GB11111"
-    val emailId = "test@test.com"
+    val eori: String                   = "GB11111"
+    val emailId                        = "test@test.com"
 
-    val app = applicationBuilder().overrides(
-      bind[HttpClientV2].to(mockHttpClient),
-      bind[RequestBuilder].toInstance(requestBuilder)
-    ).build()
+    val app = applicationBuilder()
+      .overrides(
+        bind[HttpClientV2].to(mockHttpClient),
+        bind[RequestBuilder].toInstance(requestBuilder)
+      )
+      .build()
 
-    val mockAppConfig = app.injector.instanceOf[FrontendAppConfig]
+    val mockAppConfig             = app.injector.instanceOf[FrontendAppConfig]
     val customsDataStoreConnector = app.injector.instanceOf[CustomsDataStoreConnector]
 
     val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
-    val emailVerifiedRes: EmailVerifiedResponse = EmailVerifiedResponse(Some(emailId))
+    val emailVerifiedRes: EmailVerifiedResponse     = EmailVerifiedResponse(Some(emailId))
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }

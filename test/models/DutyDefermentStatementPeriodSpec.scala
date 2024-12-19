@@ -56,9 +56,9 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
   "DutyDefermentStatementPeriodsByMonth" should {
     "provide the month and year correctly" in {
 
-      val year = 2019
+      val year  = 2019
       val month = 10
-      val day = 1
+      val day   = 1
 
       val date = LocalDate.of(year, month, day)
 
@@ -68,15 +68,14 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
     }
   }
 
-
   trait Setup {
 
-    val now = LocalDate.now()
-    val size = 47
+    val now    = LocalDate.now()
+    val size   = 47
     val offset = 10
 
     val month = 11
-    val day = 27
+    val day   = 27
     val year1 = 2011
     val year2 = 2012
 
@@ -85,20 +84,40 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       s"http://second.com/",
       size,
       DutyDefermentStatementFileMetadata(
-        year1, month, day,
-        year2, month, day,
-        Pdf, DutyDefermentStatement,
-        Excise, Some(true), Some("BACS"), "12345678"))
+        year1,
+        month,
+        day,
+        year2,
+        month,
+        day,
+        Pdf,
+        DutyDefermentStatement,
+        Excise,
+        Some(true),
+        Some("BACS"),
+        "12345678"
+      )
+    )
 
     val ddFile2 = DutyDefermentStatementFile(
       s"12345678.123",
       s"http://second.com/",
       size,
       DutyDefermentStatementFileMetadata(
-        year1, month, day,
-        year2, month, day,
-        UnknownFileFormat, DutyDefermentStatement,
-        Supplementary, Some(true), Some("BACS"), "12345678"))
+        year1,
+        month,
+        day,
+        year2,
+        month,
+        day,
+        UnknownFileFormat,
+        DutyDefermentStatement,
+        Supplementary,
+        Some(true),
+        Some("BACS"),
+        "12345678"
+      )
+    )
 
     val dutyDefermentStatementPeriodExcise = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
@@ -106,7 +125,8 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       now,
       now.minusDays(offset),
       now,
-      Seq(ddFile1, ddFile2))
+      Seq(ddFile1, ddFile2)
+    )
 
     val dutyDefermentStatementPeriodExcise2 = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
@@ -114,7 +134,8 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       now,
       now.minusDays(offset),
       now,
-      Seq(ddFile1, ddFile2))
+      Seq(ddFile1, ddFile2)
+    )
 
     val dutyDefermentStatementPeriodExcise3 = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
@@ -122,7 +143,8 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       now,
       now.minusDays(offset),
       now,
-      Seq(ddFile1, ddFile2))
+      Seq(ddFile1, ddFile2)
+    )
 
     val dutyDefermentStatementPeriodSupplementary = DutyDefermentStatementPeriod(
       DutyDefermentStatement,

@@ -39,59 +39,64 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
 
       "the file role is Duty Deferment" in new Setup {
         implicit val viewDoc: Document = view(DutyDefermentStatement)
-        titleShouldBeCorrect(viewDoc,
-          "cf.historic.document.request.review.DutyDefermentStatement.title")
+        titleShouldBeCorrect(viewDoc, "cf.historic.document.request.review.DutyDefermentStatement.title")
 
-        shouldContainSecondaryHeading(view = viewDoc, accountNumberText =
-          s"${msg("cf.account.detail.requested.deferment-account-secondary-heading")} accountNumber")
+        shouldContainSecondaryHeading(
+          view = viewDoc,
+          accountNumberText = s"${msg("cf.account.detail.requested.deferment-account-secondary-heading")} accountNumber"
+        )
       }
 
       "the file role is Duty Deferment and NI Indicator is enabled" in new Setup {
         implicit val viewDoc: Document = view(DutyDefermentStatement, Some(true))
-        titleShouldBeCorrect(viewDoc,
-          "cf.historic.document.request.review.DutyDefermentStatement.title")
+        titleShouldBeCorrect(viewDoc, "cf.historic.document.request.review.DutyDefermentStatement.title")
 
-        shouldContainSecondaryHeading(view = viewDoc, accountNumberText =
-          msg("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount"))
+        shouldContainSecondaryHeading(
+          view = viewDoc,
+          accountNumberText = msg("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
+        )
       }
     }
   }
 
-  private def shouldContainSecondaryHeading(implicit view: Document, accountNumberText: String): Assertion = {
+  private def shouldContainSecondaryHeading(implicit view: Document, accountNumberText: String): Assertion =
     view.getElementById("eori-heading").text().contains(accountNumberText) mustBe true
-  }
 
-  private def shouldContainSelectedDuration(implicit view: Document): Assertion = {
-    view.getElementsByClass("govuk-summary-list__value").text().contains(
-      "October 2019 to October 2019") mustBe true
-  }
+  private def shouldContainSelectedDuration(implicit view: Document): Assertion =
+    view.getElementsByClass("govuk-summary-list__value").text().contains("October 2019 to October 2019") mustBe true
 
   private def shouldContainChangeLink(implicit view: Document): Assertion = {
     val visuallyHiddenLinks = view.getElementsByClass("govuk-summary-list__actions")
 
     visuallyHiddenLinks.html().contains(msg("site.change")) mustBe true
 
-    view.getElementsByClass("govuk-summary-list__actions").html().contains(
-      "/customs/historic-statement/import-vat/change-request-date") mustBe true
+    view
+      .getElementsByClass("govuk-summary-list__actions")
+      .html()
+      .contains("/customs/historic-statement/import-vat/change-request-date") mustBe true
   }
 
-  private def shouldContainConfirmAndSendButton(implicit view: Document): Assertion = {
+  private def shouldContainConfirmAndSendButton(implicit view: Document): Assertion =
     view.getElementsByClass("govuk-button").html().contains(msg("site.continue")) mustBe true
-  }
 
   trait Setup {
 
     val cyaHelper: CheckYourAnswersHelper = new CheckYourAnswersHelper(populatedUserAnswers)
-    val fileRole: FileRole = C79Certificate
+    val fileRole: FileRole                = C79Certificate
 
     val returnUrl: String = routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url
 
     def view(fileRole: FileRole = C79Certificate, niIndicator: Option[Boolean] = Some(false)): Document =
-      Jsoup.parse(app.injector.instanceOf[CheckYourAnswersView].apply(
-        helper = cyaHelper,
-        fileRole = fileRole,
-        maybeDan = Some("accountNumber"),
-        niIndicator = niIndicator
-      ).body)
+      Jsoup.parse(
+        app.injector
+          .instanceOf[CheckYourAnswersView]
+          .apply(
+            helper = cyaHelper,
+            fileRole = fileRole,
+            maybeDan = Some("accountNumber"),
+            niIndicator = niIndicator
+          )
+          .body
+      )
   }
 }

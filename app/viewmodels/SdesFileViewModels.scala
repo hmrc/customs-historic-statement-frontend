@@ -26,10 +26,10 @@ object SdesFileViewModels {
   implicit class DutyDefermentStatementFileViewModel(file: DutyDefermentStatementFile) {
 
     def downloadLinkAriaLabel()(implicit messages: Messages): String = {
-      lazy val endDateMonthAndYear = Formatters.dateAsMonthAndYear(file.endDate)
+      lazy val endDateMonthAndYear    = Formatters.dateAsMonthAndYear(file.endDate)
       lazy val endDateDayMonthAndYear = Formatters.dateAsDayMonthAndYear(file.endDate)
-      lazy val startDateDay = Formatters.dateAsDay(file.startDate)
-      lazy val fileSize = Formatters.fileSize(file.size)
+      lazy val startDateDay           = Formatters.dateAsDay(file.startDate)
+      lazy val fileSize               = Formatters.fileSize(file.size)
 
       file.metadata.defermentStatementType match {
         case Supplementary =>

@@ -62,7 +62,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
       )
 
       val viewModel = createViewModel(securityStatements)
-      val result = viewModel.statementRows
+      val result    = viewModel.statementRows
 
       result.size mustBe 2
       result.head.eori mustBe None
@@ -81,11 +81,13 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
         rowId = emptyString,
         dateCellId = emptyString,
         linkCellId = emptyString,
-        renderEoriHeading = Some(h2Component(
-          msg = messages("cf.account.details.previous-eori", eoriNumber),
-          id = Some("requested-statements-eori-heading-0"),
-          classes = "govuk-heading-s govuk-!-margin-bottom-2"
-        )),
+        renderEoriHeading = Some(
+          h2Component(
+            msg = messages("cf.account.details.previous-eori", eoriNumber),
+            id = Some("requested-statements-eori-heading-0"),
+            classes = "govuk-heading-s govuk-!-margin-bottom-2"
+          )
+        ),
         renderPdfLink = HtmlFormat.empty
       )
 
@@ -106,7 +108,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
 
     "return false if EORI is not present" in {
       val viewModel = createViewModel(Seq(emptySecurityStatementForEori))
-      val result = viewModel.statementRows
+      val result    = viewModel.statementRows
 
       val isEoriPresent = result.nonEmpty
 
@@ -199,7 +201,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
       )
 
       val viewModel = createViewModel(securityStatements)
-      val result = viewModel.hasStatements
+      val result    = viewModel.hasStatements
 
       result mustBe true
     }
@@ -214,7 +216,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
       )
 
       val viewModel = createViewModel(securityStatements)
-      val result = viewModel.hasStatements
+      val result    = viewModel.hasStatements
 
       result mustBe false
     }
@@ -223,16 +225,16 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
 
 trait SpecBaseWithSetup extends SpecBase {
 
-  val app: Application = applicationBuilder().build()
+  val app: Application            = applicationBuilder().build()
   implicit val messages: Messages = messages(app)
 
   val pdfLink: PdfLink = PdfLink("file.pdf", "1MB", "Download PDF")
-  val eoriNumber = "EORI456"
+  val eoriNumber       = "EORI456"
 
   val startDateJuly: LocalDate = LocalDate.parse("2023-07-10")
-  val endDateJuly: LocalDate = LocalDate.parse("2023-07-20")
+  val endDateJuly: LocalDate   = LocalDate.parse("2023-07-20")
   val startDateJune: LocalDate = LocalDate.parse("2023-06-01")
-  val endDateJune: LocalDate = LocalDate.parse("2023-06-30")
+  val endDateJune: LocalDate   = LocalDate.parse("2023-06-30")
 
   val requestedStatement: SecurityStatementsByPeriod = SecurityStatementsByPeriod(
     startDate = startDateJuly,
@@ -253,12 +255,11 @@ trait SpecBaseWithSetup extends SpecBase {
   )
 
   val securityStatements: Seq[SecurityStatementsForEori] = Seq(securityStatementForEori)
-  val viewModel: SecuritiesRequestedStatementsViewModel = createViewModel(securityStatements)
+  val viewModel: SecuritiesRequestedStatementsViewModel  = createViewModel(securityStatements)
 
-  protected def createViewModel(securityStatements: Seq[SecurityStatementsForEori]
-                               ): SecuritiesRequestedStatementsViewModel = {
-
+  protected def createViewModel(
+    securityStatements: Seq[SecurityStatementsForEori]
+  ): SecuritiesRequestedStatementsViewModel =
     SecuritiesRequestedStatementsViewModel(securityStatements)
-  }
 
 }

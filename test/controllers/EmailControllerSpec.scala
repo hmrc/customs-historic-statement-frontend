@@ -42,7 +42,7 @@ class EmailControllerSpec extends SpecBase {
 
       running(app) {
         val request = fakeRequest(GET, routes.EmailController.showUnverified().url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
         status(result) shouldBe OK
       }
     }
@@ -56,7 +56,7 @@ class EmailControllerSpec extends SpecBase {
 
       running(app) {
         val request = fakeRequest(GET, routes.EmailController.showUnverified().url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
         status(result) shouldBe OK
       }
     }
@@ -70,23 +70,25 @@ class EmailControllerSpec extends SpecBase {
 
       running(app) {
         val request = fakeRequest(GET, routes.EmailController.showUndeliverable().url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
         status(result) shouldBe OK
       }
     }
   }
 
   trait Setup {
-    val expectedResult = Some("unverifiedEmail")
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    val expectedResult                        = Some("unverifiedEmail")
+    implicit val hc: HeaderCarrier            = HeaderCarrier()
     implicit val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
-    val requestBuilder: RequestBuilder = mock[RequestBuilder]
+    val requestBuilder: RequestBuilder        = mock[RequestBuilder]
 
     val response = EmailUnverifiedResponse(Some("unverifiedEmail"))
 
-    val app = applicationBuilder().overrides(
-      bind[HttpClientV2].toInstance(mockHttpClient),
-      bind[RequestBuilder].toInstance(requestBuilder)
-    ).build()
+    val app = applicationBuilder()
+      .overrides(
+        bind[HttpClientV2].toInstance(mockHttpClient),
+        bind[RequestBuilder].toInstance(requestBuilder)
+      )
+      .build()
   }
 }

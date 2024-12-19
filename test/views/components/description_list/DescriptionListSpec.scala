@@ -104,23 +104,23 @@ class DescriptionListSpec extends SpecBase {
 
   trait Setup {
 
-    protected val content: Html = Html("Test content")
+    protected val content: Html             = Html("Test content")
     protected val testClass: Option[String] = Some("test-class")
-    protected val testId: Option[String] = Some("test-id")
+    protected val testId: Option[String]    = Some("test-id")
 
     protected val ddExpectedContent: HtmlFormat.Appendable = ddComponent(content)
-    protected val ddWithClass: HtmlFormat.Appendable = ddComponent(content, classes = testClass)
-    protected val ddWithId: HtmlFormat.Appendable = ddComponent(content, id = testId)
-    protected val ddWithClassAndId: HtmlFormat.Appendable = ddComponent(content, classes = testClass, id = testId)
+    protected val ddWithClass: HtmlFormat.Appendable       = ddComponent(content, classes = testClass)
+    protected val ddWithId: HtmlFormat.Appendable          = ddComponent(content, id = testId)
+    protected val ddWithClassAndId: HtmlFormat.Appendable  = ddComponent(content, classes = testClass, id = testId)
 
     protected val dlExpectedContent: HtmlFormat.Appendable = dlComponent(content)
-    protected val dlWithClass: HtmlFormat.Appendable = dlComponent(content, classes = testClass)
-    protected val dlWithId: HtmlFormat.Appendable = dlComponent(content, id = testId)
-    protected val dlWithClassAndId: HtmlFormat.Appendable = dlComponent(content, classes = testClass, id = testId)
+    protected val dlWithClass: HtmlFormat.Appendable       = dlComponent(content, classes = testClass)
+    protected val dlWithId: HtmlFormat.Appendable          = dlComponent(content, id = testId)
+    protected val dlWithClassAndId: HtmlFormat.Appendable  = dlComponent(content, classes = testClass, id = testId)
 
     protected val dtExpectedContent: HtmlFormat.Appendable = dtComponent(content)
-    protected val dtWithClass: HtmlFormat.Appendable = dtComponent(content, classes = testClass)
-    protected val dtWithId: HtmlFormat.Appendable = dtComponent(content, id = testId)
-    protected val dtWithClassAndId: HtmlFormat.Appendable = dtComponent(content, classes = testClass, id = testId)
+    protected val dtWithClass: HtmlFormat.Appendable       = dtComponent(content, classes = testClass)
+    protected val dtWithId: HtmlFormat.Appendable          = dtComponent(content, id = testId)
+    protected val dtWithClassAndId: HtmlFormat.Appendable  = dtComponent(content, classes = testClass, id = testId)
   }
 }

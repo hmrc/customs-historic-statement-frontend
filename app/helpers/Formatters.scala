@@ -38,7 +38,7 @@ trait DateFormatters {
 
   def periodAsStartToEndMonth(periodStartMonth: Int, periodEndMonth: Int)(implicit messages: Messages): String = {
     val startMonth = messages(s"month.$periodStartMonth")
-    val endMonth = messages(s"month.$periodEndMonth")
+    val endMonth   = messages(s"month.$periodEndMonth")
 
     s"$startMonth ${messages("cf.cash-statement-requested-to")} $endMonth"
   }
@@ -46,13 +46,13 @@ trait DateFormatters {
 
 trait FileFormatters {
 
-  private val kbThreshold = 1024
+  private val kbThreshold      = 1024
   private val mbThreshold: Int = 1024 * 1024
 
   def fileSize(size: Long): String = size match {
     case kb if kb >= kbThreshold && kb < mbThreshold => s"${kb / kbThreshold}KB"
-    case mb if mb >= mbThreshold => f"${mb / mbThreshold.toDouble}%.1fMB"
-    case _ => "1KB"
+    case mb if mb >= mbThreshold                     => f"${mb / mbThreshold.toDouble}%.1fMB"
+    case _                                           => "1KB"
   }
 }
 

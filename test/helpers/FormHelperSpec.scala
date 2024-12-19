@@ -25,38 +25,52 @@ class FormHelperSpec extends SpecBase {
       "emptyStartMonthKey, emptyStartYearKey, emptyStartDateKey, " +
       "invalidStartMonthKey and invalidStartYearKey" in new Setup {
 
-      FormHelper.updateFormErrorKeyForStartAndEndDate()(
-        startKey, "cf.historic.document.request.form.error.start.month.date-number-invalid") shouldBe s"$startKey.month"
+        FormHelper.updateFormErrorKeyForStartAndEndDate()(
+          startKey,
+          "cf.historic.document.request.form.error.start.month.date-number-invalid"
+        ) shouldBe s"$startKey.month"
 
-      FormHelper.updateFormErrorKeyForStartAndEndDate()(
-        startKey, "cf.historic.document.request.form.error.start.date-missing") shouldBe s"$startKey.month"
+        FormHelper.updateFormErrorKeyForStartAndEndDate()(
+          startKey,
+          "cf.historic.document.request.form.error.start.date-missing"
+        ) shouldBe s"$startKey.month"
 
-      FormHelper.updateFormErrorKeyForStartAndEndDate()(
-        startKey, "cf.historic.document.request.form.error.start.month.invalid") shouldBe s"$startKey.month"
-    }
+        FormHelper.updateFormErrorKeyForStartAndEndDate()(
+          startKey,
+          "cf.historic.document.request.form.error.start.month.invalid"
+        ) shouldBe s"$startKey.month"
+      }
 
     "append .year in the FormError key when key is either start or end and " +
       "error msg key is of invalid year length" in new Setup {
 
-      FormHelper.updateFormErrorKeyForStartAndEndDate()(
-        startKey, "cf.historic.document.request.form.error.year.invalid-length") shouldBe s"$startKey.year"
+        FormHelper.updateFormErrorKeyForStartAndEndDate()(
+          startKey,
+          "cf.historic.document.request.form.error.year.invalid-length"
+        ) shouldBe s"$startKey.year"
 
-      FormHelper.updateFormErrorKeyForStartAndEndDate()(
-        endKey, "cf.historic.document.request.form.error.year.invalid-length") shouldBe s"$endKey.year"
-    }
+        FormHelper.updateFormErrorKeyForStartAndEndDate()(
+          endKey,
+          "cf.historic.document.request.form.error.year.invalid-length"
+        ) shouldBe s"$endKey.year"
+      }
 
     "return the unchanged key when key in neither start or end" in new Setup {
       FormHelper.updateFormErrorKeyForStartAndEndDate()(
-        defaultKey, "cf.historic.document.request.form.error.year.invalid-length") shouldBe defaultKey
+        defaultKey,
+        "cf.historic.document.request.form.error.year.invalid-length"
+      ) shouldBe defaultKey
 
       FormHelper.updateFormErrorKeyForStartAndEndDate()(
-        defaultKey, "cf.historic.document.request.form.error.year.invalid-length") shouldBe defaultKey
+        defaultKey,
+        "cf.historic.document.request.form.error.year.invalid-length"
+      ) shouldBe defaultKey
     }
   }
 
   trait Setup {
-    val startKey = "start"
-    val endKey = "end"
+    val startKey   = "start"
+    val endKey     = "end"
     val defaultKey = "default"
   }
 }

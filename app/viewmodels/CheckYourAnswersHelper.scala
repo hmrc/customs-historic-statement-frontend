@@ -26,34 +26,46 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.Actions
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) extends SummaryListRowHelper {
 
-  def rows(fileRole: FileRole): Seq[SummaryListRow] = {
+  def rows(fileRole: FileRole): Seq[SummaryListRow] =
     Seq(historicDatesRow(userAnswers.get(HistoricDateRequestPage(fileRole)), fileRole)).flatten
-  }
 
   def dateRows(fileRole: FileRole): Option[String] = {
     val res: Option[HistoricDates] = userAnswers.get(HistoricDateRequestPage(fileRole))
 
     res.map { historicDates =>
-      HtmlFormat.escape(
-        messages("date.range",
-          Formatters.dateAsMonthAndYear(historicDates.start),
-          Formatters.dateAsMonthAndYear(historicDates.end))).toString
+      HtmlFormat
+        .escape(
+          messages(
+            "date.range",
+            Formatters.dateAsMonthAndYear(historicDates.start),
+            Formatters.dateAsMonthAndYear(historicDates.end)
+          )
+        )
+        .toString
     }
   }
 
-  def historicDatesRow(maybeHistoricDates: Option[HistoricDates], fileRole: FileRole): Option[SummaryListRow] = {
+  def historicDatesRow(maybeHistoricDates: Option[HistoricDates], fileRole: FileRole): Option[SummaryListRow] =
     maybeHistoricDates.map { historicDates =>
       summaryListRow(
-        value = HtmlFormat.escape(
-          messages("date.range",
-            Formatters.dateAsMonthAndYear(historicDates.start),
-            Formatters.dateAsMonthAndYear(historicDates.end))
-        ).toString,
-        actions = Actions(items = Seq(ActionItem(
-          href = controllers.routes.HistoricDateRequestPageController.onPageLoad(CheckMode, fileRole).url,
-          content = span(messages("site.change")),
-          visuallyHiddenText = Some(messages("checkYourAnswers.period.change"))
-        ))))
+        value = HtmlFormat
+          .escape(
+            messages(
+              "date.range",
+              Formatters.dateAsMonthAndYear(historicDates.start),
+              Formatters.dateAsMonthAndYear(historicDates.end)
+            )
+          )
+          .toString,
+        actions = Actions(items =
+          Seq(
+            ActionItem(
+              href = controllers.routes.HistoricDateRequestPageController.onPageLoad(CheckMode, fileRole).url,
+              content = span(messages("site.change")),
+              visuallyHiddenText = Some(messages("checkYourAnswers.period.change"))
+            )
+          )
+        )
+      )
     }
-  }
 }

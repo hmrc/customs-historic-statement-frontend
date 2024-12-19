@@ -22,6 +22,6 @@ import queries.{Gettable, Settable}
 trait Page
 
 case object IsNiAccount extends Page with Gettable[Boolean] with Settable[Boolean] {
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath     = JsPath \ toString
   override def toString: String = "isNiAccount"
 }

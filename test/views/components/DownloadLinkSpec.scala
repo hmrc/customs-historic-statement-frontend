@@ -19,12 +19,7 @@ package views.components
 import helpers.Formatters
 import models.FileFormat.{Csv, Pdf}
 import models.{
-  C79Certificate,
-  CDSCashAccount,
-  CashStatementFile,
-  CashStatementFileMetadata,
-  FileFormat,
-  VatCertificateFile,
+  C79Certificate, CDSCashAccount, CashStatementFile, CashStatementFileMetadata, FileFormat, VatCertificateFile,
   VatCertificateFileMetadata
 }
 import org.jsoup.Jsoup
@@ -52,7 +47,8 @@ class DownloadLinkSpec extends ViewTestHelper {
         shouldDisplayMissingFileIdContents(
           Pdf,
           "cf.account.vat.missing-file-hidden-text",
-          "cf.account.vat.missing-file")
+          "cf.account.vat.missing-file"
+        )
       }
     }
 
@@ -68,34 +64,40 @@ class DownloadLinkSpec extends ViewTestHelper {
       "cash statement file is not available" in new Setup {
         implicit val viewDoc: Document = viewCash()
 
-        shouldDisplayMissingFileIdContents(Csv,
+        shouldDisplayMissingFileIdContents(
+          Csv,
           "cf.cash-statement-requested.missing-file-hidden-text",
-          "cf.cash-statement-requested.missing-file")
+          "cf.cash-statement-requested.missing-file"
+        )
       }
     }
   }
 
-  private def shouldDisplayDownloadURL(url: String)(implicit view: Document): Assertion = {
+  private def shouldDisplayDownloadURL(url: String)(implicit view: Document): Assertion =
     view.getElementById("testId").attr("href").contains(url) mustBe true
-  }
 
-  private def shouldDisplayFileFormatAndVoiceoverInfo(fileFormat: FileFormat,
-                                                      size: Long,
-                                                      period: String = "periodDuration")
-                                                     (implicit view: Document): Assertion = {
+  private def shouldDisplayFileFormatAndVoiceoverInfo(
+    fileFormat: FileFormat,
+    size: Long,
+    period: String = "periodDuration"
+  )(implicit view: Document): Assertion = {
     val spanElements = view.getElementsByTag("span")
     spanElements.get(0).text mustBe s"${fileFormat.name} (${Formatters.fileSize(size)})"
 
     spanElements.get(1).text mustBe msg(
       "cf.cash-statement-requested.download-link",
-      fileFormat, period, s"${Formatters.fileSize(size)}")
+      fileFormat,
+      period,
+      s"${Formatters.fileSize(size)}"
+    )
   }
 
-  private def shouldDisplayMissingFileIdContents(fileFormat: FileFormat,
-                                                 hiddenTextKey: String,
-                                                 missingFileKey: String,
-                                                 period: String = "periodDuration")
-                                                (implicit view: Document): Assertion = {
+  private def shouldDisplayMissingFileIdContents(
+    fileFormat: FileFormat,
+    hiddenTextKey: String,
+    missingFileKey: String,
+    period: String = "periodDuration"
+  )(implicit view: Document): Assertion = {
     val spanElements = view.getElementById("missing-file-testId").getElementsByTag("span")
 
     spanElements.get(0).text mustBe msg(hiddenTextKey, fileFormat, period)
@@ -104,27 +106,23 @@ class DownloadLinkSpec extends ViewTestHelper {
 
   trait Setup {
 
-    val vatFilename: String = "vatStatementFile_00"
+    val vatFilename: String    = "vatStatementFile_00"
     val vatDownloadURL: String = "download_url_00"
-    val vatSize: Long = 99L
-    val periodStartYear: Int = 2017
-    val periodStartMonth: Int = 12
-    val periodStartDay: Int = 10
+    val vatSize: Long          = 99L
+    val periodStartYear: Int   = 2017
+    val periodStartMonth: Int  = 12
+    val periodStartDay: Int    = 10
 
-    val cashFilename: String = "cashStatementFile_00"
+    val cashFilename: String    = "cashStatementFile_00"
     val cashDownloadURL: String = "download_cash_url_00"
-    val cashSize: Long = 150L
+    val cashSize: Long          = 150L
 
     val c79Certificates: VatCertificateFile = VatCertificateFile(
       vatFilename,
       vatDownloadURL,
       vatSize,
-      VatCertificateFileMetadata(
-        periodStartYear,
-        periodStartMonth,
-        Pdf,
-        C79Certificate,
-        None))
+      VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, None)
+    )
 
     val cashStatementFile: CashStatementFile = CashStatementFile(
       cashFilename,
@@ -140,9 +138,11 @@ class DownloadLinkSpec extends ViewTestHelper {
         Csv,
         CDSCashAccount,
         Some("requestId")
-      ), "12345678")
+      ),
+      "12345678"
+    )
 
-    val id = "testId"
+    val id     = "testId"
     val period = "periodDuration"
 
     def viewVat(vatCertificateFile: Option[VatCertificateFile] = None): Document =

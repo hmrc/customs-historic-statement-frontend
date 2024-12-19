@@ -36,57 +36,55 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
     }
   }
 
-  private def headingShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("requested-import-vat-certificates-heading").html().contains(
-      msg("cf.import-vat.requested.title")
-    ) mustBe true
-  }
+  private def headingShouldBeCorrect(implicit view: Document): Assertion =
+    view
+      .getElementById("requested-import-vat-certificates-heading")
+      .html()
+      .contains(
+        msg("cf.import-vat.requested.title")
+      ) mustBe true
 
-  private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("available-text").html().contains(
-      msg("cf.import-vat.requested.available.text")
-    ) mustBe true
-  }
+  private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion =
+    view
+      .getElementById("available-text")
+      .html()
+      .contains(
+        msg("cf.import-vat.requested.available.text")
+      ) mustBe true
 
   trait Setup {
 
-    private val someEori = "12345678"
-    private val localDateYear = 2020
-    private val localDateMonth = 10
-    private val localDateMonth2 = 10
-    private val localDateDay = 1
-    private val filename: String = "name_04"
-    private val downloadURL: String = "download_url_06"
-    private val size = 113L
-    private val periodStartYear: Int = 2018
-    private val periodStartMonth: Int = 3
+    private val someEori               = "12345678"
+    private val localDateYear          = 2020
+    private val localDateMonth         = 10
+    private val localDateMonth2        = 10
+    private val localDateDay           = 1
+    private val filename: String       = "name_04"
+    private val downloadURL: String    = "download_url_06"
+    private val size                   = 113L
+    private val periodStartYear: Int   = 2018
+    private val periodStartMonth: Int  = 3
     private val periodStartMonth2: Int = 4
 
-    private val eoriHistory = EoriHistory(someEori,
+    private val eoriHistory = EoriHistory(
+      someEori,
       Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
-      Some(LocalDate.of(localDateYear, localDateMonth2, localDateDay)))
+      Some(LocalDate.of(localDateYear, localDateMonth2, localDateDay))
+    )
 
     val vatCertificateFiles: VatCertificateFile = VatCertificateFile(
       filename,
       downloadURL,
       size,
-      VatCertificateFileMetadata(
-        periodStartYear,
-        periodStartMonth,
-        Pdf,
-        C79Certificate,
-        None))
+      VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, None)
+    )
 
     val vatCertificateFiles_2: VatCertificateFile = VatCertificateFile(
       filename,
       downloadURL,
       size,
-      VatCertificateFileMetadata(
-        periodStartYear,
-        periodStartMonth2,
-        Pdf,
-        C79Certificate,
-        None))
+      VatCertificateFileMetadata(periodStartYear, periodStartMonth2, Pdf, C79Certificate, None)
+    )
 
     val vatCertificatesByMonth_1: VatCertificatesByMonth = VatCertificatesByMonth(
       LocalDate.of(localDateYear, localDateMonth, localDateDay),
@@ -98,16 +96,20 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
       Seq(vatCertificateFiles_2)
     )
 
-    private val vatCertificatesForEori = VatCertificatesForEori(eoriHistory,
-      Seq(vatCertificatesByMonth_1),
-      Seq(vatCertificatesByMonth_2))
+    private val vatCertificatesForEori =
+      VatCertificatesForEori(eoriHistory, Seq(vatCertificatesByMonth_1), Seq(vatCertificatesByMonth_2))
 
     private val vatViewModel = VatViewModel(Seq(vatCertificatesForEori))
 
-    implicit val view: Document = Jsoup.parse(app.injector.instanceOf[ImportVatRequestedStatements].apply(
-      vatViewModel,
-      config.returnLink("c79Certificate")
-    ).body)
+    implicit val view: Document = Jsoup.parse(
+      app.injector
+        .instanceOf[ImportVatRequestedStatements]
+        .apply(
+          vatViewModel,
+          config.returnLink("c79Certificate")
+        )
+        .body
+    )
   }
 
 }

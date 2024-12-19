@@ -28,17 +28,19 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SdesConnector @Inject()(http: HttpClientV2,
-                              sdesGatekeeperService: SdesGatekeeperService)
-                             (implicit appConfig: FrontendAppConfig, ec: ExecutionContext) {
+class SdesConnector @Inject() (http: HttpClientV2, sdesGatekeeperService: SdesGatekeeperService)(implicit
+  appConfig: FrontendAppConfig,
+  ec: ExecutionContext
+) {
 
   import sdesGatekeeperService.*
 
   private def addXHeaders(hc: HeaderCarrier, key: String): HeaderCarrier =
     hc.copy(extraHeaders = hc.extraHeaders ++ Seq("x-client-id" -> appConfig.xClientIdHeader, "X-SDES-Key" -> key))
 
-  def getDutyDefermentStatements(eori: String, dan: String)
-                                (implicit hc: HeaderCarrier): Future[Seq[DutyDefermentStatementFile]] = {
+  def getDutyDefermentStatements(eori: String, dan: String)(implicit
+    hc: HeaderCarrier
+  ): Future[Seq[DutyDefermentStatementFile]] = {
 
     val transform = convertTo[DutyDefermentStatementFile] andThen filterFileFormats(SdesFileFormats)
     getSdesFiles(appConfig.sdesDutyDefermentStatementListUrl, s"$eori-$dan", transform)
@@ -63,7 +65,10 @@ class SdesConnector @Inject()(http: HttpClientV2,
 
     val transform = convertTo[PostponedVatStatementFile] andThen filterFileFormats(SdesFileFormats)
     getSdesFiles[FileInformation, PostponedVatStatementFile](
-      appConfig.sdesImportPostponedVatStatementListUrl, eori, transform)
+      appConfig.sdesImportPostponedVatStatementListUrl,
+      eori,
+      transform
+    )
       .map(_.filter(file => FileFormat.OtherStatementFileFormats.contains(file.metadata.fileFormat)))
   }
 
@@ -74,14 +79,15 @@ class SdesConnector @Inject()(http: HttpClientV2,
       .map(_.filter(file => FileFormat.OtherStatementFileFormats.contains(file.metadata.fileFormat)))
   }
 
-  def getSdesFiles[A, B <: SdesFile](filesUrl: String, key: String, transform: Seq[A] => Seq[B])
-                                    (implicit hc: HeaderCarrier,
-                                     reads: HttpReads[HttpResponse],
-                                     readSeq: HttpReads[Seq[A]]): Future[Seq[B]] = {
-    http.get(url"$filesUrl")
+  def getSdesFiles[A, B <: SdesFile](filesUrl: String, key: String, transform: Seq[A] => Seq[B])(implicit
+    hc: HeaderCarrier,
+    reads: HttpReads[HttpResponse],
+    readSeq: HttpReads[Seq[A]]
+  ): Future[Seq[B]] =
+    http
+      .get(url"$filesUrl")
       .setHeader(addXHeaders(hc, key).extraHeaders: _*)
       .execute[HttpResponse]
       .map(readSeq.read("GET", filesUrl, _))
       .map(transform)
-  }
 }

@@ -24,10 +24,7 @@ import org.scalatest.Assertion
 import play.api.Application
 import play.api.i18n.Messages
 import viewmodels.{
-  PostponedVatStatementsByMonth,
-  PostponedVatStatementsForEori,
-  PostponedVatViewModel,
-  SourceDisplay,
+  PostponedVatStatementsByMonth, PostponedVatStatementsForEori, PostponedVatViewModel, SourceDisplay,
   StatementDisplayData
 }
 import views.html.ImportPostponedVatRequestedStatements
@@ -77,85 +74,105 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     result.head.index mustBe 0
   }
 
-  private def headingShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("requested-import-postponed-vat-statements-heading").html().contains(
-      msg("cf.import-postponed-vat.requested.title")
-    ) mustBe true
-  }
+  private def headingShouldBeCorrect(implicit view: Document): Assertion =
+    view
+      .getElementById("requested-import-postponed-vat-statements-heading")
+      .html()
+      .contains(
+        msg("cf.import-postponed-vat.requested.title")
+      ) mustBe true
 
-  private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion = {
-    view.getElementById("available-text").html().contains(
-      msg("cf.import-postponed-vat.requested.available.text")
-    ) mustBe true
-  }
+  private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion =
+    view
+      .getElementById("available-text")
+      .html()
+      .contains(
+        msg("cf.import-postponed-vat.requested.available.text")
+      ) mustBe true
 
   trait Setup {
 
-    val app: Application = applicationBuilder().build()
+    val app: Application       = applicationBuilder().build()
     implicit val msg: Messages = messages(app)
 
-    private val someEori = "12345678"
-    private val localDateYear = 2020
-    private val localDateMonth = 10
+    private val someEori        = "12345678"
+    private val localDateYear   = 2020
+    private val localDateMonth  = 10
     private val localDateMonth2 = 10
-    private val localDateDay = 1
-    protected val monthAndYear = "October 2020"
+    private val localDateDay    = 1
+    protected val monthAndYear  = "October 2020"
 
-    private val filename: String = "name_04"
-    private val downloadURL: String = "download_url_06"
-    private val size = 113L
-    private val periodStartYear: Int = 2018
-    private val periodStartMonth: Int = 3
+    private val filename: String       = "name_04"
+    private val downloadURL: String    = "download_url_06"
+    private val size                   = 113L
+    private val periodStartYear: Int   = 2018
+    private val periodStartMonth: Int  = 3
     private val periodStartMonth2: Int = 4
-    private val source: String = "CDS"
-    private val statementRequestId = "a request id"
+    private val source: String         = "CDS"
+    private val statementRequestId     = "a request id"
 
-    protected val eoriHistory: EoriHistory = EoriHistory(someEori,
+    protected val eoriHistory: EoriHistory = EoriHistory(
+      someEori,
       Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
-      Some(LocalDate.of(localDateYear, localDateMonth2, localDateDay)))
+      Some(LocalDate.of(localDateYear, localDateMonth2, localDateDay))
+    )
 
     protected val postponedVatStatementFile: PostponedVatStatementFile = PostponedVatStatementFile(
       filename,
       downloadURL,
       size,
-      PostponedVatStatementFileMetadata(periodStartYear,
+      PostponedVatStatementFileMetadata(
+        periodStartYear,
         periodStartMonth,
         Pdf,
         PostponedVATStatement,
         source,
-        Some(statementRequestId)))
+        Some(statementRequestId)
+      )
+    )
 
     protected val postponedVatStatementFile_2: PostponedVatStatementFile = PostponedVatStatementFile(
       filename,
       downloadURL,
       size,
-      PostponedVatStatementFileMetadata(periodStartYear,
+      PostponedVatStatementFileMetadata(
+        periodStartYear,
         periodStartMonth2,
         Pdf,
         PostponedVATStatement,
         source,
-        Some(statementRequestId)))
+        Some(statementRequestId)
+      )
+    )
 
     private val postponedVatStatementsByMonth_1 = PostponedVatStatementsByMonth(
       LocalDate.of(localDateYear, localDateMonth, localDateDay),
-      Seq(postponedVatStatementFile))
+      Seq(postponedVatStatementFile)
+    )
 
     protected val postponedVatStatementsByMonth_2: PostponedVatStatementsByMonth = PostponedVatStatementsByMonth(
       LocalDate.of(localDateYear, localDateMonth2, localDateDay),
-      Seq(postponedVatStatementFile_2))
+      Seq(postponedVatStatementFile_2)
+    )
 
     private val postponedVatStatementsForEori: PostponedVatStatementsForEori = PostponedVatStatementsForEori(
-      eoriHistory, Seq(postponedVatStatementsByMonth_1), Seq(postponedVatStatementsByMonth_2))
+      eoriHistory,
+      Seq(postponedVatStatementsByMonth_1),
+      Seq(postponedVatStatementsByMonth_2)
+    )
 
     protected val postponedVatViewModel: PostponedVatViewModel =
       PostponedVatViewModel(Seq(postponedVatStatementsForEori))
 
     implicit val view: Document = Jsoup.parse(
-      app.injector.instanceOf[ImportPostponedVatRequestedStatements].apply(
-        postponedVatViewModel, config.returnLink("postponedVATStatement")).body)
+      app.injector
+        .instanceOf[ImportPostponedVatRequestedStatements]
+        .apply(postponedVatViewModel, config.returnLink("postponedVATStatement"))
+        .body
+    )
 
-    protected val viewModel: PostponedVatViewModel = PostponedVatViewModel(Seq(postponedVatStatementsForEori))
+    protected val viewModel: PostponedVatViewModel                = PostponedVatViewModel(Seq(postponedVatStatementsForEori))
     protected val statementDisplayData: Seq[StatementDisplayData] = viewModel.statementDisplayData
-    protected val statementData: StatementDisplayData = statementDisplayData.head
+    protected val statementData: StatementDisplayData             = statementDisplayData.head
   }
 }

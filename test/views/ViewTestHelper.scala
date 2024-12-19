@@ -29,18 +29,14 @@ trait ViewTestHelper extends SpecBase {
 
   val app: Application = applicationBuilder().build()
 
-  implicit val config: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
-  implicit val msg: Messages = messages(app)
+  implicit val config: FrontendAppConfig                    = app.injector.instanceOf[FrontendAppConfig]
+  implicit val msg: Messages                                = messages(app)
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest()
 
-  def titleShouldBeCorrect(view: Document, titleMessageKey: String): Assertion = {
-    view.title() mustBe s"${
-      msg(titleMessageKey)
-    } - ${msg("service.name")} - GOV.UK"
-  }
+  def titleShouldBeCorrect(view: Document, titleMessageKey: String): Assertion =
+    view.title() mustBe s"${msg(titleMessageKey)} - ${msg("service.name")} - GOV.UK"
 
-  def pageShouldContainBackLinkUrl(view: Document, url: String): Assertion = {
+  def pageShouldContainBackLinkUrl(view: Document, url: String): Assertion =
     view.getElementsByClass("govuk-back-link").attr("href") mustBe url
-  }
 
 }

@@ -51,32 +51,24 @@ class UtilsSpec extends SpecBase {
 
   "hmrcNewTabLinkComponent" should {
     "create the component correctly with provided input" in new Setup {
-      val result: HtmlFormat.Appendable = hmrcNewTabLinkComponent(
-        linkMessage,
-        href,
-        Some(preLinkMessage),
-        Some(postLinkMessage),
-        classes)
+      val result: HtmlFormat.Appendable =
+        hmrcNewTabLinkComponent(linkMessage, href, Some(preLinkMessage), Some(postLinkMessage), classes)
 
-      result mustBe new newTabLink(emptyHmrcNewTabLink).apply(
-        linkMessage,
-        href,
-        Some(preLinkMessage),
-        Some(postLinkMessage),
-        classes = classes)
+      result mustBe new newTabLink(emptyHmrcNewTabLink)
+        .apply(linkMessage, href, Some(preLinkMessage), Some(postLinkMessage), classes = classes)
     }
   }
 
   trait Setup {
 
-    val app: Application = applicationBuilder().build()
-    implicit val msg: Messages = messages(app)
+    val app: Application                   = applicationBuilder().build()
+    implicit val msg: Messages             = messages(app)
     implicit val config: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
     val linkMessage: String = "go to test page"
-    val href = "www.test.com"
-    val preLinkMessage = "test_pre_link_message"
-    val postLinkMessage = "test_post_link_message"
-    val classes = "govuk-!-margin-bottom-7"
+    val href                = "www.test.com"
+    val preLinkMessage      = "test_pre_link_message"
+    val postLinkMessage     = "test_post_link_message"
+    val classes             = "govuk-!-margin-bottom-7"
   }
 }

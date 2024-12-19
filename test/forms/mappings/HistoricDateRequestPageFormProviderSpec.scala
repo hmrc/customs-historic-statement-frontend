@@ -31,12 +31,12 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
       val formAfterBinding: Form[HistoricDates] = form.bind(
         Map(
-          "start.year" -> s"$year2021",
+          "start.year"  -> s"$year2021",
           "start.month" -> s"$month3",
-          "start.day" -> s"$day1",
-          "end.year" -> s"$year2021",
-          "end.month" -> s"$month10",
-          "end.day" -> s"$day12"
+          "start.day"   -> s"$day1",
+          "end.year"    -> s"$year2021",
+          "end.month"   -> s"$month10",
+          "end.day"     -> s"$day12"
         )
       )
 
@@ -48,12 +48,12 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
       val formAfterBinding: Form[HistoricDates] = form.bind(
         Map(
-          "start.year" -> s"$year2019",
+          "start.year"  -> s"$year2019",
           "start.month" -> s"$month3",
-          "start.day" -> s"$day1",
-          "end.year" -> s"$year2019",
-          "end.month" -> s"$month10",
-          "end.day" -> s"$day12"
+          "start.day"   -> s"$day1",
+          "end.year"    -> s"$year2019",
+          "end.month"   -> s"$month10",
+          "end.day"     -> s"$day12"
         )
       )
 
@@ -71,40 +71,40 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
     }
 
     "throw error for empty start and end dates" in new Setup {
-        val form: Form[HistoricDates] = histDateReqPageForm(C79Certificate)
+      val form: Form[HistoricDates] = histDateReqPageForm(C79Certificate)
 
-        val formAfterBinding: Form[HistoricDates] = form.bind(
-            Map(
-              "start.year" -> emptyString,
-              "start.month" -> emptyString,
-              "start.day" -> emptyString,
-              "end.year" -> emptyString,
-              "end.month" -> emptyString,
-              "end.day" -> emptyString
-            )
+      val formAfterBinding: Form[HistoricDates] = form.bind(
+        Map(
+          "start.year"  -> emptyString,
+          "start.month" -> emptyString,
+          "start.day"   -> emptyString,
+          "end.year"    -> emptyString,
+          "end.month"   -> emptyString,
+          "end.day"     -> emptyString
         )
+      )
 
-        formAfterBinding.hasErrors mustBe true
+      formAfterBinding.hasErrors mustBe true
 
-        formAfterBinding.errors.contains(
-            FormError(
-            "start.month",
-            List(
-                "cf.historic.document.request.form.error.start.date-missing.C79Certificate"
-            ),
-            List()
-            )
-        ) mustBe true
+      formAfterBinding.errors.contains(
+        FormError(
+          "start.month",
+          List(
+            "cf.historic.document.request.form.error.start.date-missing.C79Certificate"
+          ),
+          List()
+        )
+      ) mustBe true
 
-        formAfterBinding.errors.contains(
-            FormError(
-            "end.month",
-            List(
-                "cf.historic.document.request.form.error.end.date-missing.C79Certificate"
-            ),
-            List()
-            )
-        ) mustBe true
+      formAfterBinding.errors.contains(
+        FormError(
+          "end.month",
+          List(
+            "cf.historic.document.request.form.error.end.date-missing.C79Certificate"
+          ),
+          List()
+        )
+      ) mustBe true
 
     }
 
@@ -113,12 +113,12 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
       val formAfterBinding: Form[HistoricDates] = form.bind(
         Map(
-          "start.year" -> emptyString,
+          "start.year"  -> emptyString,
           "start.month" -> s"$month3",
-          "start.day" -> s"$day1",
-          "end.year" -> s"$year2021",
-          "end.month" -> s"$month10",
-          "end.day" -> s"$day12"
+          "start.day"   -> s"$day1",
+          "end.year"    -> s"$year2021",
+          "end.month"   -> s"$month10",
+          "end.day"     -> s"$day12"
         )
       )
 
@@ -140,12 +140,12 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
       val formAfterBinding: Form[HistoricDates] = form.bind(
         Map(
-          "start.year" -> s"$year2021",
+          "start.year"  -> s"$year2021",
           "start.month" -> emptyString,
-          "start.day" -> s"$day1",
-          "end.year" -> s"$year2021",
-          "end.month" -> s"$month10",
-          "end.day" -> s"$day12"
+          "start.day"   -> s"$day1",
+          "end.year"    -> s"$year2021",
+          "end.month"   -> s"$month10",
+          "end.day"     -> s"$day12"
         )
       )
 
@@ -165,16 +165,16 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
   trait Setup {
     val histDateReqPageForm = new HistoricDateRequestPageFormProvider()
-    val year2021 = 2021
-    val year2024 = 2024
-    val year2019 = 2019
+    val year2021            = 2021
+    val year2024            = 2024
+    val year2019            = 2019
 
-    val month3 = 3
-    val month4 = 4
+    val month3  = 3
+    val month4  = 4
     val month10 = 10
 
     val day12 = 12
     val day10 = 10
-    val day1 = 1
+    val day1  = 1
   }
 }

@@ -44,7 +44,7 @@ class LogoutControllerSpec extends SpecBase {
 
           redirectLocation(result).value mustBe
             "http://localhost:9553/bas-gateway/sign-out-without-state?" +
-              "continue=http%3A%2F%2Flocalhost%3A9514%2Ffeedback%2FCDS-FIN"
+            "continue=http%3A%2F%2Flocalhost%3A9514%2Ffeedback%2FCDS-FIN"
         }
       }
 
@@ -60,7 +60,7 @@ class LogoutControllerSpec extends SpecBase {
 
           redirectLocation(result).value mustBe
             "http://localhost:9553/bas-gateway/sign-out-without-state?" +
-              "continue=http%3A%2F%2Flocalhost%3A9514%2Ffeedback%2FCDS-FIN"
+            "continue=http%3A%2F%2Flocalhost%3A9514%2Ffeedback%2FCDS-FIN"
         }
       }
 
@@ -72,7 +72,8 @@ class LogoutControllerSpec extends SpecBase {
     "redirect the user to logout with no feedback survey continueUrl" when {
 
       "sessionRepository clears the user session successfully" in new Setup {
-        val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logoutNoSurvey().url)
+        val request: FakeRequest[AnyContentAsEmpty.type] =
+          fakeRequest(GET, routes.LogoutController.logoutNoSurvey().url)
 
         when(sessionRepoMock.clear(any)).thenReturn(Future.successful(true))
 
@@ -83,12 +84,13 @@ class LogoutControllerSpec extends SpecBase {
 
           redirectLocation(result).value mustBe
             "http://localhost:9553/bas-gateway/sign-out-without-state?" +
-              "continue=http%3A%2F%2Flocalhost%3A9876%2Fcustoms%2Fpayment-records"
+            "continue=http%3A%2F%2Flocalhost%3A9876%2Fcustoms%2Fpayment-records"
         }
       }
 
       "error occurs in clearing user session" in new Setup {
-        val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest(GET, routes.LogoutController.logoutNoSurvey().url)
+        val request: FakeRequest[AnyContentAsEmpty.type] =
+          fakeRequest(GET, routes.LogoutController.logoutNoSurvey().url)
 
         when(sessionRepoMock.clear(any)).thenReturn(Future.failed(new RuntimeException("error occurred")))
 
@@ -99,7 +101,7 @@ class LogoutControllerSpec extends SpecBase {
 
           redirectLocation(result).value mustBe
             "http://localhost:9553/bas-gateway/sign-out-without-state?" +
-              "continue=http%3A%2F%2Flocalhost%3A9876%2Fcustoms%2Fpayment-records"
+            "continue=http%3A%2F%2Flocalhost%3A9876%2Fcustoms%2Fpayment-records"
         }
       }
     }
@@ -109,8 +111,10 @@ class LogoutControllerSpec extends SpecBase {
   trait Setup {
     val sessionRepoMock: SessionRepository = mock[SessionRepository]
 
-    val app: Application = applicationBuilder().overrides(
-      inject.bind[SessionRepository].toInstance(sessionRepoMock)
-    ).build()
+    val app: Application = applicationBuilder()
+      .overrides(
+        inject.bind[SessionRepository].toInstance(sessionRepoMock)
+      )
+      .build()
   }
 }

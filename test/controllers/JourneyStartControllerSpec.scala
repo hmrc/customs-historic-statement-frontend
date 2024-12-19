@@ -37,10 +37,13 @@ class JourneyStartControllerSpec extends SpecBase {
         .thenReturn(Future.successful(true))
 
       running(app) {
-        val request = fakeRequest(GET, routes.JourneyStartController.dutyDeferment("linkId").url).withHeaders(xSessionId -> "something")
-        val result = route(app, request).value
+        val request = fakeRequest(GET, routes.JourneyStartController.dutyDeferment("linkId").url)
+          .withHeaders(xSessionId -> "something")
+        val result  = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController.onPageLoad(NormalMode, DutyDefermentStatement).url
+        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController
+          .onPageLoad(NormalMode, DutyDefermentStatement)
+          .url
       }
     }
 
@@ -49,7 +52,7 @@ class JourneyStartControllerSpec extends SpecBase {
         .thenReturn(Future.successful(None))
       running(app) {
         val request = fakeRequest(GET, routes.JourneyStartController.dutyDeferment("linkId").url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
       }
@@ -60,8 +63,9 @@ class JourneyStartControllerSpec extends SpecBase {
         .thenReturn(Future.successful(None))
 
       running(app) {
-        val request = fakeRequest(GET, routes.JourneyStartController.dutyDeferment("linkId").url).withHeaders(xSessionId -> "something")
-        val result = route(app, request).value
+        val request = fakeRequest(GET, routes.JourneyStartController.dutyDeferment("linkId").url)
+          .withHeaders(xSessionId -> "something")
+        val result  = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
       }
@@ -75,9 +79,11 @@ class JourneyStartControllerSpec extends SpecBase {
 
       running(app) {
         val request = fakeRequest(GET, routes.JourneyStartController.nonDutyDeferment(C79Certificate).url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController.onPageLoad(NormalMode, C79Certificate).url
+        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController
+          .onPageLoad(NormalMode, C79Certificate)
+          .url
       }
     }
 
@@ -87,16 +93,18 @@ class JourneyStartControllerSpec extends SpecBase {
 
       running(app) {
         val request = fakeRequest(GET, routes.JourneyStartController.nonDutyDeferment(SecurityStatement).url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController.onPageLoad(NormalMode, SecurityStatement).url
+        redirectLocation(result).value mustBe routes.HistoricDateRequestPageController
+          .onPageLoad(NormalMode, SecurityStatement)
+          .url
       }
     }
 
     "redirect to the BAD_REQUEST when a invalid file role has been sent" in new Setup {
       running(app) {
         val request = fakeRequest(GET, "/customs/historic-statement/start-journey/invalid")
-        val result = route(app, request).value
+        val result  = route(app, request).value
         status(result) mustBe BAD_REQUEST
       }
     }
@@ -104,7 +112,7 @@ class JourneyStartControllerSpec extends SpecBase {
     "redirect to the technical difficulties page when an invalid request has been sent" in new Setup {
       running(app) {
         val request = fakeRequest(GET, routes.JourneyStartController.nonDutyDeferment(DutyDefermentStatement).url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
       }
@@ -114,13 +122,15 @@ class JourneyStartControllerSpec extends SpecBase {
   trait Setup {
 
     val mockSessionCacheConnector: CustomsSessionCacheConnector = mock[CustomsSessionCacheConnector]
-    val mockSessionRepository: SessionRepository = mock[SessionRepository]
-    val accountLink: AccountLink = mock[AccountLink]
+    val mockSessionRepository: SessionRepository                = mock[SessionRepository]
+    val accountLink: AccountLink                                = mock[AccountLink]
 
-    val app: Application = applicationBuilder().overrides(
-      inject.bind[CustomsSessionCacheConnector].toInstance(mockSessionCacheConnector),
-      inject.bind[SessionRepository].toInstance(mockSessionRepository)
-    ).build()
+    val app: Application = applicationBuilder()
+      .overrides(
+        inject.bind[CustomsSessionCacheConnector].toInstance(mockSessionCacheConnector),
+        inject.bind[SessionRepository].toInstance(mockSessionRepository)
+      )
+      .build()
   }
 
 }

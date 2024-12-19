@@ -25,23 +25,19 @@ import play.api.libs.json.{JsValue, Writes}
 
 import java.time.LocalDate
 
-case class HistoricDocumentRequest(documentType: FileRole,
-                                   from: LocalDate,
-                                   until: LocalDate,
-                                   dan: Option[String])
+case class HistoricDocumentRequest(documentType: FileRole, from: LocalDate, until: LocalDate, dan: Option[String])
 
 object HistoricDocumentRequest {
   implicit val format: OFormat[HistoricDocumentRequest] = Json.format[HistoricDocumentRequest]
 
   implicit def jsonBodyWritable[T](implicit
-                                   writes: Writes[T],
-                                   jsValueBodyWritable: BodyWritable[JsValue]
-                                  ): BodyWritable[T] = jsValueBodyWritable.map(writes.writes)
+    writes: Writes[T],
+    jsValueBodyWritable: BodyWritable[JsValue]
+  ): BodyWritable[T] = jsValueBodyWritable.map(writes.writes)
 
-  def fromRequest(fileRole: FileRole)(implicit request: DataRequest[AnyContent]): Option[HistoricDocumentRequest] = {
+  def fromRequest(fileRole: FileRole)(implicit request: DataRequest[AnyContent]): Option[HistoricDocumentRequest] =
     for {
-      dates <- request.userAnswers.get(HistoricDateRequestPage(fileRole))
+      dates        <- request.userAnswers.get(HistoricDateRequestPage(fileRole))
       accountNumber = request.userAnswers.get(AccountNumber)
     } yield HistoricDocumentRequest(fileRole, dates.start, dates.end, accountNumber)
-  }
 }

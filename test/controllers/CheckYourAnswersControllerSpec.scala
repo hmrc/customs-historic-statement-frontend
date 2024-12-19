@@ -38,7 +38,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
 
       running(app) {
         val request = fakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(C79Certificate).url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
 
         status(result) mustBe OK
       }
@@ -51,7 +51,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
 
       running(app) {
         val request = fakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(C79Certificate).url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
 
         status(result) mustBe SEE_OTHER
       }
@@ -67,7 +67,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
 
       running(app) {
         val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ConfirmationPageController.onPageLoad(C79Certificate).url
@@ -75,12 +75,11 @@ class CheckYourAnswersControllerSpec extends SpecBase {
     }
 
     "redirect to Technical difficulties if the user answers aren't populated" in {
-      val app = applicationBuilder(userAnswers = Some(
-        emptyUserAnswers.set(AccountNumber, "123").success.value)).build()
+      val app = applicationBuilder(userAnswers = Some(emptyUserAnswers.set(AccountNumber, "123").success.value)).build()
 
       running(app) {
         val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
       }
@@ -94,7 +93,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
 
       running(app) {
         val request = fakeRequest(POST, routes.CheckYourAnswersController.onSubmit(C79Certificate).url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
       }
@@ -103,12 +102,14 @@ class CheckYourAnswersControllerSpec extends SpecBase {
 
   trait Setup {
     val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
-    val mockSessionRepo: SessionRepository = mock[SessionRepository]
+    val mockSessionRepo: SessionRepository                               = mock[SessionRepository]
 
     def createApp(userAnswers: UserAnswers = populatedUserAnswers): Application =
-      applicationBuilder(userAnswers = Some(userAnswers)).overrides(
-        inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
-        inject.bind[SessionRepository].toInstance(mockSessionRepo)
-      ).build()
+      applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
+          inject.bind[SessionRepository].toInstance(mockSessionRepo)
+        )
+        .build()
   }
 }

@@ -29,39 +29,36 @@ case object CDSCashAccount extends FileRole("CDSCashAccount")
 
 object FileRole {
   implicit val format: Format[FileRole] = new Format[FileRole] {
-    override def reads(json: JsValue): JsResult[FileRole] = {
+    override def reads(json: JsValue): JsResult[FileRole] =
       json match {
         case JsString("DutyDefermentStatement") => JsSuccess(DutyDefermentStatement)
-        case JsString("C79Certificate") => JsSuccess(C79Certificate)
-        case JsString("SecurityStatement") => JsSuccess(SecurityStatement)
-        case JsString("PostponedVATStatement") => JsSuccess(PostponedVATStatement)
-        case JsString("CDSCashAccount") => JsSuccess(CDSCashAccount)
-        case e => JsError(s"Invalid file role: $e")
+        case JsString("C79Certificate")         => JsSuccess(C79Certificate)
+        case JsString("SecurityStatement")      => JsSuccess(SecurityStatement)
+        case JsString("PostponedVATStatement")  => JsSuccess(PostponedVATStatement)
+        case JsString("CDSCashAccount")         => JsSuccess(CDSCashAccount)
+        case e                                  => JsError(s"Invalid file role: $e")
       }
-    }
-    override def writes(o: FileRole): JsValue = JsString(o.name)
+    override def writes(o: FileRole): JsValue             = JsString(o.name)
   }
 
   implicit val pathBinder: PathBindable[FileRole] = new PathBindable[FileRole] {
-    override def bind(key: String, value: String): Either[String, FileRole] = {
+    override def bind(key: String, value: String): Either[String, FileRole] =
       value match {
-        case "import-vat" => Right(C79Certificate)
+        case "import-vat"     => Right(C79Certificate)
         case "duty-deferment" => Right(DutyDefermentStatement)
-        case "adjustments" => Right(SecurityStatement)
-        case "postponed-vat" => Right(PostponedVATStatement)
+        case "adjustments"    => Right(SecurityStatement)
+        case "postponed-vat"  => Right(PostponedVATStatement)
         case "cash-statement" => Right(CDSCashAccount)
-        case fileRole => Left(s"unknown file role: $fileRole")
+        case fileRole         => Left(s"unknown file role: $fileRole")
       }
-    }
 
-    override def unbind(key: String, fileRole: FileRole): String = {
+    override def unbind(key: String, fileRole: FileRole): String =
       fileRole match {
-        case C79Certificate => "import-vat"
+        case C79Certificate         => "import-vat"
         case DutyDefermentStatement => "duty-deferment"
-        case SecurityStatement => "adjustments"
-        case PostponedVATStatement => "postponed-vat"
-        case CDSCashAccount => "cash-statement"
+        case SecurityStatement      => "adjustments"
+        case PostponedVATStatement  => "postponed-vat"
+        case CDSCashAccount         => "cash-statement"
       }
-    }
   }
 }

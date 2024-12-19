@@ -22,16 +22,14 @@ import play.api.libs.json._
 
 class RichJsValueSpec extends SpecBase {
 
-
-  val min = 2
-  val max = 10
+  val min                           = 2
+  val max                           = 10
   val nonEmptyAlphaStr: Gen[String] = Gen.alphaStr.suchThat(_.nonEmpty)
 
-  def buildJsObj[B](keys: Seq[String], values: Seq[B])(implicit writes: Writes[B]): JsObject = {
-    keys.zip(values).foldLeft(JsObject.empty) {
-      case (acc, (key, value)) => acc + (key -> Json.toJson[B](value))
+  def buildJsObj[B](keys: Seq[String], values: Seq[B])(implicit writes: Writes[B]): JsObject =
+    keys.zip(values).foldLeft(JsObject.empty) { case (acc, (key, value)) =>
+      acc + (key -> Json.toJson[B](value))
     }
-  }
 
   "set" should {
 
@@ -108,9 +106,11 @@ class RichJsValueSpec extends SpecBase {
 
       val path = JsPath \ "foo" \ 0
 
-      value.set(path, JsString("bar")) mustEqual JsSuccess(Json.obj(
-        "foo" -> Json.arr("bar")
-      ))
+      value.set(path, JsString("bar")) mustEqual JsSuccess(
+        Json.obj(
+          "foo" -> Json.arr("bar")
+        )
+      )
     }
 
     "must set into an object which does not exist" in {
@@ -119,11 +119,13 @@ class RichJsValueSpec extends SpecBase {
 
       val path = JsPath \ "foo" \ "bar"
 
-      value.set(path, JsString("baz")) mustEqual JsSuccess(Json.obj(
-        "foo" -> Json.obj(
-          "bar" -> "baz"
+      value.set(path, JsString("baz")) mustEqual JsSuccess(
+        Json.obj(
+          "foo" -> Json.obj(
+            "bar" -> "baz"
+          )
         )
-      ))
+      )
     }
 
     "must set nested objects and arrays" in {
@@ -132,15 +134,17 @@ class RichJsValueSpec extends SpecBase {
 
       val path = JsPath \ "foo" \ 0 \ "bar" \ 0
 
-      value.set(path, JsString("baz")) mustEqual JsSuccess(Json.obj(
-        "foo" -> Json.arr(
-          Json.obj(
-            "bar" -> Json.arr(
-              "baz"
+      value.set(path, JsString("baz")) mustEqual JsSuccess(
+        Json.obj(
+          "foo" -> Json.arr(
+            Json.obj(
+              "bar" -> Json.arr(
+                "baz"
+              )
             )
           )
         )
-      ))
+      )
     }
   }
 
@@ -155,15 +159,14 @@ class RichJsValueSpec extends SpecBase {
     "remove a value from one of many arrays" in {
 
       val input = Json.obj(
-        "key" -> JsArray(Seq(Json.toJson(1), Json.toJson(2))),
+        "key"  -> JsArray(Seq(Json.toJson(1), Json.toJson(2))),
         "key2" -> JsArray(Seq(Json.toJson(1), Json.toJson(2)))
       )
 
       val path = JsPath \ "key" \ 0
 
       input.remove(path) mustBe JsSuccess(
-        Json.obj(
-          "key" -> JsArray(Seq(Json.toJson(2))), "key2" -> JsArray(Seq(Json.toJson(1), Json.toJson(2))))
+        Json.obj("key" -> JsArray(Seq(Json.toJson(2))), "key2" -> JsArray(Seq(Json.toJson(1), Json.toJson(2))))
       )
     }
   }
@@ -171,7 +174,7 @@ class RichJsValueSpec extends SpecBase {
   "remove a value when there are nested arrays" in {
 
     val input = Json.obj(
-      "key" -> JsArray(Seq(JsArray(Seq(Json.toJson(1), Json.toJson(2))), Json.toJson(2))),
+      "key"  -> JsArray(Seq(JsArray(Seq(Json.toJson(1), Json.toJson(2))), Json.toJson(2))),
       "key2" -> JsArray(Seq(Json.toJson(1), Json.toJson(2)))
     )
 
@@ -179,7 +182,7 @@ class RichJsValueSpec extends SpecBase {
 
     input.remove(path) mustBe JsSuccess(
       Json.obj(
-        "key" -> JsArray(Seq(JsArray(Seq(Json.toJson(2))), Json.toJson(2))),
+        "key"  -> JsArray(Seq(JsArray(Seq(Json.toJson(2))), Json.toJson(2))),
         "key2" -> JsArray(Seq(Json.toJson(1), Json.toJson(2)))
       )
     )
@@ -187,7 +190,7 @@ class RichJsValueSpec extends SpecBase {
 
   "remove the value if the last value is deleted from an array" in {
     val input = Json.obj(
-      "key" -> JsArray(Seq(Json.toJson(1))),
+      "key"  -> JsArray(Seq(Json.toJson(1))),
       "key2" -> JsArray(Seq(Json.toJson(1), Json.toJson(2)))
     )
 
@@ -195,7 +198,7 @@ class RichJsValueSpec extends SpecBase {
 
     input.remove(path) mustBe JsSuccess(
       Json.obj(
-        "key" -> JsArray(),
+        "key"  -> JsArray(),
         "key2" -> JsArray(Seq(Json.toJson(1), Json.toJson(2)))
       )
     )

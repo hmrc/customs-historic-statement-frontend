@@ -29,30 +29,32 @@ import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps, UpstreamErrorResponse}
 import javax.inject.Inject
 import scala.concurrent._
 
-class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClientV2)
-                                         (implicit executionContext: ExecutionContext)
-  extends Logging {
+class CustomsDataStoreConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClientV2)(implicit
+  executionContext: ExecutionContext
+) extends Logging {
 
   def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
     val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/$eori/verified-email"
 
-    httpClient.get(url"$dataStoreEndpoint")
+    httpClient
+      .get(url"$dataStoreEndpoint")
       .execute[EmailResponse]
       .map {
-        case EmailResponse(Some(address), _, None) => Right(Email(address))
+        case EmailResponse(Some(address), _, None)  => Right(Email(address))
         case EmailResponse(Some(email), _, Some(_)) => Left(UndeliverableEmail(email))
-        case _ => Left(UnverifiedEmail)
+        case _                                      => Left(UnverifiedEmail)
       }
-      .recover {
-        case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
+      .recover { case UpstreamErrorResponse(_, NOT_FOUND, _, _) =>
+        Left(UnverifiedEmail)
       }
   }
 
   def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] = {
     val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/$eori/eori-history"
-    val emptyEoriHistory = Seq(EoriHistory(eori, None, None))
+    val emptyEoriHistory  = Seq(EoriHistory(eori, None, None))
 
-    httpClient.get(url"$dataStoreEndpoint")
+    httpClient
+      .get(url"$dataStoreEndpoint")
       .execute[EoriHistoryResponse]
       .map(response => response.eoriHistory)
       .recover { case e =>
@@ -67,10 +69,9 @@ class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig, httpClie
     httpClient
       .get(url"$emailDisplayApiUrl")
       .execute[EmailVerifiedResponse]
-      .recover {
-        case _ =>
-          logger.error(s"Error occurred while calling API $emailDisplayApiUrl")
-          EmailVerifiedResponse(None)
+      .recover { case _ =>
+        logger.error(s"Error occurred while calling API $emailDisplayApiUrl")
+        EmailVerifiedResponse(None)
       }
   }
 
@@ -80,10 +81,9 @@ class CustomsDataStoreConnector @Inject()(appConfig: FrontendAppConfig, httpClie
     httpClient
       .get(url"$unverifiedEmailDisplayApiUrl")
       .execute[EmailUnverifiedResponse]
-      .recover {
-        case _ =>
-          logger.error(s"Error occurred while calling API $unverifiedEmailDisplayApiUrl")
-          EmailUnverifiedResponse(None)
+      .recover { case _ =>
+        logger.error(s"Error occurred while calling API $unverifiedEmailDisplayApiUrl")
+        EmailUnverifiedResponse(None)
       }
   }
 }
@@ -94,9 +94,11 @@ object EoriHistoryResponse {
   implicit val format: OFormat[EoriHistoryResponse] = Json.format[EoriHistoryResponse]
 }
 
-case class EmailResponse(address: Option[String],
-                         timestamp: Option[String],
-                         undeliverable: Option[UndeliverableInformation])
+case class EmailResponse(
+  address: Option[String],
+  timestamp: Option[String],
+  undeliverable: Option[UndeliverableInformation]
+)
 
 object EmailResponse {
   implicit val format: OFormat[EmailResponse] = Json.format[EmailResponse]

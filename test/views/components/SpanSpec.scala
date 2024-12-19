@@ -39,22 +39,23 @@ class SpanSpec extends ViewTestHelper {
     }
   }
 
-  private def displayKey(messageKey: String = "timeout.title")(implicit view: Document) = {
+  private def displayKey(messageKey: String = "timeout.title")(implicit view: Document) =
     view.getElementsByClass("govuk-visually-hidden").html.contains(msg(messageKey)) mustBe true
-  }
 
-  private def shouldNotDisplayVisuallyHiddenKey(messageKey: String = "timeout.title")(implicit view: Document) = {
+  private def shouldNotDisplayVisuallyHiddenKey(messageKey: String = "timeout.title")(implicit view: Document) =
     view.getElementsByClass("govuk-visually-hidden").html.contains(msg(messageKey)) mustBe false
-  }
 
-  private def shouldDisplaySpanWithMessageKey(messageKey: String = "timeout.title")(implicit view: Document) = {
+  private def shouldDisplaySpanWithMessageKey(messageKey: String = "timeout.title")(implicit view: Document) =
     view.getElementsByTag("span").text() mustBe msg(messageKey)
-  }
 
   trait Setup {
     val messageKey = "timeout.title"
 
     def view(msgKey: String = messageKey, visuallyHidden: Boolean = true): Document = Jsoup.parse(
-      app.injector.instanceOf[span].apply(key = msgKey, classes = Some(emptyString), visuallyHidden = visuallyHidden).body)
+      app.injector
+        .instanceOf[span]
+        .apply(key = msgKey, classes = Some(emptyString), visuallyHidden = visuallyHidden)
+        .body
+    )
   }
 }

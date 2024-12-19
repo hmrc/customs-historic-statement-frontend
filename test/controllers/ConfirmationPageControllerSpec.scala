@@ -42,7 +42,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
 
       running(app) {
         val request = fakeRequest(GET, routes.ConfirmationPageController.onPageLoad(C79Certificate).url)
-        val result = route(app, request).value
+        val result  = route(app, request).value
 
         status(result) mustEqual OK
 
@@ -51,7 +51,8 @@ class ConfirmationPageControllerSpec extends SpecBase {
             Some(Email("some@email.com")),
             C79Certificate,
             routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url,
-            "October 2019 to October 2019")(request, messages(app), appConfig).toString
+            "October 2019 to October 2019"
+          )(request, messages(app), appConfig).toString
       }
     }
   }
@@ -66,7 +67,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
 
         running(app) {
           val request = fakeRequest(GET, routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url)
-          val result = route(app, request).value
+          val result  = route(app, request).value
 
           status(result) mustBe SEE_OTHER
         }
@@ -77,7 +78,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
 
         running(app) {
           val request = fakeRequest(GET, routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url)
-          val result = route(app, request).value
+          val result  = route(app, request).value
 
           status(result) mustBe SEE_OTHER
         }
@@ -86,16 +87,17 @@ class ConfirmationPageControllerSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockSessionRepository: SessionRepository = mock[SessionRepository]
+    val mockSessionRepository: SessionRepository          = mock[SessionRepository]
     val mockDataStoreConnector: CustomsDataStoreConnector = mock[CustomsDataStoreConnector]
 
     val app: Application = applicationBuilder(userAnswers = Some(populatedUserAnswers))
       .overrides(
         inject.bind[SessionRepository].toInstance(mockSessionRepository),
         inject.bind[CustomsDataStoreConnector].toInstance(mockDataStoreConnector)
-      ).build()
+      )
+      .build()
 
-    val view: ConfirmationPageView = app.injector.instanceOf[ConfirmationPageView]
+    val view: ConfirmationPageView   = app.injector.instanceOf[ConfirmationPageView]
     val appConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   }

@@ -24,21 +24,21 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Navigator @Inject()() {
+class Navigator @Inject() () {
 
   private def normalRoutes(fileRole: FileRole): Page => UserAnswers => Call = {
     case HistoricDateRequestPage(fileRole) => _ => routes.CheckYourAnswersController.onPageLoad(fileRole)
-    case _ => _ => routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole)
+    case _                                 => _ => routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole)
   }
 
-  private def checkRouteMap(fileRole: FileRole): Page => UserAnswers => Call = {
-    case _ => _ => routes.CheckYourAnswersController.onPageLoad(fileRole)
+  private def checkRouteMap(fileRole: FileRole): Page => UserAnswers => Call = { case _ =>
+    _ => routes.CheckYourAnswersController.onPageLoad(fileRole)
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, fileRole: FileRole): Call = mode match {
     case NormalMode =>
       normalRoutes(fileRole)(page)(userAnswers)
-    case CheckMode =>
+    case CheckMode  =>
       checkRouteMap(fileRole)(page)(userAnswers)
   }
 }

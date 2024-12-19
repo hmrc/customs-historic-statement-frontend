@@ -90,7 +90,7 @@ class SdesGatekeeperServiceSpec extends SpecBase {
 
     "correctly convert FileInformation to a sequence of a generic type" in new Setup {
       val mockConverter: FileInformation => CashStatementFile = mock[FileInformation => CashStatementFile]
-      val sdesFiles: Seq[FileInformation] = Seq(validCashStatementFileInformation, validCashStatementFileInformation)
+      val sdesFiles: Seq[FileInformation]                     = Seq(validCashStatementFileInformation, validCashStatementFileInformation)
 
       when(mockConverter.apply(ArgumentMatchers.any[FileInformation]())).thenReturn(validCashStatementFile)
 
@@ -107,19 +107,19 @@ class SdesGatekeeperServiceSpec extends SpecBase {
 
   trait Setup {
 
-    val sdesGatekeeperService = new SdesGatekeeperService()
-    val periodStartYear = 2017
-    val periodStartMonth = 11
-    val periodStartDay = 1
-    val periodEndYear = 2017
-    val periodEndMonth = 11
-    val periodEndDay = 8
-    val fileSize = 500L
+    val sdesGatekeeperService             = new SdesGatekeeperService()
+    val periodStartYear                   = 2017
+    val periodStartMonth                  = 11
+    val periodStartDay                    = 1
+    val periodEndYear                     = 2017
+    val periodEndMonth                    = 11
+    val periodEndDay                      = 8
+    val fileSize                          = 500L
     val someAccountNumber: Option[String] = Some("123456789")
-    val someRequestId: Option[String] = Some("Ab1234")
-    val csv = "csv"
-    val fileName = "test-file.csv"
-    val downloadURL = "test-file.csv"
+    val someRequestId: Option[String]     = Some("Ab1234")
+    val csv                               = "csv"
+    val fileName                          = "test-file.csv"
+    val downloadURL                       = "test-file.csv"
 
     val validCashStatementFile: CashStatementFile = CashStatementFile(
       filename = fileName,
@@ -136,82 +136,104 @@ class SdesGatekeeperServiceSpec extends SpecBase {
         statementRequestId = someRequestId,
         fileRole = CDSCashAccount,
         cashAccountNumber = someAccountNumber
-      ), eori = emptyString)
+      ),
+      eori = emptyString
+    )
 
     val validCashStatementFileInformation: FileInformation = FileInformation(
       filename = fileName,
       downloadURL = downloadURL,
       fileSize = fileSize,
-      metadata = Metadata(Seq(
-        MetadataItem("PeriodStartYear", periodStartYear.toString),
-        MetadataItem("PeriodStartMonth", periodStartMonth.toString),
-        MetadataItem("PeriodStartDay", periodStartDay.toString),
-        MetadataItem("PeriodEndYear", periodEndYear.toString),
-        MetadataItem("PeriodEndMonth", periodEndMonth.toString),
-        MetadataItem("PeriodEndDay", periodEndDay.toString),
-        MetadataItem("FileType", csv),
-        MetadataItem("FileRole", "CDSCashAccount"),
-        MetadataItem("CashAccountNumber", someAccountNumber.getOrElse(emptyString)),
-        MetadataItem("statementRequestID", someRequestId.getOrElse(emptyString)))))
+      metadata = Metadata(
+        Seq(
+          MetadataItem("PeriodStartYear", periodStartYear.toString),
+          MetadataItem("PeriodStartMonth", periodStartMonth.toString),
+          MetadataItem("PeriodStartDay", periodStartDay.toString),
+          MetadataItem("PeriodEndYear", periodEndYear.toString),
+          MetadataItem("PeriodEndMonth", periodEndMonth.toString),
+          MetadataItem("PeriodEndDay", periodEndDay.toString),
+          MetadataItem("FileType", csv),
+          MetadataItem("FileRole", "CDSCashAccount"),
+          MetadataItem("CashAccountNumber", someAccountNumber.getOrElse(emptyString)),
+          MetadataItem("statementRequestID", someRequestId.getOrElse(emptyString))
+        )
+      )
+    )
 
     val validVatCertificateFileInformation: FileInformation = FileInformation(
       filename = fileName,
       downloadURL = downloadURL,
       fileSize = fileSize,
-      metadata = Metadata(Seq(
-        MetadataItem("PeriodStartYear", periodStartYear.toString),
-        MetadataItem("PeriodStartMonth", periodStartMonth.toString),
-        MetadataItem("FileType", csv),
-        MetadataItem("FileRole", "C79Certificate"),
-        MetadataItem("statementRequestID", someRequestId.getOrElse(emptyString)))))
+      metadata = Metadata(
+        Seq(
+          MetadataItem("PeriodStartYear", periodStartYear.toString),
+          MetadataItem("PeriodStartMonth", periodStartMonth.toString),
+          MetadataItem("FileType", csv),
+          MetadataItem("FileRole", "C79Certificate"),
+          MetadataItem("statementRequestID", someRequestId.getOrElse(emptyString))
+        )
+      )
+    )
 
     val validPostponedVatStatementFileInformation: FileInformation = FileInformation(
       filename = fileName,
       downloadURL = downloadURL,
       fileSize = fileSize,
-      metadata = Metadata(Seq(
-        MetadataItem("PeriodStartYear", periodStartYear.toString),
-        MetadataItem("PeriodStartMonth", periodStartMonth.toString),
-        MetadataItem("FileType", csv),
-        MetadataItem("FileRole", "PostponedVATStatement"),
-        MetadataItem("DutyPaymentMethod", "CDS"),
-        MetadataItem("statementRequestID", someRequestId.getOrElse(emptyString)))))
+      metadata = Metadata(
+        Seq(
+          MetadataItem("PeriodStartYear", periodStartYear.toString),
+          MetadataItem("PeriodStartMonth", periodStartMonth.toString),
+          MetadataItem("FileType", csv),
+          MetadataItem("FileRole", "PostponedVATStatement"),
+          MetadataItem("DutyPaymentMethod", "CDS"),
+          MetadataItem("statementRequestID", someRequestId.getOrElse(emptyString))
+        )
+      )
+    )
 
     val validSecurityStatementFileInformation: FileInformation = FileInformation(
       filename = fileName,
       downloadURL = downloadURL,
       fileSize = fileSize,
-      metadata = Metadata(Seq(
-        MetadataItem("PeriodStartYear", periodStartYear.toString),
-        MetadataItem("PeriodStartMonth", periodStartMonth.toString),
-        MetadataItem("PeriodStartDay", periodStartDay.toString),
-        MetadataItem("PeriodEndYear", periodEndYear.toString),
-        MetadataItem("PeriodEndMonth", periodEndMonth.toString),
-        MetadataItem("PeriodEndDay", periodEndDay.toString),
-        MetadataItem("FileType", csv),
-        MetadataItem("FileRole", "SecurityStatement"),
-        MetadataItem("eoriNumber", "MISSING EORI NUMBER"),
-        MetadataItem("fileSize", fileSize.toString),
-        MetadataItem("checksum", "MISSING CHECKSUM"),
-        MetadataItem("statementRequestID", someRequestId.getOrElse(emptyString)))))
+      metadata = Metadata(
+        Seq(
+          MetadataItem("PeriodStartYear", periodStartYear.toString),
+          MetadataItem("PeriodStartMonth", periodStartMonth.toString),
+          MetadataItem("PeriodStartDay", periodStartDay.toString),
+          MetadataItem("PeriodEndYear", periodEndYear.toString),
+          MetadataItem("PeriodEndMonth", periodEndMonth.toString),
+          MetadataItem("PeriodEndDay", periodEndDay.toString),
+          MetadataItem("FileType", csv),
+          MetadataItem("FileRole", "SecurityStatement"),
+          MetadataItem("eoriNumber", "MISSING EORI NUMBER"),
+          MetadataItem("fileSize", fileSize.toString),
+          MetadataItem("checksum", "MISSING CHECKSUM"),
+          MetadataItem("statementRequestID", someRequestId.getOrElse(emptyString))
+        )
+      )
+    )
 
     val validDutyDefermentStatementFileInformation: FileInformation = FileInformation(
       filename = fileName,
       downloadURL = downloadURL,
       fileSize = fileSize,
-      metadata = Metadata(Seq(
-        MetadataItem("PeriodStartYear", periodStartYear.toString),
-        MetadataItem("PeriodStartMonth", periodStartMonth.toString),
-        MetadataItem("PeriodStartDay", periodStartDay.toString),
-        MetadataItem("PeriodEndYear", periodEndYear.toString),
-        MetadataItem("PeriodEndMonth", periodEndMonth.toString),
-        MetadataItem("PeriodEndDay", periodEndDay.toString),
-        MetadataItem("FileType", csv),
-        MetadataItem("FileRole", "DutyDefermentStatement"),
-        MetadataItem("DefermentStatementType", "DefermentStatement"),
-        MetadataItem("DutyOverLimit", "false"),
-        MetadataItem("DutyPaymentType", "Unknown"),
-        MetadataItem("DAN", "Unknown"),
-        MetadataItem("statementRequestID", someRequestId.getOrElse(emptyString)))))
+      metadata = Metadata(
+        Seq(
+          MetadataItem("PeriodStartYear", periodStartYear.toString),
+          MetadataItem("PeriodStartMonth", periodStartMonth.toString),
+          MetadataItem("PeriodStartDay", periodStartDay.toString),
+          MetadataItem("PeriodEndYear", periodEndYear.toString),
+          MetadataItem("PeriodEndMonth", periodEndMonth.toString),
+          MetadataItem("PeriodEndDay", periodEndDay.toString),
+          MetadataItem("FileType", csv),
+          MetadataItem("FileRole", "DutyDefermentStatement"),
+          MetadataItem("DefermentStatementType", "DefermentStatement"),
+          MetadataItem("DutyOverLimit", "false"),
+          MetadataItem("DutyPaymentType", "Unknown"),
+          MetadataItem("DAN", "Unknown"),
+          MetadataItem("statementRequestID", someRequestId.getOrElse(emptyString))
+        )
+      )
+    )
   }
 }

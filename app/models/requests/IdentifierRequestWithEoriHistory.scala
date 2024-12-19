@@ -19,7 +19,9 @@ package models.requests
 import models.EoriHistory
 import play.api.mvc.{Request, WrappedRequest}
 
-case class IdentifierRequestWithEoriHistory[A](request: Request[A],
-                                               identifier: String,
-                                               eori: String,
-                                               eoriHistory: Seq[EoriHistory]) extends WrappedRequest[A](request)
+case class IdentifierRequestWithEoriHistory[A](
+  request: Request[A],
+  identifier: String,
+  eori: String,
+  eoriHistory: Seq[EoriHistory]
+) extends WrappedRequest[A](request)
