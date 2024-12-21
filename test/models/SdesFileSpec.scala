@@ -53,10 +53,10 @@ class SdesFileSpec extends SpecBase with Matchers {
     "order the different types in correct order" in {
 
       List(UnknownStatementType, Weekly, Excise, ExciseDeferment, DutyDeferment, Supplementary).sorted mustBe List(
+        ExciseDeferment,
+        DutyDeferment,
         Excise,
         Supplementary,
-        DutyDeferment,
-        ExciseDeferment,
         Weekly,
         UnknownStatementType
       )

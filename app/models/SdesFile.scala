@@ -78,19 +78,19 @@ sealed abstract class DDStatementType(val name: String) extends Ordered[DDStatem
 
 object DDStatementType extends Logging {
 
-  case object Excise extends DDStatementType("Excise") {
+  case object ExciseDeferment extends DDStatementType("DD1920") {
     val order = 1
   }
 
-  case object Supplementary extends DDStatementType(name = "Supplementary") {
+  case object DutyDeferment extends DDStatementType("DD1720") {
     val order = 2
   }
 
-  case object DutyDeferment extends DDStatementType("DD1720") {
+  case object Excise extends DDStatementType("Excise") {
     val order = 3
   }
 
-  case object ExciseDeferment extends DDStatementType("DD1920") {
+  case object Supplementary extends DDStatementType(name = "Supplementary") {
     val order = 4
   }
 
