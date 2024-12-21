@@ -226,6 +226,8 @@ cf.account.detail.requested.deferment-account-statements-available.text=Mae datg
 cf.account.detail.period-group={0} i {1} {2}
 cf.account.detail.row.supplementary.info=Manylion diwedd mis atodol
 cf.account.details.row.excise.info=Crynodeb o’r ecséis
+cf.account.details.row.duty-deferment.info = Gohiriad tollau 1720
+cf.account.details.row.excise-deferment.info = Gohiriad ecséis 1920
 cf.account.details.previous-eori=EORI: {0}
 
 #

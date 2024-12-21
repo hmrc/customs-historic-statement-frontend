@@ -17,7 +17,7 @@
 package viewmodels
 
 import helpers.Formatters
-import models.DDStatementType.{Excise, Supplementary}
+import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary}
 import models.FileFormat.Pdf
 import models.{DutyDefermentStatementPeriod, DutyDefermentStatementPeriodsByMonth, DutyDefermentStatementsForEori}
 import play.api.i18n.Messages
@@ -204,11 +204,12 @@ object DutyDefermentAccountComponent {
   private def preparePeriodDetails(
     period: DutyDefermentStatementPeriod
   )(implicit messages: Messages): HtmlFormat.Appendable = {
-
     val msgKey = period.defermentStatementType match {
-      case Supplementary => "cf.account.detail.row.supplementary.info"
-      case Excise        => "cf.account.details.row.excise.info"
-      case _             => "cf.account.detail.period-group"
+      case Supplementary   => "cf.account.detail.row.supplementary.info"
+      case Excise          => "cf.account.details.row.excise.info"
+      case DutyDeferment   => "cf.account.details.row.duty-deferment.info"
+      case ExciseDeferment => "cf.account.details.row.excise-deferment.info"
+      case _               => "cf.account.detail.period-group"
     }
 
     HtmlFormat.raw(

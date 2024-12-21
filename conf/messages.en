@@ -223,6 +223,8 @@ cf.account.detail.requested.deferment-account-statements-available.text=Requeste
 cf.account.detail.period-group={0} to {1} {2}
 cf.account.detail.row.supplementary.info=Supplementary end of month
 cf.account.details.row.excise.info=Excise summary
+cf.account.details.row.duty-deferment.info = Duty deferment 1720
+cf.account.details.row.excise-deferment.info = Excise deferment 1920
 cf.account.details.previous-eori=EORI: {0}
 
 cf.account.vat.download-link=Download {0} of {1} ({2})
