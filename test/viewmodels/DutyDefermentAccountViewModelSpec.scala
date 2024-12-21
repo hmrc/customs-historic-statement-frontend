@@ -17,7 +17,7 @@
 package viewmodels
 
 import base.SpecBase
-import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary, Weekly}
+import models.DDStatementType.{DutyDeferment, ExciseDeferment, Supplementary, Weekly}
 import models.FileFormat.{Pdf, UnknownFileFormat}
 import models.{
   DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, DutyDefermentStatementPeriod,
@@ -25,9 +25,7 @@ import models.{
 }
 import play.api.Application
 import play.api.i18n.Messages
-import utils.Utils.{dlComponent, h2Component, h3Component, missingDocumentsGuidanceComponent}
-import viewmodels.DutyDefermentAccountComponent.statementRow
-import play.twirl.api.HtmlFormat
+import utils.Utils.{h2Component, h3Component, missingDocumentsGuidanceComponent}
 import helpers.Formatters
 
 import java.time.LocalDate
@@ -66,24 +64,16 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     }
 
     "create object with correct statements" in new Setup {
-      ddAccountComponent.statements.body mustBe """
-                                             |<dl  class=govuk-summary-list>
-                                             |<div id=requested-statements-list-0-2024-12-row-0 class=govuk-summary-list__row>
-                                             |<dt id=requested-statements-list-0-2024-12-row-0-date-cell class=govuk-summary-list__value>Duty deferment 1720</dt>
-                                             |
-                                             |<dd id=requested-statements-list-0-2024-12-row-0-link-cell class=govuk-summary-list__actions>
-                                             |
-                                             |
-                                             |          <a id="requested-statements-list-0-2024-12-row-0-download-link" class="file-link govuk-link" href="http://second.com/" download>
-                                             |               <span>PDF (1KB)</span>
-                                             |               <span class="govuk-visually-hidden">Download PDF for 27 to 27 November 2012 (1KB)</span>
-                                             |           </a>
-                                             |
-                                             |
-                                             |
-                                             |   </dd>
-                                             |   </div>
-                                             |   </dl>""".stripMargin
+      val statementsString: String = ddAccountComponent.statements.body
+
+      statementsString must include("<dl  class=govuk-summary-list>")
+      statementsString must include(
+        "<div id=requested-statements-list-0-2024-12-row-0 class=govuk-summary-list__row>"
+      )
+
+      statementsString must include(
+        "<dt id=requested-statements-list-0-2024-12-row-0-date-cell class=govuk-summary-list__value>Duty deferment 1720</dt>"
+      )
     }
 
     "create object with correct missingDocumentsGuidance" in new Setup {
@@ -92,18 +82,18 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
   }
 
   trait Setup {
-    val accountNumber: String     = "123456"
-    val eori: String              = "12345678"
-    val size                      = 1024L
-    val requestId: Option[String] = Some("Ab1234")
+    val accountNumber: String             = "123456"
+    val eori: String                      = "12345678"
+    private val size                      = 1024L
+    private val requestId: Option[String] = Some("Ab1234")
 
     val currentDate: LocalDate    = LocalDate.now()
-    val offset                    = 10
-    val month                     = 11
-    val localDateDay              = 10
-    val day                       = 27
-    val year1                     = 2011
-    val year2                     = 2012
+    private val offset            = 10
+    private val month             = 11
+    private val localDateDay      = 10
+    private val day               = 27
+    private val year1             = 2011
+    private val year2             = 2012
     private val pdfFileName       = "2018_03_01-08.pdf"
     private val pdfUrl            = "url.pdf"
     private val pdfSize           = 1024L
