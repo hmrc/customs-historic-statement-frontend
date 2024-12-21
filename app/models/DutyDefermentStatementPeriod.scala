@@ -17,7 +17,7 @@
 package models
 
 import helpers.Formatters
-import models.DDStatementType.{Excise, Supplementary}
+import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary}
 import services.DateConverters._
 import play.api.i18n.Messages
 
@@ -54,6 +54,12 @@ case class DutyDefermentStatementPeriod(
         messages("cf.account.detail.missing-file-type-supplementary", fileFormat, endDateMonthAndYear)
 
       case Excise => messages("cf.account.detail.missing-file-type-excise", fileFormat, endDateMonthAndYear)
+
+      case ExciseDeferment =>
+        messages("cf.account.detail.missing-file-type-excise-deferment", fileFormat, endDateMonthAndYear)
+
+      case DutyDeferment =>
+        messages("cf.account.detail.missing-file-type-duty-deferment", fileFormat, endDateMonthAndYear)
 
       case _ =>
         messages(

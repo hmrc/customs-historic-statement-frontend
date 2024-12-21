@@ -272,6 +272,8 @@ cf.account.detail.supplementary-download-link=Lawrlwytho manylion diwedd mis ato
 cf.account.detail.excise-download-link=Lawrlwytho crynodeb o’r ecséis {0} ar gyfer {1} ({2})
 cf.account.detail.missing-file-type-supplementary=Nid yw manylion diwedd mis atodol {0} ar gyfer {1} ar gael
 cf.account.detail.missing-file-type-excise=Nid yw’r crynodeb o’r ecséis {0} ar gyfer {1} ar gael
+cf.account.detail.missing-file-type-excise-deferment=Gohiriad ecséis 1920 crynodeb {0} for {1} ar gael
+cf.account.detail.missing-file-type-duty-deferment=Gohiriad tollau 1720 crynodeb {0} for {1} ar gael
 cf.account.detail.missing-file-type=Nid yw {0} ar gyfer {1} i {2} ar gael
 cf.account.detail.unavailable=Nid yw ar gael
 

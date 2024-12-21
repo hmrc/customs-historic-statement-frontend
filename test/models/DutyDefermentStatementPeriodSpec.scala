@@ -17,8 +17,11 @@
 package models
 
 import base.SpecBase
-import models.DDStatementType.{Excise, Supplementary, UnknownStatementType}
+import helpers.Formatters
+import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary, UnknownStatementType}
 import models.FileFormat.{Pdf, UnknownFileFormat}
+import play.api.Application
+import play.api.i18n.Messages
 import play.api.test.Helpers
 
 import java.time.LocalDate
@@ -68,18 +71,59 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
     }
   }
 
+  "unavailableLinkHiddenText" should {
+
+    "return correct text for defermentStatementType" in new Setup {
+      val app: Application        = applicationBuilder().build()
+      implicit val msgs: Messages = messages(app)
+
+      dutyDefermentStatementPeriodExciseDeferment.unavailableLinkHiddenText(Pdf) mustBe msgs(
+        "cf.account.detail.missing-file-type-excise-deferment",
+        Pdf,
+        Formatters.dateAsMonthAndYear(endDate)
+      )
+
+      dutyDefermentStatementPeriodDutyDeferment.unavailableLinkHiddenText(Pdf) mustBe msgs(
+        "cf.account.detail.missing-file-type-duty-deferment",
+        Pdf,
+        Formatters.dateAsMonthAndYear(endDate)
+      )
+
+      dutyDefermentStatementPeriodExcise.copy(endDate = endDate).unavailableLinkHiddenText(Pdf) mustBe msgs(
+        "cf.account.detail.missing-file-type-excise",
+        Pdf,
+        Formatters.dateAsMonthAndYear(endDate)
+      )
+
+      dutyDefermentStatementPeriodSupplementary.unavailableLinkHiddenText(Pdf) mustBe msgs(
+        "cf.account.detail.missing-file-type-supplementary",
+        Pdf,
+        Formatters.dateAsMonthAndYear(endDate)
+      )
+
+      dutyDefermentStatementPeriodUnknown
+        .copy(startDate = startDate, endDate = endDate)
+        .unavailableLinkHiddenText(Pdf) mustBe "PDF for 10 to 27 November 2011 unavailable"
+    }
+  }
+
   trait Setup {
 
-    val now    = LocalDate.now()
+    val now: LocalDate = LocalDate.now()
+
     val size   = 47
     val offset = 10
 
     val month = 11
     val day   = 27
+    val day10 = 10
     val year1 = 2011
     val year2 = 2012
 
-    val ddFile1 = DutyDefermentStatementFile(
+    val startDate: LocalDate = LocalDate.of(year1, month, day10)
+    val endDate: LocalDate   = LocalDate.of(year1, month, day)
+
+    val ddFile1: DutyDefermentStatementFile = DutyDefermentStatementFile(
       s"12345678.123",
       s"http://second.com/",
       size,
@@ -99,7 +143,7 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       )
     )
 
-    val ddFile2 = DutyDefermentStatementFile(
+    val ddFile2: DutyDefermentStatementFile = DutyDefermentStatementFile(
       s"12345678.123",
       s"http://second.com/",
       size,
@@ -119,7 +163,7 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       )
     )
 
-    val dutyDefermentStatementPeriodExcise = DutyDefermentStatementPeriod(
+    val dutyDefermentStatementPeriodExcise: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       Excise,
       now,
@@ -128,7 +172,7 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       Seq(ddFile1, ddFile2)
     )
 
-    val dutyDefermentStatementPeriodExcise2 = DutyDefermentStatementPeriod(
+    val dutyDefermentStatementPeriodExcise2: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       Excise,
       now,
@@ -137,7 +181,7 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       Seq(ddFile1, ddFile2)
     )
 
-    val dutyDefermentStatementPeriodExcise3 = DutyDefermentStatementPeriod(
+    val dutyDefermentStatementPeriodExcise3: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       Excise,
       now,
@@ -146,21 +190,39 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       Seq(ddFile1, ddFile2)
     )
 
-    val dutyDefermentStatementPeriodSupplementary = DutyDefermentStatementPeriod(
+    val dutyDefermentStatementPeriodSupplementary: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       Supplementary,
       now,
       now.minusDays(offset),
-      now,
+      endDate,
       Seq(ddFile1, ddFile2)
     )
 
-    val dutyDefermentStatementPeriodUnknown = DutyDefermentStatementPeriod(
+    val dutyDefermentStatementPeriodUnknown: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       UnknownStatementType,
       now,
       now.minusDays(offset),
       now,
+      Seq(ddFile1, ddFile2)
+    )
+
+    val dutyDefermentStatementPeriodExciseDeferment: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
+      DutyDefermentStatement,
+      ExciseDeferment,
+      now,
+      now.minusDays(offset),
+      endDate,
+      Seq(ddFile1, ddFile2)
+    )
+
+    val dutyDefermentStatementPeriodDutyDeferment: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
+      DutyDefermentStatement,
+      DutyDeferment,
+      now,
+      now.minusDays(offset),
+      endDate,
       Seq(ddFile1, ddFile2)
     )
   }
