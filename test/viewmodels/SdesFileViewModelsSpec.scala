@@ -62,6 +62,9 @@ class SdesFileViewModelsSpec extends SpecBase {
     val month = 11
     val day   = 27
 
+    val fileName    = "test_file"
+    val downloadUrl = "http://second.com/"
+
     def metaData(defermentStatementType: DDStatementType): DutyDefermentStatementFileMetadata =
       DutyDefermentStatementFileMetadata(
         year,
@@ -78,40 +81,19 @@ class SdesFileViewModelsSpec extends SpecBase {
         "12345678"
       )
 
-    val excise: DutyDefermentStatementFile = DutyDefermentStatementFile(
-      s"12345678.123",
-      s"http://second.com/",
-      size,
-      metaData(Excise)
-    )
+    val excise: DutyDefermentStatementFile = DutyDefermentStatementFile(fileName, downloadUrl, size, metaData(Excise))
 
-    val supplementary: DutyDefermentStatementFile = DutyDefermentStatementFile(
-      s"12345678.123",
-      s"http://second.com/",
-      size,
-      metaData(Supplementary)
-    )
+    val supplementary: DutyDefermentStatementFile =
+      DutyDefermentStatementFile(fileName, downloadUrl, size, metaData(Supplementary))
 
-    val unknown: DutyDefermentStatementFile = DutyDefermentStatementFile(
-      s"12345678.123",
-      s"http://second.com/",
-      size,
-      metaData(UnknownStatementType)
-    )
+    val unknown: DutyDefermentStatementFile =
+      DutyDefermentStatementFile(fileName, downloadUrl, size, metaData(UnknownStatementType))
 
-    val exciseDeferment: DutyDefermentStatementFile = DutyDefermentStatementFile(
-      s"12345678.123",
-      s"http://second.com/",
-      size,
-      metaData(ExciseDeferment)
-    )
+    val exciseDeferment: DutyDefermentStatementFile =
+      DutyDefermentStatementFile(fileName, downloadUrl, size, metaData(ExciseDeferment))
 
-    val dutyDeferment: DutyDefermentStatementFile = DutyDefermentStatementFile(
-      s"12345678.123",
-      s"http://second.com/",
-      size,
-      metaData(DutyDeferment)
-    )
+    val dutyDeferment: DutyDefermentStatementFile =
+      DutyDefermentStatementFile(fileName, downloadUrl, size, metaData(DutyDeferment))
 
     val app: Application        = applicationBuilder().build()
     implicit val msgs: Messages = messages(app)
