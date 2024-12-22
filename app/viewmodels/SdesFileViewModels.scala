@@ -17,7 +17,7 @@
 package viewmodels
 
 import helpers.Formatters
-import models.DDStatementType.{Excise, Supplementary}
+import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary}
 import models.DutyDefermentStatementFile
 import play.api.i18n.Messages
 
@@ -37,6 +37,12 @@ object SdesFileViewModels {
 
         case Excise =>
           messages("cf.account.detail.excise-download-link", file.fileFormat, endDateMonthAndYear, fileSize)
+
+        case ExciseDeferment =>
+          messages("cf.account.detail.excise-deferment-download-link", file.fileFormat, endDateMonthAndYear, fileSize)
+
+        case DutyDeferment =>
+          messages("cf.account.detail.duty-deferment-download-link", file.fileFormat, endDateMonthAndYear, fileSize)
 
         case _ =>
           messages("cf.account.detail.download-link", file.fileFormat, startDateDay, endDateDayMonthAndYear, fileSize)
