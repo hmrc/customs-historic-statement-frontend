@@ -82,30 +82,30 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
   }
 
   trait Setup {
-    val accountNumber: String             = "123456"
-    val eori: String                      = "12345678"
+    val accountNumber: String = "123456"
+    val eori: String          = "12345678"
+
     private val size                      = 1024L
     private val requestId: Option[String] = Some("Ab1234")
-
-    private val currentDate: LocalDate = LocalDate.now()
-    private val offset                 = 10
-    private val month                  = 11
-    private val localDateDay           = 10
-    private val day                    = 27
-    private val year1                  = 2011
-    private val year2                  = 2012
-    private val pdfFileName            = "2018_03_01-08.pdf"
-    private val pdfUrl                 = "url.pdf"
-    private val pdfSize                = 1024L
-    private val periodStartYear        = 2018
-    private val periodStartMonth       = 3
-    private val periodStartMonth2      = 2
-    private val periodStartDay         = 1
-    private val periodEndYear          = 2018
-    private val periodEndMonth2        = 3
-    private val periodEndMonth         = 2
-    private val periodEndDay           = 8
-    private val dutyPaymentType        = "BACS"
+    private val currentDate: LocalDate    = LocalDate.now()
+    private val offset                    = 10
+    private val month                     = 11
+    private val localDateDay              = 10
+    private val day                       = 27
+    private val year1                     = 2011
+    private val year2                     = 2012
+    private val pdfFileName               = "2018_03_01-08.pdf"
+    private val pdfUrl                    = "url.pdf"
+    private val pdfSize                   = 1024L
+    private val periodStartYear           = 2018
+    private val periodStartMonth          = 3
+    private val periodStartMonth2         = 2
+    private val periodStartDay            = 1
+    private val periodEndYear             = 2018
+    private val periodEndMonth2           = 3
+    private val periodEndMonth            = 2
+    private val periodEndDay              = 8
+    private val dutyPaymentType           = "BACS"
 
     val app: Application        = applicationBuilder().build()
     implicit val msgs: Messages = messages(app)
