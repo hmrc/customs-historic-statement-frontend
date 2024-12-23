@@ -77,27 +77,38 @@ sealed abstract class DDStatementType(val name: String) extends Ordered[DDStatem
 }
 
 object DDStatementType extends Logging {
-  case object Excise extends DDStatementType("Excise") {
+
+  case object ExciseDeferment extends DDStatementType("DD1920") {
     val order = 1
   }
 
-  case object Supplementary extends DDStatementType(name = "Supplementary") {
+  case object DutyDeferment extends DDStatementType("DD1720") {
     val order = 2
   }
 
-  case object Weekly extends DDStatementType("Weekly") {
+  case object Excise extends DDStatementType("Excise") {
     val order = 3
   }
 
-  case object UnknownStatementType extends DDStatementType("UNKNOWN STATEMENT TYPE") {
+  case object Supplementary extends DDStatementType(name = "Supplementary") {
     val order = 4
   }
 
+  case object Weekly extends DDStatementType("Weekly") {
+    val order = 5
+  }
+
+  case object UnknownStatementType extends DDStatementType("UNKNOWN STATEMENT TYPE") {
+    val order = 6
+  }
+
   def apply(name: String): DDStatementType = name match {
-    case Weekly.name        => Weekly
-    case Supplementary.name => Supplementary
-    case Excise.name        => Excise
-    case _                  =>
+    case ExciseDeferment.name => ExciseDeferment
+    case DutyDeferment.name   => DutyDeferment
+    case Excise.name          => Excise
+    case Supplementary.name   => Supplementary
+    case Weekly.name          => Weekly
+    case _                    =>
       logger.warn(s"Unknown duty deferment statement type: $name")
       UnknownStatementType
   }

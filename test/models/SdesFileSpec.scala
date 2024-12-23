@@ -25,47 +25,88 @@ import play.api.libs.json.{JsString, Json}
 
 class SdesFileSpec extends SpecBase with Matchers {
 
-  "an SdesFile" should {
-    "be correctly ordered and formatted" in new Setup {
+  "DDStatementType.apply" should {
+    "produce correct object" in new Setup {
 
-      val one      = 1
-      val zero     = 0
-      val minusOne = -1
+      DDStatementType("DD1920") mustBe ExciseDeferment
+      DDStatementType("DD1720") mustBe DutyDeferment
+      DDStatementType("Random") mustBe UnknownStatementType
+      DDStatementType("Weekly") mustBe Weekly
+      DDStatementType("Supplementary") mustBe Supplementary
+      DDStatementType("Excise") mustBe Excise
+    }
+  }
 
-      securityStatementFile2 compare securityStatementFile1 mustBe one
-      vatCertificateFile1 compare vatCertificateFile2 mustBe zero
-      cashStatementFile1 compare cashStatementFile2 mustBe zero
-      postponedVatStatementFile1 compare postponedVatStatementFile2 mustBe zero
+  "DDStatementType.unapply" should {
+    "produce correct output" in new Setup {
 
-      FileFormat.unapply(Pdf).value mustBe "PDF"
-
-      JsString("Pdf").as[FileFormat] mustBe Pdf
-      Json.toJson[FileFormat](Pdf) mustBe JsString("PDF")
-      Pdf.toString mustBe "PDF"
-
-      DDStatementType.apply("Random") mustBe UnknownStatementType
-      DDStatementType.apply("Weekly") mustBe Weekly
-      DDStatementType.apply("Supplementary") mustBe Supplementary
-      DDStatementType.apply("Excise") mustBe Excise
-
+      unapply(ExciseDeferment).value mustBe "DD1920"
+      unapply(DutyDeferment).value mustBe "DD1720"
       unapply(UnknownStatementType).value mustBe "UNKNOWN STATEMENT TYPE"
       unapply(Weekly).value mustBe "Weekly"
       unapply(Supplementary).value mustBe "Supplementary"
       unapply(Excise).value mustBe "Excise"
+    }
+  }
 
-      Weekly compare Excise mustBe one
-      Weekly compare Supplementary mustBe one
-      Weekly compare UnknownStatementType mustBe minusOne
+  "DDStatementType.compare" should {
+    "order the different types in correct order" in {
 
-      Excise compare Weekly mustBe minusOne
-      Excise compare Supplementary mustBe minusOne
-      Excise compare UnknownStatementType mustBe minusOne
+      List(UnknownStatementType, Weekly, Excise, ExciseDeferment, DutyDeferment, Supplementary).sorted mustBe List(
+        ExciseDeferment,
+        DutyDeferment,
+        Excise,
+        Supplementary,
+        Weekly,
+        UnknownStatementType
+      )
+    }
+  }
 
-      Supplementary compare Weekly mustBe minusOne
-      Supplementary compare Excise mustBe one
-      Supplementary compare UnknownStatementType mustBe minusOne
+  "FileFormat.apply" should {
+    "create correct object" in new Setup {
 
-      DutyDefermentStatement.name mustBe "DutyDefermentStatement"
+      FileFormat("PDF") mustBe Pdf
+      FileFormat("CSV") mustBe Csv
+      FileFormat("UNKNOWN FILE FORMAT") mustBe UnknownFileFormat
+      FileFormat("abc") mustBe UnknownFileFormat
+    }
+  }
+
+  "FileFormat.unapply" should {
+    "produce correct output" in new Setup {
+
+      FileFormat.unapply(Pdf).value mustBe "PDF"
+      FileFormat.unapply(Csv).value mustBe "CSV"
+      FileFormat.unapply(UnknownFileFormat).value mustBe "UNKNOWN FILE FORMAT"
+    }
+  }
+
+  "FileFormat.reads" should {
+    "create correct object" in {
+
+      JsString("Pdf").as[FileFormat] mustBe Pdf
+      JsString("PDF").as[FileFormat] mustBe Pdf
+      JsString("Csv").as[FileFormat] mustBe Csv
+      JsString("CSV").as[FileFormat] mustBe Csv
+    }
+  }
+
+  "FileFormat.writes" should {
+    "create correct object" in {
+
+      Json.toJson[FileFormat](Pdf) mustBe JsString("PDF")
+      Json.toJson[FileFormat](Csv) mustBe JsString("CSV")
+    }
+  }
+
+  "SecurityStatementFile.compare" should {
+    "correctly order" in new Setup {
+
+      securityStatementFile2 compare securityStatementFile1 mustBe 1
+      vatCertificateFile1 compare vatCertificateFile2 mustBe 0
+      cashStatementFile1 compare cashStatementFile2 mustBe 0
+      postponedVatStatementFile1 compare postponedVatStatementFile2 mustBe 0
 
       List(dutyDefermentFile1, dutyDefermentFile2, dutyDefermentFile3).sorted mustBe
         List(dutyDefermentFile2, dutyDefermentFile3, dutyDefermentFile1)
@@ -85,7 +126,7 @@ class SdesFileSpec extends SpecBase with Matchers {
     val size     = 10
     val fileSize = 12
 
-    val securityStatementFile1 = SecurityStatementFile(
+    val securityStatementFile1: SecurityStatementFile = SecurityStatementFile(
       "file1",
       "/download",
       size,
@@ -105,7 +146,7 @@ class SdesFileSpec extends SpecBase with Matchers {
       )
     )
 
-    val securityStatementFile2 = SecurityStatementFile(
+    val securityStatementFile2: SecurityStatementFile = SecurityStatementFile(
       "file2",
       "/download",
       size,
@@ -125,7 +166,7 @@ class SdesFileSpec extends SpecBase with Matchers {
       )
     )
 
-    val vatCertificateFile1 = VatCertificateFile(
+    val vatCertificateFile1: VatCertificateFile = VatCertificateFile(
       "file1",
       "/download",
       size,
@@ -133,7 +174,7 @@ class SdesFileSpec extends SpecBase with Matchers {
       "123456789"
     )
 
-    val vatCertificateFile2 = VatCertificateFile(
+    val vatCertificateFile2: VatCertificateFile = VatCertificateFile(
       "file1",
       "/download",
       size,
