@@ -17,38 +17,24 @@
 package models
 
 import base.SpecBase
-import helpers.Formatters
 import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary, UnknownStatementType}
 import models.FileFormat.{Pdf, UnknownFileFormat}
 import play.api.Application
 import play.api.i18n.Messages
-import play.api.test.Helpers
 
 import java.time.LocalDate
 
 class DutyDefermentStatementPeriodSpec extends SpecBase {
 
-  "DutyDefermentStatementPeriod" should {
+  "compare" should {
 
     "order correctly" in new Setup {
       dutyDefermentStatementPeriodExcise compare dutyDefermentStatementPeriodSupplementary mustBe -1
       dutyDefermentStatementPeriodExcise compare dutyDefermentStatementPeriodExcise2 mustBe 0
     }
+  }
 
-    "display the correct unavailable hidden link for Excise" in new Setup {
-      dutyDefermentStatementPeriodExcise.unavailableLinkHiddenText(Pdf)(Helpers.stubMessages()) mustBe
-        "cf.account.detail.missing-file-type-excise"
-    }
-
-    "display the correct unavailable hidden link for Supplementary" in new Setup {
-      dutyDefermentStatementPeriodSupplementary.unavailableLinkHiddenText(Pdf)(Helpers.stubMessages()) mustBe
-        "cf.account.detail.missing-file-type-supplementary"
-    }
-
-    "display the correct unavailable hidden link for missing file type" in new Setup {
-      dutyDefermentStatementPeriodUnknown.unavailableLinkHiddenText(Pdf)(Helpers.stubMessages()) mustBe
-        "cf.account.detail.missing-file-type"
-    }
+  "findStatementFileByFormat" should {
 
     "return all files for a given file format" in new Setup {
       dutyDefermentStatementPeriodExcise.findStatementFileByFormat(Pdf) mustBe Seq(ddFile1)
@@ -57,6 +43,7 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
   }
 
   "DutyDefermentStatementPeriodsByMonth" should {
+
     "provide the month and year correctly" in {
 
       val year  = 2019
@@ -73,34 +60,31 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
 
   "unavailableLinkHiddenText" should {
 
-    "return correct text for defermentStatementType" in new Setup {
-      val app: Application        = applicationBuilder().build()
-      implicit val msgs: Messages = messages(app)
+    "return correct text for ExciseDeferment" in new Setup {
+      dutyDefermentStatementPeriodExciseDeferment.unavailableLinkHiddenText(
+        Pdf
+      ) mustBe "Excise deferment 1920 summary PDF for November 2011 unavailable"
+    }
 
-      dutyDefermentStatementPeriodExciseDeferment.unavailableLinkHiddenText(Pdf) mustBe msgs(
-        "cf.account.detail.missing-file-type-excise-deferment",
-        Pdf,
-        Formatters.dateAsMonthAndYear(endDate)
-      )
+    "return correct text for DutyDeferment" in new Setup {
+      dutyDefermentStatementPeriodDutyDeferment.unavailableLinkHiddenText(
+        Pdf
+      ) mustBe "Duty deferment 1720 summary PDF for November 2011 unavailable"
+    }
 
-      dutyDefermentStatementPeriodDutyDeferment.unavailableLinkHiddenText(Pdf) mustBe msgs(
-        "cf.account.detail.missing-file-type-duty-deferment",
-        Pdf,
-        Formatters.dateAsMonthAndYear(endDate)
-      )
+    "return correct text for Excise" in new Setup {
+      dutyDefermentStatementPeriodExcise
+        .copy(endDate = endDate)
+        .unavailableLinkHiddenText(Pdf) mustBe "Excise summary PDF for November 2011 unavailable"
+    }
 
-      dutyDefermentStatementPeriodExcise.copy(endDate = endDate).unavailableLinkHiddenText(Pdf) mustBe msgs(
-        "cf.account.detail.missing-file-type-excise",
-        Pdf,
-        Formatters.dateAsMonthAndYear(endDate)
-      )
+    "return correct text for Supplementary" in new Setup {
+      dutyDefermentStatementPeriodSupplementary.unavailableLinkHiddenText(
+        Pdf
+      ) mustBe "Supplementary end of month PDF for November 2011 unavailable"
+    }
 
-      dutyDefermentStatementPeriodSupplementary.unavailableLinkHiddenText(Pdf) mustBe msgs(
-        "cf.account.detail.missing-file-type-supplementary",
-        Pdf,
-        Formatters.dateAsMonthAndYear(endDate)
-      )
-
+    "return correct text for UnknownStatementType" in new Setup {
       dutyDefermentStatementPeriodUnknown
         .copy(startDate = startDate, endDate = endDate)
         .unavailableLinkHiddenText(Pdf) mustBe "PDF for 10 to 27 November 2011 unavailable"
@@ -225,5 +209,8 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       endDate,
       Seq(ddFile1, ddFile2)
     )
+
+    val app: Application        = applicationBuilder().build()
+    implicit val msgs: Messages = messages(app)
   }
 }

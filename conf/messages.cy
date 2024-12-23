@@ -270,13 +270,13 @@ cf.error.unauthorized.message=Nid ydych wedi’ch awdurdodi i fwrw golwg dros y 
 cf.account.detail.download-link=Lawrlwytho {0} ar gyfer {1} i {2} ({3})
 cf.account.detail.supplementary-download-link=Lawrlwytho manylion diwedd mis atodol {0} ar gyfer {1} ({2})
 cf.account.detail.excise-download-link=Lawrlwytho crynodeb o’r ecséis {0} ar gyfer {1} ({2})
-cf.account.detail.excise-deferment-download-link=Lawrlwytho crynodeb o’r Gohiriad ecséis 1920 summary {0} for {1} ({2})
-cf.account.detail.duty-deferment-download-link=Lawrlwytho crynodeb o’r Gohiriad tollau 1720 summary {0} for {1} ({2})
+cf.account.detail.excise-deferment-download-link=Lawrlwytho crynodeb o’r Gohiriad ecséis 1920 {0} ar gyfer {1} ({2})
+cf.account.detail.duty-deferment-download-link=Lawrlwytho crynodeb o’r Gohiriad tollau 1720 {0} ar gyfer {1} ({2})
 
 cf.account.detail.missing-file-type-supplementary=Nid yw manylion diwedd mis atodol {0} ar gyfer {1} ar gael
 cf.account.detail.missing-file-type-excise=Nid yw’r crynodeb o’r ecséis {0} ar gyfer {1} ar gael
-cf.account.detail.missing-file-type-excise-deferment=Gohiriad ecséis 1920 crynodeb {0} for {1} ar gael
-cf.account.detail.missing-file-type-duty-deferment=Gohiriad tollau 1720 crynodeb {0} for {1} ar gael
+cf.account.detail.missing-file-type-excise-deferment=Gohiriad ecséis 1920 crynodeb {0} ar gyfer {1} ar gael
+cf.account.detail.missing-file-type-duty-deferment=Gohiriad tollau 1720 crynodeb {0} ar gyfer {1} ar gael
 cf.account.detail.missing-file-type=Nid yw {0} ar gyfer {1} i {2} ar gael
 cf.account.detail.unavailable=Nid yw ar gael
 
