@@ -28,30 +28,27 @@ class SdesFileViewModelsSpec extends SpecBase {
 
   "DutyDefermentStatementFileViewModel.downloadLinkAriaLabel" should {
 
-    "return correct label for different defermentStatementType" in new Setup {
-
-      val exciseViewModel = new DutyDefermentStatementFileViewModel(excise)
-
+    "return correct label for Excise DDStatementType" in new Setup {
       exciseViewModel.downloadLinkAriaLabel() mustBe "Download excise summary PDF for November 2021 (1KB)"
+    }
 
-      val supplementaryViewModel = new DutyDefermentStatementFileViewModel(supplementary)
-
+    "return correct label for Supplementary DDStatementType" in new Setup {
       supplementaryViewModel
         .downloadLinkAriaLabel() mustBe "Download supplementary end of month PDF for November 2021 (1KB)"
+    }
 
-      val unknownViewModel = new DutyDefermentStatementFileViewModel(unknown)
-
-      unknownViewModel.downloadLinkAriaLabel() mustBe "Download PDF for 27 to 27 November 2021 (1KB)"
-
-      val exciseDefermentViewModel = new DutyDefermentStatementFileViewModel(exciseDeferment)
-
+    "return correct label for ExciseDeferment DDStatementType" in new Setup {
       exciseDefermentViewModel
         .downloadLinkAriaLabel() mustBe "Download excise deferment 1920 summary PDF for November 2021 (1KB)"
+    }
 
-      val dutyDefermentViewModel = new DutyDefermentStatementFileViewModel(dutyDeferment)
-
+    "return correct label for DutyDeferment DDStatementType" in new Setup {
       dutyDefermentViewModel
         .downloadLinkAriaLabel() mustBe "Download duty deferment 1720 summary PDF for November 2021 (1KB)"
+    }
+
+    "return correct label for UnknownStatementType" in new Setup {
+      unknownViewModel.downloadLinkAriaLabel() mustBe "Download PDF for 27 to 27 November 2021 (1KB)"
     }
   }
 
@@ -81,19 +78,26 @@ class SdesFileViewModelsSpec extends SpecBase {
         "12345678"
       )
 
-    val excise: DutyDefermentStatementFile = DutyDefermentStatementFile(fileName, downloadUrl, size, metaData(Excise))
+    lazy val excise: DutyDefermentStatementFile =
+      DutyDefermentStatementFile(fileName, downloadUrl, size, metaData(Excise))
 
-    val supplementary: DutyDefermentStatementFile =
+    lazy val supplementary: DutyDefermentStatementFile =
       DutyDefermentStatementFile(fileName, downloadUrl, size, metaData(Supplementary))
 
-    val unknown: DutyDefermentStatementFile =
+    lazy val unknown: DutyDefermentStatementFile =
       DutyDefermentStatementFile(fileName, downloadUrl, size, metaData(UnknownStatementType))
 
-    val exciseDeferment: DutyDefermentStatementFile =
+    lazy val exciseDeferment: DutyDefermentStatementFile =
       DutyDefermentStatementFile(fileName, downloadUrl, size, metaData(ExciseDeferment))
 
-    val dutyDeferment: DutyDefermentStatementFile =
+    lazy val dutyDeferment: DutyDefermentStatementFile =
       DutyDefermentStatementFile(fileName, downloadUrl, size, metaData(DutyDeferment))
+
+    lazy val exciseViewModel          = new DutyDefermentStatementFileViewModel(excise)
+    lazy val supplementaryViewModel   = new DutyDefermentStatementFileViewModel(supplementary)
+    lazy val unknownViewModel         = new DutyDefermentStatementFileViewModel(unknown)
+    lazy val exciseDefermentViewModel = new DutyDefermentStatementFileViewModel(exciseDeferment)
+    lazy val dutyDefermentViewModel   = new DutyDefermentStatementFileViewModel(dutyDeferment)
 
     val app: Application        = applicationBuilder().build()
     implicit val msgs: Messages = messages(app)
