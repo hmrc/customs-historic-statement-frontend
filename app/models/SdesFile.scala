@@ -105,9 +105,9 @@ object DDStatementType extends Logging {
   def apply(name: String): DDStatementType = name match {
     case ExciseDeferment.name => ExciseDeferment
     case DutyDeferment.name   => DutyDeferment
-    case Weekly.name          => Weekly
-    case Supplementary.name   => Supplementary
     case Excise.name          => Excise
+    case Supplementary.name   => Supplementary
+    case Weekly.name          => Weekly
     case _                    =>
       logger.warn(s"Unknown duty deferment statement type: $name")
       UnknownStatementType
