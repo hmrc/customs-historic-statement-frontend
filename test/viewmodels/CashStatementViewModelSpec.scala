@@ -208,7 +208,7 @@ class CashStatementViewModelSpec extends SpecBase {
     "helpAndSupport" should {
 
       "generate the correct help and support content" in new Setup {
-        when(appConfig.cashAccountForCdsDeclarationsUrl)
+        when(mockAppConfig.cashAccountForCdsDeclarationsUrl)
           .thenReturn("https://www.gov.uk/guidance/use-a-cash-account-for-cds-declarations")
 
         val result: HtmlFormat.Appendable = CashStatementViewModel.helpAndSupport
@@ -223,6 +223,9 @@ class CashStatementViewModelSpec extends SpecBase {
   }
 
   trait Setup {
+
+    val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+
     val eoriNumber               = "EORI456"
     val startDateJuly: LocalDate = LocalDate.parse("2023-07-10")
     val endDateJuly: LocalDate   = LocalDate.parse("2023-07-20")
