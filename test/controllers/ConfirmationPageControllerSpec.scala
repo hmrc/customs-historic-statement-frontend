@@ -52,7 +52,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
             C79Certificate,
             routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url,
             "October 2019 to October 2019"
-          )(request, messages(app), appConfig).toString
+          )(request, messages, appConfig).toString
       }
     }
   }
@@ -98,7 +98,5 @@ class ConfirmationPageControllerSpec extends SpecBase {
       .build()
 
     val view: ConfirmationPageView   = app.injector.instanceOf[ConfirmationPageView]
-    val appConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
-
   }
 }

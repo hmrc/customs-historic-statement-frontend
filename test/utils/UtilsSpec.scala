@@ -60,11 +60,6 @@ class UtilsSpec extends SpecBase {
   }
 
   trait Setup {
-
-    val app: Application                   = applicationBuilder().build()
-    implicit val msg: Messages             = messages(app)
-    implicit val config: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
-
     val linkMessage: String = "go to test page"
     val href                = "www.test.com"
     val preLinkMessage      = "test_pre_link_message"

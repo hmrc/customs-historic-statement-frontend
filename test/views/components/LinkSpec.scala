@@ -82,15 +82,15 @@ class LinkSpec extends ViewTestHelper {
   private def shouldContainPreAndPostLinkMessages(preLinkMessage: String, postLinkMessage: String)(implicit
     view: Document
   ): Assertion = {
-    view.text().contains(msg(preLinkMessage)) mustBe true
-    view.text().contains(msg(postLinkMessage)) mustBe true
+    view.text().contains(messages(preLinkMessage)) mustBe true
+    view.text().contains(messages(postLinkMessage)) mustBe true
   }
 
   private def shouldNotContainPreAndPostLinkMessages(preLinkMessage: String, postLinkMessage: String)(implicit
     view: Document
   ): Assertion = {
-    view.text().contains(msg(preLinkMessage)) mustBe false
-    view.text().contains(msg(postLinkMessage)) mustBe false
+    view.text().contains(messages(preLinkMessage)) mustBe false
+    view.text().contains(messages(postLinkMessage)) mustBe false
   }
 
   private def shouldContainCorrectStyleClasses(
@@ -98,12 +98,12 @@ class LinkSpec extends ViewTestHelper {
     pClass: String = "govuk-body",
     linkMessage: String
   )(implicit view: Document): Assertion = {
-    view.getElementsByClass(linkClass).text() mustBe msg(linkMessage)
-    view.getElementsByClass(pClass).text().contains(msg(linkMessage)) mustBe true
+    view.getElementsByClass(linkClass).text() mustBe messages(linkMessage)
+    view.getElementsByClass(pClass).text().contains(messages(linkMessage)) mustBe true
   }
 
   private def shouldContainLinkSentence(linkMessage: String)(implicit view: Document): Assertion =
-    view.text().contains(s"${msg(linkMessage)}.") mustBe true
+    view.text().contains(s"${messages(linkMessage)}.") mustBe true
 
   trait Setup {
     val linkMessage    = "cf.undeliverable.email.change.text.p1"
@@ -125,7 +125,7 @@ class LinkSpec extends ViewTestHelper {
       pClass: String = "govuk-body"
     ): Document =
       Jsoup.parse(
-        app.injector
+        application.injector
           .instanceOf[link]
           .apply(
             linkMessage = linkMessage,

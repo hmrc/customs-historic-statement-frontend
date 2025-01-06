@@ -83,7 +83,7 @@ class SpanLinkSpec extends ViewTestHelper {
       id: Option[String] = None
     ): Document = {
 
-      val component = app.injector
+      val component = application.injector
         .instanceOf[span_link]
         .apply(
           msg = msgKey,

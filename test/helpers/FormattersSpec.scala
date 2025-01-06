@@ -60,16 +60,12 @@ class FormattersSpec extends SpecBase {
     }
 
     "display 'January to March' when given periodStartMonth and periodEndMonth" in new Setup {
-      private val res = periodAsStartToEndMonth(january, march)(msg)
+      private val res = periodAsStartToEndMonth(january, march)(messages)
 
       res mustBe "January to March"
     }
 
     trait Setup {
-
-      val app: Application       = applicationBuilder().build()
-      implicit val msg: Messages = messages(app)
-
       val belowKbThreshold = 100
       val kbValue          = 30567
       val mbValue          = 20567567

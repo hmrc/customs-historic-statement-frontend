@@ -97,10 +97,7 @@ class NewTabLinkSpec extends SpecBase {
     val postLinkMessage        = "test_post_link_message"
     val classes                = "govuk-!-margin-bottom-7"
     val defaultClasses: String = "govuk-body"
-
-    implicit val msg: Messages             = messages(app)
-    implicit val config: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
-
+    
     def newTabLinkComponent(
       linkMessage: String,
       href: String,
@@ -109,7 +106,7 @@ class NewTabLinkSpec extends SpecBase {
       classes: String = defaultClasses
     ): Document =
       Jsoup.parse(
-        app.injector.instanceOf[newTabLink].apply(linkMessage, href, preLinkMessage, postLinkMessage, classes).body
+        application.injector.instanceOf[newTabLink].apply(linkMessage, href, preLinkMessage, postLinkMessage, classes).body
       )
 
   }

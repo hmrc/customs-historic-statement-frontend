@@ -224,10 +224,6 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
 }
 
 trait SpecBaseWithSetup extends SpecBase {
-
-  val app: Application            = applicationBuilder().build()
-  implicit val messages: Messages = messages(app)
-
   val pdfLink: PdfLink = PdfLink("file.pdf", "1MB", "Download PDF")
   val eoriNumber       = "EORI456"
 

@@ -30,7 +30,7 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
   "view" should {
     "display correct title and contents" in new Setup {
       titleShouldBeCorrect(view, "cf.import-vat.requested.title")
-      pageShouldContainBackLinkUrl(view, config.returnLink("c79Certificate"))
+      pageShouldContainBackLinkUrl(view, appConfig.returnLink("c79Certificate"))
       headingShouldBeCorrect
       requestedAvailableTextShouldBeCorrect
     }
@@ -41,7 +41,7 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("requested-import-vat-certificates-heading")
       .html()
       .contains(
-        msg("cf.import-vat.requested.title")
+        messages("cf.import-vat.requested.title")
       ) mustBe true
 
   private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion =
@@ -49,7 +49,7 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("available-text")
       .html()
       .contains(
-        msg("cf.import-vat.requested.available.text")
+        messages("cf.import-vat.requested.available.text")
       ) mustBe true
 
   trait Setup {
@@ -102,14 +102,13 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
     private val vatViewModel = VatViewModel(Seq(vatCertificatesForEori))
 
     implicit val view: Document = Jsoup.parse(
-      app.injector
+      application.injector
         .instanceOf[ImportVatRequestedStatements]
         .apply(
           vatViewModel,
-          config.returnLink("c79Certificate")
+          appConfig.returnLink("c79Certificate")
         )
         .body
     )
   }
-
 }

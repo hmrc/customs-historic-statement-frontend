@@ -209,8 +209,5 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       endDate,
       Seq(ddFile1, ddFile2)
     )
-
-    val app: Application        = applicationBuilder().build()
-    implicit val msgs: Messages = messages(app)
   }
 }

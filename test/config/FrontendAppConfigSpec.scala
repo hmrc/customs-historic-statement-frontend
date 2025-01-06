@@ -25,94 +25,89 @@ import play.api.Application
 class FrontendAppConfigSpec extends SpecBase {
 
   "FrontendAppConfig" should {
-    "contain correct values for the provided configuration" in new Setup {
-      config.cashAccountForCdsDeclarationsUrl mustBe
+    "contain correct values for the provided configuration" in {
+      appConfig.cashAccountForCdsDeclarationsUrl mustBe
         "https://www.gov.uk/guidance/use-a-cash-account-for-cds-declarations"
     }
   }
 
   "sdesCashStatementListUrl" should {
-    "return correct sdes url" in new Setup {
-      config.sdesCashStatementListUrl mustBe
+    "return correct sdes url" in {
+      appConfig.sdesCashStatementListUrl mustBe
         "http://localhost:9754/customs-financials-sdes-stub/files-available/list/CDSCashAccount"
     }
   }
 
   "returnLink" should {
-    "return the adjustments link if a SecurityStatement FileRole provided" in new Setup {
-      config.returnLink(SecurityStatement, emptyUserAnswers) mustBe
+    "return the adjustments link if a SecurityStatement FileRole provided" in {
+      appConfig.returnLink(SecurityStatement, emptyUserAnswers) mustBe
         "http://localhost:9398/customs/documents/adjustments"
     }
 
-    "return the adjustments link if a C79Certificate FileRole provided" in new Setup {
-      config.returnLink(C79Certificate, emptyUserAnswers) mustBe
+    "return the adjustments link if a C79Certificate FileRole provided" in {
+      appConfig.returnLink(C79Certificate, emptyUserAnswers) mustBe
         "http://localhost:9398/customs/documents/import-vat"
     }
 
-    "return the cash account link if a CDSCashAccount FileRole and User Answers provided" in new Setup {
-      config.returnLink(CDSCashAccount, emptyUserAnswers) mustBe
+    "return the cash account link if a CDSCashAccount FileRole and User Answers provided" in {
+      appConfig.returnLink(CDSCashAccount, emptyUserAnswers) mustBe
         "http://localhost:9394/customs/cash-account"
     }
 
-    "return the DutyDeferment link if a DutyDeferment FileRole provided and linkId in user answers" in new Setup {
-      config.returnLink(DutyDefermentStatement, emptyUserAnswers.set(RequestedLinkId, "someLink").success.value) mustBe
+    "return the DutyDeferment link if a DutyDeferment FileRole provided and linkId in user answers" in {
+      appConfig.returnLink(DutyDefermentStatement, emptyUserAnswers.set(RequestedLinkId, "someLink").success.value) mustBe
         "http://localhost:9397/customs/duty-deferment/someLink/account"
     }
 
-    "return the cash account link if a CDSCashAccount FileRole provided" in new Setup {
-      config.returnLink(CDSCashAccount) mustBe
+    "return the cash account link if a CDSCashAccount FileRole provided" in {
+      appConfig.returnLink(CDSCashAccount) mustBe
         "http://localhost:9394/customs/cash-account"
     }
 
-    "throw an exception if DutyDeferment FileRole and no linkId in user answers" in new Setup {
+    "throw an exception if DutyDeferment FileRole and no linkId in user answers" in {
       intercept[Exception] {
-        config.returnLink(DutyDefermentStatement, emptyUserAnswers) mustBe
+        appConfig.returnLink(DutyDefermentStatement, emptyUserAnswers) mustBe
           "http://localhost:9398/customs/documents/import-vat"
       }.getMessage mustBe "Unable to retrieve linkId"
     }
 
-    "throw an exception if DutyDeferment fileRole is passed " in new Setup {
+    "throw an exception if DutyDeferment fileRole is passed " in {
       intercept[Exception] {
-        config.returnLink(DutyDefermentStatement) mustBe "http://localhost:9398/customs/documents/import-vat"
+        appConfig.returnLink(DutyDefermentStatement) mustBe "http://localhost:9398/customs/documents/import-vat"
       }.getMessage mustBe "Invalid file role"
     }
   }
 
   "feedbackService" should {
-    "return correct url" in new Setup {
-      config.feedbackService mustBe "http://localhost:9514/feedback/CDS-FIN"
+    "return correct url" in {
+      appConfig.feedbackService mustBe "http://localhost:9514/feedback/CDS-FIN"
     }
   }
 
   "deleteNotificationUrl" should {
-    "return correct url for cash account FileRole" in new Setup {
-      config.deleteNotificationUrl(CDSCashAccount, "GB123456789000") mustBe
+    "return correct url for cash account FileRole" in {
+      appConfig.deleteNotificationUrl(CDSCashAccount, "GB123456789000") mustBe
         "http://localhost:9878/customs-financials-api/eori/GB123456789000/notifications/CDSCashAccount"
     }
 
-    "return correct url for C79 certificate FileRole" in new Setup {
-      config.deleteNotificationUrl(C79Certificate, "GB123456789000") mustBe
+    "return correct url for C79 certificate FileRole" in {
+      appConfig.deleteNotificationUrl(C79Certificate, "GB123456789000") mustBe
         "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/C79Certificate"
     }
 
-    "return correct url for Duty deferment statement FileRole" in new Setup {
-      config.deleteNotificationUrl(DutyDefermentStatement, "GB123456789000") mustBe
+    "return correct url for Duty deferment statement FileRole" in {
+      appConfig.deleteNotificationUrl(DutyDefermentStatement, "GB123456789000") mustBe
         "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/DutyDefermentStatement"
     }
 
-    "return correct url for Postponed VAT Statement FileRole" in new Setup {
-      config.deleteNotificationUrl(PostponedVATStatement, "GB123456789000") mustBe
+    "return correct url for Postponed VAT Statement FileRole" in {
+      appConfig.deleteNotificationUrl(PostponedVATStatement, "GB123456789000") mustBe
         "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/PostponedVATStatement"
     }
 
-    "return correct url for Security statement FileRole" in new Setup {
-      config.deleteNotificationUrl(SecurityStatement, "GB123456789000") mustBe
+    "return correct url for Security statement FileRole" in {
+      appConfig.deleteNotificationUrl(SecurityStatement, "GB123456789000") mustBe
         "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/SecurityStatement"
     }
-  }
-
-  trait Setup {
-    val app: Application          = applicationBuilder().build()
-    val config: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
   }
 }

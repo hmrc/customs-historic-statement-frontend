@@ -39,7 +39,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
         implicit val viewDoc: Document = view(isNiAccount = true)
 
         titleShouldBeCorrect(viewDoc, "cf.account.detail.requested.title")
-        pageShouldContainBackLinkUrl(viewDoc, config.returnLink("dutyDeferment"))
+        pageShouldContainBackLinkUrl(viewDoc, appConfig.returnLink("dutyDeferment"))
         shouldContainNiAccountNumber(viewDoc)
         headingShouldBeCorrect(viewDoc)
         subHeadingShouldBeCorrect(viewDoc)
@@ -51,7 +51,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
         implicit val viewDoc: Document = view()
 
         titleShouldBeCorrect(viewDoc, "cf.account.detail.requested.title")
-        pageShouldContainBackLinkUrl(viewDoc, config.returnLink("dutyDeferment"))
+        pageShouldContainBackLinkUrl(viewDoc, appConfig.returnLink("dutyDeferment"))
         shouldContainAccountNumber(viewDoc)
         headingShouldBeCorrect(viewDoc)
         subHeadingShouldBeCorrect(viewDoc)
@@ -100,7 +100,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
         val expectedHtml: String          = h2Component(
           id = Some("historic-eori-0"),
           classes = "govuk-heading-s",
-          msg = msg("cf.account.details.previous-eori", "12345678")
+          msg = messages("cf.account.details.previous-eori", "12345678")
         ).toString()
 
         result.toString mustEqual expectedHtml
@@ -121,9 +121,9 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
         val result: HtmlFormat.Appendable     = viewModel.component.statements
         val expectedPeriodDetailsHtml: String = statementRowContent.period.defermentStatementType match {
-          case Supplementary => msg("cf.account.detail.row.supplementary.info")
-          case Excise        => msg("cf.account.details.row.excise.info")
-          case _             => msg("cf.account.detail.period-group")
+          case Supplementary => messages("cf.account.detail.row.supplementary.info")
+          case Excise        => messages("cf.account.details.row.excise.info")
+          case _             => messages("cf.account.detail.period-group")
         }
 
         val rowId = s"${statement.historyIndex}-${statement.group.year}-${statement.group.month}-row-$statementIndex"
@@ -164,16 +164,16 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
           basePeriod.copy(fileRole = C79Certificate, defermentStatementType = Supplementary)
 
         val supplementaryResult: HtmlFormat.Appendable = renderStatement
-        val supplementaryMessage: String               = msg("cf.account.detail.row.supplementary.info")
+        val supplementaryMessage: String               = messages("cf.account.detail.row.supplementary.info")
         supplementaryResult.body must include(supplementaryMessage)
 
         val excisePeriod: DutyDefermentStatementPeriod = basePeriod.copy(defermentStatementType = Excise)
         val exciseResult: HtmlFormat.Appendable        = renderStatement
-        val exciseMessage: String                      = msg("cf.account.details.row.excise.info")
+        val exciseMessage: String                      = messages("cf.account.details.row.excise.info")
         exciseResult.body must include(exciseMessage)
 
         val result: HtmlFormat.Appendable = renderStatement
-        val expectedMessage: String       = msg(
+        val expectedMessage: String       = messages(
           "cf.account.detail.period-group",
           Formatters.dateAsDay(basePeriod.startDate),
           Formatters.dateAsDay(basePeriod.endDate),
@@ -189,7 +189,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("eori-heading")
       .html()
       .contains(
-        msg("cf.account.detail.requested.deferment-account-secondary-heading")
+        messages("cf.account.detail.requested.deferment-account-secondary-heading")
       ) mustBe true
 
   private def shouldContainNiAccountNumber(implicit view: Document): Assertion =
@@ -197,7 +197,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("eori-heading")
       .html()
       .contains(
-        msg("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
+        messages("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
       ) mustBe true
 
   private def headingShouldBeCorrect(implicit view: Document): Assertion =
@@ -205,7 +205,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("requested-statements-heading")
       .html()
       .contains(
-        msg("cf.account.detail.requested.deferment-account-heading")
+        messages("cf.account.detail.requested.deferment-account-heading")
       ) mustBe true
 
   private def subHeadingShouldBeCorrect(implicit view: Document): Assertion =
@@ -213,7 +213,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("requested-statements-available-text")
       .html()
       .contains(
-        msg("cf.account.detail.requested.deferment-account-statements-available.text")
+        messages("cf.account.detail.requested.deferment-account-statements-available.text")
       ) mustBe true
 
   private def eoriNumberShouldBeCorrect(implicit view: Document): Assertion =
@@ -221,7 +221,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("historic-eori-0")
       .html()
       .contains(
-        msg("cf.account.details.previous-eori", "12345678")
+        messages("cf.account.details.previous-eori", "12345678")
       ) mustBe true
 
   trait Setup {
@@ -327,9 +327,9 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       DutyDefermentAccountViewModel("accountNumber", Seq(dutyDefermentStatementsForEori), isNiAccount = isNiAccount)
 
     protected def view(isNiAccount: Boolean = false): Document = Jsoup.parse(
-      app.injector
+      application.injector
         .instanceOf[DutyDefermentRequestedStatements]
-        .apply(dutyDefermentModel(isNiAccount), config.returnLink("dutyDeferment"))
+        .apply(dutyDefermentModel(isNiAccount), appConfig.returnLink("dutyDeferment"))
         .body
     )
 

@@ -43,7 +43,8 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
 
         shouldContainSecondaryHeading(
           view = viewDoc,
-          accountNumberText = s"${msg("cf.account.detail.requested.deferment-account-secondary-heading")} accountNumber"
+          accountNumberText =
+            s"${messages("cf.account.detail.requested.deferment-account-secondary-heading")} accountNumber"
         )
       }
 
@@ -53,7 +54,7 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
 
         shouldContainSecondaryHeading(
           view = viewDoc,
-          accountNumberText = msg("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
+          accountNumberText = messages("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
         )
       }
     }
@@ -68,7 +69,7 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
   private def shouldContainChangeLink(implicit view: Document): Assertion = {
     val visuallyHiddenLinks = view.getElementsByClass("govuk-summary-list__actions")
 
-    visuallyHiddenLinks.html().contains(msg("site.change")) mustBe true
+    visuallyHiddenLinks.html().contains(messages("site.change")) mustBe true
 
     view
       .getElementsByClass("govuk-summary-list__actions")
@@ -77,7 +78,7 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
   }
 
   private def shouldContainConfirmAndSendButton(implicit view: Document): Assertion =
-    view.getElementsByClass("govuk-button").html().contains(msg("site.continue")) mustBe true
+    view.getElementsByClass("govuk-button").html().contains(messages("site.continue")) mustBe true
 
   trait Setup {
 
@@ -88,7 +89,7 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
 
     def view(fileRole: FileRole = C79Certificate, niIndicator: Option[Boolean] = Some(false)): Document =
       Jsoup.parse(
-        app.injector
+        application.injector
           .instanceOf[CheckYourAnswersView]
           .apply(
             helper = cyaHelper,

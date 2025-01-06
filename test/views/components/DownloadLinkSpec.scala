@@ -84,7 +84,7 @@ class DownloadLinkSpec extends ViewTestHelper {
     val spanElements = view.getElementsByTag("span")
     spanElements.get(0).text mustBe s"${fileFormat.name} (${Formatters.fileSize(size)})"
 
-    spanElements.get(1).text mustBe msg(
+    spanElements.get(1).text mustBe messages(
       "cf.cash-statement-requested.download-link",
       fileFormat,
       period,
@@ -100,8 +100,8 @@ class DownloadLinkSpec extends ViewTestHelper {
   )(implicit view: Document): Assertion = {
     val spanElements = view.getElementById("missing-file-testId").getElementsByTag("span")
 
-    spanElements.get(0).text mustBe msg(hiddenTextKey, fileFormat, period)
-    spanElements.get(1).text mustBe msg(missingFileKey)
+    spanElements.get(0).text mustBe messages(hiddenTextKey, fileFormat, period)
+    spanElements.get(1).text mustBe messages(missingFileKey)
   }
 
   trait Setup {
@@ -146,9 +146,9 @@ class DownloadLinkSpec extends ViewTestHelper {
     val period = "periodDuration"
 
     def viewVat(vatCertificateFile: Option[VatCertificateFile] = None): Document =
-      Jsoup.parse(app.injector.instanceOf[download_link].apply(vatCertificateFile, Pdf, id, period).body)
+      Jsoup.parse(application.injector.instanceOf[download_link].apply(vatCertificateFile, Pdf, id, period).body)
 
     def viewCash(cashStatementFile: Option[CashStatementFile] = None): Document =
-      Jsoup.parse(app.injector.instanceOf[download_link_cash_account].apply(cashStatementFile, Csv, id, period).body)
+      Jsoup.parse(application.injector.instanceOf[download_link_cash_account].apply(cashStatementFile, Csv, id, period).body)
   }
 }

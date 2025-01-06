@@ -32,7 +32,7 @@ class CashStatementViewSpec extends ViewTestHelper {
 
     "display correct title and contents" in new Setup {
       titleShouldBeCorrect(view, "cf.cash-statement-requested-heading")
-      pageShouldContainBackLinkUrl(view, config.returnLink(CDSCashAccount))
+      pageShouldContainBackLinkUrl(view, appConfig.returnLink(CDSCashAccount))
       headingShouldBeCorrect
       requestedParagraphTextShouldBeCorrect
       requestedListParagraphTextShouldBeCorrect
@@ -44,25 +44,25 @@ class CashStatementViewSpec extends ViewTestHelper {
     view
       .getElementById("search-transactions-support-message-heading")
       .html()
-      .contains(msg("site.support.heading")) mustBe true
+      .contains(messages("site.support.heading")) mustBe true
 
   private def headingShouldBeCorrect(implicit view: Document): Assertion =
     view
       .getElementById("requested-cash-statement-heading")
       .html()
-      .contains(msg("cf.cash-statement-requested-heading")) mustBe true
+      .contains(messages("cf.cash-statement-requested-heading")) mustBe true
 
   private def requestedParagraphTextShouldBeCorrect(implicit view: Document): Assertion =
     view
       .getElementById("requested-cash-statement-paragraph")
       .html()
-      .contains(msg("cf.cash-statement-requested-paragraph")) mustBe true
+      .contains(messages("cf.cash-statement-requested-paragraph")) mustBe true
 
   private def requestedListParagraphTextShouldBeCorrect(implicit view: Document): Assertion =
     view
       .getElementById("requested-cash-statement-list-paragraph")
       .html()
-      .contains(msg("cf.cash-statement-requested-list-paragraph")) mustBe true
+      .contains(messages("cf.cash-statement-requested-list-paragraph")) mustBe true
 
   trait Setup {
 
@@ -110,7 +110,10 @@ class CashStatementViewSpec extends ViewTestHelper {
     val cashStatementViewModel: CashStatementViewModel = CashStatementViewModel(Seq(cashStatementsForEori))
 
     implicit val view: Document = Jsoup.parse(
-      app.injector.instanceOf[CashStatementView].apply(cashStatementViewModel, config.returnLink(CDSCashAccount)).body
+      application.injector
+        .instanceOf[CashStatementView]
+        .apply(cashStatementViewModel, appConfig.returnLink(CDSCashAccount))
+        .body
     )
   }
 }

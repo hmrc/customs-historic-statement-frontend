@@ -39,7 +39,7 @@ class LayoutSpec extends SpecBase {
         val linkUrl = "test.com"
 
         val layoutView: Document = Jsoup.parse(
-          app.injector
+          application.injector
             .instanceOf[Layout]
             .apply(
               pageTitle = Some(title),
@@ -55,7 +55,7 @@ class LayoutSpec extends SpecBase {
       }
 
       "there is no value for title and back link" in new Setup {
-        val layoutView: Document = Jsoup.parse(app.injector.instanceOf[Layout].apply()(content).body)
+        val layoutView: Document = Jsoup.parse(application.injector.instanceOf[Layout].apply()(content).body)
 
         shouldContainCorrectTitle(layoutView)
         shouldContainCorrectServiceUrls(layoutView)
@@ -96,11 +96,8 @@ class LayoutSpec extends SpecBase {
       .text() mustBe "BETA This is a new service - your feedback will help us to improve it."
 
   trait Setup {
-    val app: Application = applicationBuilder().build()
-
-    implicit val msgs: Messages                               = messages(app)
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
-    implicit val appConfig: FrontendAppConfig                 = app.injector.instanceOf[FrontendAppConfig]
+    implicit val appConfig: FrontendAppConfig                 = application.injector.instanceOf[FrontendAppConfig]
 
     val content: Html = Html("test")
   }

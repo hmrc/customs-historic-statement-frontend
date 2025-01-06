@@ -58,19 +58,15 @@ class CheckYourAnswersHelperSpec extends SpecBase {
 
   "dateRows" should {
     "return correct date range string for C79Certificate file role" in new Setup {
-      helperOb.dateRows(c79FileRole) mustBe Some(messages(app)("date.range", "October 2019", "October 2019"))
+      helperOb.dateRows(c79FileRole) mustBe Some(messages("date.range", "October 2019", "October 2019"))
     }
   }
 
   trait Setup {
-
     val c79FileRole: FileRole      = C79Certificate
     val dutyFileRole: FileRole     = DutyDefermentStatement
     val securityFileRole: FileRole = SecurityStatement
     val postFileRole: FileRole     = PostponedVATStatement
-
-    val app: Application        = applicationBuilder(userAnswers = Some(populatedUserAnswers)).build()
-    implicit val msgs: Messages = messages(app)
     val helperOb                = new CheckYourAnswersHelper(populatedUserAnswers)
   }
 }

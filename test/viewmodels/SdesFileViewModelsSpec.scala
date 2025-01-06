@@ -98,8 +98,5 @@ class SdesFileViewModelsSpec extends SpecBase {
     lazy val unknownViewModel         = new DutyDefermentStatementFileViewModel(unknown)
     lazy val exciseDefermentViewModel = new DutyDefermentStatementFileViewModel(exciseDeferment)
     lazy val dutyDefermentViewModel   = new DutyDefermentStatementFileViewModel(dutyDeferment)
-
-    val app: Application        = applicationBuilder().build()
-    implicit val msgs: Messages = messages(app)
   }
 }

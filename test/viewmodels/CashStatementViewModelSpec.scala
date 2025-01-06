@@ -148,7 +148,7 @@ class CashStatementViewModelSpec extends SpecBase {
       val document: Document = Jsoup.parse(result.body)
 
       private val rowsByMonth               = document.select("div[id^=requested-statements-list-0-row-]")
-      private val julyStartMonthRow1        = rowsByMonth.asScala(0)
+      private val julyStartMonthRow1        = rowsByMonth.asScala.head
       private val julyStartMonthRow2        = rowsByMonth.asScala(1)
       private val augustStartMonthRow1      = rowsByMonth.asScala(2)
       private val augustStartMonthRow2      = rowsByMonth.asScala(3)
@@ -161,7 +161,7 @@ class CashStatementViewModelSpec extends SpecBase {
       julyStartMonthRow2.select("dt").first.ownText mustBe "July to August"
       augustStartMonthRow1.select("dt").first.ownText mustBe "August to August"
       augustStartMonthRow2.select("dt").first.ownText mustBe "August to October"
-      augustStartMonthRow1Links.eachText.asScala(0) mustBe "PDF (2.0MB) Download PDF of August to August (2.0MB)"
+      augustStartMonthRow1Links.eachText.asScala.head mustBe "PDF (2.0MB) Download PDF of August to August (2.0MB)"
       augustStartMonthRow1Links.eachText.asScala(1) mustBe "CSV (1.0MB) Download CSV of August to August (1.0MB)"
       csvLinks.size mustBe 4
       pdfLinks.size mustBe 1
@@ -213,21 +213,16 @@ class CashStatementViewModelSpec extends SpecBase {
 
         val result: HtmlFormat.Appendable = CashStatementViewModel.helpAndSupport
 
-        result.body must include(msg("search-transactions-support-message-heading"))
-        result.body must include(msg("cf.help-and-support.link.text"))
-        result.body must include(msg("cf.help-and-support.link.text.pre"))
-        result.body must include(msg("cf.help-and-support.link.text.post"))
+        result.body must include(messages("search-transactions-support-message-heading"))
+        result.body must include(messages("cf.help-and-support.link.text"))
+        result.body must include(messages("cf.help-and-support.link.text.pre"))
+        result.body must include(messages("cf.help-and-support.link.text.post"))
         result.body must include(appConfig.cashAccountForCdsDeclarationsUrl)
       }
     }
   }
 
   trait Setup {
-
-    val app: Application                      = applicationBuilder().build()
-    implicit val msg: Messages                = messages(app)
-    implicit val appConfig: FrontendAppConfig = mock[FrontendAppConfig]
-
     val eoriNumber               = "EORI456"
     val startDateJuly: LocalDate = LocalDate.parse("2023-07-10")
     val endDateJuly: LocalDate   = LocalDate.parse("2023-07-20")

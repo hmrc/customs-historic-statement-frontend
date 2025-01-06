@@ -35,7 +35,7 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
   "view" should {
     "display correct title and contents" in new Setup {
       titleShouldBeCorrect(view, "cf.import-postponed-vat.requested.title")
-      pageShouldContainBackLinkUrl(view, config.returnLink("postponedVATStatement"))
+      pageShouldContainBackLinkUrl(view, appConfig.returnLink("postponedVATStatement"))
       headingShouldBeCorrect
       requestedAvailableTextShouldBeCorrect
     }
@@ -60,7 +60,7 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     }
 
     "correctly handle missing files" in new Setup {
-      statementData.statementItem.body must include(msg("cf.account.postponed-vat.missing-file-type", "CHIEF"))
+      statementData.statementItem.body must include(messages("cf.account.postponed-vat.missing-file-type", "CHIEF"))
     }
   }
 
@@ -79,7 +79,7 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("requested-import-postponed-vat-statements-heading")
       .html()
       .contains(
-        msg("cf.import-postponed-vat.requested.title")
+        messages("cf.import-postponed-vat.requested.title")
       ) mustBe true
 
   private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion =
@@ -87,13 +87,10 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("available-text")
       .html()
       .contains(
-        msg("cf.import-postponed-vat.requested.available.text")
+        messages("cf.import-postponed-vat.requested.available.text")
       ) mustBe true
 
   trait Setup {
-
-    val app: Application       = applicationBuilder().build()
-    implicit val msg: Messages = messages(app)
 
     private val someEori        = "12345678"
     private val localDateYear   = 2020
@@ -165,9 +162,9 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
       PostponedVatViewModel(Seq(postponedVatStatementsForEori))
 
     implicit val view: Document = Jsoup.parse(
-      app.injector
+      application.injector
         .instanceOf[ImportPostponedVatRequestedStatements]
-        .apply(postponedVatViewModel, config.returnLink("postponedVATStatement"))
+        .apply(postponedVatViewModel, appConfig.returnLink("postponedVATStatement"))
         .body
     )
 

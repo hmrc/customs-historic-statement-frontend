@@ -27,7 +27,6 @@ import repositories.SessionRepository
 import utils.Utils.emptyString
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
-import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 
@@ -467,9 +466,9 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
             status(result) mustBe BAD_REQUEST
 
             val errorMsg = if (fileRole == C79Certificate) {
-              msgs("cf.historic.document.request.form.error.date-range-too-wide.c79")
+              messages("cf.historic.document.request.form.error.date-range-too-wide.c79")
             } else {
-              msgs("cf.historic.document.request.form.error.date-range-too-wide")
+              messages("cf.historic.document.request.form.error.date-range-too-wide")
             }
 
             contentAsString(result).contains(errorMsg) mustBe true
@@ -495,7 +494,5 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         inject.bind[FrontendAppConfig].toInstance(mockConfig)
       )
       .build()
-
-    val msgs: Messages = messages(app)
   }
 }

@@ -32,7 +32,7 @@ class ErrorHandlerSpec extends SpecBase {
 
     "display template with correct contents" in new Setup {
 
-      val errorTemplateView: ErrorTemplate = app.injector.instanceOf[ErrorTemplate]
+      val errorTemplateView: ErrorTemplate = application.injector.instanceOf[ErrorTemplate]
 
       errorHandler.standardErrorTemplate(title, heading, message).map { errorTemplate =>
         errorTemplate mustBe errorTemplateView(title, heading, message)
@@ -48,7 +48,7 @@ class ErrorHandlerSpec extends SpecBase {
 
     "display template with correct contents" in new Setup {
 
-      val notFoundView: not_found = app.injector.instanceOf[not_found]
+      val notFoundView: not_found = application.injector.instanceOf[not_found]
 
       errorHandler.notFoundTemplate.map { notFoundTemplate =>
         notFoundTemplate.toString mustBe notFoundView.apply().body
@@ -60,26 +60,22 @@ class ErrorHandlerSpec extends SpecBase {
 
     "display template with correct contents" in new Setup {
 
-      val errorTemplateView: ErrorTemplate = app.injector.instanceOf[ErrorTemplate]
+      val errorTemplateView: ErrorTemplate = application.injector.instanceOf[ErrorTemplate]
 
       errorHandler.unauthorized() mustBe
         errorTemplateView.apply(
-          msgs("cf.error.unauthorized.title"),
-          msgs("cf.error.unauthorized.heading"),
-          msgs("cf.error.unauthorized.message")
+          messages("cf.error.unauthorized.title"),
+          messages("cf.error.unauthorized.heading"),
+          messages("cf.error.unauthorized.message")
         )
     }
   }
 
   trait Setup {
-    val app: Application = applicationBuilder().build()
-
     implicit val ec: scala.concurrent.ExecutionContext        = scala.concurrent.ExecutionContext.global
-    implicit val appConfig: FrontendAppConfig                 = app.injector.instanceOf[FrontendAppConfig]
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
-    implicit val msgs: Messages                               = messages(app)
 
-    val errorHandler: ErrorHandler = app.injector.instanceOf[ErrorHandler]
+    val errorHandler: ErrorHandler = application.injector.instanceOf[ErrorHandler]
     val title                      = "test_title"
     val heading                    = "test_heading"
     val message                    = "test_msg"

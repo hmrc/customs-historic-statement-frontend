@@ -47,7 +47,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
       ddAccountComponent.eoriHeading mustBe h2Component(
         id = Some(s"historic-eori-0"),
         classes = "govuk-heading-s",
-        msg = msgs("cf.account.details.previous-eori", eori)
+        msg = messages("cf.account.details.previous-eori", eori)
       )
     }
 
@@ -106,9 +106,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     private val periodEndMonth            = 2
     private val periodEndDay              = 8
     private val dutyPaymentType           = "BACS"
-
-    val app: Application        = applicationBuilder().build()
-    implicit val msgs: Messages = messages(app)
 
     val ddFile1: DutyDefermentStatementFile = DutyDefermentStatementFile(
       s"12345678.123",
