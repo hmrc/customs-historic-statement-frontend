@@ -77,10 +77,10 @@ trait SpecBase
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
 
-  val application: Application = applicationBuilder().build()
+  lazy val application: Application = applicationBuilder().build()
 
-  implicit val appConfig: FrontendAppConfig = application.injector.instanceOf[FrontendAppConfig]
+  implicit lazy val appConfig: FrontendAppConfig = application.injector.instanceOf[FrontendAppConfig]
 
-  implicit val messages: Messages =
+  implicit lazy val messages: Messages =
     application.injector.instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
 }
