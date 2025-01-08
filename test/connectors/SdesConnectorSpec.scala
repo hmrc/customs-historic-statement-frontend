@@ -758,13 +758,13 @@ class SdesConnectorSpec extends SpecBase {
     val mockHttp: HttpClientV2         = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
 
-    val app                        = applicationBuilder()
+    val app           = applicationBuilder()
       .overrides(
         bind[HttpClientV2].toInstance(mockHttp),
         bind[RequestBuilder].toInstance(requestBuilder)
       )
       .build()
-    val mockAppConfig              = app.injector.instanceOf[FrontendAppConfig]
-    val sdesConnector              = app.injector.instanceOf[SdesConnector]
+    val mockAppConfig = app.injector.instanceOf[FrontendAppConfig]
+    val sdesConnector = app.injector.instanceOf[SdesConnector]
   }
 }
