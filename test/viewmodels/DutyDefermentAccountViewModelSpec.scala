@@ -68,11 +68,11 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
 
       statementsString must include("<dl  class=govuk-summary-list>")
       statementsString must include(
-        "<div id=requested-statements-list-0-2024-12-row-0 class=govuk-summary-list__row>"
+        "<div id=requested-statements-list-0-2025-1-row-0 class=govuk-summary-list__row>"
       )
 
       statementsString must include(
-        "<dt id=requested-statements-list-0-2024-12-row-0-date-cell class=govuk-summary-list__value>Duty deferment 1720</dt>"
+        "<dt id=requested-statements-list-0-2025-1-row-0-date-cell class=govuk-summary-list__value>Duty deferment 1720</dt>"
       )
     }
 
