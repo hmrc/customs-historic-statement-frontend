@@ -92,7 +92,7 @@ class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
 }
 
 trait SetUpWithSpecBase extends SpecBase {
-  val returnUrl        = "http://localhost:9398/customs/documents/adjustments"
+  val returnUrl = "http://localhost:9398/customs/documents/adjustments"
 
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest()
 
@@ -127,6 +127,6 @@ trait SetUpWithSpecBase extends SpecBase {
       case CDSCashAccount         => messages("cf.historic.document.request.date.CashStatement.hint")
     }
 
-  val endDateText: String = messages ("cf.historic.document.request.to")
-  val endDateHint: String = messages ("cf.historic.document.request.endDate.hint")
+  val endDateText: String = messages("cf.historic.document.request.to")
+  val endDateHint: String = messages("cf.historic.document.request.endDate.hint")
 }

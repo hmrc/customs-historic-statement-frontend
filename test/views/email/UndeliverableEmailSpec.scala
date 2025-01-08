@@ -44,7 +44,7 @@ class UndeliverableEmailSpec extends SpecBase {
         view.getElementById("email-verify-heading-h2").text() mustBe messages("cf.undeliverable.email.verify.heading")
 
         view.text().contains(messages("cf.undeliverable.email.verify.text.p1")) mustBe true
-        
+
         view.getElementById("email-change-heading-h2").text() mustBe messages("cf.undeliverable.email.change.heading")
 
         view.text().contains(messages("cf.undeliverable.email.change.text.p1")) mustBe true
@@ -73,6 +73,7 @@ class UndeliverableEmailSpec extends SpecBase {
       application.injector.instanceOf[undeliverable_email].apply(nextPageUrl, email)(request, messages, appConfig).body
     )
 
-    val viewWithNoEmail: Document = Jsoup.parse(application.injector.instanceOf[undeliverable_email].apply(nextPageUrl).body)
+    val viewWithNoEmail: Document =
+      Jsoup.parse(application.injector.instanceOf[undeliverable_email].apply(nextPageUrl).body)
   }
 }

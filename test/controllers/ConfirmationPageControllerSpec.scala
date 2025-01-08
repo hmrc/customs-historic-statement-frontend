@@ -97,6 +97,6 @@ class ConfirmationPageControllerSpec extends SpecBase {
       )
       .build()
 
-    val view: ConfirmationPageView   = app.injector.instanceOf[ConfirmationPageView]
+    val view: ConfirmationPageView = app.injector.instanceOf[ConfirmationPageView]
   }
 }

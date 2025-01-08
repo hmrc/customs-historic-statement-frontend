@@ -149,6 +149,8 @@ class DownloadLinkSpec extends ViewTestHelper {
       Jsoup.parse(application.injector.instanceOf[download_link].apply(vatCertificateFile, Pdf, id, period).body)
 
     def viewCash(cashStatementFile: Option[CashStatementFile] = None): Document =
-      Jsoup.parse(application.injector.instanceOf[download_link_cash_account].apply(cashStatementFile, Csv, id, period).body)
+      Jsoup.parse(
+        application.injector.instanceOf[download_link_cash_account].apply(cashStatementFile, Csv, id, period).body
+      )
   }
 }

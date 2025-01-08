@@ -97,6 +97,8 @@ class ConfirmationPageViewSpec extends SpecBase {
     val dates: String      = "03 Oct 2021 to 04 Sept 2022"
 
     val view: Document =
-      Jsoup.parse(application.injector.instanceOf[ConfirmationPageView].apply(Some(email), fileRole, returnLink, dates).body)
+      Jsoup.parse(
+        application.injector.instanceOf[ConfirmationPageView].apply(Some(email), fileRole, returnLink, dates).body
+      )
   }
 }

@@ -55,7 +55,10 @@ class FrontendAppConfigSpec extends SpecBase {
     }
 
     "return the DutyDeferment link if a DutyDeferment FileRole provided and linkId in user answers" in {
-      appConfig.returnLink(DutyDefermentStatement, emptyUserAnswers.set(RequestedLinkId, "someLink").success.value) mustBe
+      appConfig.returnLink(
+        DutyDefermentStatement,
+        emptyUserAnswers.set(RequestedLinkId, "someLink").success.value
+      ) mustBe
         "http://localhost:9397/customs/duty-deferment/someLink/account"
     }
 

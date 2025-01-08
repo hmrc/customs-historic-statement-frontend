@@ -67,6 +67,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
     val dutyFileRole: FileRole     = DutyDefermentStatement
     val securityFileRole: FileRole = SecurityStatement
     val postFileRole: FileRole     = PostponedVATStatement
-    val helperOb                = new CheckYourAnswersHelper(populatedUserAnswers)
+    val helperOb                   = new CheckYourAnswersHelper(populatedUserAnswers)
   }
 }
