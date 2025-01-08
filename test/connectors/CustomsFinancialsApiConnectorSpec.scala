@@ -23,7 +23,7 @@ import org.mockito.ArgumentMatchers
 import play.api.http.Status
 import play.api.inject.bind
 import play.api.test.Helpers.*
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.{HttpReads, HttpResponse, StringContextOps}
 import utils.Utils.emptyString
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
@@ -129,6 +129,5 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
     val mockAppConfig                 = app.injector.instanceOf[FrontendAppConfig]
     val customsFinancialsApiConnector = app.injector.instanceOf[CustomsFinancialsApiConnector]
-    implicit val hc: HeaderCarrier    = HeaderCarrier()
   }
 }

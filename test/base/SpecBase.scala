@@ -28,6 +28,7 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import pages.{AccountNumber, HistoricDateRequestPage}
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
+import uk.gov.hmrc.http.HeaderCarrier
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
@@ -83,4 +84,6 @@ trait SpecBase
 
   implicit lazy val messages: Messages =
     application.injector.instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
+
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 }

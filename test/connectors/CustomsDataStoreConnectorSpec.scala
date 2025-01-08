@@ -26,7 +26,7 @@ import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.retrieve.Email
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HttpReads, StringContextOps, UpstreamErrorResponse}
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND}
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
@@ -231,7 +231,5 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
     val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
     val emailVerifiedRes: EmailVerifiedResponse     = EmailVerifiedResponse(Some(emailId))
-
-    implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 }

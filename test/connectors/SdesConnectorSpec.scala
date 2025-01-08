@@ -27,7 +27,7 @@ import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.Helpers
 import play.api.test.Helpers.*
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.{HttpReads, HttpResponse, StringContextOps}
 import utils.Utils.emptyString
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
@@ -766,6 +766,5 @@ class SdesConnectorSpec extends SpecBase {
       .build()
     val mockAppConfig              = app.injector.instanceOf[FrontendAppConfig]
     val sdesConnector              = app.injector.instanceOf[SdesConnector]
-    implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 }
