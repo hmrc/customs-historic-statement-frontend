@@ -18,12 +18,10 @@ package viewmodels
 
 import base.SpecBase
 import models.FileFormat.Pdf
-import play.api.i18n.Messages
 import models.{EoriHistory, SecurityStatementsByPeriod, SecurityStatementsForEori}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
-import play.api.Application
 import play.twirl.api.HtmlFormat
 import utils.Utils.{emptyString, h2Component, spanComponent, spanLinkComponent}
 import java.time.LocalDate

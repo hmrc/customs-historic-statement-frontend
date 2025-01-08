@@ -24,8 +24,6 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import scala.jdk.CollectionConverters.ListHasAsScala
 import org.mockito.Mockito.when
-import play.api.Application
-import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import utils.Utils.h2Component
 
@@ -223,7 +221,6 @@ class CashStatementViewModelSpec extends SpecBase {
   }
 
   trait Setup {
-
     val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
     val eoriNumber               = "EORI456"

@@ -17,7 +17,6 @@
 package controllers
 
 import base.SpecBase
-import config.FrontendAppConfig
 import connectors.CustomsDataStoreConnector
 import models.C79Certificate
 import play.api.{Application, inject}

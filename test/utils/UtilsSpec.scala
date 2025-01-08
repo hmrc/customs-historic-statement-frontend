@@ -17,9 +17,6 @@
 package utils
 
 import base.SpecBase
-import config.FrontendAppConfig
-import play.api.Application
-import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import utils.Utils.{comma, emptyHmrcNewTabLink, emptyString, hmrcNewTabLinkComponent, hyphen, period}
 import views.html.components.newTabLink

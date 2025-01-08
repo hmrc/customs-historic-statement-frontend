@@ -24,9 +24,7 @@ import models.{
 }
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
-import play.api.Application
 import play.api.data.Form
-import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.html.HistoricDateRequestPageView

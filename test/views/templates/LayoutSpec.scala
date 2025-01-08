@@ -19,7 +19,6 @@ package views.templates
 import config.FrontendAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.Application
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
@@ -97,7 +96,6 @@ class LayoutSpec extends SpecBase {
 
   trait Setup {
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
-    implicit val appConfig: FrontendAppConfig                 = application.injector.instanceOf[FrontendAppConfig]
 
     val content: Html = Html("test")
   }

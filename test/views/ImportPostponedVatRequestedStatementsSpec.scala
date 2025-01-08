@@ -21,8 +21,6 @@ import models.{EoriHistory, PostponedVATStatement, PostponedVatStatementFile, Po
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import play.api.Application
-import play.api.i18n.Messages
 import viewmodels.{
   PostponedVatStatementsByMonth, PostponedVatStatementsForEori, PostponedVatViewModel, SourceDisplay,
   StatementDisplayData

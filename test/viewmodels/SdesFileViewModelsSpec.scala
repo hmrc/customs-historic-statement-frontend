@@ -20,8 +20,6 @@ import base.SpecBase
 import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary, UnknownStatementType}
 import models.FileFormat.Pdf
 import models.{DDStatementType, DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata}
-import play.api.Application
-import play.api.i18n.Messages
 import viewmodels.SdesFileViewModels.DutyDefermentStatementFileViewModel
 
 class SdesFileViewModelsSpec extends SpecBase {

@@ -23,8 +23,6 @@ import models.{
   DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, DutyDefermentStatementPeriod,
   DutyDefermentStatementPeriodsByMonth, DutyDefermentStatementsForEori, EoriHistory
 }
-import play.api.Application
-import play.api.i18n.Messages
 import utils.Utils.{h2Component, h3Component, missingDocumentsGuidanceComponent}
 import helpers.Formatters
 

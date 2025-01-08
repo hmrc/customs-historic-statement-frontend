@@ -17,13 +17,10 @@
 package views
 
 import base.SpecBase
-import config.FrontendAppConfig
 import controllers.routes
 import models.{C79Certificate, FileRole}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.Application
-import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

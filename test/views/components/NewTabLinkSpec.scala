@@ -17,13 +17,10 @@
 package views.components
 
 import base.SpecBase
-import config.FrontendAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.scalatest.Assertion
-import play.api.Application
-import play.api.i18n.Messages
 import utils.Utils.{emptyStringWithSpace, period}
 import views.html.components.newTabLink
 
@@ -89,8 +86,6 @@ class NewTabLinkSpec extends SpecBase {
     component.text().contains(msg) mustBe false
 
   trait Setup {
-    val app: Application = applicationBuilder().build()
-
     val linkMessage: String    = "go to test page"
     val href                   = "www.test.com"
     val preLinkMessage         = "test_pre_link_message"

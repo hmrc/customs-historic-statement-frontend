@@ -19,7 +19,6 @@ package views.components
 import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
 import models.DutyDefermentStatement
-import play.api.Application
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._

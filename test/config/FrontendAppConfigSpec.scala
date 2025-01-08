@@ -20,7 +20,6 @@ import base.SpecBase
 import models.{C79Certificate, CDSCashAccount, DutyDefermentStatement, PostponedVATStatement, SecurityStatement}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.RequestedLinkId
-import play.api.Application
 
 class FrontendAppConfigSpec extends SpecBase {
 

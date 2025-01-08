@@ -18,13 +18,10 @@ package handlers
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.Application
-import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.html.{ErrorTemplate, not_found}
 import base.SpecBase
-import config.FrontendAppConfig
 
 class ErrorHandlerSpec extends SpecBase {
 

@@ -17,7 +17,6 @@
 package controllers
 
 import base.SpecBase
-import config.FrontendAppConfig
 import play.api.test.Helpers._
 import views.html.UnauthorisedView
 

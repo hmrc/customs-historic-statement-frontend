@@ -19,8 +19,6 @@ package models
 import base.SpecBase
 import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary, UnknownStatementType}
 import models.FileFormat.{Pdf, UnknownFileFormat}
-import play.api.Application
-import play.api.i18n.Messages
 
 import java.time.LocalDate
 

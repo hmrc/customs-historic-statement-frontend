@@ -18,8 +18,6 @@ package helpers
 
 import base.SpecBase
 import helpers.Formatters.{fileSize, periodAsStartToEndMonth}
-import play.api.Application
-import play.api.i18n.Messages
 
 class FormattersSpec extends SpecBase {
 
