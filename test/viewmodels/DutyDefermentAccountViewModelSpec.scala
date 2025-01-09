@@ -262,8 +262,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         monthAndYear = ddStatementPeriod.monthAndYear,
         periods = Seq(ddStatementPeriod)
       ),
-      periodIndex = 0,
-      period = ddStatementPeriod,
       periodsWithIndex = Seq((ddStatementPeriod, 0)),
       isNiAccount = true,
       accountNumber = accountNumber

@@ -44,8 +44,6 @@ case class DutyDefermentAccountStatement(
   groupIndex: Int,
   eorisStatements: Seq[DutyDefermentStatementsForEori],
   group: DutyDefermentStatementPeriodsByMonth,
-  periodIndex: Int,
-  period: DutyDefermentStatementPeriod,
   periodsWithIndex: Seq[(DutyDefermentStatementPeriod, Int)],
   isNiAccount: Boolean,
   accountNumber: String
@@ -81,14 +79,11 @@ object DutyDefermentAccountViewModel {
     for {
       (eorisStatements, historyIndex) <- statementsForAllEoris.zipWithIndex.reverse
       (group, groupIndex)             <- eorisStatements.groupsRequested.zipWithIndex.reverse
-      (period, periodIndex)           <- group.periods.zipWithIndex
     } yield DutyDefermentAccountStatement(
       historyIndex,
       groupIndex,
       Seq(eorisStatements),
       group,
-      periodIndex,
-      period,
       group.periods.reverse.zipWithIndex,
       isNiAccount,
       accountNumber

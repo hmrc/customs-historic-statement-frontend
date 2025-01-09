@@ -342,8 +342,6 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
           monthAndYear = period.monthAndYear,
           periods = Seq(period)
         ),
-        periodIndex = 0,
-        period = period,
         periodsWithIndex = Seq((period, 0)),
         isNiAccount = true,
         accountNumber = accountNumber
