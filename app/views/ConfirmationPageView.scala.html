@@ -38,7 +38,7 @@
 )
 
 @layout(
-    pageTitle = Some(messages("cf.accounts.title")),
+    pageTitle = Some(messages(s"cf.historic.document.request.confirmation.panel-text.${fileRole.name}")),
     dutyDeferment = fileRole == DutyDefermentStatement
     ) {
 
