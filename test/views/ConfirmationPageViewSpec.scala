@@ -37,7 +37,8 @@ class ConfirmationPageViewSpec extends SpecBase {
     "display correct text" when {
 
       "title should display correctly" in new Setup {
-        view.title() mustBe s"${messages(app)("cf.accounts.title")} - ${messages(app)("service.name")} - GOV.UK"
+        view
+          .title() mustBe s"${messages(app)(s"cf.historic.document.request.confirmation.panel-text.${fileRole.name}")} - ${messages(app)("service.name")} - GOV.UK"
       }
 
       "date should display correctly" in new Setup {

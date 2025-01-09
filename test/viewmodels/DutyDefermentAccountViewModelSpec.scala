@@ -107,8 +107,8 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     private val periodEndDay              = 8
     private val dutyPaymentType           = "BACS"
 
-    val currentYear                       = currentDate.getYear.toString
-    val currentMonth                      = currentDate.getMonthValue.toString
+    val currentYear  = currentDate.getYear.toString
+    val currentMonth = currentDate.getMonthValue.toString
 
     val app: Application        = applicationBuilder().build()
     implicit val msgs: Messages = messages(app)
