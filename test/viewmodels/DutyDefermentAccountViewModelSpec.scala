@@ -68,11 +68,11 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
 
       statementsString must include("<dl  class=govuk-summary-list>")
       statementsString must include(
-        "<div id=requested-statements-list-0-2024-12-row-0 class=govuk-summary-list__row>"
+        s"""<div id=requested-statements-list-0-$currentYear-$currentMonth-row-0 class=govuk-summary-list__row>"""
       )
 
       statementsString must include(
-        "<dt id=requested-statements-list-0-2024-12-row-0-date-cell class=govuk-summary-list__value>Duty deferment 1720</dt>"
+        s"""<dt id=requested-statements-list-0-$currentYear-$currentMonth-row-0-date-cell class=govuk-summary-list__value>Duty deferment 1720</dt>"""
       )
     }
 
@@ -106,6 +106,9 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     private val periodEndMonth            = 2
     private val periodEndDay              = 8
     private val dutyPaymentType           = "BACS"
+
+    val currentYear  = currentDate.getYear.toString
+    val currentMonth = currentDate.getMonthValue.toString
 
     val app: Application        = applicationBuilder().build()
     implicit val msgs: Messages = messages(app)

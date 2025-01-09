@@ -37,17 +37,21 @@ class ConfirmationPageViewSpec extends SpecBase {
     "display correct text" when {
 
       "title should display correctly" in new Setup {
-        view.title() mustBe s"${messages(app)("cf.accounts.title")} - ${messages(app)("service.name")} - GOV.UK"
+        view
+          .title() mustBe
+          s"${messages(app)(s"cf.historic.document.request.confirmation.panel-text.${fileRole.name}")} - " +
+          s"${messages(app)("service.name")} - GOV.UK"
       }
 
       "date should display correctly" in new Setup {
         view.getElementById("email-confirmation-panel-date").text() mustBe messages(app)("03 Oct 2021 to 04 Sept 2022")
       }
 
-      "subheader-text should display correctly" in new Setup {
-        view.getElementById("email-confirmation-subheader").text() mustBe messages(app)(
+      "subheader-text should be an H2 and display correctly" in new Setup {
+        subheaderElement.text() mustBe messages(app)(
           "cf.historic.document.request.confirmation.subheader-text.next"
         )
+        subheaderElement.tagName() mustBe "h2"
       }
 
       "email confirmation should display correctly" in new Setup {
@@ -102,5 +106,7 @@ class ConfirmationPageViewSpec extends SpecBase {
 
     val view: Document =
       Jsoup.parse(app.injector.instanceOf[ConfirmationPageView].apply(Some(email), fileRole, returnLink, dates).body)
+
+    val subheaderElement = view.getElementsByTag("h2").first()
   }
 }
