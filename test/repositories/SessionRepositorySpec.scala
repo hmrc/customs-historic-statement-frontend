@@ -18,7 +18,7 @@ package repositories
 
 import base.SpecBase
 import models.UserAnswers
-import play.api.{Application, Configuration}
+import play.api.Configuration
 import uk.gov.hmrc.mongo.play.PlayMongoComponent
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,10 +43,8 @@ class SessionRepositorySpec extends SpecBase {
   }
 
   trait Setup {
-    val app: Application = applicationBuilder().build()
-
-    val appConfig: Configuration           = app.injector.instanceOf[Configuration]
-    val mongoComponent: PlayMongoComponent = app.injector.instanceOf[PlayMongoComponent]
+    val appConfig: Configuration           = application.injector.instanceOf[Configuration]
+    val mongoComponent: PlayMongoComponent = application.injector.instanceOf[PlayMongoComponent]
 
     val defaultSessionRepository = new DefaultSessionRepository(mongoComponent, appConfig)
 

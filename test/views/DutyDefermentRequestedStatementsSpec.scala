@@ -225,7 +225,6 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       ) mustBe true
 
   trait Setup {
-
     private val someEori                      = "12345678"
     private val someDan                       = "12345"
     private val someRequestId: Option[String] = Some("Ab1234")

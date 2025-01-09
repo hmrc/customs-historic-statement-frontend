@@ -114,7 +114,6 @@ class SdesFileSpec extends SpecBase with Matchers {
   }
 
   trait Setup {
-
     val year  = 2018
     val year2 = 2019
     val year3 = 19
@@ -297,6 +296,5 @@ class SdesFileSpec extends SpecBase with Matchers {
         "12345678"
       )
     )
-
   }
 }

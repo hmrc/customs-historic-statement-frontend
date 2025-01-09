@@ -81,7 +81,6 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
     view.getElementsByClass("govuk-button").html().contains(messages("site.continue")) mustBe true
 
   trait Setup {
-
     val cyaHelper: CheckYourAnswersHelper = new CheckYourAnswersHelper(populatedUserAnswers)
     val fileRole: FileRole                = C79Certificate
 

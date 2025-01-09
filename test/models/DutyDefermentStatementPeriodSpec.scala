@@ -90,7 +90,6 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
   }
 
   trait Setup {
-
     val now: LocalDate = LocalDate.now()
 
     val size   = 47

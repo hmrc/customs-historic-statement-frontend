@@ -120,7 +120,6 @@ class JourneyStartControllerSpec extends SpecBase {
   }
 
   trait Setup {
-
     val mockSessionCacheConnector: CustomsSessionCacheConnector = mock[CustomsSessionCacheConnector]
     val mockSessionRepository: SessionRepository                = mock[SessionRepository]
     val accountLink: AccountLink                                = mock[AccountLink]
@@ -132,5 +131,4 @@ class JourneyStartControllerSpec extends SpecBase {
       )
       .build()
   }
-
 }

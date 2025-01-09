@@ -53,7 +53,6 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
       ) mustBe true
 
   trait Setup {
-
     private val someEori               = "12345678"
     private val localDateYear          = 2020
     private val localDateMonth         = 10
