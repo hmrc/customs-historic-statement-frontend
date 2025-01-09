@@ -22,7 +22,8 @@
     layout: Layout,
     link: components.link,
     p: components.p,
-    h1: components.h1
+    h1: components.h1,
+    h2: components.h2
 )
 
 @(
@@ -52,10 +53,10 @@
         )
     </div>
 
-    @p(
+    @h2(
         classes="govuk-heading-s",
         id=Some("email-confirmation-subheader"),
-        content = Html(messages(s"cf.historic.document.request.confirmation.subheader-text.next"))
+        msg = messages(s"cf.historic.document.request.confirmation.subheader-text.next")
     )
 
     @email.map { addr =>
