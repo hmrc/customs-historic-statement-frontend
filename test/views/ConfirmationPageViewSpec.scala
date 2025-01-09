@@ -44,7 +44,6 @@ class ConfirmationPageViewSpec extends SpecBase {
         view.getElementById("email-confirmation-panel-date").text() mustBe messages("03 Oct 2021 to 04 Sept 2022")
       }
 
-
       "subheader-text should be an H2 and display correctly" in new Setup {
         subheaderElement.text() mustBe messages(
           "cf.historic.document.request.confirmation.subheader-text.next"
