@@ -17,7 +17,6 @@
 package connectors
 
 import base.SpecBase
-import config.FrontendAppConfig
 import models.{
   EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, UndeliverableEmail, UndeliverableInformation,
   UnverifiedEmail
@@ -226,7 +225,6 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
       )
       .build()
 
-    val mockAppConfig             = app.injector.instanceOf[FrontendAppConfig]
     val customsDataStoreConnector = app.injector.instanceOf[CustomsDataStoreConnector]
 
     val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))

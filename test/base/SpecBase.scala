@@ -82,6 +82,8 @@ trait SpecBase
 
   implicit lazy val appConfig: FrontendAppConfig = application.injector.instanceOf[FrontendAppConfig]
 
+  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+
   implicit lazy val messages: Messages =
     application.injector.instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
 

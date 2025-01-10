@@ -17,7 +17,6 @@
 package services
 
 import java.time.{LocalDateTime, ZoneId}
-import config.FrontendAppConfig
 import base.SpecBase
 import org.mockito.Mockito.when
 
@@ -60,7 +59,6 @@ class DateTimeServiceSpec extends SpecBase {
     val hour   = 12
     val minute = 30
 
-    val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
     when(mockAppConfig.fixedDateTime).thenReturn(false)
     val dateTimeService: DateTimeService = new DateTimeService(mockAppConfig)
   }

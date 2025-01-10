@@ -17,7 +17,6 @@
 package connectors
 
 import base.SpecBase
-import config.FrontendAppConfig
 import org.mockito.ArgumentMatchers
 import play.api.inject.bind
 import play.api.test.Helpers.*
@@ -91,7 +90,6 @@ class CustomsSessionCacheConnectorSpec extends SpecBase {
       )
       .build()
 
-    val mockAppConfig                = app.injector.instanceOf[FrontendAppConfig]
     val customsSessionCacheConnector = app.injector.instanceOf[CustomsSessionCacheConnector]
   }
 }

@@ -17,7 +17,6 @@
 package viewmodels
 
 import base.SpecBase
-import config.FrontendAppConfig
 import models.FileFormat.{Csv, Pdf}
 import models.*
 import org.jsoup.Jsoup
@@ -221,7 +220,6 @@ class CashStatementViewModelSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
     val eoriNumber               = "EORI456"
     val startDateJuly: LocalDate = LocalDate.parse("2023-07-10")

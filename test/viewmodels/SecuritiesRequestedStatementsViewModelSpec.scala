@@ -255,5 +255,4 @@ trait SpecBaseWithSetup extends SpecBase {
     securityStatements: Seq[SecurityStatementsForEori]
   ): SecuritiesRequestedStatementsViewModel =
     SecuritiesRequestedStatementsViewModel(securityStatements)
-
 }

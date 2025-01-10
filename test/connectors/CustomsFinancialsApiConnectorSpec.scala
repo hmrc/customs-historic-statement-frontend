@@ -17,7 +17,6 @@
 package connectors
 
 import base.SpecBase
-import config.FrontendAppConfig
 import models.{C79Certificate, HistoricDocumentRequest}
 import org.mockito.ArgumentMatchers
 import play.api.http.Status
@@ -127,7 +126,6 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       )
       .build()
 
-    val mockAppConfig                 = app.injector.instanceOf[FrontendAppConfig]
     val customsFinancialsApiConnector = app.injector.instanceOf[CustomsFinancialsApiConnector]
   }
 }

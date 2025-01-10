@@ -26,7 +26,6 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.Utils.emptyString
 
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
@@ -190,8 +189,6 @@ class AuthActionSpec extends SpecBase {
 }
 
 class FakeFailingAuthConnector @Inject() (exceptionToReturn: Throwable) extends AuthConnector {
-  val serviceUrl: String = emptyString
-
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit
     hc: HeaderCarrier,
     ec: ExecutionContext
