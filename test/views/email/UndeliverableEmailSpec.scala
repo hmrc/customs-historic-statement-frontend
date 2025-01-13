@@ -20,8 +20,6 @@ import base.SpecBase
 import utils.TestData.{email, url}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import views.html.email.undeliverable_email
 
 class UndeliverableEmailSpec extends SpecBase {
@@ -63,8 +61,6 @@ class UndeliverableEmailSpec extends SpecBase {
   }
 
   trait Setup {
-    implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
-
     val view: Document = Jsoup.parse(
       application.injector.instanceOf[undeliverable_email].apply(url, email)(request, messages, appConfig).body
     )

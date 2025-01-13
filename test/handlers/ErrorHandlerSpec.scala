@@ -18,8 +18,6 @@ package handlers
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import views.html.{ErrorTemplate, not_found}
 import utils.TestData.{test_heading, test_message, test_title}
 import base.SpecBase
@@ -70,9 +68,7 @@ class ErrorHandlerSpec extends SpecBase {
   }
 
   trait Setup {
-    implicit val ec: scala.concurrent.ExecutionContext        = scala.concurrent.ExecutionContext.global
-    implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
-
-    val errorHandler: ErrorHandler = application.injector.instanceOf[ErrorHandler]
+    implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
+    val errorHandler: ErrorHandler                     = application.injector.instanceOf[ErrorHandler]
   }
 }

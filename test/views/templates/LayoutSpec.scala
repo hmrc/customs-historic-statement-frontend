@@ -20,8 +20,6 @@ import config.FrontendAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import play.twirl.api.Html
 import views.html.templates.Layout
 import base.SpecBase
@@ -93,8 +91,6 @@ class LayoutSpec extends SpecBase {
       .text() mustBe "BETA This is a new service - your feedback will help us to improve it."
 
   trait Setup {
-    implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
-
     val content: Html = Html("test")
   }
 }

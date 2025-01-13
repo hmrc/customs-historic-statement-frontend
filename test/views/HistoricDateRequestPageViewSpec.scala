@@ -25,8 +25,6 @@ import models.{
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import play.api.data.Form
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import views.html.HistoricDateRequestPageView
 
 class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
@@ -91,8 +89,6 @@ class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
 
 trait SetUpWithSpecBase extends SpecBase {
   val returnUrl = "http://localhost:9398/customs/documents/adjustments"
-
-  implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest()
 
   private def form(fileRole: FileRole): Form[HistoricDates] = new HistoricDateRequestPageFormProvider().apply(fileRole)
 

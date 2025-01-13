@@ -85,4 +85,6 @@ trait SpecBase
     application.injector.instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+
+  implicit lazy val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest()
 }
