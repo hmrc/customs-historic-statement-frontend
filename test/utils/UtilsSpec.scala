@@ -19,6 +19,7 @@ package utils
 import base.SpecBase
 import play.twirl.api.HtmlFormat
 import utils.Utils.{comma, emptyHmrcNewTabLink, emptyString, hmrcNewTabLinkComponent, hyphen, period}
+import utils.TestData.{classes, href, linkMessage, postLinkMessage, preLinkMessage}
 import views.html.components.newTabLink
 
 class UtilsSpec extends SpecBase {
@@ -47,20 +48,12 @@ class UtilsSpec extends SpecBase {
   }
 
   "hmrcNewTabLinkComponent" should {
-    "create the component correctly with provided input" in new Setup {
+    "create the component correctly with provided input" in {
       val result: HtmlFormat.Appendable =
         hmrcNewTabLinkComponent(linkMessage, href, Some(preLinkMessage), Some(postLinkMessage), classes)
 
       result mustBe new newTabLink(emptyHmrcNewTabLink)
         .apply(linkMessage, href, Some(preLinkMessage), Some(postLinkMessage), classes = classes)
     }
-  }
-
-  trait Setup {
-    val linkMessage: String = "go to test page"
-    val href                = "www.test.com"
-    val preLinkMessage      = "test_pre_link_message"
-    val postLinkMessage     = "test_post_link_message"
-    val classes             = "govuk-!-margin-bottom-7"
   }
 }

@@ -24,6 +24,7 @@ import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import play.twirl.api.HtmlFormat
 import utils.Utils.{emptyString, h2Component, spanComponent, spanLinkComponent}
+import utils.TestData.{eori, pdfLink}
 import java.time.LocalDate
 
 class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
@@ -48,12 +49,12 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
     "return a sequence of StatementRow with correct data" in {
       val securityStatements = Seq(
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+          eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq(requestedStatement)
         ),
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory(eoriNumber, Some(startDateJune), Some(endDateJune)),
+          eoriHistory = EoriHistory(eori, Some(startDateJune), Some(endDateJune)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq(requestedStatement)
         )
@@ -64,7 +65,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
 
       result.size mustBe 2
       result.head.eori mustBe None
-      result(1).eori mustBe Some(eoriNumber)
+      result(1).eori mustBe Some(eori)
     }
   }
 
@@ -72,7 +73,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
     "render the EORI heading correctly" in {
       val mockStatementRow = StatementRow(
         historyIndex = 0,
-        eori = Some(eoriNumber),
+        eori = Some(eori),
         date = emptyString,
         pdf = None,
         dlRowId = emptyString,
@@ -81,7 +82,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
         linkCellId = emptyString,
         renderEoriHeading = Some(
           h2Component(
-            msg = messages("cf.account.details.previous-eori", eoriNumber),
+            msg = messages("cf.account.details.previous-eori", eori),
             id = Some("requested-statements-eori-heading-0"),
             classes = "govuk-heading-s govuk-!-margin-bottom-2"
           )
@@ -96,7 +97,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
       )
 
       val expectedHtml = h2Component(
-        msg = messages("cf.account.details.previous-eori", eoriNumber),
+        msg = messages("cf.account.details.previous-eori", eori),
         id = Some("requested-statements-eori-heading-0"),
         classes = "govuk-heading-s govuk-!-margin-bottom-2"
       )
@@ -192,7 +193,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
     "return true if there are requested statements" in {
       val securityStatements = Seq(
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+          eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq(requestedStatement)
         )
@@ -207,7 +208,7 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
     "return false if there are no requested statements" in {
       val securityStatements = Seq(
         SecurityStatementsForEori(
-          eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+          eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq(requestedStatement),
           requestedStatements = Seq.empty
         )
@@ -222,9 +223,6 @@ class SecuritiesRequestedStatementsViewModelSpec extends SpecBaseWithSetup {
 }
 
 trait SpecBaseWithSetup extends SpecBase {
-  val pdfLink: PdfLink = PdfLink("file.pdf", "1MB", "Download PDF")
-  val eoriNumber       = "EORI456"
-
   val startDateJuly: LocalDate = LocalDate.parse("2023-07-10")
   val endDateJuly: LocalDate   = LocalDate.parse("2023-07-20")
   val startDateJune: LocalDate = LocalDate.parse("2023-06-01")
@@ -237,7 +235,7 @@ trait SpecBaseWithSetup extends SpecBase {
   )
 
   val securityStatementForEori: SecurityStatementsForEori = SecurityStatementsForEori(
-    eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+    eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
     currentStatements = Seq(requestedStatement),
     requestedStatements = Seq(requestedStatement)
   )

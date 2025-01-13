@@ -26,6 +26,7 @@ import play.twirl.api.Html
 import views.html.templates.Layout
 import base.SpecBase
 import utils.Utils.emptyString
+import utils.TestData.{test_title, url}
 
 class LayoutSpec extends SpecBase {
 
@@ -34,22 +35,19 @@ class LayoutSpec extends SpecBase {
     "display correct guidance" when {
 
       "title and back link are provided" in new Setup {
-        val title   = "test_title"
-        val linkUrl = "test.com"
-
         val layoutView: Document = Jsoup.parse(
           application.injector
             .instanceOf[Layout]
             .apply(
-              pageTitle = Some(title),
-              backLinkUrl = Some(linkUrl)
+              pageTitle = Some(test_title),
+              backLinkUrl = Some(url)
             )(content)
             .body
         )
 
-        shouldContainCorrectTitle(layoutView, title)
+        shouldContainCorrectTitle(layoutView, test_title)
         shouldContainCorrectServiceUrls(layoutView)
-        shouldContainCorrectBackLink(layoutView, Some(linkUrl))
+        shouldContainCorrectBackLink(layoutView, Some(url))
         shouldContainCorrectBanners(layoutView)
       }
 

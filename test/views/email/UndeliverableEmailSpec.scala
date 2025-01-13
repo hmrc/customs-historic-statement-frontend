@@ -17,6 +17,7 @@
 package views.email
 
 import base.SpecBase
+import utils.TestData.{email, url}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc.AnyContentAsEmpty
@@ -49,7 +50,7 @@ class UndeliverableEmailSpec extends SpecBase {
 
         view.text().contains(messages("cf.undeliverable.email.link-text")) mustBe true
 
-        view.toString must include(nextPageUrl)
+        view.toString must include(url)
         view.text().contains(email.get) mustBe true
       }
 
@@ -62,15 +63,13 @@ class UndeliverableEmailSpec extends SpecBase {
   }
 
   trait Setup {
-    val nextPageUrl                                           = "test_url"
-    val email: Option[String]                                 = Some("test@test.com")
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val view: Document = Jsoup.parse(
-      application.injector.instanceOf[undeliverable_email].apply(nextPageUrl, email)(request, messages, appConfig).body
+      application.injector.instanceOf[undeliverable_email].apply(url, email)(request, messages, appConfig).body
     )
 
     val viewWithNoEmail: Document =
-      Jsoup.parse(application.injector.instanceOf[undeliverable_email].apply(nextPageUrl).body)
+      Jsoup.parse(application.injector.instanceOf[undeliverable_email].apply(url).body)
   }
 }

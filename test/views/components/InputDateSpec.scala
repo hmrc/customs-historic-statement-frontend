@@ -19,6 +19,7 @@ package views.components
 import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
 import models.DutyDefermentStatement
+import utils.TestData.id
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
@@ -145,7 +146,6 @@ class InputDateSpec extends SpecBase {
 
   trait Setup {
     val form     = new HistoricDateRequestPageFormProvider().apply(DutyDefermentStatement)
-    val id       = "value"
     val headline = "Date of birth"
   }
 }

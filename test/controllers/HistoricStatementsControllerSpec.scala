@@ -28,6 +28,7 @@ import play.api.{Application, inject}
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import play.api.mvc.AnyContentAsEmpty
+import utils.TestData.*
 
 import java.time._
 import scala.concurrent.Future
@@ -102,7 +103,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
   "historicStatementsDutyDeferment" should {
     "return dutyDeferment statement" in new Setup {
       when(mockSessionCacheConnector.getAccountNumber(any, any)(any))
-        .thenReturn(Future.successful(Some(someDan)))
+        .thenReturn(Future.successful(Some(dan)))
 
       when(mockSdesConnector.getDutyDefermentStatements(any, any)(any))
         .thenReturn(Future.successful(dutyDefermentFiles))
@@ -144,23 +145,6 @@ class HistoricStatementsControllerSpec extends SpecBase {
   trait Setup {
     implicit val messages: Messages = Helpers.stubMessages()
 
-    val someEori      = "12345678"
-    val someDan       = "12345"
-    val someRequestId = Some("Ab1234")
-
-    val year        = 2018
-    val year17      = 2014
-    val two         = 3
-    val one         = 1
-    val three       = 3
-    val minute      = 8
-    val twentyEight = 28
-    val twelve      = 12
-    val eleven      = 11
-
-    val fiveHundread = 500L
-    val ninetynine   = 99L
-
     val size = 1024L
 
     val securityStatementFile = SecurityStatementFile(
@@ -176,7 +160,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
         one,
         Pdf,
         SecurityStatement,
-        someEori,
+        eori,
         fiveHundread,
         "0000000"
       )
@@ -195,7 +179,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
         two,
         Pdf,
         SecurityStatement,
-        someEori,
+        eori,
         fiveHundread,
         "0000000"
       )
@@ -264,7 +248,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
         Weekly,
         Some(true),
         Some("BACS"),
-        someDan,
+        dan,
         someRequestId
       )
     )
@@ -285,7 +269,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
         Supplementary,
         Some(true),
         Some("BACS"),
-        someDan,
+        dan,
         someRequestId
       )
     )
@@ -306,7 +290,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
         Excise,
         Some(true),
         Some("BACS"),
-        someDan,
+        dan,
         someRequestId
       )
     )
@@ -327,14 +311,12 @@ class HistoricStatementsControllerSpec extends SpecBase {
         Weekly,
         Some(true),
         Some("BACS"),
-        someDan,
+        dan,
         someRequestId
       )
     )
 
     val dutyDefermentFiles = Seq(dutyDeferementFile, dutyDeferementFile_2, dutyDeferementFile_3, dutyDeferementFile_4)
-
-    val offset = 10
 
     val eoriHistories = Seq(
       EoriHistory("eori1", Some(LocalDate.now()), Some(LocalDate.now())),

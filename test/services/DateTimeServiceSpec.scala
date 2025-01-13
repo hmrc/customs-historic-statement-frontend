@@ -18,6 +18,7 @@ package services
 
 import java.time.{LocalDateTime, ZoneId}
 import base.SpecBase
+import utils.TestData.{day, hour, minute, month, year}
 import org.mockito.Mockito.when
 
 class DateTimeServiceSpec extends SpecBase {
@@ -52,13 +53,6 @@ class DateTimeServiceSpec extends SpecBase {
   }
 
   trait Setup {
-
-    val year   = 2027
-    val month  = 12
-    val day    = 20
-    val hour   = 12
-    val minute = 30
-
     when(mockAppConfig.fixedDateTime).thenReturn(false)
     val dateTimeService: DateTimeService = new DateTimeService(mockAppConfig)
   }

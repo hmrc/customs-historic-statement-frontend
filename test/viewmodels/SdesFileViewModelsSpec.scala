@@ -21,6 +21,7 @@ import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplemen
 import models.FileFormat.Pdf
 import models.{DDStatementType, DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata}
 import viewmodels.SdesFileViewModels.DutyDefermentStatementFileViewModel
+import utils.TestData.{downloadUrl, fileName}
 
 class SdesFileViewModelsSpec extends SpecBase {
 
@@ -56,9 +57,6 @@ class SdesFileViewModelsSpec extends SpecBase {
     val year2 = 2021
     val month = 11
     val day   = 27
-
-    val fileName    = "test_file"
-    val downloadUrl = "http://second.com/"
 
     def metaData(defermentStatementType: DDStatementType): DutyDefermentStatementFileMetadata =
       DutyDefermentStatementFileMetadata(

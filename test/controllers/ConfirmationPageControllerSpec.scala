@@ -50,7 +50,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
             Some(Email("some@email.com")),
             C79Certificate,
             routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url,
-            "October 2019 to October 2019"
+            "March 2018 to March 2018"
           )(request, messages, appConfig).toString
       }
     }

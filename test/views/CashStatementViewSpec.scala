@@ -23,8 +23,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.Assertion
 import viewmodels.{CashStatementForEori, CashStatementMonthToMonth, CashStatementViewModel}
 import views.html.CashStatementView
-
-import java.time.LocalDate
+import utils.TestData.{date, downloadUrl, eori, fileName, periodStartDay, periodStartMonth, periodStartYear}
 
 class CashStatementViewSpec extends ViewTestHelper {
 
@@ -65,25 +64,13 @@ class CashStatementViewSpec extends ViewTestHelper {
       .contains(messages("cf.cash-statement-requested-list-paragraph")) mustBe true
 
   trait Setup {
+    val size = 120L
 
-    val someEori              = "12345678"
-    val localDateYear         = 2020
-    val localDateMonth        = 10
-    val localDateDay          = 1
-    val filename: String      = "statement_file_01"
-    val downloadURL: String   = "download_url_01"
-    val size                  = 120L
-    val periodStartYear: Int  = 2019
-    val periodStartMonth: Int = 7
-    val periodStartDay: Int   = 10
-
-    val date = LocalDate.of(localDateYear, localDateMonth, localDateDay)
-
-    val eoriHistory: EoriHistory = EoriHistory(someEori, Some(date), Some(date))
+    val eoriHistory: EoriHistory = EoriHistory(eori, Some(date), Some(date))
 
     val cashStatementFile: CashStatementFile = CashStatementFile(
-      filename,
-      downloadURL,
+      fileName,
+      downloadUrl,
       size,
       CashStatementFileMetadata(
         periodStartYear,
@@ -96,7 +83,7 @@ class CashStatementViewSpec extends ViewTestHelper {
         CDSCashAccount,
         Some("requestId")
       ),
-      someEori
+      eori
     )
 
     val cashStatementsByMonth: CashStatementMonthToMonth =
@@ -104,8 +91,6 @@ class CashStatementViewSpec extends ViewTestHelper {
 
     val cashStatementsForEori: CashStatementForEori =
       CashStatementForEori(eoriHistory, Seq(cashStatementsByMonth), Seq.empty)
-
-    val accountNumber = "12345"
 
     val cashStatementViewModel: CashStatementViewModel = CashStatementViewModel(Seq(cashStatementsForEori))
 

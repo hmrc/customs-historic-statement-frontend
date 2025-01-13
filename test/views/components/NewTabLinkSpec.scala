@@ -22,6 +22,7 @@ import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.scalatest.Assertion
 import utils.Utils.{emptyStringWithSpace, period}
+import utils.TestData.{classes, defaultClasses, href, linkMessage, postLinkMessage, preLinkMessage}
 import views.html.components.newTabLink
 
 class NewTabLinkSpec extends SpecBase {
@@ -86,13 +87,6 @@ class NewTabLinkSpec extends SpecBase {
     component.text().contains(msg) mustBe false
 
   trait Setup {
-    val linkMessage: String    = "go to test page"
-    val href                   = "www.test.com"
-    val preLinkMessage         = "test_pre_link_message"
-    val postLinkMessage        = "test_post_link_message"
-    val classes                = "govuk-!-margin-bottom-7"
-    val defaultClasses: String = "govuk-body"
-
     def newTabLinkComponent(
       linkMessage: String,
       href: String,

@@ -22,11 +22,11 @@ import javax.inject.Inject
 
 class DateTimeService @Inject() (appConfig: FrontendAppConfig) {
 
-  val year   = 2027
-  val month  = 12
-  val day    = 20
-  val hour   = 12
-  val minute = 30
+  val year   = 2018
+  val month  = 3
+  val day    = 14
+  val hour   = 2
+  val minute = 23
 
   def systemDateTime(zoneId: ZoneId): LocalDateTime =
     if (appConfig.fixedDateTime) {

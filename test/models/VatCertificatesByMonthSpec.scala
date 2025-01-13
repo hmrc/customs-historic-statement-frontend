@@ -17,6 +17,7 @@
 package models
 
 import base.SpecBase
+import utils.TestData.*
 import play.api.test.Helpers
 import viewmodels.VatCertificatesByMonth
 
@@ -26,17 +27,13 @@ class VatCertificatesByMonthSpec extends SpecBase {
 
   "compare" should {
     "return the correct order" in {
-
-      val year     = 2019
-      val year2    = 2018
-      val ten      = 10
       val one      = 1
       val minusOne = -1
 
-      val vatCertificatesByMonth  = VatCertificatesByMonth(LocalDate.of(year, ten, ten))(Helpers.stubMessages())
-      val vatCertificatesByMonth2 = VatCertificatesByMonth(LocalDate.of(year2, ten, ten))(Helpers.stubMessages())
-      vatCertificatesByMonth.compare(vatCertificatesByMonth2) mustBe one
-      vatCertificatesByMonth2.compare(vatCertificatesByMonth) mustBe minusOne
+      val vatCertificatesByMonth  = VatCertificatesByMonth(LocalDate.of(year, month, day))(Helpers.stubMessages())
+      val vatCertificatesByMonth2 = VatCertificatesByMonth(LocalDate.of(year2, month, day))(Helpers.stubMessages())
+      vatCertificatesByMonth.compare(vatCertificatesByMonth2) mustBe minusOne
+      vatCertificatesByMonth2.compare(vatCertificatesByMonth) mustBe one
     }
   }
 }

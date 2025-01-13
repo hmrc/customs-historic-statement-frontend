@@ -36,6 +36,7 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.CSRFTokenHelper.*
 import play.api.test.FakeRequest
 import utils.Utils.emptyString
+import utils.TestData.*
 
 import java.time.LocalDate
 
@@ -50,10 +51,6 @@ trait SpecBase
   val userAnswersId = "id"
 
   def emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId, Json.obj())
-
-  private val year  = 2019
-  private val month = 10
-  private val day   = 1
 
   def populatedUserAnswers: UserAnswers = emptyUserAnswers
     .set(AccountNumber, "123")

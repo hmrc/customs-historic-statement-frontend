@@ -24,7 +24,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
 import play.twirl.api.HtmlFormat
-import utils.Utils._
+import utils.Utils.*
+import utils.TestData.*
 import viewmodels.{DutyDefermentAccountRowContent, DutyDefermentAccountStatement, DutyDefermentAccountViewModel}
 import views.html.DutyDefermentRequestedStatements
 import views.html.components.duty_deferment_file
@@ -100,7 +101,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
         val expectedHtml: String          = h2Component(
           id = Some("historic-eori-0"),
           classes = "govuk-heading-s",
-          msg = messages("cf.account.details.previous-eori", "12345678")
+          msg = messages("cf.account.details.previous-eori", "GB11111")
         ).toString()
 
         result.toString mustEqual expectedHtml
@@ -110,7 +111,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
         val result: HtmlFormat.Appendable = viewModel.component.monthHeading
         val expectedHtml: String          = h3Component(
-          id = Some(s"requested-statements-month-heading-0-2018-2"),
+          id = Some(s"requested-statements-month-heading-0-2017-10"),
           msg = Formatters.dateAsMonthAndYear(monthAndYear)
         ).toString()
 
@@ -221,28 +222,12 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("historic-eori-0")
       .html()
       .contains(
-        messages("cf.account.details.previous-eori", "12345678")
+        messages("cf.account.details.previous-eori", "GB11111")
       ) mustBe true
 
   trait Setup {
-    private val someEori                      = "12345678"
-    private val someDan                       = "12345"
-    private val someRequestId: Option[String] = Some("Ab1234")
-    private val pdfFileName                   = "2018_03_01-08.pdf"
-    private val pdfUrl                        = "url.pdf"
-    private val pdfSize                       = 1024L
-    private val periodStartYear               = 2018
-    private val periodStartMonth              = 3
-    private val periodStartMonth2             = 2
-    private val periodStartDay                = 1
-    private val periodEndYear                 = 2018
-    private val periodEndMonth2               = 3
-    private val periodEndMonth                = 2
-    private val periodEndDay                  = 8
-    private val dutyPaymentType               = "BACS"
-
-    protected val accountNumber           = "123456"
-    protected val monthAndYear: LocalDate = LocalDate.of(periodStartYear, periodStartMonth2, periodStartDay)
+    private val dutyPaymentType           = "BACS"
+    protected val monthAndYear: LocalDate = LocalDate.of(periodStartYear, periodStartMonth_2, periodStartDay)
 
     private val dutyDefermentFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
@@ -261,7 +246,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
           Weekly,
           Some(true),
           Some(dutyPaymentType),
-          someDan,
+          dan,
           someRequestId
         )
       )
@@ -272,17 +257,17 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
       pdfSize,
       DutyDefermentStatementFileMetadata(
         periodStartYear,
-        periodStartMonth2,
+        periodStartMonth_2,
         periodStartDay,
         periodEndYear,
-        periodEndMonth2,
+        periodEndMonth_2,
         periodEndDay,
         Pdf,
         DutyDefermentStatement,
         Supplementary,
         Some(true),
         Some(dutyPaymentType),
-        someDan,
+        dan,
         someRequestId
       )
     )
@@ -292,7 +277,7 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
     private val localDateDay   = 10
 
     private val eoriHistory = EoriHistory(
-      someEori,
+      eori,
       Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
       Some(LocalDate.of(localDateYear, localDateMonth, localDateDay))
     )

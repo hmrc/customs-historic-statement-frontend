@@ -21,6 +21,7 @@ import org.jsoup.nodes.Document
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.html.{ErrorTemplate, not_found}
+import utils.TestData.{test_heading, test_message, test_title}
 import base.SpecBase
 
 class ErrorHandlerSpec extends SpecBase {
@@ -31,12 +32,12 @@ class ErrorHandlerSpec extends SpecBase {
 
       val errorTemplateView: ErrorTemplate = application.injector.instanceOf[ErrorTemplate]
 
-      errorHandler.standardErrorTemplate(title, heading, message).map { errorTemplate =>
-        errorTemplate mustBe errorTemplateView(title, heading, message)
+      errorHandler.standardErrorTemplate(test_title, test_heading, test_heading).map { errorTemplate =>
+        errorTemplate mustBe errorTemplateView(test_title, test_heading, test_message)
 
         val docView: Document = Jsoup.parse(errorTemplate.body)
-        docView.getElementsByClass("govuk-heading-xl").text mustBe heading
-        docView.getElementsByClass("govuk-body").text mustBe message
+        docView.getElementsByClass("govuk-heading-xl").text mustBe test_heading
+        docView.getElementsByClass("govuk-body").text mustBe test_message
       }
     }
   }
@@ -73,8 +74,5 @@ class ErrorHandlerSpec extends SpecBase {
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
 
     val errorHandler: ErrorHandler = application.injector.instanceOf[ErrorHandler]
-    val title                      = "test_title"
-    val heading                    = "test_heading"
-    val message                    = "test_msg"
   }
 }

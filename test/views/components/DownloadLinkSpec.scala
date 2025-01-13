@@ -22,6 +22,7 @@ import models.{
   C79Certificate, CDSCashAccount, CashStatementFile, CashStatementFileMetadata, FileFormat, VatCertificateFile,
   VatCertificateFileMetadata
 }
+import utils.TestData.{downloadUrl, fileName, periodStartDay, periodStartMonth, periodStartYear, test_Id}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
@@ -37,7 +38,7 @@ class DownloadLinkSpec extends ViewTestHelper {
       "vat certificate file is available" in new Setup {
         implicit val viewDoc: Document = viewVat(Some(c79Certificates))
 
-        shouldDisplayDownloadURL(vatDownloadURL)
+        shouldDisplayDownloadURL(downloadUrl)
         shouldDisplayFileFormatAndVoiceoverInfo(Pdf, vatSize)
       }
 
@@ -105,21 +106,14 @@ class DownloadLinkSpec extends ViewTestHelper {
   }
 
   trait Setup {
-
-    val vatFilename: String    = "vatStatementFile_00"
-    val vatDownloadURL: String = "download_url_00"
-    val vatSize: Long          = 99L
-    val periodStartYear: Int   = 2017
-    val periodStartMonth: Int  = 12
-    val periodStartDay: Int    = 10
-
+    val vatSize: Long           = 99L
     val cashFilename: String    = "cashStatementFile_00"
     val cashDownloadURL: String = "download_cash_url_00"
     val cashSize: Long          = 150L
 
     val c79Certificates: VatCertificateFile = VatCertificateFile(
-      vatFilename,
-      vatDownloadURL,
+      fileName,
+      downloadUrl,
       vatSize,
       VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, None)
     )
@@ -142,15 +136,14 @@ class DownloadLinkSpec extends ViewTestHelper {
       "12345678"
     )
 
-    val id     = "testId"
     val period = "periodDuration"
 
     def viewVat(vatCertificateFile: Option[VatCertificateFile] = None): Document =
-      Jsoup.parse(application.injector.instanceOf[download_link].apply(vatCertificateFile, Pdf, id, period).body)
+      Jsoup.parse(application.injector.instanceOf[download_link].apply(vatCertificateFile, Pdf, test_Id, period).body)
 
     def viewCash(cashStatementFile: Option[CashStatementFile] = None): Document =
       Jsoup.parse(
-        application.injector.instanceOf[download_link_cash_account].apply(cashStatementFile, Csv, id, period).body
+        application.injector.instanceOf[download_link_cash_account].apply(cashStatementFile, Csv, test_Id, period).body
       )
   }
 }

@@ -21,6 +21,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.Assertion
 import views.ViewTestHelper
 import views.html.components.link
+import utils.TestData.{id, linkMessage, location, pId, postLinkMessage, preLinkMessage, testClass}
 
 class LinkSpec extends ViewTestHelper {
 
@@ -30,10 +31,10 @@ class LinkSpec extends ViewTestHelper {
 
       "it contains linkId, preLinkMessage and postLinkMessage" in new Setup {
         implicit val linkView: Document =
-          viewDoc(linkId = Some(id), preLinkMessage = Some(preLinkMsgKey), postLinkMessage = Some(postLinkMsgKey))
+          viewDoc(linkId = Some(id), preLinkMessage = Some(preLinkMessage), postLinkMessage = Some(postLinkMessage))
 
         shouldContainLocation(Some(id), location)
-        shouldContainPreAndPostLinkMessages(preLinkMsgKey, postLinkMsgKey)
+        shouldContainPreAndPostLinkMessages(preLinkMessage, postLinkMessage)
         shouldContainCorrectStyleClasses(linkMessage = linkMessage)
       }
 
@@ -62,12 +63,12 @@ class LinkSpec extends ViewTestHelper {
         implicit val linkView: Document = viewDoc(
           linkId = Some(id),
           pWrapped = false,
-          preLinkMessage = Some(preLinkMsgKey),
-          postLinkMessage = Some(postLinkMsgKey),
+          preLinkMessage = Some(preLinkMessage),
+          postLinkMessage = Some(postLinkMessage),
           pClass = testClass
         )
 
-        shouldNotContainPreAndPostLinkMessages(preLinkMsgKey, postLinkMsgKey)
+        shouldNotContainPreAndPostLinkMessages(preLinkMessage, postLinkMessage)
       }
     }
   }
@@ -106,13 +107,6 @@ class LinkSpec extends ViewTestHelper {
     view.text().contains(s"${messages(linkMessage)}.") mustBe true
 
   trait Setup {
-    val linkMessage    = "cf.undeliverable.email.change.text.p1"
-    val location       = "test_location"
-    val id             = "test_id"
-    val pId            = "test_pid"
-    val preLinkMsgKey  = "cf.undeliverable.email.link-text"
-    val postLinkMsgKey = "cf.undeliverable.email.change.text.p2"
-    val testClass      = "test_link_class"
 
     def viewDoc(
       location: String = location,

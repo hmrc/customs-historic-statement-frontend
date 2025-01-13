@@ -17,6 +17,7 @@
 package models
 
 import base.SpecBase
+import utils.TestData.*
 import models.DDStatementType.*
 import models.FileFormat.{Csv, Pdf, UnknownFileFormat}
 import org.scalatest.matchers.must.Matchers
@@ -114,14 +115,6 @@ class SdesFileSpec extends SpecBase with Matchers {
   }
 
   trait Setup {
-    val year  = 2018
-    val year2 = 2019
-    val year3 = 19
-    val year4 = 2011
-    val year5 = 2012
-
-    val month    = 11
-    val day      = 27
     val size     = 10
     val fileSize = 12
 

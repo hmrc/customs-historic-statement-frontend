@@ -28,6 +28,7 @@ import play.api.test.Helpers
 import play.api.test.Helpers.*
 import uk.gov.hmrc.http.{HttpReads, HttpResponse, StringContextOps}
 import utils.Utils.emptyString
+import utils.TestData.*
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
@@ -52,7 +53,7 @@ class SdesConnectorSpec extends SpecBase {
 
       running(app) {
         val result: Seq[DutyDefermentStatementFile] =
-          await(sdesConnector.getDutyDefermentStatements(someEori, someDan)(hc))
+          await(sdesConnector.getDutyDefermentStatements(eori, dan)(hc))
 
         result must be(dutyDefermentStatementFiles)
       }
@@ -74,7 +75,7 @@ class SdesConnectorSpec extends SpecBase {
         .thenReturn(requestBuilder)
 
       running(app) {
-        val result: Seq[SecurityStatementFile] = await(sdesConnector.getSecurityStatements(someEori)(hc))
+        val result: Seq[SecurityStatementFile] = await(sdesConnector.getSecurityStatements(eori)(hc))
         result must be(securityStatementFiles)
       }
     }
@@ -95,7 +96,7 @@ class SdesConnectorSpec extends SpecBase {
         .thenReturn(requestBuilder)
 
       running(app) {
-        val result = await(sdesConnector.getVatCertificates(someEori)(hc))
+        val result = await(sdesConnector.getVatCertificates(eori)(hc))
         result must be(vatCertificateFiles)
       }
     }
@@ -118,7 +119,7 @@ class SdesConnectorSpec extends SpecBase {
           .thenReturn(requestBuilder)
 
         running(app) {
-          val result = await(sdesConnector.getPostponedVatStatements(someEori)(hc))
+          val result = await(sdesConnector.getPostponedVatStatements(eori)(hc))
           result must be(postponedVatStatementFiles)
         }
       }
@@ -136,7 +137,7 @@ class SdesConnectorSpec extends SpecBase {
         when(mockHttp.get(eqTo(url"$sdesCashStatementsUrl"))(any()))
           .thenReturn(requestBuilder)
 
-        sdesConnector.getCashStatements(someEori)(hc).map { cashStatements =>
+        sdesConnector.getCashStatements(eori)(hc).map { cashStatements =>
           cashStatements mustBe cashStatementFiles
         }
       }
@@ -157,7 +158,7 @@ class SdesConnectorSpec extends SpecBase {
 
       running(app) {
         intercept[Exception] {
-          await(sdesConnector.getVatCertificates(someEori)(hc))
+          await(sdesConnector.getVatCertificates(eori)(hc))
         }.getMessage mustBe "Unknown file role: Invalid"
       }
     }
@@ -165,15 +166,6 @@ class SdesConnectorSpec extends SpecBase {
 
   trait Setup {
     implicit val messages: Messages = Helpers.stubMessages()
-
-    val someDan  = "1234"
-    val someEori = "eori1"
-
-    val year   = 2018
-    val month  = 3
-    val day    = 14
-    val hour   = 2
-    val minute = 23
 
     val size = 111L
 
@@ -273,7 +265,7 @@ class SdesConnectorSpec extends SpecBase {
             MetadataItem("DefermentStatementType", "Weekly"),
             MetadataItem("DutyOverLimit", "Y"),
             MetadataItem("DutyPaymentType", "BACS"),
-            MetadataItem("DAN", someDan)
+            MetadataItem("DAN", dan)
           )
         )
       ),
@@ -294,7 +286,7 @@ class SdesConnectorSpec extends SpecBase {
             MetadataItem("DefermentStatementType", "Weekly"),
             MetadataItem("DutyOverLimit", "N"),
             MetadataItem("DutyPaymentType", "BACS"),
-            MetadataItem("DAN", someDan)
+            MetadataItem("DAN", dan)
           )
         )
       )
@@ -317,7 +309,7 @@ class SdesConnectorSpec extends SpecBase {
           Weekly,
           Some(true),
           Some("BACS"),
-          someDan
+          dan
         )
       ),
       DutyDefermentStatementFile(
@@ -336,7 +328,7 @@ class SdesConnectorSpec extends SpecBase {
           Weekly,
           Some(false),
           Some("BACS"),
-          someDan
+          dan
         )
       )
     )
@@ -359,7 +351,7 @@ class SdesConnectorSpec extends SpecBase {
             MetadataItem("PeriodEndDay", "23"),
             MetadataItem("FileType", "pdf"),
             MetadataItem("FileRole", "SecurityStatement"),
-            MetadataItem("eoriNumber", someEori),
+            MetadataItem("eoriNumber", eori),
             MetadataItem("fileSize", "111"),
             MetadataItem("checksum", "checksum_01"),
             MetadataItem("issueDate", "3/4/2018")
@@ -380,7 +372,7 @@ class SdesConnectorSpec extends SpecBase {
             MetadataItem("PeriodEndDay", "23"),
             MetadataItem("FileType", "pdf"),
             MetadataItem("FileRole", "SecurityStatement"),
-            MetadataItem("eoriNumber", someEori),
+            MetadataItem("eoriNumber", eori),
             MetadataItem("checksum", "checksum_01"),
             MetadataItem("issueDate", "3/4/2018")
           )
@@ -404,7 +396,7 @@ class SdesConnectorSpec extends SpecBase {
               MetadataItem("PeriodEndDay", "23"),
               MetadataItem("FileType", "foo"),
               MetadataItem("FileRole", "SecurityStatement"),
-              MetadataItem("eoriNumber", someEori),
+              MetadataItem("eoriNumber", eori),
               MetadataItem("fileSize", "111"),
               MetadataItem("checksum", "checksum_01"),
               MetadataItem("issueDate", "3/4/2018"),
@@ -429,7 +421,7 @@ class SdesConnectorSpec extends SpecBase {
                 MetadataItem("PeriodEndDay", "23"),
                 MetadataItem("FileType", "bar"),
                 MetadataItem("FileRole", "SecurityStatement"),
-                MetadataItem("eoriNumber", someEori),
+                MetadataItem("eoriNumber", eori),
                 MetadataItem("fileSize", "111"),
                 MetadataItem("checksum", "checksum_01"),
                 MetadataItem("issueDate", "3/4/2018")
@@ -452,7 +444,7 @@ class SdesConnectorSpec extends SpecBase {
           minute,
           Pdf,
           SecurityStatement,
-          someEori,
+          eori,
           size,
           "checksum_01"
         )
@@ -470,7 +462,7 @@ class SdesConnectorSpec extends SpecBase {
           minute,
           Pdf,
           SecurityStatement,
-          someEori,
+          eori,
           size,
           "checksum_01"
         )

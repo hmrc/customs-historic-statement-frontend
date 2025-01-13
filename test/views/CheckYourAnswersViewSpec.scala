@@ -64,7 +64,7 @@ class CheckYourAnswersViewSpec extends ViewTestHelper {
     view.getElementById("eori-heading").text().contains(accountNumberText) mustBe true
 
   private def shouldContainSelectedDuration(implicit view: Document): Assertion =
-    view.getElementsByClass("govuk-summary-list__value").text().contains("October 2019 to October 2019") mustBe true
+    view.getElementsByClass("govuk-summary-list__value").text().contains("March 2018 to March 2018") mustBe true
 
   private def shouldContainChangeLink(implicit view: Document): Assertion = {
     val visuallyHiddenLinks = view.getElementsByClass("govuk-summary-list__actions")
