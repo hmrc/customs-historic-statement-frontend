@@ -50,7 +50,7 @@ class LayoutSpec extends SpecBase {
       }
 
       "there is no value for title and back link" in new Setup {
-        val layoutView: Document = Jsoup.parse(application.injector.instanceOf[Layout].apply()(content).body)
+        val layoutView: Document = Jsoup.parse(instanceOf[Layout].apply()(content).body)
 
         shouldContainCorrectTitle(layoutView)
         shouldContainCorrectServiceUrls(layoutView)

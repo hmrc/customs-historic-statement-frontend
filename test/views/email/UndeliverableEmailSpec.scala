@@ -62,10 +62,10 @@ class UndeliverableEmailSpec extends SpecBase {
 
   trait Setup {
     val view: Document = Jsoup.parse(
-      application.injector.instanceOf[undeliverable_email].apply(url, email)(request, messages, appConfig).body
+      instanceOf[undeliverable_email].apply(url, email)(request, messages, appConfig).body
     )
 
     val viewWithNoEmail: Document =
-      Jsoup.parse(application.injector.instanceOf[undeliverable_email].apply(url).body)
+      Jsoup.parse(instanceOf[undeliverable_email].apply(url).body)
   }
 }

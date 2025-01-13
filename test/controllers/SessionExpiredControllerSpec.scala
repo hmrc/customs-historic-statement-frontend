@@ -28,7 +28,7 @@ class SessionExpiredControllerSpec extends SpecBase {
 
       val request = fakeRequest(GET, routes.SessionExpiredController.onPageLoad().url)
       val result  = route(application, request).value
-      val view    = application.injector.instanceOf[SessionExpiredView]
+      val view    = instanceOf[SessionExpiredView]
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual

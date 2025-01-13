@@ -139,11 +139,11 @@ class DownloadLinkSpec extends ViewTestHelper {
     val period = "periodDuration"
 
     def viewVat(vatCertificateFile: Option[VatCertificateFile] = None): Document =
-      Jsoup.parse(application.injector.instanceOf[download_link].apply(vatCertificateFile, Pdf, test_Id, period).body)
+      Jsoup.parse(instanceOf[download_link].apply(vatCertificateFile, Pdf, test_Id, period).body)
 
     def viewCash(cashStatementFile: Option[CashStatementFile] = None): Document =
       Jsoup.parse(
-        application.injector.instanceOf[download_link_cash_account].apply(cashStatementFile, Csv, test_Id, period).body
+        instanceOf[download_link_cash_account].apply(cashStatementFile, Csv, test_Id, period).body
       )
   }
 }

@@ -28,7 +28,7 @@ class ErrorHandlerSpec extends SpecBase {
 
     "display template with correct contents" in new Setup {
 
-      val errorTemplateView: ErrorTemplate = application.injector.instanceOf[ErrorTemplate]
+      val errorTemplateView: ErrorTemplate = instanceOf[ErrorTemplate]
 
       errorHandler.standardErrorTemplate(test_title, test_heading, test_heading).map { errorTemplate =>
         errorTemplate mustBe errorTemplateView(test_title, test_heading, test_message)
@@ -44,7 +44,7 @@ class ErrorHandlerSpec extends SpecBase {
 
     "display template with correct contents" in new Setup {
 
-      val notFoundView: not_found = application.injector.instanceOf[not_found]
+      val notFoundView: not_found = instanceOf[not_found]
 
       errorHandler.notFoundTemplate.map { notFoundTemplate =>
         notFoundTemplate.toString mustBe notFoundView.apply().body
@@ -56,7 +56,7 @@ class ErrorHandlerSpec extends SpecBase {
 
     "display template with correct contents" in new Setup {
 
-      val errorTemplateView: ErrorTemplate = application.injector.instanceOf[ErrorTemplate]
+      val errorTemplateView: ErrorTemplate = instanceOf[ErrorTemplate]
 
       errorHandler.unauthorized() mustBe
         errorTemplateView.apply(
@@ -69,6 +69,6 @@ class ErrorHandlerSpec extends SpecBase {
 
   trait Setup {
     implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
-    val errorHandler: ErrorHandler                     = application.injector.instanceOf[ErrorHandler]
+    val errorHandler: ErrorHandler                     = instanceOf[ErrorHandler]
   }
 }

@@ -99,7 +99,7 @@ class ConfirmationPageViewSpec extends SpecBase {
 
     val view: Document =
       Jsoup.parse(
-        application.injector.instanceOf[ConfirmationPageView].apply(Some(email), fileRole, returnLink, dates).body
+        instanceOf[ConfirmationPageView].apply(Some(email), fileRole, returnLink, dates).body
       )
 
     val subheaderElement = view.getElementsByTag("h2").first()

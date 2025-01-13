@@ -39,6 +39,7 @@ import utils.Utils.emptyString
 import utils.TestData.*
 
 import java.time.LocalDate
+import scala.reflect.ClassTag
 
 trait SpecBase
     extends AnyWordSpecLike
@@ -77,14 +78,15 @@ trait SpecBase
 
   lazy val application: Application = applicationBuilder().build()
 
-  implicit lazy val appConfig: FrontendAppConfig = application.injector.instanceOf[FrontendAppConfig]
+  implicit lazy val appConfig: FrontendAppConfig = instanceOf[FrontendAppConfig]
 
   val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
-  implicit lazy val messages: Messages =
-    application.injector.instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
+  implicit lazy val messages: Messages = instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
   implicit lazy val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest()
+
+  def instanceOf[T: ClassTag]: T = application.injector.instanceOf[T]
 }

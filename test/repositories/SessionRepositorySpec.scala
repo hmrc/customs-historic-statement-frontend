@@ -43,8 +43,8 @@ class SessionRepositorySpec extends SpecBase {
   }
 
   trait Setup {
-    val appConfig: Configuration           = application.injector.instanceOf[Configuration]
-    val mongoComponent: PlayMongoComponent = application.injector.instanceOf[PlayMongoComponent]
+    val appConfig: Configuration           = instanceOf[Configuration]
+    val mongoComponent: PlayMongoComponent = instanceOf[PlayMongoComponent]
 
     val defaultSessionRepository = new DefaultSessionRepository(mongoComponent, appConfig)
 

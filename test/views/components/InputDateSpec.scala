@@ -38,7 +38,7 @@ class InputDateSpec extends SpecBase {
       )
 
       running(application) {
-        val inputDateView                 = application.injector.instanceOf[inputDate]
+        val inputDateView                 = instanceOf[inputDate]
         val output: HtmlFormat.Appendable = inputDateView(
           formWithValues,
           headline,
@@ -67,7 +67,7 @@ class InputDateSpec extends SpecBase {
       )
 
       running(application) {
-        val inputDateView                 = application.injector.instanceOf[inputDate]
+        val inputDateView                 = instanceOf[inputDate]
         val output: HtmlFormat.Appendable = inputDateView(
           formWithValues,
           headline,
@@ -96,7 +96,7 @@ class InputDateSpec extends SpecBase {
       )
 
       running(application) {
-        val inputDateView                 = application.injector.instanceOf[inputDate]
+        val inputDateView                 = instanceOf[inputDate]
         val output: HtmlFormat.Appendable = inputDateView(
           formWithValues,
           headline,
@@ -124,7 +124,7 @@ class InputDateSpec extends SpecBase {
       )
 
       running(application) {
-        val inputDateView                 = application.injector.instanceOf[inputDate]
+        val inputDateView                 = instanceOf[inputDate]
         val output: HtmlFormat.Appendable = inputDateView(
           formWithValues,
           headline,
