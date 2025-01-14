@@ -18,7 +18,7 @@ package controllers
 
 import models.{EmailUnverifiedResponse, EmailVerifiedResponse}
 import play.api.inject._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
+import uk.gov.hmrc.http.HttpReads
 import base.SpecBase
 import org.mockito.ArgumentMatchers
 import play.api.test.Helpers._
@@ -78,7 +78,6 @@ class EmailControllerSpec extends SpecBase {
 
   trait Setup {
     val expectedResult                        = Some("unverifiedEmail")
-    implicit val hc: HeaderCarrier            = HeaderCarrier()
     implicit val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
     val requestBuilder: RequestBuilder        = mock[RequestBuilder]
 

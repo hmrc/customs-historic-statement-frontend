@@ -26,7 +26,6 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.Utils.emptyString
 
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
@@ -121,8 +120,8 @@ class AuthActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        val bodyParsers       = application.injector.instanceOf[BodyParsers.Default]
-        val frontendAppConfig = application.injector.instanceOf[FrontendAppConfig]
+        val bodyParsers       = instanceOf[BodyParsers.Default]
+        val frontendAppConfig = instanceOf[FrontendAppConfig]
 
         val authAction = new AuthenticatedIdentifierAction(
           new FakeFailingAuthConnector(new MissingBearerToken),
@@ -145,8 +144,8 @@ class AuthActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        val bodyParsers       = application.injector.instanceOf[BodyParsers.Default]
-        val frontendAppConfig = application.injector.instanceOf[FrontendAppConfig]
+        val bodyParsers       = instanceOf[BodyParsers.Default]
+        val frontendAppConfig = instanceOf[FrontendAppConfig]
 
         val authAction = new AuthenticatedIdentifierAction(
           new FakeFailingAuthConnector(new BearerTokenExpired),
@@ -169,8 +168,8 @@ class AuthActionSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        val bodyParsers       = application.injector.instanceOf[BodyParsers.Default]
-        val frontendAppConfig = application.injector.instanceOf[FrontendAppConfig]
+        val bodyParsers       = instanceOf[BodyParsers.Default]
+        val frontendAppConfig = instanceOf[FrontendAppConfig]
 
         val authAction = new AuthenticatedIdentifierAction(
           new FakeFailingAuthConnector(new InsufficientEnrolments),
@@ -190,8 +189,6 @@ class AuthActionSpec extends SpecBase {
 }
 
 class FakeFailingAuthConnector @Inject() (exceptionToReturn: Throwable) extends AuthConnector {
-  val serviceUrl: String = emptyString
-
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit
     hc: HeaderCarrier,
     ec: ExecutionContext

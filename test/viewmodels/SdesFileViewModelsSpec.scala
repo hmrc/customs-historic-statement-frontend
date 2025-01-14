@@ -20,9 +20,8 @@ import base.SpecBase
 import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary, UnknownStatementType}
 import models.FileFormat.Pdf
 import models.{DDStatementType, DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata}
-import play.api.Application
-import play.api.i18n.Messages
 import viewmodels.SdesFileViewModels.DutyDefermentStatementFileViewModel
+import utils.TestData.{downloadUrl, fileName}
 
 class SdesFileViewModelsSpec extends SpecBase {
 
@@ -58,9 +57,6 @@ class SdesFileViewModelsSpec extends SpecBase {
     val year2 = 2021
     val month = 11
     val day   = 27
-
-    val fileName    = "test_file"
-    val downloadUrl = "http://second.com/"
 
     def metaData(defermentStatementType: DDStatementType): DutyDefermentStatementFileMetadata =
       DutyDefermentStatementFileMetadata(
@@ -98,8 +94,5 @@ class SdesFileViewModelsSpec extends SpecBase {
     lazy val unknownViewModel         = new DutyDefermentStatementFileViewModel(unknown)
     lazy val exciseDefermentViewModel = new DutyDefermentStatementFileViewModel(exciseDeferment)
     lazy val dutyDefermentViewModel   = new DutyDefermentStatementFileViewModel(dutyDeferment)
-
-    val app: Application        = applicationBuilder().build()
-    implicit val msgs: Messages = messages(app)
   }
 }

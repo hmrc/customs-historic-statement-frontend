@@ -23,6 +23,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.Assertion
 import viewmodels.{VatCertificatesByMonth, VatCertificatesForEori, VatViewModel}
 import views.html.ImportVatRequestedStatements
+import utils.TestData.*
 
 import java.time.LocalDate
 
@@ -30,7 +31,7 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
   "view" should {
     "display correct title and contents" in new Setup {
       titleShouldBeCorrect(view, "cf.import-vat.requested.title")
-      pageShouldContainBackLinkUrl(view, config.returnLink("c79Certificate"))
+      pageShouldContainBackLinkUrl(view, appConfig.returnLink("c79Certificate"))
       headingShouldBeCorrect
       requestedAvailableTextShouldBeCorrect
     }
@@ -41,7 +42,7 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("requested-import-vat-certificates-heading")
       .html()
       .contains(
-        msg("cf.import-vat.requested.title")
+        messages("cf.import-vat.requested.title")
       ) mustBe true
 
   private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion =
@@ -49,50 +50,42 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("available-text")
       .html()
       .contains(
-        msg("cf.import-vat.requested.available.text")
+        messages("cf.import-vat.requested.available.text")
       ) mustBe true
 
   trait Setup {
-
-    private val someEori               = "12345678"
-    private val localDateYear          = 2020
-    private val localDateMonth         = 10
-    private val localDateMonth2        = 10
-    private val localDateDay           = 1
-    private val filename: String       = "name_04"
-    private val downloadURL: String    = "download_url_06"
     private val size                   = 113L
     private val periodStartYear: Int   = 2018
     private val periodStartMonth: Int  = 3
     private val periodStartMonth2: Int = 4
 
     private val eoriHistory = EoriHistory(
-      someEori,
-      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
-      Some(LocalDate.of(localDateYear, localDateMonth2, localDateDay))
+      eori,
+      Some(LocalDate.of(year, month, day)),
+      Some(LocalDate.of(year, month_2, day))
     )
 
     val vatCertificateFiles: VatCertificateFile = VatCertificateFile(
-      filename,
-      downloadURL,
+      fileName,
+      downloadUrl,
       size,
       VatCertificateFileMetadata(periodStartYear, periodStartMonth, Pdf, C79Certificate, None)
     )
 
     val vatCertificateFiles_2: VatCertificateFile = VatCertificateFile(
-      filename,
-      downloadURL,
+      fileName,
+      downloadUrl,
       size,
       VatCertificateFileMetadata(periodStartYear, periodStartMonth2, Pdf, C79Certificate, None)
     )
 
     val vatCertificatesByMonth_1: VatCertificatesByMonth = VatCertificatesByMonth(
-      LocalDate.of(localDateYear, localDateMonth, localDateDay),
+      LocalDate.of(year, month, day),
       Seq(vatCertificateFiles)
     )
 
     val vatCertificatesByMonth_2: VatCertificatesByMonth = VatCertificatesByMonth(
-      LocalDate.of(localDateYear, localDateMonth2, localDateDay),
+      LocalDate.of(year, month_2, day),
       Seq(vatCertificateFiles_2)
     )
 
@@ -102,14 +95,13 @@ class ImportVatRequestedStatementsSpec extends ViewTestHelper {
     private val vatViewModel = VatViewModel(Seq(vatCertificatesForEori))
 
     implicit val view: Document = Jsoup.parse(
-      app.injector
+      application.injector
         .instanceOf[ImportVatRequestedStatements]
         .apply(
           vatViewModel,
-          config.returnLink("c79Certificate")
+          appConfig.returnLink("c79Certificate")
         )
         .body
     )
   }
-
 }

@@ -19,7 +19,7 @@ package views.components
 import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
 import models.DutyDefermentStatement
-import play.api.Application
+import utils.TestData.id
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
@@ -37,15 +37,15 @@ class InputDateSpec extends SpecBase {
         )
       )
 
-      running(app) {
-        val inputDateView                 = app.injector.instanceOf[inputDate]
+      running(application) {
+        val inputDateView                 = instanceOf[inputDate]
         val output: HtmlFormat.Appendable = inputDateView(
           formWithValues,
           headline,
           id = id,
           hintText = None,
           legendAsPageHeading = false
-        )(messages(app))
+        )(messages)
 
         val html: Document = Jsoup.parse(output.toString)
         html.getElementsByTag("legend").text()     must include(headline)
@@ -66,15 +66,15 @@ class InputDateSpec extends SpecBase {
         )
       )
 
-      running(app) {
-        val inputDateView                 = app.injector.instanceOf[inputDate]
+      running(application) {
+        val inputDateView                 = instanceOf[inputDate]
         val output: HtmlFormat.Appendable = inputDateView(
           formWithValues,
           headline,
           id = id,
           hintText = None,
           legendAsPageHeading = false
-        )(messages(app))
+        )(messages)
 
         val html: Document = Jsoup.parse(output.toString)
         html.getElementsByTag("legend").text()          must include(headline)
@@ -95,15 +95,15 @@ class InputDateSpec extends SpecBase {
         )
       )
 
-      running(app) {
-        val inputDateView                 = app.injector.instanceOf[inputDate]
+      running(application) {
+        val inputDateView                 = instanceOf[inputDate]
         val output: HtmlFormat.Appendable = inputDateView(
           formWithValues,
           headline,
           id = id,
           hintText = None,
           legendAsPageHeading = false
-        )(messages(app))
+        )(messages)
 
         val html: Document = Jsoup.parse(output.toString)
         html.getElementsByTag("legend").text()         must include(headline)
@@ -123,15 +123,15 @@ class InputDateSpec extends SpecBase {
         )
       )
 
-      running(app) {
-        val inputDateView                 = app.injector.instanceOf[inputDate]
+      running(application) {
+        val inputDateView                 = instanceOf[inputDate]
         val output: HtmlFormat.Appendable = inputDateView(
           formWithValues,
           headline,
           id = id,
           hintText = None,
           legendAsPageHeading = false
-        )(messages(app))
+        )(messages)
 
         val html: Document = Jsoup.parse(output.toString)
         html.getElementsByTag("legend").text()       must include(headline)
@@ -145,10 +145,7 @@ class InputDateSpec extends SpecBase {
   }
 
   trait Setup {
-    val form             =
-      new HistoricDateRequestPageFormProvider().apply(DutyDefermentStatement)
-    val app: Application = applicationBuilder().build()
-    val id               = "value"
-    val headline         = "Date of birth"
+    val form     = new HistoricDateRequestPageFormProvider().apply(DutyDefermentStatement)
+    val headline = "Date of birth"
   }
 }

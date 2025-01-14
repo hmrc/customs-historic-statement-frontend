@@ -17,13 +17,10 @@
 package views
 
 import base.SpecBase
-import config.FrontendAppConfig
 import controllers.routes
 import models.{C79Certificate, FileRole}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.Application
-import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -39,23 +36,23 @@ class ConfirmationPageViewSpec extends SpecBase {
       "title should display correctly" in new Setup {
         view
           .title() mustBe
-          s"${messages(app)(s"cf.historic.document.request.confirmation.panel-text.${fileRole.name}")} - " +
-          s"${messages(app)("service.name")} - GOV.UK"
+          s"${messages(s"cf.historic.document.request.confirmation.panel-text.${fileRole.name}")} - " +
+          s"${messages("service.name")} - GOV.UK"
       }
 
       "date should display correctly" in new Setup {
-        view.getElementById("email-confirmation-panel-date").text() mustBe messages(app)("03 Oct 2021 to 04 Sept 2022")
+        view.getElementById("email-confirmation-panel-date").text() mustBe messages("03 Oct 2021 to 04 Sept 2022")
       }
 
       "subheader-text should be an H2 and display correctly" in new Setup {
-        subheaderElement.text() mustBe messages(app)(
+        subheaderElement.text() mustBe messages(
           "cf.historic.document.request.confirmation.subheader-text.next"
         )
         subheaderElement.tagName() mustBe "h2"
       }
 
       "email confirmation should display correctly" in new Setup {
-        view.getElementById("email-confirmation").text() mustBe messages(app)(
+        view.getElementById("email-confirmation").text() mustBe messages(
           "cf.historic.document.request.confirmation.body-text.request",
           email.value
         )
@@ -64,17 +61,17 @@ class ConfirmationPageViewSpec extends SpecBase {
       "download your PVAT statements text should display correctly" in new Setup {
         view
           .text()
-          .contains(messages(app)("cf.historic.document.request.confirmation.body-text2.PostponedVATStatement"))
+          .contains(messages("cf.historic.document.request.confirmation.body-text2.PostponedVATStatement"))
       }
 
       "body-text2 should display correctly" in new Setup {
-        view.getElementById("body-text2").text() mustBe messages(app)(
+        view.getElementById("body-text2").text() mustBe messages(
           s"cf.historic.document.request.confirmation.body-text2.${fileRole.name}"
         )
       }
 
       "link should display correct text" in new Setup {
-        view.getElementById("link-text").text() mustBe messages(app)(
+        view.getElementById("link-text").text() mustBe messages(
           s"cf.historic.document.request.confirmation.${fileRole.name}.link-text"
         )
       }
@@ -92,10 +89,6 @@ class ConfirmationPageViewSpec extends SpecBase {
   }
 
   trait Setup {
-    val app: Application = applicationBuilder(userAnswers = Some(populatedUserAnswers)).build()
-
-    implicit val msges: Messages                              = messages(app)
-    implicit val appConfig: FrontendAppConfig                 = app.injector.instanceOf[FrontendAppConfig]
     implicit val request: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequest(GET, routes.ConfirmationPageController.onPageLoad(C79Certificate).url)
 
@@ -105,7 +98,9 @@ class ConfirmationPageViewSpec extends SpecBase {
     val dates: String      = "03 Oct 2021 to 04 Sept 2022"
 
     val view: Document =
-      Jsoup.parse(app.injector.instanceOf[ConfirmationPageView].apply(Some(email), fileRole, returnLink, dates).body)
+      Jsoup.parse(
+        instanceOf[ConfirmationPageView].apply(Some(email), fileRole, returnLink, dates).body
+      )
 
     val subheaderElement = view.getElementsByTag("h2").first()
   }

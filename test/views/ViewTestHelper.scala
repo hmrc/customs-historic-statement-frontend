@@ -17,26 +17,13 @@
 package views
 
 import base.SpecBase
-import config.FrontendAppConfig
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import play.api.Application
-import play.api.i18n.Messages
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 
 trait ViewTestHelper extends SpecBase {
-
-  val app: Application = applicationBuilder().build()
-
-  implicit val config: FrontendAppConfig                    = app.injector.instanceOf[FrontendAppConfig]
-  implicit val msg: Messages                                = messages(app)
-  implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest()
-
   def titleShouldBeCorrect(view: Document, titleMessageKey: String): Assertion =
-    view.title() mustBe s"${msg(titleMessageKey)} - ${msg("service.name")} - GOV.UK"
+    view.title() mustBe s"${messages(titleMessageKey)} - ${messages("service.name")} - GOV.UK"
 
   def pageShouldContainBackLinkUrl(view: Document, url: String): Assertion =
     view.getElementsByClass("govuk-back-link").attr("href") mustBe url
-
 }

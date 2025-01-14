@@ -19,14 +19,12 @@ package views.templates
 import config.FrontendAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.Application
 import play.api.i18n.Messages
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import play.twirl.api.Html
 import views.html.templates.Layout
 import base.SpecBase
 import utils.Utils.emptyString
+import utils.TestData.{test_title, url}
 
 class LayoutSpec extends SpecBase {
 
@@ -35,27 +33,24 @@ class LayoutSpec extends SpecBase {
     "display correct guidance" when {
 
       "title and back link are provided" in new Setup {
-        val title   = "test_title"
-        val linkUrl = "test.com"
-
         val layoutView: Document = Jsoup.parse(
-          app.injector
+          application.injector
             .instanceOf[Layout]
             .apply(
-              pageTitle = Some(title),
-              backLinkUrl = Some(linkUrl)
+              pageTitle = Some(test_title),
+              backLinkUrl = Some(url)
             )(content)
             .body
         )
 
-        shouldContainCorrectTitle(layoutView, title)
+        shouldContainCorrectTitle(layoutView, test_title)
         shouldContainCorrectServiceUrls(layoutView)
-        shouldContainCorrectBackLink(layoutView, Some(linkUrl))
+        shouldContainCorrectBackLink(layoutView, Some(url))
         shouldContainCorrectBanners(layoutView)
       }
 
       "there is no value for title and back link" in new Setup {
-        val layoutView: Document = Jsoup.parse(app.injector.instanceOf[Layout].apply()(content).body)
+        val layoutView: Document = Jsoup.parse(instanceOf[Layout].apply()(content).body)
 
         shouldContainCorrectTitle(layoutView)
         shouldContainCorrectServiceUrls(layoutView)
@@ -96,12 +91,6 @@ class LayoutSpec extends SpecBase {
       .text() mustBe "BETA This is a new service - your feedback will help us to improve it."
 
   trait Setup {
-    val app: Application = applicationBuilder().build()
-
-    implicit val msgs: Messages                               = messages(app)
-    implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
-    implicit val appConfig: FrontendAppConfig                 = app.injector.instanceOf[FrontendAppConfig]
-
     val content: Html = Html("test")
   }
 }

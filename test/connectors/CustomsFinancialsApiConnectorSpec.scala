@@ -17,13 +17,12 @@
 package connectors
 
 import base.SpecBase
-import config.FrontendAppConfig
 import models.{C79Certificate, HistoricDocumentRequest}
 import org.mockito.ArgumentMatchers
 import play.api.http.Status
 import play.api.inject.bind
 import play.api.test.Helpers.*
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.{HttpReads, HttpResponse, StringContextOps}
 import utils.Utils.emptyString
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
@@ -127,8 +126,6 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       )
       .build()
 
-    val mockAppConfig                 = app.injector.instanceOf[FrontendAppConfig]
     val customsFinancialsApiConnector = app.injector.instanceOf[CustomsFinancialsApiConnector]
-    implicit val hc: HeaderCarrier    = HeaderCarrier()
   }
 }

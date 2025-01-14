@@ -17,11 +17,10 @@
 package connectors
 
 import base.SpecBase
-import config.FrontendAppConfig
 import org.mockito.ArgumentMatchers
 import play.api.inject.bind
 import play.api.test.Helpers.*
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.{HttpReads, HttpResponse, StringContextOps}
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
@@ -91,8 +90,6 @@ class CustomsSessionCacheConnectorSpec extends SpecBase {
       )
       .build()
 
-    val mockAppConfig                = app.injector.instanceOf[FrontendAppConfig]
     val customsSessionCacheConnector = app.injector.instanceOf[CustomsSessionCacheConnector]
-    implicit val hc: HeaderCarrier   = HeaderCarrier()
   }
 }

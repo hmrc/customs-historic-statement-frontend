@@ -29,6 +29,7 @@ import uk.gov.hmrc.http.ServiceUnavailableException
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import utils.Utils.emptyString
+import utils.TestData.emailId
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 
@@ -80,8 +81,6 @@ class EmailActionSpec extends SpecBase {
   }
 
   trait Setup {
-    val emailId = "test@test.com"
-
     val mockDataStoreService: CustomsDataStoreConnector = org.mockito.Mockito.mock(classOf[CustomsDataStoreConnector])
 
     val app: Application = applicationBuilder()

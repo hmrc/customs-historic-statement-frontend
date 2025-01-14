@@ -18,8 +18,6 @@ package viewmodels
 
 import base.SpecBase
 import models.{C79Certificate, DutyDefermentStatement, FileRole, PostponedVATStatement, SecurityStatement}
-import play.api.Application
-import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.ActionItem
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Actions, Value}
@@ -32,7 +30,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
 
       val compare = List(
         SummaryListRow(
-          Value(HtmlContent("October 2019 to October 2019"), emptyString),
+          Value(HtmlContent("March 2018 to March 2018"), emptyString),
           None,
           emptyString,
           Some(
@@ -58,19 +56,15 @@ class CheckYourAnswersHelperSpec extends SpecBase {
 
   "dateRows" should {
     "return correct date range string for C79Certificate file role" in new Setup {
-      helperOb.dateRows(c79FileRole) mustBe Some(messages(app)("date.range", "October 2019", "October 2019"))
+      helperOb.dateRows(c79FileRole) mustBe Some(messages("date.range", "March 2018", "March 2018"))
     }
   }
 
   trait Setup {
-
     val c79FileRole: FileRole      = C79Certificate
     val dutyFileRole: FileRole     = DutyDefermentStatement
     val securityFileRole: FileRole = SecurityStatement
     val postFileRole: FileRole     = PostponedVATStatement
-
-    val app: Application        = applicationBuilder(userAnswers = Some(populatedUserAnswers)).build()
-    implicit val msgs: Messages = messages(app)
-    val helperOb                = new CheckYourAnswersHelper(populatedUserAnswers)
+    val helperOb                   = new CheckYourAnswersHelper(populatedUserAnswers)
   }
 }

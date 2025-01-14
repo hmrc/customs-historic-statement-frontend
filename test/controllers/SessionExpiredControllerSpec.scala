@@ -17,7 +17,6 @@
 package controllers
 
 import base.SpecBase
-import config.FrontendAppConfig
 import play.api.test.Helpers._
 import views.html.SessionExpiredView
 
@@ -27,18 +26,15 @@ class SessionExpiredControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val app       = applicationBuilder(userAnswers = None).build()
-      val request   = fakeRequest(GET, routes.SessionExpiredController.onPageLoad().url)
-      val result    = route(app, request).value
-      val view      = app.injector.instanceOf[SessionExpiredView]
-      val appConfig = app.injector.instanceOf[FrontendAppConfig]
-
+      val request = fakeRequest(GET, routes.SessionExpiredController.onPageLoad().url)
+      val result  = route(application, request).value
+      val view    = instanceOf[SessionExpiredView]
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view()(request, messages(app), appConfig).toString
+        view()(request, messages, appConfig).toString
 
-      app.stop()
+      application.stop()
     }
   }
 }

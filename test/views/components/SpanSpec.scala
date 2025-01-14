@@ -19,6 +19,7 @@ package views.components
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import utils.Utils.emptyString
+import utils.TestData.msgKey
 import views.ViewTestHelper
 import views.html.components.span
 
@@ -39,20 +40,18 @@ class SpanSpec extends ViewTestHelper {
     }
   }
 
-  private def displayKey(messageKey: String = "timeout.title")(implicit view: Document) =
-    view.getElementsByClass("govuk-visually-hidden").html.contains(msg(messageKey)) mustBe true
+  private def displayKey(msgKey: String = "test_message_key")(implicit view: Document) =
+    view.getElementsByClass("govuk-visually-hidden").html.contains(messages(msgKey)) mustBe true
 
-  private def shouldNotDisplayVisuallyHiddenKey(messageKey: String = "timeout.title")(implicit view: Document) =
-    view.getElementsByClass("govuk-visually-hidden").html.contains(msg(messageKey)) mustBe false
+  private def shouldNotDisplayVisuallyHiddenKey(msgKey: String = "test_message_key")(implicit view: Document) =
+    view.getElementsByClass("govuk-visually-hidden").html.contains(messages(msgKey)) mustBe false
 
-  private def shouldDisplaySpanWithMessageKey(messageKey: String = "timeout.title")(implicit view: Document) =
-    view.getElementsByTag("span").text() mustBe msg(messageKey)
+  private def shouldDisplaySpanWithMessageKey(msgKey: String = "test_message_key")(implicit view: Document) =
+    view.getElementsByTag("span").text() mustBe messages(msgKey)
 
   trait Setup {
-    val messageKey = "timeout.title"
-
-    def view(msgKey: String = messageKey, visuallyHidden: Boolean = true): Document = Jsoup.parse(
-      app.injector
+    def view(msgKey: String = msgKey, visuallyHidden: Boolean = true): Document = Jsoup.parse(
+      application.injector
         .instanceOf[span]
         .apply(key = msgKey, classes = Some(emptyString), visuallyHidden = visuallyHidden)
         .body

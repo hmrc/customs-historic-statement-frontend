@@ -21,13 +21,12 @@ import models.{EoriHistory, PostponedVATStatement, PostponedVatStatementFile, Po
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import play.api.Application
-import play.api.i18n.Messages
 import viewmodels.{
   PostponedVatStatementsByMonth, PostponedVatStatementsForEori, PostponedVatViewModel, SourceDisplay,
   StatementDisplayData
 }
 import views.html.ImportPostponedVatRequestedStatements
+import utils.TestData.*
 import java.time.LocalDate
 
 class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
@@ -35,7 +34,7 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
   "view" should {
     "display correct title and contents" in new Setup {
       titleShouldBeCorrect(view, "cf.import-postponed-vat.requested.title")
-      pageShouldContainBackLinkUrl(view, config.returnLink("postponedVATStatement"))
+      pageShouldContainBackLinkUrl(view, appConfig.returnLink("postponedVATStatement"))
       headingShouldBeCorrect
       requestedAvailableTextShouldBeCorrect
     }
@@ -60,15 +59,15 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     }
 
     "correctly handle missing files" in new Setup {
-      statementData.statementItem.body must include(msg("cf.account.postponed-vat.missing-file-type", "CHIEF"))
+      statementData.statementItem.body must include(messages("cf.account.postponed-vat.missing-file-type", "CHIEF"))
     }
   }
 
   private def displayStatementsShouldBeCorrect(result: Seq[StatementDisplayData]): Assertion = {
     result.length mustBe 1
-    result.head.monthYear.equalsIgnoreCase("October 2020") mustBe true
-    result.head.monthYearId.equalsIgnoreCase("october-2020") mustBe true
-    result.head.formattedMonth mustBe "October"
+    result.head.monthYear.equalsIgnoreCase("March 2018") mustBe true
+    result.head.monthYearId.equalsIgnoreCase("March-2018") mustBe true
+    result.head.formattedMonth mustBe "March"
     result.head.sources.length mustBe 2
     result.head.sources.head.source mustBe "CDS"
     result.head.index mustBe 0
@@ -79,7 +78,7 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("requested-import-postponed-vat-statements-heading")
       .html()
       .contains(
-        msg("cf.import-postponed-vat.requested.title")
+        messages("cf.import-postponed-vat.requested.title")
       ) mustBe true
 
   private def requestedAvailableTextShouldBeCorrect(implicit view: Document): Assertion =
@@ -87,39 +86,23 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
       .getElementById("available-text")
       .html()
       .contains(
-        msg("cf.import-postponed-vat.requested.available.text")
+        messages("cf.import-postponed-vat.requested.available.text")
       ) mustBe true
 
   trait Setup {
-
-    val app: Application       = applicationBuilder().build()
-    implicit val msg: Messages = messages(app)
-
-    private val someEori        = "12345678"
-    private val localDateYear   = 2020
-    private val localDateMonth  = 10
-    private val localDateMonth2 = 10
-    private val localDateDay    = 1
-    protected val monthAndYear  = "October 2020"
-
-    private val filename: String       = "name_04"
-    private val downloadURL: String    = "download_url_06"
-    private val size                   = 113L
-    private val periodStartYear: Int   = 2018
-    private val periodStartMonth: Int  = 3
-    private val periodStartMonth2: Int = 4
-    private val source: String         = "CDS"
-    private val statementRequestId     = "a request id"
+    protected val monthAndYear = "March 2018"
+    private val size           = 113L
+    private val source: String = "CDS"
 
     protected val eoriHistory: EoriHistory = EoriHistory(
-      someEori,
-      Some(LocalDate.of(localDateYear, localDateMonth, localDateDay)),
-      Some(LocalDate.of(localDateYear, localDateMonth2, localDateDay))
+      eori,
+      Some(LocalDate.of(year, month, day)),
+      Some(LocalDate.of(year, month_2, day))
     )
 
     protected val postponedVatStatementFile: PostponedVatStatementFile = PostponedVatStatementFile(
-      filename,
-      downloadURL,
+      fileName,
+      downloadUrl,
       size,
       PostponedVatStatementFileMetadata(
         periodStartYear,
@@ -127,31 +110,31 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
         Pdf,
         PostponedVATStatement,
         source,
-        Some(statementRequestId)
+        Some(requestId)
       )
     )
 
     protected val postponedVatStatementFile_2: PostponedVatStatementFile = PostponedVatStatementFile(
-      filename,
-      downloadURL,
+      fileName,
+      downloadUrl,
       size,
       PostponedVatStatementFileMetadata(
         periodStartYear,
-        periodStartMonth2,
+        periodStartMonth_2,
         Pdf,
         PostponedVATStatement,
         source,
-        Some(statementRequestId)
+        Some(requestId)
       )
     )
 
     private val postponedVatStatementsByMonth_1 = PostponedVatStatementsByMonth(
-      LocalDate.of(localDateYear, localDateMonth, localDateDay),
+      LocalDate.of(year, month, day),
       Seq(postponedVatStatementFile)
     )
 
     protected val postponedVatStatementsByMonth_2: PostponedVatStatementsByMonth = PostponedVatStatementsByMonth(
-      LocalDate.of(localDateYear, localDateMonth2, localDateDay),
+      LocalDate.of(year, month_2, day),
       Seq(postponedVatStatementFile_2)
     )
 
@@ -165,9 +148,9 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
       PostponedVatViewModel(Seq(postponedVatStatementsForEori))
 
     implicit val view: Document = Jsoup.parse(
-      app.injector
+      application.injector
         .instanceOf[ImportPostponedVatRequestedStatements]
-        .apply(postponedVatViewModel, config.returnLink("postponedVATStatement"))
+        .apply(postponedVatViewModel, appConfig.returnLink("postponedVATStatement"))
         .body
     )
 

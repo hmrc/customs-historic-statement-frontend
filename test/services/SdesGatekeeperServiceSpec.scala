@@ -18,6 +18,7 @@ package services
 
 import base.SpecBase
 import models.*
+import utils.TestData.*
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.{times, verify, when}
 import utils.Utils.emptyString
@@ -107,23 +108,11 @@ class SdesGatekeeperServiceSpec extends SpecBase {
 
   trait Setup {
 
-    val sdesGatekeeperService             = new SdesGatekeeperService()
-    val periodStartYear                   = 2017
-    val periodStartMonth                  = 11
-    val periodStartDay                    = 1
-    val periodEndYear                     = 2017
-    val periodEndMonth                    = 11
-    val periodEndDay                      = 8
-    val fileSize                          = 500L
-    val someAccountNumber: Option[String] = Some("123456789")
-    val someRequestId: Option[String]     = Some("Ab1234")
-    val csv                               = "csv"
-    val fileName                          = "test-file.csv"
-    val downloadURL                       = "test-file.csv"
+    val sdesGatekeeperService = new SdesGatekeeperService()
 
     val validCashStatementFile: CashStatementFile = CashStatementFile(
       filename = fileName,
-      downloadURL = downloadURL,
+      downloadURL = downloadUrl,
       size = fileSize,
       metadata = CashStatementFileMetadata(
         periodStartYear = periodStartYear,
@@ -142,7 +131,7 @@ class SdesGatekeeperServiceSpec extends SpecBase {
 
     val validCashStatementFileInformation: FileInformation = FileInformation(
       filename = fileName,
-      downloadURL = downloadURL,
+      downloadURL = downloadUrl,
       fileSize = fileSize,
       metadata = Metadata(
         Seq(
@@ -162,7 +151,7 @@ class SdesGatekeeperServiceSpec extends SpecBase {
 
     val validVatCertificateFileInformation: FileInformation = FileInformation(
       filename = fileName,
-      downloadURL = downloadURL,
+      downloadURL = downloadUrl,
       fileSize = fileSize,
       metadata = Metadata(
         Seq(
@@ -177,7 +166,7 @@ class SdesGatekeeperServiceSpec extends SpecBase {
 
     val validPostponedVatStatementFileInformation: FileInformation = FileInformation(
       filename = fileName,
-      downloadURL = downloadURL,
+      downloadURL = downloadUrl,
       fileSize = fileSize,
       metadata = Metadata(
         Seq(
@@ -193,7 +182,7 @@ class SdesGatekeeperServiceSpec extends SpecBase {
 
     val validSecurityStatementFileInformation: FileInformation = FileInformation(
       filename = fileName,
-      downloadURL = downloadURL,
+      downloadURL = downloadUrl,
       fileSize = fileSize,
       metadata = Metadata(
         Seq(
@@ -215,7 +204,7 @@ class SdesGatekeeperServiceSpec extends SpecBase {
 
     val validDutyDefermentStatementFileInformation: FileInformation = FileInformation(
       filename = fileName,
-      downloadURL = downloadURL,
+      downloadURL = downloadUrl,
       fileSize = fileSize,
       metadata = Metadata(
         Seq(

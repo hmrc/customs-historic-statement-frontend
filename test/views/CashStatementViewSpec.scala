@@ -23,8 +23,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.Assertion
 import viewmodels.{CashStatementForEori, CashStatementMonthToMonth, CashStatementViewModel}
 import views.html.CashStatementView
-
-import java.time.LocalDate
+import utils.TestData.{date, downloadUrl, eori, fileName, periodStartDay, periodStartMonth, periodStartYear}
 
 class CashStatementViewSpec extends ViewTestHelper {
 
@@ -32,7 +31,7 @@ class CashStatementViewSpec extends ViewTestHelper {
 
     "display correct title and contents" in new Setup {
       titleShouldBeCorrect(view, "cf.cash-statement-requested-heading")
-      pageShouldContainBackLinkUrl(view, config.returnLink(CDSCashAccount))
+      pageShouldContainBackLinkUrl(view, appConfig.returnLink(CDSCashAccount))
       headingShouldBeCorrect
       requestedParagraphTextShouldBeCorrect
       requestedListParagraphTextShouldBeCorrect
@@ -44,46 +43,34 @@ class CashStatementViewSpec extends ViewTestHelper {
     view
       .getElementById("search-transactions-support-message-heading")
       .html()
-      .contains(msg("site.support.heading")) mustBe true
+      .contains(messages("site.support.heading")) mustBe true
 
   private def headingShouldBeCorrect(implicit view: Document): Assertion =
     view
       .getElementById("requested-cash-statement-heading")
       .html()
-      .contains(msg("cf.cash-statement-requested-heading")) mustBe true
+      .contains(messages("cf.cash-statement-requested-heading")) mustBe true
 
   private def requestedParagraphTextShouldBeCorrect(implicit view: Document): Assertion =
     view
       .getElementById("requested-cash-statement-paragraph")
       .html()
-      .contains(msg("cf.cash-statement-requested-paragraph")) mustBe true
+      .contains(messages("cf.cash-statement-requested-paragraph")) mustBe true
 
   private def requestedListParagraphTextShouldBeCorrect(implicit view: Document): Assertion =
     view
       .getElementById("requested-cash-statement-list-paragraph")
       .html()
-      .contains(msg("cf.cash-statement-requested-list-paragraph")) mustBe true
+      .contains(messages("cf.cash-statement-requested-list-paragraph")) mustBe true
 
   trait Setup {
+    val size = 120L
 
-    val someEori              = "12345678"
-    val localDateYear         = 2020
-    val localDateMonth        = 10
-    val localDateDay          = 1
-    val filename: String      = "statement_file_01"
-    val downloadURL: String   = "download_url_01"
-    val size                  = 120L
-    val periodStartYear: Int  = 2019
-    val periodStartMonth: Int = 7
-    val periodStartDay: Int   = 10
-
-    val date = LocalDate.of(localDateYear, localDateMonth, localDateDay)
-
-    val eoriHistory: EoriHistory = EoriHistory(someEori, Some(date), Some(date))
+    val eoriHistory: EoriHistory = EoriHistory(eori, Some(date), Some(date))
 
     val cashStatementFile: CashStatementFile = CashStatementFile(
-      filename,
-      downloadURL,
+      fileName,
+      downloadUrl,
       size,
       CashStatementFileMetadata(
         periodStartYear,
@@ -96,7 +83,7 @@ class CashStatementViewSpec extends ViewTestHelper {
         CDSCashAccount,
         Some("requestId")
       ),
-      someEori
+      eori
     )
 
     val cashStatementsByMonth: CashStatementMonthToMonth =
@@ -105,12 +92,13 @@ class CashStatementViewSpec extends ViewTestHelper {
     val cashStatementsForEori: CashStatementForEori =
       CashStatementForEori(eoriHistory, Seq(cashStatementsByMonth), Seq.empty)
 
-    val accountNumber = "12345"
-
     val cashStatementViewModel: CashStatementViewModel = CashStatementViewModel(Seq(cashStatementsForEori))
 
     implicit val view: Document = Jsoup.parse(
-      app.injector.instanceOf[CashStatementView].apply(cashStatementViewModel, config.returnLink(CDSCashAccount)).body
+      application.injector
+        .instanceOf[CashStatementView]
+        .apply(cashStatementViewModel, appConfig.returnLink(CDSCashAccount))
+        .body
     )
   }
 }

@@ -17,7 +17,6 @@
 package connectors
 
 import base.SpecBase
-import config.FrontendAppConfig
 import models.{
   EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, UndeliverableEmail, UndeliverableInformation,
   UnverifiedEmail
@@ -26,12 +25,13 @@ import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.retrieve.Email
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HttpReads, StringContextOps, UpstreamErrorResponse}
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND}
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import utils.TestData.*
 
 import java.net.URL
 import java.time.LocalDate
@@ -93,14 +93,9 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
   "getAllEoriHistory" should {
     "parse eoriHistory correctly" in new Setup {
       val jsonObject =
-        Json.obj("eori" -> "eori1", "validFrom" -> "2019-11-10", "validUntil" -> "2019-12-10T10:15:30+01:00")
+        Json.obj("eori" -> "eori1", "validFrom" -> "2018-11-14", "validUntil" -> "2018-12-14T10:15:30+01:00")
 
-      val jsonObject2 = Json.obj("eori" -> "eori1", "validFrom" -> "2019-11-10", "validUntil" -> "2019-12-10T10:15:30")
-
-      val year   = 2019
-      val day    = 10
-      val eleven = 11
-      val twelve = 12
+      val jsonObject2 = Json.obj("eori" -> "eori1", "validFrom" -> "2018-11-14", "validUntil" -> "2018-12-14T10:15:30")
 
       val eoriHistory1 =
         EoriHistory("eori1", Some(LocalDate.of(year, eleven, day)), Some(LocalDate.of(year, twelve, day)))
@@ -110,14 +105,12 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
       Json.toJson[EoriHistory](eoriHistory1) mustBe Json.obj(
         "eori"       -> "eori1",
-        "validFrom"  -> "2019-11-10",
-        "validUntil" -> "2019-12-10"
+        "validFrom"  -> "2018-11-14",
+        "validUntil" -> "2018-12-14"
       )
     }
 
     "return eoriHistory from customs data store" in new Setup {
-
-      val offset = 10
 
       val eoriHistory1 = EoriHistory("eori1", Some(LocalDate.now()), Some(LocalDate.now()))
 
@@ -216,8 +209,6 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
   trait Setup {
     val mockHttpClient: HttpClientV2   = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
-    val eori: String                   = "GB11111"
-    val emailId                        = "test@test.com"
 
     val app = applicationBuilder()
       .overrides(
@@ -226,12 +217,9 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
       )
       .build()
 
-    val mockAppConfig             = app.injector.instanceOf[FrontendAppConfig]
     val customsDataStoreConnector = app.injector.instanceOf[CustomsDataStoreConnector]
 
     val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
     val emailVerifiedRes: EmailVerifiedResponse     = EmailVerifiedResponse(Some(emailId))
-
-    implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 }

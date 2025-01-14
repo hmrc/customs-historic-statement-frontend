@@ -20,6 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewTestHelper
 import views.html.components.span_link
+import utils.TestData.{msgKey, url}
 
 class SpanLinkSpec extends ViewTestHelper {
 
@@ -72,10 +73,6 @@ class SpanLinkSpec extends ViewTestHelper {
   }
 
   trait Setup {
-
-    val msgKey = "timeout.title"
-    val url    = "/example"
-
     def view(
       msgKey: String = msgKey,
       spanMsg: Option[String] = None,
@@ -83,7 +80,7 @@ class SpanLinkSpec extends ViewTestHelper {
       id: Option[String] = None
     ): Document = {
 
-      val component = app.injector
+      val component = application.injector
         .instanceOf[span_link]
         .apply(
           msg = msgKey,

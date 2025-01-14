@@ -17,17 +17,16 @@
 package viewmodels
 
 import base.SpecBase
-import config.FrontendAppConfig
 import models.FileFormat.{Csv, Pdf}
 import models.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+
 import scala.jdk.CollectionConverters.ListHasAsScala
 import org.mockito.Mockito.when
-import play.api.Application
-import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import utils.Utils.h2Component
+import utils.TestData.{eori, someAccountNumber}
 
 import java.time.LocalDate
 
@@ -38,7 +37,7 @@ class CashStatementViewModelSpec extends SpecBase {
     "return grouped statements by year when exist" in new Setup {
       val cashStatements: Seq[CashStatementForEori] = Seq(
         CashStatementForEori(
-          eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+          eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq.empty,
           requestedStatements = Seq(CashStatementMonthToMonth(startDate, endDate))
         )
@@ -58,7 +57,7 @@ class CashStatementViewModelSpec extends SpecBase {
     "return an empty sequence when no requested statements exist" in new Setup {
       val cashStatements: Seq[CashStatementForEori] = Seq(
         CashStatementForEori(
-          eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+          eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq(CashStatementMonthToMonth(startDate, endDate)),
           requestedStatements = Seq.empty
         )
@@ -78,7 +77,7 @@ class CashStatementViewModelSpec extends SpecBase {
     "return true if there are requested statements" in new Setup {
       val cashStatements: Seq[CashStatementForEori] = Seq(
         CashStatementForEori(
-          eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+          eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq.empty,
           requestedStatements = Seq(CashStatementMonthToMonth(startDate, endDate))
         )
@@ -95,7 +94,7 @@ class CashStatementViewModelSpec extends SpecBase {
     "return false if there are no requested statements" in new Setup {
       val cashStatements: Seq[CashStatementForEori] = Seq(
         CashStatementForEori(
-          eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+          eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
           currentStatements = Seq.empty,
           requestedStatements = Seq.empty
         )
@@ -116,7 +115,7 @@ class CashStatementViewModelSpec extends SpecBase {
       val statements: Seq[CashStatementMonthToMonth] = Seq(CashStatementMonthToMonth(startDate, endDate))
       val groupedStatements: GroupedStatementsByEori = GroupedStatementsByEori(
         eoriIndex = 0,
-        eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+        eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
         statementsByYear = Map(periodStartYear -> statements)
       )
 
@@ -140,7 +139,7 @@ class CashStatementViewModelSpec extends SpecBase {
 
       val groupedStatements: GroupedStatementsByEori = GroupedStatementsByEori(
         eoriIndex = 0,
-        eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+        eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
         statementsByYear = Map(periodStartYear -> statements)
       )
 
@@ -148,7 +147,7 @@ class CashStatementViewModelSpec extends SpecBase {
       val document: Document = Jsoup.parse(result.body)
 
       private val rowsByMonth               = document.select("div[id^=requested-statements-list-0-row-]")
-      private val julyStartMonthRow1        = rowsByMonth.asScala(0)
+      private val julyStartMonthRow1        = rowsByMonth.asScala.head
       private val julyStartMonthRow2        = rowsByMonth.asScala(1)
       private val augustStartMonthRow1      = rowsByMonth.asScala(2)
       private val augustStartMonthRow2      = rowsByMonth.asScala(3)
@@ -161,7 +160,7 @@ class CashStatementViewModelSpec extends SpecBase {
       julyStartMonthRow2.select("dt").first.ownText mustBe "July to August"
       augustStartMonthRow1.select("dt").first.ownText mustBe "August to August"
       augustStartMonthRow2.select("dt").first.ownText mustBe "August to October"
-      augustStartMonthRow1Links.eachText.asScala(0) mustBe "PDF (2.0MB) Download PDF of August to August (2.0MB)"
+      augustStartMonthRow1Links.eachText.asScala.head mustBe "PDF (2.0MB) Download PDF of August to August (2.0MB)"
       augustStartMonthRow1Links.eachText.asScala(1) mustBe "CSV (1.0MB) Download CSV of August to August (1.0MB)"
       csvLinks.size mustBe 4
       pdfLinks.size mustBe 1
@@ -174,7 +173,7 @@ class CashStatementViewModelSpec extends SpecBase {
 
       val groupedStatements: GroupedStatementsByEori = GroupedStatementsByEori(
         eoriIndex = 0,
-        eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+        eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
         statementsByYear = Map(periodStartYear -> statements)
       )
 
@@ -192,7 +191,7 @@ class CashStatementViewModelSpec extends SpecBase {
         Seq(CashStatementMonthToMonth(startDate.plusYears(1), endDate.plusYears(1)))
       val groupedStatements: GroupedStatementsByEori     = GroupedStatementsByEori(
         eoriIndex = 0,
-        eoriHistory = EoriHistory(eoriNumber, Some(startDateJuly), Some(endDateJuly)),
+        eoriHistory = EoriHistory(eori, Some(startDateJuly), Some(endDateJuly)),
         statementsByYear = Map(
           periodStartYear     -> statements2023,
           periodStartYear + 1 -> statements2024
@@ -208,35 +207,28 @@ class CashStatementViewModelSpec extends SpecBase {
     "helpAndSupport" should {
 
       "generate the correct help and support content" in new Setup {
-        when(appConfig.cashAccountForCdsDeclarationsUrl)
+        when(mockAppConfig.cashAccountForCdsDeclarationsUrl)
           .thenReturn("https://www.gov.uk/guidance/use-a-cash-account-for-cds-declarations")
 
         val result: HtmlFormat.Appendable = CashStatementViewModel.helpAndSupport
 
-        result.body must include(msg("search-transactions-support-message-heading"))
-        result.body must include(msg("cf.help-and-support.link.text"))
-        result.body must include(msg("cf.help-and-support.link.text.pre"))
-        result.body must include(msg("cf.help-and-support.link.text.post"))
+        result.body must include(messages("search-transactions-support-message-heading"))
+        result.body must include(messages("cf.help-and-support.link.text"))
+        result.body must include(messages("cf.help-and-support.link.text.pre"))
+        result.body must include(messages("cf.help-and-support.link.text.post"))
         result.body must include(appConfig.cashAccountForCdsDeclarationsUrl)
       }
     }
   }
 
   trait Setup {
-
-    val app: Application                      = applicationBuilder().build()
-    implicit val msg: Messages                = messages(app)
-    implicit val appConfig: FrontendAppConfig = mock[FrontendAppConfig]
-
-    val eoriNumber               = "EORI456"
     val startDateJuly: LocalDate = LocalDate.parse("2023-07-10")
     val endDateJuly: LocalDate   = LocalDate.parse("2023-07-20")
     val startDateJune: LocalDate = LocalDate.parse("2023-06-01")
     val endDateJune: LocalDate   = LocalDate.parse("2023-06-30")
 
-    val accountNumber: Option[String] = Some("123456789")
-    val monthJuly                     = "July"
-    val monthAugust                   = "August"
+    val monthJuly   = "July"
+    val monthAugust = "August"
 
     val periodStartYear  = 2023
     val periodStartMonth = 7
@@ -260,7 +252,7 @@ class CashStatementViewModelSpec extends SpecBase {
       periodEndDay = periodEndDay,
       fileFormat = Csv,
       fileRole = CDSCashAccount,
-      cashAccountNumber = accountNumber,
+      cashAccountNumber = someAccountNumber,
       statementRequestId = None
     )
 
@@ -273,7 +265,7 @@ class CashStatementViewModelSpec extends SpecBase {
       periodEndDay = periodEndDay,
       fileFormat = Csv,
       fileRole = CDSCashAccount,
-      cashAccountNumber = accountNumber,
+      cashAccountNumber = someAccountNumber,
       statementRequestId = None
     )
 
@@ -286,7 +278,7 @@ class CashStatementViewModelSpec extends SpecBase {
       periodEndDay = periodEndDay,
       fileFormat = Csv,
       fileRole = CDSCashAccount,
-      cashAccountNumber = accountNumber,
+      cashAccountNumber = someAccountNumber,
       statementRequestId = None
     )
 
@@ -299,7 +291,7 @@ class CashStatementViewModelSpec extends SpecBase {
       periodEndDay = periodEndDay,
       fileFormat = Csv,
       fileRole = CDSCashAccount,
-      cashAccountNumber = accountNumber,
+      cashAccountNumber = someAccountNumber,
       statementRequestId = None
     )
 
@@ -312,7 +304,7 @@ class CashStatementViewModelSpec extends SpecBase {
       periodEndDay = periodEndDay,
       fileFormat = Pdf,
       fileRole = CDSCashAccount,
-      cashAccountNumber = accountNumber,
+      cashAccountNumber = someAccountNumber,
       statementRequestId = None
     )
 

@@ -17,6 +17,7 @@
 package services
 
 import base.SpecBase
+import utils.TestData.*
 import models.DDStatementType.{Excise, Weekly}
 import models.FileFormat.{Csv, Pdf}
 import models.*
@@ -69,19 +70,7 @@ class SortStatementsServiceSpec extends SpecBase {
   trait Setup {
     implicit val messages: Messages = Helpers.stubMessages()
 
-    val someEori                          = "12345678"
-    val someDan                           = "12345"
-    val someRequestId                     = Some("Ab1234")
-    val periodStartYear                   = 2017
-    val periodStartMonth                  = 11
-    val periodStartMonth_2                = 10
-    val periodStartDay                    = 1
-    val periodEndYear                     = 2017
-    val periodEndMonth                    = 11
-    val periodEndDay                      = 8
-    val fileSize                          = 500L
-    val size                              = 99L
-    val someAccountNumber: Option[String] = Some("123456789")
+    val size = 99L
 
     val cashStatementFilePdf: CashStatementFile = CashStatementFile(
       "file1",
@@ -99,7 +88,7 @@ class SortStatementsServiceSpec extends SpecBase {
         someAccountNumber,
         None
       ),
-      someEori
+      eori
     )
 
     val cashStatementFileCsv: CashStatementFile = CashStatementFile(
@@ -118,7 +107,7 @@ class SortStatementsServiceSpec extends SpecBase {
         someAccountNumber,
         None
       ),
-      someEori
+      eori
     )
 
     val cashStatementFilePdf_2: CashStatementFile = CashStatementFile(
@@ -137,7 +126,7 @@ class SortStatementsServiceSpec extends SpecBase {
         someAccountNumber,
         someRequestId
       ),
-      someEori
+      eori
     )
 
     val requestedCashStatements: Seq[CashStatementMonthToMonth] = List(
@@ -164,7 +153,7 @@ class SortStatementsServiceSpec extends SpecBase {
         periodEndDay,
         Pdf,
         SecurityStatement,
-        someEori,
+        eori,
         fileSize,
         "0000000",
         None
@@ -184,7 +173,7 @@ class SortStatementsServiceSpec extends SpecBase {
         periodEndDay,
         Pdf,
         SecurityStatement,
-        someEori,
+        eori,
         fileSize,
         "0000000",
         None
@@ -204,7 +193,7 @@ class SortStatementsServiceSpec extends SpecBase {
         periodEndDay,
         Pdf,
         SecurityStatement,
-        someEori,
+        eori,
         fileSize,
         "0000000",
         someRequestId
@@ -232,7 +221,7 @@ class SortStatementsServiceSpec extends SpecBase {
                 periodEndDay,
                 Pdf,
                 SecurityStatement,
-                "12345678",
+                "GB11111",
                 fileSize,
                 "0000000",
                 someRequestId
@@ -397,7 +386,7 @@ class SortStatementsServiceSpec extends SpecBase {
           Weekly,
           Some(true),
           Some("BACS"),
-          someDan,
+          dan,
           someRequestId
         )
       )
@@ -419,7 +408,7 @@ class SortStatementsServiceSpec extends SpecBase {
           Weekly,
           Some(true),
           Some("BACS"),
-          someDan,
+          dan,
           None
         )
       )
@@ -441,7 +430,7 @@ class SortStatementsServiceSpec extends SpecBase {
           Excise,
           Some(true),
           Some("BACS"),
-          someDan,
+          dan,
           someRequestId
         )
       )
@@ -463,7 +452,7 @@ class SortStatementsServiceSpec extends SpecBase {
           Excise,
           Some(true),
           Some("BACS"),
-          someDan,
+          dan,
           None
         )
       )
@@ -487,7 +476,7 @@ class SortStatementsServiceSpec extends SpecBase {
           Weekly,
           Some(true),
           Some("BACS"),
-          "12345",
+          "1234",
           someRequestId
         )
       ),
@@ -507,7 +496,7 @@ class SortStatementsServiceSpec extends SpecBase {
           Excise,
           Some(true),
           Some("BACS"),
-          "12345",
+          "1234",
           someRequestId
         )
       )

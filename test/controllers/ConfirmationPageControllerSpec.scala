@@ -17,7 +17,6 @@
 package controllers
 
 import base.SpecBase
-import config.FrontendAppConfig
 import connectors.CustomsDataStoreConnector
 import models.C79Certificate
 import play.api.{Application, inject}
@@ -51,8 +50,8 @@ class ConfirmationPageControllerSpec extends SpecBase {
             Some(Email("some@email.com")),
             C79Certificate,
             routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url,
-            "October 2019 to October 2019"
-          )(request, messages(app), appConfig).toString
+            "March 2018 to March 2018"
+          )(request, messages, appConfig).toString
       }
     }
   }
@@ -97,8 +96,6 @@ class ConfirmationPageControllerSpec extends SpecBase {
       )
       .build()
 
-    val view: ConfirmationPageView   = app.injector.instanceOf[ConfirmationPageView]
-    val appConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
-
+    val view: ConfirmationPageView = app.injector.instanceOf[ConfirmationPageView]
   }
 }
