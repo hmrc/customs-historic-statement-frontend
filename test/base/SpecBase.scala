@@ -80,11 +80,11 @@ trait SpecBase
 
   implicit lazy val appConfig: FrontendAppConfig = instanceOf[FrontendAppConfig]
 
-  val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+  lazy val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   implicit lazy val messages: Messages = instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
   implicit lazy val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest()
 
