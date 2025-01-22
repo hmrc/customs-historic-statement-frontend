@@ -54,13 +54,13 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
     "return correct text for ExciseDeferment" in new Setup {
       dutyDefermentStatementPeriodExciseDeferment.unavailableLinkHiddenText(
         Pdf
-      ) mustBe "Excise deferment 1920 summary PDF for March 2018 unavailable"
+      ) mustBe "Excise deferment 1920 PDF for March 2018 unavailable"
     }
 
     "return correct text for DutyDeferment" in new Setup {
       dutyDefermentStatementPeriodDutyDeferment.unavailableLinkHiddenText(
         Pdf
-      ) mustBe "Duty deferment 1720 summary PDF for March 2018 unavailable"
+      ) mustBe "Duty deferment 1720 PDF for March 2018 unavailable"
     }
 
     "return correct text for Excise" in new Setup {

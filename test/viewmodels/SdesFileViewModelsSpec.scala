@@ -38,12 +38,12 @@ class SdesFileViewModelsSpec extends SpecBase {
 
     "return correct label for ExciseDeferment DDStatementType" in new Setup {
       exciseDefermentViewModel
-        .downloadLinkAriaLabel() mustBe "Download excise deferment 1920 summary PDF for November 2021 (1KB)"
+        .downloadLinkAriaLabel() mustBe "Download excise deferment 1920 PDF for November 2021 (1KB)"
     }
 
     "return correct label for DutyDeferment DDStatementType" in new Setup {
       dutyDefermentViewModel
-        .downloadLinkAriaLabel() mustBe "Download duty deferment 1720 summary PDF for November 2021 (1KB)"
+        .downloadLinkAriaLabel() mustBe "Download duty deferment 1720 PDF for November 2021 (1KB)"
     }
 
     "return correct label for UnknownStatementType" in new Setup {
