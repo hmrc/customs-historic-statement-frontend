@@ -17,27 +17,25 @@
 package connectors
 
 import config.FrontendAppConfig
-import models._
+import models.*
 import play.api.Logging
 import play.api.http.Status.NOT_FOUND
-import play.api.libs.json._
+import play.api.libs.json.*
 import uk.gov.hmrc.auth.core.retrieve.Email
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps, UpstreamErrorResponse}
 
 import javax.inject.Inject
-import scala.concurrent._
+import scala.concurrent.*
 
 class CustomsDataStoreConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClientV2)(implicit
   executionContext: ExecutionContext
 ) extends Logging {
 
-  def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
-    val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/$eori/verified-email"
-
+  def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] =
     httpClient
-      .get(url"$dataStoreEndpoint")
+      .get(url"${appConfig.customsDataStoreGetVerifiedEmail}")
       .execute[EmailResponse]
       .map {
         case EmailResponse(Some(address), _, None)  => Right(Email(address))
@@ -47,14 +45,12 @@ class CustomsDataStoreConnector @Inject() (appConfig: FrontendAppConfig, httpCli
       .recover { case UpstreamErrorResponse(_, NOT_FOUND, _, _) =>
         Left(UnverifiedEmail)
       }
-  }
 
   def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] = {
-    val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/$eori/eori-history"
-    val emptyEoriHistory  = Seq(EoriHistory(eori, None, None))
+    val emptyEoriHistory = Seq(EoriHistory(eori, None, None))
 
     httpClient
-      .get(url"$dataStoreEndpoint")
+      .get(url"${appConfig.customsDataStoreGetEoriHistory}")
       .execute[EoriHistoryResponse]
       .map(response => response.eoriHistory)
       .recover { case e =>

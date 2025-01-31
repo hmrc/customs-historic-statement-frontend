@@ -17,20 +17,16 @@
 package connectors
 
 import base.SpecBase
-import models.{
-  EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, UndeliverableEmail, UndeliverableInformation,
-  UnverifiedEmail
-}
+import models.{EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, UndeliverableEmail, UndeliverableInformation, UnverifiedEmail}
+import org.mockito.ArgumentMatchers.{any, eq as eqTo}
+import org.mockito.Mockito.when
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.retrieve.Email
-import uk.gov.hmrc.http.{HttpReads, StringContextOps, UpstreamErrorResponse}
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND}
-import org.mockito.Mockito.when
-import org.mockito.ArgumentMatchers.any
-import org.mockito.ArgumentMatchers.{eq => eqTo}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import uk.gov.hmrc.http.{HttpReads, StringContextOps, UpstreamErrorResponse}
 import utils.TestData.*
 
 import java.net.URL
@@ -42,7 +38,7 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
   "getEmail" should {
     "return email address from customs data store" in new Setup {
       val emailResponse       = EmailResponse(Some("a@a.com"), Some("time"), None)
-      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/GB12345/verified-email"
+      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/verified-email"
 
       when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(emailResponse))
@@ -63,7 +59,7 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
         Some(UndeliverableInformation("subject-example", "ex-event-id-01", "ex-group-id-01"))
       )
 
-      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/GB12346/verified-email"
+      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/verified-email"
 
       when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(emailResponse))
@@ -118,7 +114,7 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
         EoriHistory("eori2", Some(LocalDate.now().minusDays(offset)), Some(LocalDate.now().minusDays(offset)))
 
       val eoriHistoryResponse = EoriHistoryResponse(Seq(eoriHistory1, eoriHistory2))
-      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/eori1/eori-history"
+      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/eori-history"
 
       when(requestBuilder.execute(any[HttpReads[EoriHistoryResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(eoriHistoryResponse))
@@ -133,7 +129,7 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
     "return empty EoriHistory when failed to get eoriHistory from data store" in new Setup {
 
-      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/eori1/eori-history"
+      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/eori-history"
 
       when(requestBuilder.execute(any[HttpReads[EoriHistoryResponse]], any[ExecutionContext]))
         .thenReturn(Future.failed(new RuntimeException("failed to get eori history")))

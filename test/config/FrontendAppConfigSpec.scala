@@ -86,6 +86,24 @@ class FrontendAppConfigSpec extends SpecBase {
     }
   }
 
+  "customsDataStore" should {
+    "return correct url" in {
+      appConfig.customsDataStore mustBe "http://localhost:9893/customs-data-store"
+    }
+  }
+
+  "customsDataStoreGetVerifiedEmail" should {
+    "return correct url" in {
+      appConfig.customsDataStoreGetVerifiedEmail mustBe "http://localhost:9893/customs-data-store/eori/verified-email"
+    }
+  }
+
+  "customsDataStoreGetEoriHistory" should {
+    "return correct url" in {
+      appConfig.customsDataStoreGetEoriHistory mustBe "http://localhost:9893/customs-data-store/eori/eori-history"
+    }
+  }
+
   "deleteNotificationUrl" should {
     "return correct url for cash account FileRole" in {
       appConfig.deleteNotificationUrl(CDSCashAccount, "GB123456789000") mustBe
