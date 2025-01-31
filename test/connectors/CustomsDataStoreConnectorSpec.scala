@@ -21,7 +21,7 @@ import models.{
   EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, UndeliverableEmail, UndeliverableInformation,
   UnverifiedEmail
 }
-import org.mockito.ArgumentMatchers.{any, eq as eqTo}
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.when
 import play.api.inject.bind
 import play.api.libs.json.Json
