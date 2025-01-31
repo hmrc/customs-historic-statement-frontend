@@ -56,7 +56,7 @@ class ConfirmationPageController @Inject() (
 
       for {
         _     <- sessionRepository.set(userAnswersWithNoHistoricDates(fileRole, request))
-        email <- retrieveEmail(request)
+        email <- retrieveEmail()
       } yield Ok(
         view(email, fileRole, returnLink, dates.dateRows(fileRole).getOrElse(emptyString))
       )
@@ -75,9 +75,8 @@ class ConfirmationPageController @Inject() (
       case _                         => request.userAnswers
     }
 
-  private def retrieveEmail(request: DataRequest[AnyContent])(implicit hc: HeaderCarrier): Future[Option[Email]] =
-    customsDataStoreConnector
-      .getEmail(request.eori)
+  private def retrieveEmail(implicit hc: HeaderCarrier): Future[Option[Email]] =
+    customsDataStoreConnector.getEmail
       .map {
         case Right(email) => Some(email)
         case Left(_)      => None

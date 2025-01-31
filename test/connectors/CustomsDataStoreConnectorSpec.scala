@@ -23,7 +23,6 @@ import models.{
 }
 import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.when
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.Helpers.*
@@ -49,7 +48,7 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
       when(mockHttpClient.get(eqTo(url"$customsDataStoreUrl"))(any())).thenReturn(requestBuilder)
 
       running(app) {
-        val result = await(customsDataStoreConnector.getEmail("GB12345")(hc))
+        val result = await(customsDataStoreConnector.getEmail(hc))
         result mustBe Right(Email("a@a.com"))
       }
     }
@@ -70,7 +69,7 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
       when(mockHttpClient.get(eqTo(url"$customsDataStoreUrl"))(any())).thenReturn(requestBuilder)
 
       running(app) {
-        val result = await(customsDataStoreConnector.getEmail("GB12346")(hc))
+        val result = await(customsDataStoreConnector.getEmail(hc))
         result mustBe Left(UndeliverableEmail("noresponse@email.com"))
       }
     }
@@ -83,7 +82,7 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
       when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
-        val result = customsDataStoreConnector.getEmail(eori)
+        val result = customsDataStoreConnector.getEmail
         await(result) mustBe Left(UnverifiedEmail)
       }
     }

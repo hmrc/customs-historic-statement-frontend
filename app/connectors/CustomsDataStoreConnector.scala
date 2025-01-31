@@ -33,7 +33,7 @@ class CustomsDataStoreConnector @Inject() (appConfig: FrontendAppConfig, httpCli
   executionContext: ExecutionContext
 ) extends Logging {
 
-  def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] =
+  def getEmail(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] =
     httpClient
       .get(url"${appConfig.customsDataStoreGetVerifiedEmail}")
       .execute[EmailResponse]

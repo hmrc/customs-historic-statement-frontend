@@ -36,7 +36,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in new Setup {
 
-      when(mockDataStoreConnector.getEmail(any)(any)).thenReturn(Future.successful(Right(Email("some@email.com"))))
+      when(mockDataStoreConnector.getEmail(any)).thenReturn(Future.successful(Right(Email("some@email.com"))))
       when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
 
       running(app) {
