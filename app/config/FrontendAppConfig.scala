@@ -17,7 +17,10 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
-import models.{C79Certificate, CDSCashAccount, DutyDefermentStatement, FileRole, PostponedVATStatement, SecurityStatement, UserAnswers}
+import models.{
+  C79Certificate, CDSCashAccount, DutyDefermentStatement, FileRole, PostponedVATStatement, SecurityStatement,
+  UserAnswers
+}
 import pages.RequestedLinkId
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
