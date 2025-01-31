@@ -1,3 +1,4 @@
+import AppDependencies.bootstrapVersion
 import play.sbt.routes.RoutesKeys
 import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings.itSettings
@@ -5,7 +6,6 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "customs-historic-statement-frontend"
 
-val bootstrapVersion = "9.7.0"
 val silencerVersion = "1.7.16"
 val scala3_3_4 = "3.3.4"
 val testDirectory = "test"
