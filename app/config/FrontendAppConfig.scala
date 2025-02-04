@@ -42,8 +42,13 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   lazy val customsFinancialsApi: String = servicesConfig.baseUrl("customs-financials-api") +
     configuration.get[String]("microservice.services.customs-financials-api.context")
 
-  lazy val customsDataStore: String = servicesConfig.baseUrl("customs-data-store") +
+  private lazy val customsDataStoreVerifiedEmail = "/eori/verified-email"
+  private lazy val customsDataStoreEoriHistory   = "/eori/eori-history"
+
+  lazy val customsDataStore: String                 = servicesConfig.baseUrl("customs-data-store") +
     configuration.get[String]("microservice.services.customs-data-store.context")
+  lazy val customsDataStoreGetVerifiedEmail: String = s"$customsDataStore$customsDataStoreVerifiedEmail"
+  lazy val customsDataStoreGetEoriHistory: String   = s"$customsDataStore$customsDataStoreEoriHistory"
 
   lazy val sdesApi: String = servicesConfig.baseUrl("sdes") +
     configuration.get[String]("microservice.services.sdes.context")

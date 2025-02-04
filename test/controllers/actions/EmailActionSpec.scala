@@ -38,7 +38,7 @@ class EmailActionSpec extends SpecBase {
   "filter" should {
     "Let requests with validated email through" in new Setup {
       running(app) {
-        when(mockDataStoreService.getEmail(any)(any))
+        when(mockDataStoreService.getEmail(any))
           .thenReturn(Future.successful(Right(Email("last.man@standing.co.uk"))))
 
         val response = await(emailAction.filter(authenticatedRequest))
@@ -49,7 +49,7 @@ class EmailActionSpec extends SpecBase {
     "Let request through, when getEmail throws service unavailable exception" in new Setup {
       running(app) {
 
-        when(mockDataStoreService.getEmail(any)(any))
+        when(mockDataStoreService.getEmail(any))
           .thenReturn(Future.failed(new ServiceUnavailableException(emptyString)))
 
         val response = await(emailAction.filter(authenticatedRequest))
@@ -59,7 +59,7 @@ class EmailActionSpec extends SpecBase {
 
     "Redirect users with unvalidated emails" in new Setup {
       running(app) {
-        when(mockDataStoreService.getEmail(any)(any)).thenReturn(Future.successful(Left(UnverifiedEmail)))
+        when(mockDataStoreService.getEmail(any)).thenReturn(Future.successful(Left(UnverifiedEmail)))
 
         val response = await(emailAction.filter(authenticatedRequest))
 
@@ -69,7 +69,7 @@ class EmailActionSpec extends SpecBase {
     }
 
     "redirect the requests to undeliverable email page when dataStoreService returns undeliverable email" in new Setup {
-      when(mockDataStoreService.getEmail(any)(any)).thenReturn(Future.successful(Left(UndeliverableEmail(emailId))))
+      when(mockDataStoreService.getEmail(any)).thenReturn(Future.successful(Left(UndeliverableEmail(emailId))))
 
       running(app) {
         val result = emailAction.filter(authenticatedRequest).map(res => res.get)
