@@ -7,7 +7,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 lazy val appName: String = "customs-historic-statement-frontend"
 
 val silencerVersion = "1.7.16"
-val scala3_3_4 = "3.3.4"
+val scala3_3_5 = "3.3.5"
 val testDirectory = "test"
 
 val turnoffJSUglifyWarningsTask = SettingKey[Seq[String]]("sbt-uglify turn off console output")
@@ -15,7 +15,7 @@ turnoffJSUglifyWarningsTask := Seq("warnings=false")
 
 Global / lintUnusedKeysOnLoad := false
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := scala3_3_4
+ThisBuild / scalaVersion := scala3_3_5
 
 lazy val scalastyleSettings = Seq(scalastyleConfig := baseDirectory.value / "scalastyle-config.xml",
   (Test / scalastyleConfig) := baseDirectory.value / testDirectory / "test-scalastyle-config.xml")
