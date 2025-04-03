@@ -80,7 +80,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
   "deleteNotification" should {
     "return true when deletion is successful" in new Setup {
       val customsFinancialsApiUrl =
-        "http://localhost:9878/customs-financials-api/eori/eori1/requested-notifications/C79Certificate"
+        "http://localhost:9878/customs-financials-api/eori/requested-notifications/C79Certificate"
 
       when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
 
@@ -91,14 +91,14 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
         .thenReturn(requestBuilder)
 
       running(app) {
-        val result = await(customsFinancialsApiConnector.deleteNotification("eori1", C79Certificate)(hc))
+        val result = await(customsFinancialsApiConnector.deleteNotification("eori", C79Certificate)(hc))
         result mustBe true
       }
     }
 
     "return false when failed to submit the request" in new Setup {
       val customsFinancialsApiUrl =
-        "http://localhost:9878/customs-financials-api/eori/eori1/requested-notifications/C79Certificate"
+        "http://localhost:9878/customs-financials-api/eori/requested-notifications/C79Certificate"
 
       when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
 
@@ -109,7 +109,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
         .thenReturn(requestBuilder)
 
       running(app) {
-        val result = await(customsFinancialsApiConnector.deleteNotification("eori1", C79Certificate)(hc))
+        val result = await(customsFinancialsApiConnector.deleteNotification("eori", C79Certificate)(hc))
         result mustBe false
       }
     }

@@ -107,27 +107,27 @@ class FrontendAppConfigSpec extends SpecBase {
   "deleteNotificationUrl" should {
     "return correct url for cash account FileRole" in {
       appConfig.deleteNotificationUrl(CDSCashAccount, "GB123456789000") mustBe
-        "http://localhost:9878/customs-financials-api/eori/GB123456789000/notifications/CDSCashAccount"
+        "http://localhost:9878/customs-financials-api/eori/notifications/CDSCashAccount"
     }
 
     "return correct url for C79 certificate FileRole" in {
       appConfig.deleteNotificationUrl(C79Certificate, "GB123456789000") mustBe
-        "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/C79Certificate"
+        "http://localhost:9878/customs-financials-api/eori/requested-notifications/C79Certificate"
     }
 
     "return correct url for Duty deferment statement FileRole" in {
       appConfig.deleteNotificationUrl(DutyDefermentStatement, "GB123456789000") mustBe
-        "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/DutyDefermentStatement"
+        "http://localhost:9878/customs-financials-api/eori/requested-notifications/DutyDefermentStatement"
     }
 
     "return correct url for Postponed VAT Statement FileRole" in {
       appConfig.deleteNotificationUrl(PostponedVATStatement, "GB123456789000") mustBe
-        "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/PostponedVATStatement"
+        "http://localhost:9878/customs-financials-api/eori/requested-notifications/PostponedVATStatement"
     }
 
     "return correct url for Security statement FileRole" in {
       appConfig.deleteNotificationUrl(SecurityStatement, "GB123456789000") mustBe
-        "http://localhost:9878/customs-financials-api/eori/GB123456789000/requested-notifications/SecurityStatement"
+        "http://localhost:9878/customs-financials-api/eori/requested-notifications/SecurityStatement"
     }
   }
 }
