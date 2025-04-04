@@ -90,8 +90,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
 
   def deleteNotificationUrl(fileRole: FileRole, eori: String): String =
     fileRole match {
-      case CDSCashAccount => s"$customsFinancialsApi/eori/$eori/notifications/$fileRole"
-      case _              => s"$customsFinancialsApi/eori/$eori/requested-notifications/$fileRole"
+      case CDSCashAccount => s"$customsFinancialsApi/eori/notifications/$fileRole"
+      case _              => s"$customsFinancialsApi/eori/requested-notifications/$fileRole"
     }
 
   private def dutyDefermentReturnLink(linkId: String): String =
