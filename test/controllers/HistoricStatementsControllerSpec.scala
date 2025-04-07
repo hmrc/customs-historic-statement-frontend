@@ -337,7 +337,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
       )
       .build()
 
-    when(mockCustomsFinancialsApiConnector.deleteNotification(any, any)(any)).thenReturn(Future.successful(true))
+    when(mockCustomsFinancialsApiConnector.deleteNotification(any)(any)).thenReturn(Future.successful(true))
     when(mockDataStoreConnector.getAllEoriHistory(any)(any)).thenReturn(Future.successful(eoriHistories))
   }
 }
