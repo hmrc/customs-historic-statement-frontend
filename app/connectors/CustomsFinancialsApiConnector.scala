@@ -42,8 +42,8 @@ class CustomsFinancialsApiConnector @Inject() (appConfig: FrontendAppConfig, htt
       .map(_.status == NO_CONTENT)
       .recover { case _ => false }
 
-  def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    val deleteNotificationEndpoint = appConfig.deleteNotificationUrl(fileRole, eori)
+  def deleteNotification(fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val deleteNotificationEndpoint = appConfig.deleteNotificationUrl(fileRole)
 
     httpClient
       .delete(url"$deleteNotificationEndpoint")

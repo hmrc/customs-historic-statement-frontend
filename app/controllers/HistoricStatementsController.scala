@@ -51,7 +51,7 @@ class HistoricStatementsController @Inject() (
 
   def historicStatements(fileRole: FileRole): Action[AnyContent] = (identify andThen getEoriHistory).async {
     implicit request =>
-      customsFinancialsApiConnector.deleteNotification(request.eori, fileRole)
+      customsFinancialsApiConnector.deleteNotification(fileRole)
 
       fileRole match {
         case SecurityStatement     => showHistoricSecurityStatements()
@@ -65,7 +65,7 @@ class HistoricStatementsController @Inject() (
   def historicStatementsDutyDeferment(linkId: String): Action[AnyContent] =
     (identify andThen getEoriHistory andThen getSessionId).async { implicit request =>
 
-      customsFinancialsApiConnector.deleteNotification(request.eori, DutyDefermentStatement)
+      customsFinancialsApiConnector.deleteNotification(DutyDefermentStatement)
       sessionCacheConnector.getAccountNumber(request.sessionId, linkId).flatMap {
         case Some(dan) => showHistoricDutyDefermentStatements(dan, linkId)
         case None      => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))

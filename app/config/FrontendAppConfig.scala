@@ -88,7 +88,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   def sessionCacheUrl(sessionId: String, linkId: String): String =
     customsFinancialsSessionCacheUrl + s"/account-link/$sessionId/$linkId"
 
-  def deleteNotificationUrl(fileRole: FileRole, eori: String): String =
+  def deleteNotificationUrl(fileRole: FileRole): String =
     fileRole match {
       case CDSCashAccount => s"$customsFinancialsApi/eori/notifications/$fileRole"
       case _              => s"$customsFinancialsApi/eori/requested-notifications/$fileRole"

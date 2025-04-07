@@ -91,7 +91,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
         .thenReturn(requestBuilder)
 
       running(app) {
-        val result = await(customsFinancialsApiConnector.deleteNotification("eori", C79Certificate)(hc))
+        val result = await(customsFinancialsApiConnector.deleteNotification(C79Certificate)(hc))
         result mustBe true
       }
     }
@@ -109,7 +109,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
         .thenReturn(requestBuilder)
 
       running(app) {
-        val result = await(customsFinancialsApiConnector.deleteNotification("eori", C79Certificate)(hc))
+        val result = await(customsFinancialsApiConnector.deleteNotification(C79Certificate)(hc))
         result mustBe false
       }
     }
