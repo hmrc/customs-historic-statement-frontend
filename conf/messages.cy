@@ -123,6 +123,7 @@ cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Yn ô
 cf.historic.document.request.confirmation.SecurityStatement.link-text=Yn ôl i ‘Hysbysiad o ddatganiadau addasu’
 cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Yn ôl i ddatganiadau TAW mewnforio ohiriedig
 cf.historic.document.request.confirmation.body-text.SecurityStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
+cf.historic.document.request.confirmation.back-to-dashboard.link-text=Yn ôl i hafan ‘Rheoli tollau mewnforio a chyfrifon TAW’
 
 cf.historic.document.request.confirmation.subheader-text.next=Yr hyn sy’n digwydd nesaf
 cf.historic.document.request.confirmation.body-text.request=Byddwn yn anfon e-bost at {0} cyn pen 48 awr pan fydd eich cais wedi’i brosesu.
