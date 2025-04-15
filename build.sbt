@@ -7,18 +7,17 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 lazy val appName: String = "customs-historic-statement-frontend"
 
 val silencerVersion = "1.7.16"
-val scala3_3_5 = "3.3.5"
-val testDirectory = "test"
-
-val turnoffJSUglifyWarningsTask = SettingKey[Seq[String]]("sbt-uglify turn off console output")
-turnoffJSUglifyWarningsTask := Seq("warnings=false")
+val scala3_3_5      = "3.3.5"
+val testDirectory   = "test"
 
 Global / lintUnusedKeysOnLoad := false
 ThisBuild / majorVersion := 0
 ThisBuild / scalaVersion := scala3_3_5
 
-lazy val scalastyleSettings = Seq(scalastyleConfig := baseDirectory.value / "scalastyle-config.xml",
-  (Test / scalastyleConfig) := baseDirectory.value / testDirectory / "test-scalastyle-config.xml")
+lazy val scalastyleSettings = Seq(
+  scalastyleConfig := baseDirectory.value / "scalastyle-config.xml",
+  (Test / scalastyleConfig) := baseDirectory.value / testDirectory / "test-scalastyle-config.xml"
+)
 
 lazy val it = project
   .enablePlugins(PlayScala)
@@ -44,7 +43,6 @@ lazy val root = (project in file("."))
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;" +
       ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;.*ControllerConfiguration;" +
       ".*Formatters; .*LocalDateFormatter; .*package; .*UserAnswers",
-
     ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageMinimumBranchTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := false,
@@ -52,42 +50,48 @@ lazy val root = (project in file("."))
     scalacOptions ++= Seq("-feature"),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-
     update / evictionWarningOptions :=
       EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     resolvers += Resolver.jcenterRepo,
-
     Concat.groups := Seq(
       "javascripts/customshistoricstatementfrontend-app.js" ->
-        group(Seq("javascripts/show-hide-content.js",
-          "javascripts/jquery.min.js",
-          "javascripts/customshistoricstatementfrontend.js"))
+        group(
+          Seq(
+            "javascripts/show-hide-content.js",
+            "javascripts/jquery.min.js",
+            "javascripts/customshistoricstatementfrontend.js"
+          )
+        )
     ),
     uglifyCompressOptions := Seq("unused=false", "dead_code=false"),
+    uglifyOps := UglifyOps.singleFile,
     pipelineStages := Seq(digest),
     Assets / pipelineStages := Seq(concat, uglify),
     uglify / includeFilter := GlobFilter("customshistoricstatementfrontend-*.js")
   )
-  .settings(uglifyCompressOptions := turnoffJSUglifyWarningsTask.value)
   .settings(
     scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all")),
     scalacOptions ++= Seq("-Wconf:src=routes/.*:s", "-Wconf:msg=Flag.*repeatedly:s"),
-
-      Test / scalacOptions ++= Seq(
+    Test / scalacOptions ++= Seq(
       "-Wunused:imports",
       "-Wunused:params",
       "-Wunused:implicits",
       "-Wunused:explicits",
-      "-Wunused:privates"),
-
+      "-Wunused:privates"
+    ),
     libraryDependencies ++= Seq(
-      compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.for3Use2_13With("", ".12")),
+      compilerPlugin(
+        "com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.for3Use2_13With("", ".12")
+      ),
       "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.for3Use2_13With("", ".12")
     ),
     scalafmtDetailedError := true,
     scalafmtPrintDiff := true,
     scalafmtFailOnErrors := true
-  ).settings(scalastyleSettings)
+  )
+  .settings(scalastyleSettings)
 
-addCommandAlias("runAllChecks",
-  ";clean;compile;coverage;test;it/test;scalafmtCheckAll;scalastyle;Test/scalastyle;coverageReport")
+addCommandAlias(
+  "runAllChecks",
+  ";clean;compile;coverage;test;it/test;scalafmtCheckAll;scalastyle;Test/scalastyle;coverageReport"
+)
