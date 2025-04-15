@@ -34,7 +34,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
 
   "onPageLoad" must {
 
-    "return OK and the correct view for a GET" in new Setup {
+    "return OK and the correct view including a return link to the MIDVA dashboard" in new Setup {
 
       when(mockDataStoreConnector.getEmail(any)).thenReturn(Future.successful(Right(Email("some@email.com"))))
       when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
@@ -52,6 +52,8 @@ class ConfirmationPageControllerSpec extends SpecBase {
             appConfig.financialsHomepage,
             "March 2018 to March 2018"
           )(request, messages, appConfig).toString
+
+        contentAsString(result) must include(appConfig.financialsHomepage)
       }
     }
   }
