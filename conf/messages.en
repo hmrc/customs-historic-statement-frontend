@@ -123,6 +123,7 @@ cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Back 
 cf.historic.document.request.confirmation.SecurityStatement.link-text=Back to notification of adjustment statements
 cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Back to postponed import VAT statements
 cf.historic.document.request.confirmation.body-text.SecurityStatement=We will send an email to {0} when your statements are ready. You can access them from the statements page, usually within 48 hours.
+cf.historic.document.request.confirmation.back-to-dashboard.link-text=Back to Manage import duties and VAT accounts homepage
 
 cf.historic.document.request.confirmation.subheader-text.next=What happens next
 cf.historic.document.request.confirmation.body-text.request=We''ll send an email within 48 hours to {0} when your request is processed.

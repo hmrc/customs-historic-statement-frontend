@@ -25,7 +25,6 @@ GET         /:fileRole/selected-statements               controllers.CheckYourAn
 POST        /:fileRole/selected-statements               controllers.CheckYourAnswersController.onSubmit(fileRole: FileRole)
 
 GET         /:fileRole/confirmation                      controllers.ConfirmationPageController.onPageLoad(fileRole: FileRole)
-GET         /:fileRole/confirmation/return-to-statements controllers.ConfirmationPageController.returnToStatementsPage(fileRole: FileRole)
 
 GET         /requested/:fileRole                         controllers.HistoricStatementsController.historicStatements(fileRole: FileRole)
 GET         /requested/duty-deferment/:linkId            controllers.HistoricStatementsController.historicStatementsDutyDeferment(linkId: String)

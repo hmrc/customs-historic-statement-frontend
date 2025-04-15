@@ -34,7 +34,7 @@ class ConfirmationPageControllerSpec extends SpecBase {
 
   "onPageLoad" must {
 
-    "return OK and the correct view for a GET" in new Setup {
+    "return OK and the correct view including a return link to the MIDVA dashboard" in new Setup {
 
       when(mockDataStoreConnector.getEmail(any)).thenReturn(Future.successful(Right(Email("some@email.com"))))
       when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
@@ -49,38 +49,11 @@ class ConfirmationPageControllerSpec extends SpecBase {
           view(
             Some(Email("some@email.com")),
             C79Certificate,
-            routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url,
+            appConfig.financialsHomepage,
             "March 2018 to March 2018"
           )(request, messages, appConfig).toString
-      }
-    }
-  }
 
-  "returnToStatementsPage" must {
-
-    "redirect to statements page" when {
-
-      "user session is cleared successfully" in new Setup {
-
-        when(mockSessionRepository.clear(any)).thenReturn(Future.successful(true))
-
-        running(app) {
-          val request = fakeRequest(GET, routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url)
-          val result  = route(app, request).value
-
-          status(result) mustBe SEE_OTHER
-        }
-      }
-
-      "error occurs in clearing user session" in new Setup {
-        when(mockSessionRepository.clear(any)).thenReturn(Future.failed(new RuntimeException("error occurred")))
-
-        running(app) {
-          val request = fakeRequest(GET, routes.ConfirmationPageController.returnToStatementsPage(C79Certificate).url)
-          val result  = route(app, request).value
-
-          status(result) mustBe SEE_OTHER
-        }
+        contentAsString(result) must include(appConfig.financialsHomepage)
       }
     }
   }

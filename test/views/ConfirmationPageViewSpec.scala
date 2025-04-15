@@ -72,7 +72,7 @@ class ConfirmationPageViewSpec extends SpecBase {
 
       "link should display correct text" in new Setup {
         view.getElementById("link-text").text() mustBe messages(
-          s"cf.historic.document.request.confirmation.${fileRole.name}.link-text"
+          "cf.historic.document.request.confirmation.back-to-dashboard.link-text"
         )
       }
     }

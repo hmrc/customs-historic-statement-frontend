@@ -52,7 +52,7 @@ class ConfirmationPageController @Inject() (
     implicit request =>
 
       val dates      = new CheckYourAnswersHelper(request.userAnswers)
-      val returnLink = routes.ConfirmationPageController.returnToStatementsPage(fileRole).url
+      val returnLink = appConfig.financialsHomepage
 
       for {
         _     <- sessionRepository.set(userAnswersWithNoHistoricDates(fileRole, request))
@@ -61,13 +61,6 @@ class ConfirmationPageController @Inject() (
         view(email, fileRole, returnLink, dates.dateRows(fileRole).getOrElse(emptyString))
       )
   }
-
-  def returnToStatementsPage(fileRole: FileRole): Action[AnyContent] =
-    (identify andThen getData andThen requireData).async { implicit request =>
-      for {
-        _ <- sessionRepository.clear(request.internalId).recover { case _ => true }
-      } yield Redirect(appConfig.returnLink(fileRole, request.userAnswers))
-    }
 
   private def userAnswersWithNoHistoricDates(fileRole: FileRole, request: DataRequest[AnyContent]): UserAnswers =
     request.userAnswers.remove(HistoricDateRequestPage(fileRole)) match {
