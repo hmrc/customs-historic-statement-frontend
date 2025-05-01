@@ -28,6 +28,11 @@ class FrontendAppConfigSpec extends SpecBase {
       appConfig.cashAccountForCdsDeclarationsUrl mustBe
         "https://www.gov.uk/guidance/use-a-cash-account-for-cds-declarations"
     }
+
+    "contain the correct GOV survey banner URL" in {
+      appConfig.helpMakeGovUkBetterUrl mustBe
+        "https://survey.take-part-in-research.service.gov.uk/jfe/form/SV_74GjifgnGv6GsMC?Source=BannerList_HMRC_CDS_MIDVA"
+    }
   }
 
   "sdesCashStatementListUrl" should {
