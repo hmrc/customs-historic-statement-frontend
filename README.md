@@ -86,11 +86,6 @@ You can find a list of microservice specific routes here - `/conf/app.routes`
 
 Application entrypoint:  `/customs/payment-records` 
 
-| Path                                  |
-| ----                                  |
-| GET /requested/:fileRole              |
-| GET /requested/duty-deferment/:linkId |
-
 ## Feature Switches
 
 > ### Caution!
@@ -107,14 +102,6 @@ Application entrypoint:  `/customs/payment-records`
 | -------- | ------- |
 | `fixed-systemdate-for-tests` | Fix the system date for running tests|
 
-Different features can be enabled / disabled per-environment via the `app-config-<env>` project by setting `features.some-feature: true`
-
-In non-production environments,
-you can also toggle features on or off in a running microservice instance
-by performing a HTTP GET against
-
-    /customs-historic-statement-frontend/test-only/feature/<feature>/<enable|disable>
-    
 > **Note:** Microservices must be running with test-only routes explicitly enabled,
 > via this switch in the `app-config-<env>`, the service manager microservice profile,
 > or just via `sbt run` locally:
