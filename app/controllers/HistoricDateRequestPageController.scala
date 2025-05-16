@@ -17,7 +17,7 @@
 package controllers
 
 import config.FrontendAppConfig
-import controllers.actions._
+import controllers.actions.*
 import forms.HistoricDateRequestPageFormProvider
 import models.{C79Certificate, DateMessages, FileRole, HistoricDates, Mode}
 import navigation.Navigator
@@ -58,10 +58,12 @@ class HistoricDateRequestPageController @Inject() (
   def onPageLoad(mode: Mode, fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData) {
 
     implicit request =>
+      val referer = request.headers.get("Referer")
 
       val preparedForm: Form[HistoricDates] = request.userAnswers.get(HistoricDateRequestPage(fileRole)) match {
-        case None        => formProvider(fileRole)
-        case Some(value) => formProvider(fileRole).fill(value)
+        case Some(value) if referer.exists(_.contains(appConfig.context)) =>
+          formProvider(fileRole).fill(value)
+        case _                                                            => formProvider(fileRole)
       }
 
       val backLink = appConfig.returnLink(fileRole, request.userAnswers)

@@ -24,6 +24,10 @@ import pages.RequestedLinkId
 class FrontendAppConfigSpec extends SpecBase {
 
   "FrontendAppConfig" should {
+    "contain the correct context for this service" in {
+      appConfig.context mustBe "/customs/historic-statement/"
+    }
+
     "contain correct values for the provided configuration" in {
       appConfig.cashAccountForCdsDeclarationsUrl mustBe
         "https://www.gov.uk/guidance/use-a-cash-account-for-cds-declarations"

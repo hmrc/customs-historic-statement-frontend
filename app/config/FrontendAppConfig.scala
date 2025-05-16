@@ -28,7 +28,8 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig: ServicesConfig) {
 
-  lazy val host: String = configuration.get[String]("host")
+  lazy val host: String    = configuration.get[String]("host")
+  lazy val context: String = "/customs/historic-statement/"
 
   lazy val timeout: Int   = configuration.get[Int]("timeout.timeout")
   lazy val countdown: Int = configuration.get[Int]("timeout.countdown")
