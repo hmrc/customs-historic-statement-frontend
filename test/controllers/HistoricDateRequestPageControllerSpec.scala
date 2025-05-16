@@ -510,7 +510,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
     val latest = 1
 
     val sameServiceReferral = "Referer" -> appConfig.context
-    val otherReferral       = "Referer" -> ""
+    val otherReferral       = "Referer" -> emptyString
 
     val earliestMonthInCurrentPeriod: LocalDateTime = LocalDateTime.now().minusMonths(offset)
     val latestMonthInLastPeriod: LocalDateTime      = earliestMonthInCurrentPeriod.minusMonths(latest)
