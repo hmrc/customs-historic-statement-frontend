@@ -19,16 +19,17 @@ package controllers
 import base.SpecBase
 import config.FrontendAppConfig
 import models.*
+import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.{HistoricDateRequestPage, RequestedLinkId}
+import play.api.mvc.AnyContentAsFormUrlEncoded
+import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import play.api.{Application, inject}
 import repositories.SessionRepository
 import utils.Utils.emptyString
-import org.mockito.Mockito.when
-import org.mockito.ArgumentMatchers.any
-import play.api.mvc.AnyContentAsFormUrlEncoded
-import play.api.test.FakeRequest
 
 import java.time.*
 import scala.concurrent.Future
@@ -50,14 +51,40 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
-    "return OK when there is populated data in the user answers" in {
-      val app     = applicationBuilder(Some(populatedUserAnswers)).build()
+    "return OK when there is populated data in the user answers and referer is this service" in new Setup {
+      when(mockAppConfig.context).thenReturn(appConfig.context)
+
       val request =
         fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, C79Certificate).url)
+          .withHeaders(sameServiceReferral)
 
       running(app) {
         val result = route(app, request).value
         status(result) mustBe OK
+
+        val body   = contentAsString(result)
+        val doc    = Jsoup.parse(body)
+        val inputs = doc.select("input[type=text]")
+
+        inputs.hasAttr("value") mustBe true
+      }
+    }
+
+    "return OK when there is populated data in the user answers and referer is NOT this service" in new Setup {
+      val application = applicationBuilder(Some(populatedUserAnswers)).build()
+      val request     =
+        fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, C79Certificate).url)
+          .withHeaders(otherReferral)
+
+      running(application) {
+        val result = route(app, request).value
+        status(result) mustBe OK
+
+        val body   = contentAsString(result)
+        val doc    = Jsoup.parse(body)
+        val inputs = doc.select("input[type=text]")
+
+        inputs.hasAttr("value") mustBe false
       }
     }
 
@@ -481,6 +508,9 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
   trait Setup {
     val offset = 6
     val latest = 1
+
+    val sameServiceReferral = "Referer" -> appConfig.context
+    val otherReferral       = "Referer" -> ""
 
     val earliestMonthInCurrentPeriod: LocalDateTime = LocalDateTime.now().minusMonths(offset)
     val latestMonthInLastPeriod: LocalDateTime      = earliestMonthInCurrentPeriod.minusMonths(latest)
