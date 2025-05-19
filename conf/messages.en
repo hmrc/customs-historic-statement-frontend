@@ -132,8 +132,8 @@ cf.historic.document.request.confirmation.body-text2.C79Certificate=You''ll be a
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=You''ll be able to download your statements from the postponed import VAT statements page.
 cf.historic.document.request.confirmation.body-text2.SecurityStatement=You''ll be able to download your statements from the notification of adjustment statements page.
 
-cf.historic.document.request.confirmation.subheader-text.help=Help us imporve the service
-cf.historic.document.request.confirmation.body-text.help=Do you have an EU EORI number? We're carrying out user research to help improve our services.
+cf.historic.document.request.confirmation.subheader-text.help=Help us improve the service
+cf.historic.document.request.confirmation.body-text.help=Do you have an EU EORI number? We''re carrying out user research to help improve our services.
 cf.historic.document.request.confirmation.link.help=Sign up to take part in user research (opens in new tab)
 
 #HistoricDataRequestPageView
