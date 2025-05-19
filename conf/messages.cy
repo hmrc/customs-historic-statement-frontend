@@ -132,9 +132,9 @@ cf.historic.document.request.confirmation.body-text2.C79Certificate=Byddwch yn g
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen datganiadau TAW mewnforio ohiriedig.
 cf.historic.document.request.confirmation.body-text2.SecurityStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen ‘Hysbysiad o ddatganiadau addasu’.
 
-cf.historic.document.request.confirmation.subheader-text.help=Help us imporve the service (in thick North Walian accent)
-cf.historic.document.request.confirmation.body-text.help=Do you have an EU EORI number? We're carrying out user research to help improve our services. (in thick North Walian accent)
-cf.historic.document.request.confirmation.link.help=Sign up to take part in user research (in thick North Walian accent) (opens in new tab)
+cf.historic.document.request.confirmation.subheader-text.help=Helpu ni i wella’r gwasanaeth hwn
+cf.historic.document.request.confirmation.body-text.help=A oes gennych rif EORI yn yr UE? Rydym yn cynnal ymchwil defnyddwyr i helpu i wella ein gwasanaethau
+cf.historic.document.request.confirmation.link.help=Cofrestrwch i gymryd rhan mewn ymchwil defnyddwyr (yn agor tab newydd)
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau o ar ôl blwyddyn dreth {0} i {1}.
