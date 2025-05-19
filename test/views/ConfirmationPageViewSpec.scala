@@ -88,7 +88,7 @@ class ConfirmationPageViewSpec extends SpecBase {
         )
       }
 
-      "Page must contain correct research headder link" in new Setup {
+      "Page must contain correct research header link" in new Setup {
         view.getElementsByClass("improve-the-service-link").text() mustBe messages(
           "cf.historic.document.request.confirmation.link.help"
         )
