@@ -81,20 +81,19 @@
         
     @h2(
         classes="govuk-heading-s",
-        id=Some("email-confirmation-subheader-help"),
-        msg = messages(s"cf.historic.document.request.confirmation.subheader-text.help")
+        id=Some("improve-the-service-heading"),
+        msg = messages("cf.historic.document.request.confirmation.subheader-text.help")
     )
 
     @p(
         classes="govuk-body",
-        id=Some("email-confirmation-body-help"),
+        id=Some("improve-the-service-body"),
         content = Html(messages(s"cf.historic.document.request.confirmation.body-text.help"))
     )
 
     @newTabLink(
-        linkMessage = messages(
-        "cf.historic.document.request.confirmation.link.help"),
+        linkMessage = messages("cf.historic.document.request.confirmation.link.help"),
         href = appConfig.helpMakeGovUkBetterUrl,
-        classes = "govuk-body govuk-!-margin-bottom-9 hmrc-user-research-banner-link"
+        classes = "govuk-body govuk-!-margin-bottom-9 improve-the-service-link"
     )
 }

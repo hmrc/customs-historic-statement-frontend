@@ -75,18 +75,21 @@ class ConfirmationPageViewSpec extends SpecBase {
           "cf.historic.document.request.confirmation.back-to-dashboard.link-text"
         )
       }
-      "Page must contain correct research headder text" in new Setup {
-        view.getElementById("email-confirmation-subheader-help").text() mustBe messages(
+
+      "Page must contain correct research header text" in new Setup {
+        view.getElementById("improve-the-service-heading").text() mustBe messages(
           "cf.historic.document.request.confirmation.subheader-text.help"
         )
       }
+
       "Page must contain correct research description text" in new Setup {
-        view.getElementById("email-confirmation-body-help").text() mustBe messages(
+        view.getElementById("improve-the-service-body").text() mustBe messages(
           "cf.historic.document.request.confirmation.body-text.help"
         )
       }
+
       "Page must contain correct research headder link" in new Setup {
-        view.getElementsByClass("hmrc-user-research-banner-link").text() mustBe messages(
+        view.getElementsByClass("improve-the-service-link").text() mustBe messages(
           "cf.historic.document.request.confirmation.link.help"
         )
       }
