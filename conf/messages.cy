@@ -133,7 +133,7 @@ cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Byddw
 cf.historic.document.request.confirmation.body-text2.SecurityStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen ‘Hysbysiad o ddatganiadau addasu’.
 
 cf.historic.document.request.confirmation.subheader-text.help=Helpu ni i wella’r gwasanaeth hwn
-cf.historic.document.request.confirmation.body-text.help=A oes gennych rif EORI yn yr UE? Rydym yn cynnal ymchwil defnyddwyr i helpu i wella ein gwasanaethau
+cf.historic.document.request.confirmation.body-text.help=A oes gennych rif EORI yn yr UE? Rydym yn cynnal ymchwil defnyddwyr i helpu i wella ein gwasanaethau.
 cf.historic.document.request.confirmation.link.help=Cofrestrwch i gymryd rhan mewn ymchwil defnyddwyr (yn agor tab newydd)
 
 #HistoricDataRequestPageView
