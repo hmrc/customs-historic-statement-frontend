@@ -36,10 +36,10 @@ class NewTabLinkSpec extends SpecBase {
           newTabLinkComponent(linkMessage, href, Some(preLinkMessage), Some(postLinkMessage), classes)
 
         elementByParagraph(component).text() mustBe
-          s"$preLinkMessage$emptyStringWithSpace$linkMessage$emptyStringWithSpace$postLinkMessage$period"
+          s"$preLinkMessage$emptyStringWithSpace$linkMessage$emptyStringWithSpace$postLinkMessage"
 
         elementByClasses(component, classes).get(0).text() mustBe
-          s"$preLinkMessage$emptyStringWithSpace$linkMessage$emptyStringWithSpace$postLinkMessage$period"
+          s"$preLinkMessage$emptyStringWithSpace$linkMessage$emptyStringWithSpace$postLinkMessage"
 
         shouldContainTheMessage(component, preLinkMessage)
         shouldContainTheMessage(component, postLinkMessage)
@@ -49,10 +49,10 @@ class NewTabLinkSpec extends SpecBase {
         val component: Document =
           newTabLinkComponent(linkMessage = linkMessage, href = href, postLinkMessage = Some(postLinkMessage))
 
-        elementByParagraph(component).text() mustBe s"$linkMessage$emptyStringWithSpace$postLinkMessage$period"
+        elementByParagraph(component).text() mustBe s"$linkMessage$emptyStringWithSpace$postLinkMessage"
 
         elementByClasses(component, defaultClasses).get(0).text() mustBe
-          s"$linkMessage$emptyStringWithSpace$postLinkMessage$period"
+          s"$linkMessage$emptyStringWithSpace$postLinkMessage"
 
         shouldNotContainTheMessage(component, preLinkMessage)
         shouldContainTheMessage(component, postLinkMessage)
@@ -63,10 +63,10 @@ class NewTabLinkSpec extends SpecBase {
           newTabLinkComponent(linkMessage = linkMessage, href = href, preLinkMessage = Some(preLinkMessage))
 
         elementByParagraph(component)
-          .text() mustBe s"$preLinkMessage$emptyStringWithSpace$linkMessage$emptyStringWithSpace$period"
+          .text() mustBe s"$preLinkMessage$emptyStringWithSpace$linkMessage"
 
         elementByClasses(component, defaultClasses).get(0).text() mustBe
-          s"$preLinkMessage$emptyStringWithSpace$linkMessage$emptyStringWithSpace$period"
+          s"$preLinkMessage$emptyStringWithSpace$linkMessage"
 
         shouldContainTheMessage(component, preLinkMessage)
         shouldNotContainTheMessage(component, postLinkMessage)

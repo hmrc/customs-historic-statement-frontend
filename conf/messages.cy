@@ -132,6 +132,10 @@ cf.historic.document.request.confirmation.body-text2.C79Certificate=Byddwch yn g
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen datganiadau TAW mewnforio ohiriedig.
 cf.historic.document.request.confirmation.body-text2.SecurityStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen ‘Hysbysiad o ddatganiadau addasu’.
 
+cf.historic.document.request.confirmation.subheader-text.help=Helpu ni i wella’r gwasanaeth hwn
+cf.historic.document.request.confirmation.body-text.help=A oes gennych rif EORI yn yr UE? Rydym yn cynnal ymchwil defnyddwyr i helpu i wella ein gwasanaethau.
+cf.historic.document.request.confirmation.link.help=Cofrestrwch i gymryd rhan mewn ymchwil defnyddwyr (yn agor tab newydd)
+
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau o ar ôl blwyddyn dreth {0} i {1}.
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’

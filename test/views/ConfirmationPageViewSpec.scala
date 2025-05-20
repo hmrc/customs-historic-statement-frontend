@@ -75,6 +75,24 @@ class ConfirmationPageViewSpec extends SpecBase {
           "cf.historic.document.request.confirmation.back-to-dashboard.link-text"
         )
       }
+
+      "Page must contain correct research header text" in new Setup {
+        view.getElementById("improve-the-service-heading").text() mustBe messages(
+          "cf.historic.document.request.confirmation.subheader-text.help"
+        )
+      }
+
+      "Page must contain correct research description text" in new Setup {
+        view.getElementById("improve-the-service-body").text() mustBe messages(
+          "cf.historic.document.request.confirmation.body-text.help"
+        )
+      }
+
+      "Page must contain correct research header link" in new Setup {
+        view.getElementsByClass("improve-the-service-link").text() mustBe messages(
+          "cf.historic.document.request.confirmation.link.help"
+        )
+      }
     }
 
     "display Welsh toggle" in new Setup {

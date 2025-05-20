@@ -21,6 +21,7 @@
 @this(
     layout: Layout,
     link: components.link,
+    newTabLink: components.newTabLink,
     p: components.p,
     h1: components.h1,
     h2: components.h2
@@ -76,5 +77,23 @@
         "cf.historic.document.request.confirmation.back-to-dashboard.link-text"),
         location = returnLink,
         pId = Some("link-text"),
-        pClass = "govuk-body govuk-!-margin-bottom-9")
+    )
+        
+    @h2(
+        classes="govuk-heading-s",
+        id=Some("improve-the-service-heading"),
+        msg = messages("cf.historic.document.request.confirmation.subheader-text.help")
+    )
+
+    @p(
+        classes="govuk-body",
+        id=Some("improve-the-service-body"),
+        content = Html(messages("cf.historic.document.request.confirmation.body-text.help"))
+    )
+
+    @newTabLink(
+        linkMessage = messages("cf.historic.document.request.confirmation.link.help"),
+        href = appConfig.helpMakeGovUkBetterUrl,
+        classes = "govuk-body govuk-!-margin-bottom-9 improve-the-service-link"
+    )
 }
