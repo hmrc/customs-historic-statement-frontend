@@ -52,7 +52,6 @@ lazy val root = (project in file("."))
     retrieveManaged := true,
     update / evictionWarningOptions :=
       EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-    resolvers += Resolver.jcenterRepo,
     Concat.groups := Seq(
       "javascripts/customshistoricstatementfrontend-app.js" ->
         group(
