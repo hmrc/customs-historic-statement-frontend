@@ -21,7 +21,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.scalatest.Assertion
-import utils.Utils.{emptyStringWithSpace, period}
+import utils.Utils.emptyStringWithSpace
 import utils.TestData.{classes, defaultClasses, href, linkMessage, postLinkMessage, preLinkMessage}
 import views.html.components.newTabLink
 
