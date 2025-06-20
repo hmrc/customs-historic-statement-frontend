@@ -23,6 +23,7 @@ import play.api.http.Status.NOT_FOUND
 import play.api.libs.json.*
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.UpstreamErrorResponse.WithStatusCode
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps, UpstreamErrorResponse}
 
@@ -53,9 +54,14 @@ class CustomsDataStoreConnector @Inject() (appConfig: FrontendAppConfig, httpCli
       .get(url"${appConfig.customsDataStoreGetEoriHistory}")
       .execute[EoriHistoryResponse]
       .map(response => response.eoriHistory)
-      .recover { case e =>
-        logger.error(s"DATASTORE-E-EORI-HISTORY-ERROR: ${e.getClass.getName}")
-        emptyEoriHistory
+      .recover {
+        case e @ WithStatusCode(NOT_FOUND) if e.message.contains(NOT_FOUND.toString) =>
+          logger.warn(s"EORI History not found in data store: ${e.getClass.getName}")
+          emptyEoriHistory
+
+        case e =>
+          logger.error(s"DATASTORE-E-EORI-HISTORY-ERROR: ${e.getClass.getName}")
+          emptyEoriHistory
       }
   }
 
