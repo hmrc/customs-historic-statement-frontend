@@ -18,84 +18,83 @@ package connectors
 
 import base.SpecBase
 import models.{
-  EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, UndeliverableEmail, UndeliverableInformation,
-  UnverifiedEmail
+  EmailResponses, EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, UndeliverableEmail,
+  UndeliverableInformation, UnverifiedEmail
 }
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.when
-import play.api.inject.bind
-import play.api.libs.json.Json
+import play.api.{Application, Configuration}
+import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.retrieve.Email
-import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
-import uk.gov.hmrc.http.{HttpReads, StringContextOps, UpstreamErrorResponse}
 import utils.TestData.*
+import utils.WireMockSupportProvider
+import com.github.tomakehurst.wiremock.client.WireMock.{get, notFound, ok, serverError, urlPathMatching}
 
-import java.net.URL
 import java.time.LocalDate
-import scala.concurrent.{ExecutionContext, Future}
+import com.typesafe.config.ConfigFactory
 
-class CustomsDataStoreConnectorSpec extends SpecBase {
+class CustomsDataStoreConnectorSpec extends SpecBase with WireMockSupportProvider {
 
   "getEmail" should {
     "return email address from customs data store" in new Setup {
-      val emailResponse       = EmailResponse(Some("a@a.com"), Some("time"), None)
-      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/verified-email"
+      val emailResponse: EmailResponse = EmailResponse(Some("a@a.com"), Some("time"), None)
 
-      when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(emailResponse))
+      wireMockServer.stubFor(
+        get(urlPathMatching(getEmailUrl))
+          .willReturn(
+            ok(Json.toJson(emailResponse).toString)
+          )
+      )
 
-      when(mockHttpClient.get(eqTo(url"$customsDataStoreUrl"))(any())).thenReturn(requestBuilder)
+      val result: Either[EmailResponses, Email] = await(customsDataStoreConnector.getEmail(hc))
 
-      running(app) {
-        val result = await(customsDataStoreConnector.getEmail(hc))
-        result mustBe Right(Email("a@a.com"))
-      }
+      result mustBe Right(Email("a@a.com"))
+      verifyEndPointUrlHit(getEmailUrl)
     }
 
     "return undeliverable email address from customs data store" in new Setup {
 
-      val emailResponse = EmailResponse(
+      val emailResponse: EmailResponse = EmailResponse(
         Some("noresponse@email.com"),
         Some("time"),
         Some(UndeliverableInformation("subject-example", "ex-event-id-01", "ex-group-id-01"))
       )
 
-      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/verified-email"
+      wireMockServer.stubFor(
+        get(urlPathMatching(getEmailUrl))
+          .willReturn(
+            ok(Json.toJson(emailResponse).toString)
+          )
+      )
 
-      when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(emailResponse))
+      val result: Either[EmailResponses, Email] = await(customsDataStoreConnector.getEmail(hc))
 
-      when(mockHttpClient.get(eqTo(url"$customsDataStoreUrl"))(any())).thenReturn(requestBuilder)
-
-      running(app) {
-        val result = await(customsDataStoreConnector.getEmail(hc))
-        result mustBe Left(UndeliverableEmail("noresponse@email.com"))
-      }
+      result mustBe Left(UndeliverableEmail("noresponse@email.com"))
+      verifyEndPointUrlHit(getEmailUrl)
     }
 
     "return None when call to customs data store fails" in new Setup {
 
-      when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
-        .thenReturn(Future.failed(UpstreamErrorResponse("NoData", NOT_FOUND, NOT_FOUND)))
+      wireMockServer.stubFor(
+        get(urlPathMatching(getEmailUrl))
+          .willReturn(notFound())
+      )
 
-      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+      val result: Either[EmailResponses, Email] = await(customsDataStoreConnector.getEmail)
 
-      running(app) {
-        val result = customsDataStoreConnector.getEmail
-        await(result) mustBe Left(UnverifiedEmail)
-      }
+      result mustBe Left(UnverifiedEmail)
+      verifyEndPointUrlHit(getEmailUrl)
     }
   }
 
   "getAllEoriHistory" should {
     "parse eoriHistory correctly" in new Setup {
-      val jsonObject =
+      val jsonObject: JsObject =
         Json.obj("eori" -> "eori1", "validFrom" -> "2018-11-14", "validUntil" -> "2018-12-14T10:15:30+01:00")
 
-      val jsonObject2 = Json.obj("eori" -> "eori1", "validFrom" -> "2018-11-14", "validUntil" -> "2018-12-14T10:15:30")
+      val jsonObject2: JsObject =
+        Json.obj("eori" -> "eori1", "validFrom" -> "2018-11-14", "validUntil" -> "2018-12-14T10:15:30")
 
-      val eoriHistory1 =
+      val eoriHistory1: EoriHistory =
         EoriHistory("eori1", Some(LocalDate.of(year, eleven, day)), Some(LocalDate.of(year, twelve, day)))
 
       jsonObject.as[EoriHistory] mustBe eoriHistory1
@@ -110,112 +109,142 @@ class CustomsDataStoreConnectorSpec extends SpecBase {
 
     "return eoriHistory from customs data store" in new Setup {
 
-      val eoriHistory1 = EoriHistory("eori1", Some(LocalDate.now()), Some(LocalDate.now()))
+      val eoriHistory1: EoriHistory = EoriHistory("eori1", Some(LocalDate.now()), Some(LocalDate.now()))
 
-      val eoriHistory2 =
+      val eoriHistory2: EoriHistory =
         EoriHistory("eori2", Some(LocalDate.now().minusDays(offset)), Some(LocalDate.now().minusDays(offset)))
 
-      val eoriHistoryResponse = EoriHistoryResponse(Seq(eoriHistory1, eoriHistory2))
-      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/eori-history"
+      val eoriHistoryResponse: EoriHistoryResponse = EoriHistoryResponse(Seq(eoriHistory1, eoriHistory2))
 
-      when(requestBuilder.execute(any[HttpReads[EoriHistoryResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(eoriHistoryResponse))
+      wireMockServer.stubFor(
+        get(urlPathMatching(eoriHistoryUrl))
+          .willReturn(
+            ok(Json.toJson(eoriHistoryResponse).toString)
+          )
+      )
 
-      when(mockHttpClient.get(eqTo(url"$customsDataStoreUrl"))(any())).thenReturn(requestBuilder)
+      val result: Seq[EoriHistory] = await(customsDataStoreConnector.getAllEoriHistory("eori1")(hc))
 
-      running(app) {
-        val result = await(customsDataStoreConnector.getAllEoriHistory("eori1")(hc))
-        result.toList mustBe Seq(eoriHistory1, eoriHistory2)
-      }
+      result.toList mustBe Seq(eoriHistory1, eoriHistory2)
+      verifyEndPointUrlHit(eoriHistoryUrl)
     }
 
     "return empty EoriHistory when failed to get eoriHistory from data store" in new Setup {
 
-      val customsDataStoreUrl = "http://localhost:9893/customs-data-store/eori/eori-history"
+      wireMockServer.stubFor(
+        get(urlPathMatching(eoriHistoryUrl))
+          .willReturn(serverError())
+      )
 
-      when(requestBuilder.execute(any[HttpReads[EoriHistoryResponse]], any[ExecutionContext]))
-        .thenReturn(Future.failed(new RuntimeException("failed to get eori history")))
+      val result: Seq[EoriHistory] = await(customsDataStoreConnector.getAllEoriHistory("eori1")(hc))
 
-      when(mockHttpClient.get(eqTo(url"$customsDataStoreUrl"))(any())).thenReturn(requestBuilder)
+      result.toList mustBe Seq(EoriHistory("eori1", None, None))
+      verifyEndPointUrlHit(eoriHistoryUrl)
+    }
 
-      running(app) {
-        val result = await(customsDataStoreConnector.getAllEoriHistory("eori1")(hc))
-        result.toList mustBe Seq(EoriHistory("eori1", None, None))
-      }
+    "return empty EoriHistory when 404 response code is received while fetching the EORI history from data store" in new Setup {
+
+      wireMockServer.stubFor(
+        get(urlPathMatching(eoriHistoryUrl))
+          .willReturn(notFound())
+      )
+
+      val result: Seq[EoriHistory] = await(customsDataStoreConnector.getAllEoriHistory("eori1")(hc))
+
+      result.toList mustBe Seq(EoriHistory("eori1", None, None))
+      verifyEndPointUrlHit(eoriHistoryUrl)
     }
   }
 
   "retrieveUnverifiedEmail" must {
     "return EmailUnverifiedResponse with unverified email value" in new Setup {
 
-      when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(emailUnverifiedRes))
+      wireMockServer.stubFor(
+        get(urlPathMatching(unverifiedEmailUrl))
+          .willReturn(
+            ok(Json.toJson(emailUnverifiedRes).toString)
+          )
+      )
 
-      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+      val result: EmailUnverifiedResponse = await(customsDataStoreConnector.retrieveUnverifiedEmail)
 
-      running(app) {
-        val result = await(customsDataStoreConnector.retrieveUnverifiedEmail)
-        result mustBe emailUnverifiedRes
-      }
+      result mustBe emailUnverifiedRes
+      verifyEndPointUrlHit(unverifiedEmailUrl)
     }
 
     "return EmailUnverifiedResponse with None for unverified email if there is an error while" +
       " fetching response from api" in new Setup {
 
-        when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
-          .thenReturn(Future.failed(new RuntimeException("error occurred")))
+        wireMockServer.stubFor(
+          get(urlPathMatching(unverifiedEmailUrl))
+            .willReturn(serverError())
+        )
 
-        when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+        val result: EmailUnverifiedResponse = await(customsDataStoreConnector.retrieveUnverifiedEmail)
 
-        running(app) {
-          val result = await(customsDataStoreConnector.retrieveUnverifiedEmail)
-          result.unVerifiedEmail mustBe empty
-        }
+        result.unVerifiedEmail mustBe empty
+        verifyEndPointUrlHit(unverifiedEmailUrl)
       }
   }
 
   "verifiedEmail" must {
     "return verified email when email-display api call is successful" in new Setup {
 
-      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(emailVerifiedRes))
+      wireMockServer.stubFor(
+        get(urlPathMatching(verifiedEmailUrl))
+          .willReturn(
+            ok(Json.toJson(emailVerifiedRes).toString)
+          )
+      )
 
-      when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+      val result: EmailVerifiedResponse = await(customsDataStoreConnector.verifiedEmail)
 
-      running(app) {
-        val result = await(customsDataStoreConnector.verifiedEmail)
-        result mustBe emailVerifiedRes
-      }
+      result mustBe emailVerifiedRes
+      verifyEndPointUrlHit(verifiedEmailUrl)
     }
 
     "return none for verified email when exception occurs while calling email-display api" in new Setup {
 
-      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
-        .thenReturn(
-          Future.failed(UpstreamErrorResponse("error occurred", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR))
-        )
+      wireMockServer.stubFor(
+        get(urlPathMatching(verifiedEmailUrl))
+          .willReturn(serverError())
+      )
 
-      when(mockHttpClient.get(any())(any())).thenReturn(requestBuilder)
+      val result: EmailVerifiedResponse = await(customsDataStoreConnector.verifiedEmail)
 
-      running(app) {
-        val result = await(customsDataStoreConnector.verifiedEmail)
-        result.verifiedEmail mustBe empty
-      }
+      result.verifiedEmail mustBe empty
+      verifyEndPointUrlHit(verifiedEmailUrl)
     }
   }
 
-  trait Setup {
-    val mockHttpClient: HttpClientV2   = mock[HttpClientV2]
-    val requestBuilder: RequestBuilder = mock[RequestBuilder]
+  override def config: Configuration = Configuration(
+    ConfigFactory.parseString(
+      s"""
+         |microservice {
+         |  services {
+         |      customs-data-store {
+         |      protocol = http
+         |      host     = $wireMockHost
+         |      port     = $wireMockPort
+         |      context = "/customs-data-store"
+         |    }
+         |  }
+         |}
+         |""".stripMargin
+    )
+  )
 
-    val app = applicationBuilder()
-      .overrides(
-        bind[HttpClientV2].to(mockHttpClient),
-        bind[RequestBuilder].toInstance(requestBuilder)
-      )
+  trait Setup {
+    val getEmailUrl: String        = "/customs-data-store/eori/verified-email"
+    val eoriHistoryUrl: String     = "/customs-data-store/eori/eori-history"
+    val verifiedEmailUrl: String   = "/customs-data-store/subscriptions/email-display"
+    val unverifiedEmailUrl: String = "/customs-data-store/subscriptions/unverified-email-display"
+
+    val app: Application = applicationBuilder()
+      .configure(config)
       .build()
 
-    val customsDataStoreConnector = app.injector.instanceOf[CustomsDataStoreConnector]
+    val customsDataStoreConnector: CustomsDataStoreConnector = app.injector.instanceOf[CustomsDataStoreConnector]
 
     val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
     val emailVerifiedRes: EmailVerifiedResponse     = EmailVerifiedResponse(Some(emailId))
