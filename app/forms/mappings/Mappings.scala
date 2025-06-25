@@ -21,7 +21,7 @@ import play.api.data.Forms.of
 
 import java.time.LocalDate
 
-trait Mappings extends Formatters with Constraints {
+trait Mappings extends Constraints {
 
   protected def localDate(
     emptyStartMonth: String,
@@ -32,6 +32,7 @@ trait Mappings extends Formatters with Constraints {
     emptyEndDate: String,
     invalidMonth: String,
     invalidYear: String,
+    invalidDate: String,
     args: Seq[String] = Seq.empty
   ): FieldMapping[LocalDate] =
     of(
@@ -44,6 +45,7 @@ trait Mappings extends Formatters with Constraints {
         emptyEndDate,
         invalidMonth,
         invalidYear,
+        invalidDate,
         args
       )
     )

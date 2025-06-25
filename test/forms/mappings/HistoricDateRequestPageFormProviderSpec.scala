@@ -88,7 +88,7 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
       formAfterBinding.errors.contains(
         FormError(
-          "start.month",
+          "start",
           List(
             "cf.historic.document.request.form.error.start.date-missing.C79Certificate"
           ),
@@ -98,7 +98,7 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
       formAfterBinding.errors.contains(
         FormError(
-          "end.month",
+          "end",
           List(
             "cf.historic.document.request.form.error.end.date-missing.C79Certificate"
           ),
