@@ -19,7 +19,7 @@ package views.components
 import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
 import models.DutyDefermentStatement
-import utils.TestData.{startKey, id}
+import utils.TestData.{id, startKey}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
@@ -48,7 +48,7 @@ class InputDateSpec extends SpecBase {
         )(messages)
 
         val html: Document = Jsoup.parse(output.toString)
-        html.getElementsByTag("legend").text()     must include(headline)
+        html.getElementsByTag("legend").text()           must include(headline)
         html.getElementById(s"$startKey.month").attr(id) must include("01")
         html.getElementById(s"$startKey.year").attr(id)  must include("2021")
         html.getElementsByTag("input").attr("class") mustNot include(
@@ -77,7 +77,7 @@ class InputDateSpec extends SpecBase {
         )(messages)
 
         val html: Document = Jsoup.parse(output.toString)
-        html.getElementsByTag("legend").text()          must include(headline)
+        html.getElementsByTag("legend").text()                must include(headline)
         html.getElementById(s"$startKey.month").attr(id) mustNot include("01")
         html.getElementById(s"$startKey.year").attr(id)       must include("2021")
         html.getElementById(s"$startKey.month").attr("class") must include(
@@ -106,7 +106,7 @@ class InputDateSpec extends SpecBase {
         )(messages)
 
         val html: Document = Jsoup.parse(output.toString)
-        html.getElementsByTag("legend").text()         must include(headline)
+        html.getElementsByTag("legend").text()               must include(headline)
         html.getElementById(s"$startKey.month").attr(id)     must include("01")
         html.getElementById(s"$startKey.year").attr(id) mustNot include("2021")
         html.getElementById(s"$startKey.year").attr("class") must include(
@@ -134,11 +134,10 @@ class InputDateSpec extends SpecBase {
         )(messages)
 
         val html: Document = Jsoup.parse(output.toString)
-        html.getElementsByTag("legend").text()       must include(headline)
+        html.getElementsByTag("legend").text() must include(headline)
         html.getElementById(s"$startKey.month").attr(id) mustNot include("01")
         html.getElementById(s"$startKey.year").attr(id) mustNot include("2021")
         val inputs = html.getElementsByTag("input")
-        println("INPUTS" + inputs)
         inputs.attr("class") must include(
           "govuk-input--error"
         )

@@ -38,10 +38,10 @@ private[mappings] class LocalDateFormatter(
   private val fieldKeys: List[String] = List("month", "year")
 
   private def toDate(key: String, month: Option[String], year: Option[String]): Either[Seq[FormError], LocalDate] =
-    (validMonth(month), validYear(year))  match {
-      case (Some(_), None) => Left(Seq(FormError(s"$key.year", invalidYear, args)))
-      case (None, Some(_))    => Left(Seq(FormError(s"$key.month", invalidMonth, args)))
-      case (None, None) => Left(Seq(FormError(s"$key", invalidDate, args)))
+    (validMonth(month), validYear(year)) match {
+      case (Some(_), None)                     => Left(Seq(FormError(s"$key.year", invalidYear, args)))
+      case (None, Some(_))                     => Left(Seq(FormError(s"$key.month", invalidMonth, args)))
+      case (None, None)                        => Left(Seq(FormError(s"$key", invalidDate, args)))
       case (Some(validMonth), Some(validYear)) => Right(LocalDate.of(validYear, validMonth, 1))
     }
 
@@ -110,17 +110,15 @@ private[mappings] class LocalDateFormatter(
     }
   }
 
-  private def validMonth(month: Option[String]): Option[Int] = {
+  private def validMonth(month: Option[String]): Option[Int] =
     Try(month.get.trim.toInt) match {
       case Success(value) if value > 0 && value < 13 => Some(value)
-      case _ => None
+      case _                                         => None
     }
-  }
 
-  private def validYear(year: Option[String]): Option[Int] = {
+  private def validYear(year: Option[String]): Option[Int] =
     Try(year.get.trim.toInt) match {
       case Success(value) if value.toString.matches("^\\d{4}$") => Some(value)
-      case _ => None
+      case _                                                    => None
     }
-  }
 }
