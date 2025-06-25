@@ -20,7 +20,7 @@ import play.api.data.FormError
 import play.api.data.format.Formatter
 
 import java.time.LocalDate
-import scala.util.{Success, Try, Failure}
+import scala.util.{Success, Try}
 
 private[mappings] class LocalDateFormatter(
   emptyStartMonth: String,
