@@ -52,21 +52,8 @@ lazy val root = (project in file("."))
     retrieveManaged := true,
     update / evictionWarningOptions :=
       EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-    Concat.groups := Seq(
-      "javascripts/customshistoricstatementfrontend-app.js" ->
-        group(
-          Seq(
-            "javascripts/show-hide-content.js",
-            "javascripts/jquery.min.js",
-            "javascripts/customshistoricstatementfrontend.js"
-          )
-        )
-    ),
-    uglifyCompressOptions := Seq("unused=false", "dead_code=false"),
-    uglifyOps := UglifyOps.singleFile,
     pipelineStages := Seq(digest),
-    Assets / pipelineStages := Seq(concat, uglify),
-    uglify / includeFilter := GlobFilter("customshistoricstatementfrontend-*.js")
+    Assets / pipelineStages := Seq(concat)
   )
   .settings(
     scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all")),
