@@ -35,7 +35,8 @@ class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
           emptyStartDate = s"cf.historic.document.request.form.error.start.date-missing.$fileRole",
           emptyEndDate = s"cf.historic.document.request.form.error.end.date-missing.$fileRole",
           invalidMonth = "cf.historic.document.request.form.error.start.month.invalid",
-          invalidYear = "cf.historic.document.request.form.error.year.invalid"
+          invalidYear = "cf.historic.document.request.form.error.start.year.invalid",
+          invalidDate = "cf.historic.document.request.form.error.start.date.invalid"
         ).verifying(earlierThanSystemStartDate(fileRole))
           .verifying(earlierThanPVATStartDate(fileRole))
           .verifying(earlierThanDDStatementStartDate(fileRole)),
@@ -47,7 +48,8 @@ class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
           emptyStartDate = s"cf.historic.document.request.form.error.start.date-missing.$fileRole",
           emptyEndDate = s"cf.historic.document.request.form.error.end.date-missing.$fileRole",
           invalidMonth = "cf.historic.document.request.form.error.end.month.invalid",
-          invalidYear = "cf.historic.document.request.form.error.year.invalid"
+          invalidYear = "cf.historic.document.request.form.error.end.year.invalid",
+          invalidDate = "cf.historic.document.request.form.error.end.date.invalid"
         ).verifying(tooRecentDate(fileRole))
       )(HistoricDates.apply)(hd => Some(Tuple.fromProductTyped(hd)))
     )

@@ -20,7 +20,7 @@ import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
 import models.{C79Certificate, HistoricDates, PostponedVATStatement}
 import play.api.data.{Form, FormError}
-import utils.Utils.emptyString
+import utils.Utils.{emptyString, period}
 
 class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
@@ -88,7 +88,7 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
       formAfterBinding.errors.contains(
         FormError(
-          "start.month",
+          "start",
           List(
             "cf.historic.document.request.form.error.start.date-missing.C79Certificate"
           ),
@@ -98,7 +98,7 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
 
       formAfterBinding.errors.contains(
         FormError(
-          "end.month",
+          "end",
           List(
             "cf.historic.document.request.form.error.end.date-missing.C79Certificate"
           ),
@@ -135,6 +135,33 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
       ) mustBe true
     }
 
+    "return an error for ivalid year field" in new Setup {
+      val form: Form[HistoricDates] = histDateReqPageForm(C79Certificate)
+
+      val formAfterBinding: Form[HistoricDates] = form.bind(
+        Map(
+          "start.year"  -> period,
+          "start.month" -> s"$month3",
+          "start.day"   -> s"$day1",
+          "end.year"    -> s"$year2021",
+          "end.month"   -> s"$month10",
+          "end.day"     -> s"$day12"
+        )
+      )
+
+      formAfterBinding.hasErrors mustBe true
+
+      formAfterBinding.errors.contains(
+        FormError(
+          "start.year",
+          List(
+            "cf.historic.document.request.form.error.start.year.invalid"
+          ),
+          List()
+        )
+      ) mustBe true
+    }
+
     "return an error for empty month field" in new Setup {
       val form: Form[HistoricDates] = histDateReqPageForm(C79Certificate)
 
@@ -156,6 +183,60 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
           "start.month",
           List(
             "cf.historic.document.request.form.error.start.month.date-number-invalid.C79Certificate"
+          ),
+          List()
+        )
+      ) mustBe true
+    }
+
+    "return an error for invalid month field" in new Setup {
+      val form: Form[HistoricDates] = histDateReqPageForm(C79Certificate)
+
+      val formAfterBinding: Form[HistoricDates] = form.bind(
+        Map(
+          "start.year"  -> s"$year2021",
+          "start.month" -> period,
+          "start.day"   -> s"$day1",
+          "end.year"    -> s"$year2021",
+          "end.month"   -> s"$month10",
+          "end.day"     -> s"$day12"
+        )
+      )
+
+      formAfterBinding.hasErrors mustBe true
+
+      formAfterBinding.errors.contains(
+        FormError(
+          "start.month",
+          List(
+            "cf.historic.document.request.form.error.start.month.invalid"
+          ),
+          List()
+        )
+      ) mustBe true
+    }
+
+    "return an error for both invalid month and year field" in new Setup {
+      val form: Form[HistoricDates] = histDateReqPageForm(C79Certificate)
+
+      val formAfterBinding: Form[HistoricDates] = form.bind(
+        Map(
+          "start.year"  -> period,
+          "start.month" -> period,
+          "start.day"   -> s"$day1",
+          "end.year"    -> s"$year2021",
+          "end.month"   -> s"$month10",
+          "end.day"     -> s"$day12"
+        )
+      )
+
+      formAfterBinding.hasErrors mustBe true
+
+      formAfterBinding.errors.contains(
+        FormError(
+          "start",
+          List(
+            "cf.historic.document.request.form.error.start.date.invalid"
           ),
           List()
         )

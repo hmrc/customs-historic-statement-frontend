@@ -56,7 +56,7 @@
 
     @formHelper(action = controllers.routes.HistoricDateRequestPageController.onSubmit(mode, fileRole), Symbol("autoComplete") -> "off") {
 
-        @errorSummary(form.errors,errorFieldName = None, isErrorKeyUpdateEnabled = true, Some(updateFormErrorKeyForStartAndEndDate()))
+        @errorSummary(form.errors, errorFieldName = None)
 
             @h1(s"cf.historic.document.request.heading.$fileRole")
 

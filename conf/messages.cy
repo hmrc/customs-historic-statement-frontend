@@ -153,10 +153,12 @@ cf.historic.document.request.form.error.date-too-recent.c79=Gallwch ofyn am dyst
 
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.dd=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Medi 2019
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Hydref 2019
-cf.historic.document.request.form.error.start.month.invalid=Mae’n rhaid i’r dyddiad dechrau fod yn ddyddiad go iawn
-cf.historic.document.request.form.error.end.month.invalid=Mae’n rhaid i’r dyddiad dod i ben fod yn ddyddiad go iawn
-cf.historic.document.request.form.error.year.invalid=Nodwch flwyddyn go iawn
-cf.historic.document.request.form.error.year.invalid-length=Mae’n rhaid i’r flwyddyn gynnwys pedwar rhif
+cf.historic.document.request.form.error.start.month.invalid=Nodwch fis rhwng 1 a 12 ar gyfer y dyddiad dechrau
+cf.historic.document.request.form.error.end.month.invalid=Nodwch fis rhwng 1 a 12 ar gyfer y dyddiad dod i ben
+cf.historic.document.request.form.error.start.year.invalid=Nodwch flwyddyn go iawn ar gyfer y dyddiad dechrau
+cf.historic.document.request.form.error.end.year.invalid=Nodwch flwyddyn go iawn ar gyfer y dyddiad dod i ben
+cf.historic.document.request.form.error.start.date.invalid=Nodwch ddyddiad go iawn ar gyfer y dyddiad dechrau
+cf.historic.document.request.form.error.end.date.invalid=Nodwch ddyddiad go iawn ar gyfer y dyddiad dod i ben
 
 # Duty Deferment Statement Error Messages
 cf.historic.document.request.form.error.start.date-missing.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch o ba fis a blwyddyn yr hoffech eu cael
