@@ -22,7 +22,7 @@ import models.{
   UndeliverableInformation, UnverifiedEmail
 }
 import play.api.{Application, Configuration}
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.retrieve.Email
 import utils.TestData.*
@@ -69,6 +69,22 @@ class CustomsDataStoreConnectorSpec extends SpecBase with WireMockSupportProvide
       val result: Either[EmailResponses, Email] = await(customsDataStoreConnector.getEmail(hc))
 
       result mustBe Left(UndeliverableEmail("noresponse@email.com"))
+      verifyEndPointUrlHit(getEmailUrl)
+    }
+
+    "return UnverifiedEmail when no email is returned" in new Setup {
+      val emailResponse: EmailResponse = EmailResponse(None, Some("time"), None)
+
+      wireMockServer.stubFor(
+        get(urlPathMatching(getEmailUrl))
+          .willReturn(
+            ok(Json.toJson(emailResponse).toString)
+          )
+      )
+
+      val result: Either[EmailResponses, Email] = await(customsDataStoreConnector.getEmail(hc))
+
+      result mustBe Left(UnverifiedEmail)
       verifyEndPointUrlHit(getEmailUrl)
     }
 
@@ -217,6 +233,13 @@ class CustomsDataStoreConnectorSpec extends SpecBase with WireMockSupportProvide
     }
   }
 
+  "EoriHistoryResponse" should {
+    "serialize and deserialize correctly" in new Setup {
+      Json.toJson(expectedEoriHistoryResponse) mustBe expectedEoriHistoryResponseJson
+      expectedEoriHistoryResponseJson.as[EoriHistoryResponse] mustBe expectedEoriHistoryResponse
+    }
+  }
+
   override def config: Configuration = Configuration(
     ConfigFactory.parseString(
       s"""
@@ -248,5 +271,24 @@ class CustomsDataStoreConnectorSpec extends SpecBase with WireMockSupportProvide
 
     val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
     val emailVerifiedRes: EmailVerifiedResponse     = EmailVerifiedResponse(Some(emailId))
+
+    val undeliverableInformation: UndeliverableInformation =
+      UndeliverableInformation("test subject", "test event", "test group")
+
+    val expectedEoriHistoryResponse: EoriHistoryResponse = EoriHistoryResponse(
+      Seq(EoriHistory("eori1", Some(LocalDate.of(year, month, day)), Some(LocalDate.of(year2, month, day))))
+    )
+
+    val expectedEoriHistoryResponseJson: JsValue = Json.parse(
+      """{
+        |  "eoriHistory": [
+        |    {
+        |      "eori": "eori1",
+        |      "validFrom": "2018-03-14",
+        |      "validUntil": "2019-03-14"
+        |    }
+        |  ]
+        |}""".stripMargin
+    )
   }
 }

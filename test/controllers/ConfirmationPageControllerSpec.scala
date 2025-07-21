@@ -56,6 +56,52 @@ class ConfirmationPageControllerSpec extends SpecBase {
         contentAsString(result) must include(appConfig.financialsHomepage)
       }
     }
+
+    "return None when an error occurs for email retrieval" in new Setup {
+
+      when(mockDataStoreConnector.getEmail(any)).thenReturn(Future.successful(Left("An error occurred")))
+      when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
+
+      running(app) {
+        val request = fakeRequest(GET, routes.ConfirmationPageController.onPageLoad(C79Certificate).url)
+        val result  = route(app, request).value
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(
+            None,
+            C79Certificate,
+            appConfig.financialsHomepage,
+            "March 2018 to March 2018"
+          )(request, messages, appConfig).toString
+
+        contentAsString(result) must include(appConfig.financialsHomepage)
+      }
+    }
+
+    "return None when email retrieval fails with an exception" in new Setup {
+
+      when(mockDataStoreConnector.getEmail(any)).thenReturn(Future.failed(new RuntimeException("Fail")))
+      when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
+
+      running(app) {
+        val request = fakeRequest(GET, routes.ConfirmationPageController.onPageLoad(C79Certificate).url)
+        val result  = route(app, request).value
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(
+            None,
+            C79Certificate,
+            appConfig.financialsHomepage,
+            "March 2018 to March 2018"
+          )(request, messages, appConfig).toString
+
+        contentAsString(result) must include(appConfig.financialsHomepage)
+      }
+    }
   }
 
   trait Setup {

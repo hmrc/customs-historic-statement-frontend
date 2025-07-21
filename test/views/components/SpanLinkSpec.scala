@@ -52,6 +52,19 @@ class SpanLinkSpec extends ViewTestHelper {
 
       shouldRenderLinkWithId("govuk-id", msgKey)
     }
+
+    "render the link with the download attribute when download is true" in new Setup {
+      implicit val spanView: Document = viewWithDownload(download = true)
+
+      spanView.getElementsByTag("a").hasAttr("download") mustBe true
+    }
+
+    "not render the download attribute when download is false" in new Setup {
+      implicit val spanView: Document = viewWithDownload(download = false)
+
+      spanView.getElementsByTag("a").hasAttr("download") mustBe false
+    }
+
   }
 
   private def displayVisuallyHiddenMessage(expectedMsg: String)(implicit view: Document) =
@@ -88,6 +101,29 @@ class SpanLinkSpec extends ViewTestHelper {
           spanMsg = spanMsg,
           spanClass = spanClass,
           id = id
+        )
+
+      Jsoup.parse(component.body)
+    }
+
+    def viewWithDownload(
+      msgKey: String = msgKey,
+      spanMsg: Option[String] = Some(msgKey),
+      spanClass: Option[String] = Some("govuk-visually-hidden"),
+      id: Option[String] = None,
+      download: Boolean
+    ): Document = {
+      val component = application.injector
+        .instanceOf[span_link]
+        .render(
+          msg = msgKey,
+          id = id,
+          classes = "govuk-link",
+          url = url,
+          spanClass = spanClass,
+          spanMsg = spanMsg,
+          download = download,
+          messages = messages
         )
 
       Jsoup.parse(component.body)
