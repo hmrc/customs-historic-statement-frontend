@@ -156,32 +156,6 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
         result.toString mustEqual expectedHtml
       }
-
-      "handle different statement types in preparePeriodDetails" ignore new Setup {
-
-        val renderStatement: HtmlFormat.Appendable = viewModel.component.statements
-
-        val supplementaryPeriod: DutyDefermentStatementPeriod =
-          basePeriod.copy(fileRole = C79Certificate, defermentStatementType = Supplementary)
-
-        val supplementaryResult: HtmlFormat.Appendable = renderStatement
-        val supplementaryMessage: String               = messages("cf.account.detail.row.supplementary.info")
-        supplementaryResult.body must include(supplementaryMessage)
-
-        val excisePeriod: DutyDefermentStatementPeriod = basePeriod.copy(defermentStatementType = Excise)
-        val exciseResult: HtmlFormat.Appendable        = renderStatement
-        val exciseMessage: String                      = messages("cf.account.details.row.excise.info")
-        exciseResult.body must include(exciseMessage)
-
-        val result: HtmlFormat.Appendable = renderStatement
-        val expectedMessage: String       = messages(
-          "cf.account.detail.period-group",
-          Formatters.dateAsDay(basePeriod.startDate),
-          Formatters.dateAsDay(basePeriod.endDate),
-          Formatters.dateAsMonth(basePeriod.endDate)
-        )
-        result.body must include(expectedMessage)
-      }
     }
   }
 

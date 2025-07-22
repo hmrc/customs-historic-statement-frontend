@@ -19,12 +19,13 @@ package controllers
 import base.SpecBase
 import connectors.{AccountLink, CustomsSessionCacheConnector}
 import models.{C79Certificate, DutyDefermentStatement, NormalMode, SecurityStatement}
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.api.{Application, inject}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderNames.xSessionId
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
+
 import scala.concurrent.Future
 
 class JourneyStartControllerSpec extends SpecBase {
@@ -68,6 +69,20 @@ class JourneyStartControllerSpec extends SpecBase {
         val result  = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
+      }
+    }
+
+    "redirect to the session expired controller when session id is missing from header carrier" in new Setup {
+      when(mockSessionCacheConnector.getAccountLink(any, any)(any)).thenReturn(Future.successful(None))
+
+      running(app) {
+        val request = fakeRequest(GET, routes.JourneyStartController.dutyDeferment("linkId").url)
+          .withSession()
+
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
+
       }
     }
   }
