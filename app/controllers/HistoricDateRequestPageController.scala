@@ -90,8 +90,6 @@ class HistoricDateRequestPageController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => {
-            println("--------------")
-            println(formWithErrors)
             logMessageForAnalytics(fileRole, request.eori, formWithErrors)
             Future.successful(
               BadRequest(
