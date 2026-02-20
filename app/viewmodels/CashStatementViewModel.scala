@@ -24,7 +24,8 @@ import models.{CashStatementFile, EoriHistory, FileFormat}
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import utils.Utils.{
-  ddComponent, divComponent, dlComponent, dtComponent, emptyString, h2Component, hmrcNewTabLinkComponent
+  ddComponent, descriptionListCaption, divComponent, dlComponent, dtComponent, emptyString, h2Component,
+  hmrcNewTabLinkComponent
 }
 import views.html.components.download_link_cash_account
 
@@ -130,9 +131,9 @@ object CashStatementViewModel {
       .flatMap(_.cashAccountNumber)
       .headOption match {
       case Some(cashAccountNumber) =>
-        h2Component(
-          msg = messages("cf.cash-statement-requested-account-heading", cashAccountNumber),
-          classes = "govuk-caption-xl"
+        descriptionListCaption(
+          dtMsg = messages("cf.cash-statement-requested-account-heading", cashAccountNumber),
+          ddMsg = cashAccountNumber
         )
 
       case None => Html(emptyString)
