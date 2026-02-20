@@ -18,7 +18,7 @@ package utils
 
 import config.FrontendAppConfig
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
+import play.twirl.api.{HtmlFormat, Html}
 import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
 import views.html.components.*
 import views.html.components.description_list.{dd, dl, dt}
