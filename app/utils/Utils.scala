@@ -45,6 +45,16 @@ object Utils {
   val missingDocumentsGuidanceComponent   = new missing_documents_guidance(h2Component, pComponent)
   val emptyHmrcNewTabLink: HmrcNewTabLink = new HmrcNewTabLink()
 
+  def descriptionListCaption(dtMsg: String, ddMsg: String, id: Option[String] = None, classes: String = "govuk-caption-xl"): HtmlFormat.Appendable =
+    dlComponent(
+      content = Html(
+        dtComponent(content = Html(dtMsg), classes = Some("govuk-visually-hidden")).toString +
+          ddComponent(content = Html(ddMsg)).toString
+      ),
+      classes = Some(classes),
+      id = id
+    )
+
   def hmrcNewTabLinkComponent(
     linkMessage: String,
     href: String,
