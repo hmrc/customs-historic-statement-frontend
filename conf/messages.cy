@@ -161,32 +161,32 @@ cf.historic.document.request.form.error.start.date.invalid=Nodwch ddyddiad go ia
 cf.historic.document.request.form.error.end.date.invalid=Nodwch ddyddiad go iawn ar gyfer y dyddiad dod i ben
 
 # Duty Deferment Statement Error Messages
-cf.historic.document.request.form.error.start.date-missing.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch o ba fis a blwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.end.date-missing.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis a blwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.start.date-missing.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch o ba ddyddiad yr hoffech ddechrau eu cael
+cf.historic.document.request.form.error.end.date-missing.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba ddyddiad yr hoffech eu cael
 cf.historic.document.request.form.error.start.year.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch o ba flwyddyn yr hoffech eu cael
 cf.historic.document.request.form.error.end.year.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba flwyddyn yr hoffech eu cael
 cf.historic.document.request.form.error.start.month.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch o ba fis yr hoffech eu cael
 cf.historic.document.request.form.error.end.month.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis yr hoffech eu cael
 
 # Postponed VAT Statement Error Messages
-cf.historic.document.request.form.error.start.date-missing.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch o ba fis a blwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.end.date-missing.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis a blwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.start.date-missing.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch o ba ddyddiad yr hoffech ddechrau eu cael
+cf.historic.document.request.form.error.end.date-missing.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba ddyddiad yr hoffech eu cael
 cf.historic.document.request.form.error.start.year.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch o ba flwyddyn yr hoffech eu cael
 cf.historic.document.request.form.error.end.year.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba flwyddyn yr hoffech eu cael
 cf.historic.document.request.form.error.start.month.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch o ba fis yr hoffech eu cael
 cf.historic.document.request.form.error.end.month.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis yr hoffech eu cael
 
 # Security Statement Error Messages
-cf.historic.document.request.form.error.start.date-missing.SecurityStatement=Yn eich cais am ddatganiadau, nodwch o ba fis a blwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.end.date-missing.SecurityStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis a blwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.start.date-missing.SecurityStatement=Yn eich cais am ddatganiadau, nodwch o ba ddyddiad yr hoffech ddechrau eu cael
+cf.historic.document.request.form.error.end.date-missing.SecurityStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba ddyddiad yr hoffech eu cael
 cf.historic.document.request.form.error.start.year.date-number-invalid.SecurityStatement=Yn eich cais am ddatganiadau, nodwch o ba flwyddyn yr hoffech eu cael
 cf.historic.document.request.form.error.end.year.date-number-invalid.SecurityStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba flwyddyn yr hoffech eu cael
 cf.historic.document.request.form.error.start.month.date-number-invalid.SecurityStatement=Yn eich cais am ddatganiadau, nodwch o ba fis yr hoffech eu cael
 cf.historic.document.request.form.error.end.month.date-number-invalid.SecurityStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis yr hoffech eu cael
 
 # C79 Certificate Statement Error Messages
-cf.historic.document.request.form.error.start.date-missing.C79Certificate=Yn eich cais am dystysgrifau, nodwch o ba fis a blwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.end.date-missing.C79Certificate=Yn eich cais am dystysgrifau, nodwch hyd at ba fis a blwyddyn yr hoffech eu cael
+cf.historic.document.request.form.error.start.date-missing.C79Certificate=Yn eich cais am dystysgrifau, nodwch o ba ddyddiad yr hoffech ddechrau eu cael
+cf.historic.document.request.form.error.end.date-missing.C79Certificate=Yn eich cais am dystysgrifau, nodwch hyd at ba ddyddiad yr hoffech eu cael
 cf.historic.document.request.form.error.start.year.date-number-invalid.C79Certificate=Yn eich cais am dystysgrifau, nodwch o ba flwyddyn yr hoffech eu cael
 cf.historic.document.request.form.error.end.year.date-number-invalid.C79Certificate=Yn eich cais am dystysgrifau, nodwch hyd at ba flwyddyn yr hoffech eu cael
 cf.historic.document.request.form.error.start.month.date-number-invalid.C79Certificate=Yn eich cais am dystysgrifau, nodwch o ba fis yr hoffech eu cael
