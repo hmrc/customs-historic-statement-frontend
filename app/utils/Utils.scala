@@ -18,7 +18,7 @@ package utils
 
 import config.FrontendAppConfig
 import play.api.i18n.Messages
-import play.twirl.api.{Html, HtmlFormat}
+import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
 import views.html.components.*
 import views.html.components.description_list.{dd, dl, dt}
@@ -44,21 +44,6 @@ object Utils {
 
   val missingDocumentsGuidanceComponent   = new missing_documents_guidance(h2Component, pComponent)
   val emptyHmrcNewTabLink: HmrcNewTabLink = new HmrcNewTabLink()
-
-  def descriptionListCaption(
-    dtMsg: String,
-    ddMsg: String,
-    id: Option[String] = None,
-    classes: String = "govuk-caption-xl"
-  ): HtmlFormat.Appendable =
-    dlComponent(
-      content = Html(
-        dtComponent(content = Html(dtMsg), classes = Some("govuk-visually-hidden")).toString +
-          ddComponent(content = Html(ddMsg)).toString
-      ),
-      classes = Some(classes),
-      id = id
-    )
 
   def hmrcNewTabLinkComponent(
     linkMessage: String,
