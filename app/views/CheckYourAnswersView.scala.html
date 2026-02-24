@@ -40,7 +40,7 @@
 
     @maybeDan.map{ dan =>
         @if(fileRole == DutyDefermentStatement) {
-            <h2 class="govuk-caption-xl" id="eori-heading">
+            <span class="govuk-caption-xl" id="eori-heading">
                 @messages("cf.account.detail.requested.deferment-account-secondary-heading")
                 @{
                     dan
@@ -48,7 +48,7 @@
                 @if(niIndicator.getOrElse(false)) {
                     @messages("cf.account.detail.requested.deferment-account-secondary-heading.NiAccount")
                 }
-            </h2>
+            </span>
         }
     }
 
