@@ -118,7 +118,6 @@ cf.historic.document.request.confirmation.panel-text.DutyDefermentStatement=Daet
 cf.historic.document.request.confirmation.panel-text.C79Certificate=Daeth eich cais am dystysgrifau i law
 cf.historic.document.request.confirmation.panel-text.SecurityStatement=Daeth eich cais am ddatganiadau i law
 cf.historic.document.request.confirmation.panel-text.PostponedVATStatement=Mae’ch cais am ddatganiadau wedi dod i law
-cf.historic.document.request.confirmation.panel-text.CDSCashAccount=Daeth eich cais am drafodion i law
 cf.historic.document.request.confirmation.C79Certificate.link-text=Yn ôl i ‘Tystysgrifau TAW mewnforio (C79)’
 cf.historic.document.request.confirmation.DutyDefermentStatement.link-text=Yn ôl i ‘Datganiadau gohirio tollau’
 cf.historic.document.request.confirmation.SecurityStatement.link-text=Yn ôl i ‘Hysbysiad o ddatganiadau addasu’
