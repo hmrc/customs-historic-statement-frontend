@@ -126,11 +126,15 @@ cf.historic.document.request.confirmation.body-text.SecurityStatement=Byddwn yn 
 cf.historic.document.request.confirmation.back-to-dashboard.link-text=Yn ôl i hafan ‘Rheoli tollau mewnforio a chyfrifon TAW’
 
 cf.historic.document.request.confirmation.subheader-text.next=Yr hyn sy’n digwydd nesaf
-cf.historic.document.request.confirmation.body-text.request=Byddwn yn anfon e-bost at {0} cyn pen 48 awr pan fydd eich cais wedi’i brosesu.
-cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen ‘Datganiadau gohirio tollau’.
-cf.historic.document.request.confirmation.body-text2.C79Certificate=Byddwch yn gallu lawrlwytho’ch tystysgrifau o’r dudalen tystysgrifau TAW mewnforio (C79).
-cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen datganiadau TAW mewnforio ohiriedig.
-cf.historic.document.request.confirmation.body-text2.SecurityStatement=Byddwch yn gallu lawrlwytho’ch datganiadau o’r dudalen ‘Hysbysiad o ddatganiadau addasu’.
+cf.historic.document.request.confirmation.body-text.request.DutyDefermentStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod i’w lawrlwytho o dudalen datganiadau cyfrif gohirio tollau.
+cf.historic.document.request.confirmation.body-text.request.C79Certificate=Byddwn yn anfon e-bost at {0} pan fydd eich tystysgrifau yn barod i’w lawrlwytho o’r dudalen tystysgrifau TAW mewnforio (C79).
+cf.historic.document.request.confirmation.body-text.request.SecurityStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau ar gael i’w lawrlwytho o dudalen hysbysiadau addasiad.
+cf.historic.document.request.confirmation.body-text.request.PostponedVATStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau ar gael i’w lawrlwytho o dudalen datganiadau TAW mewnforio gohiriedig.
+
+cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=Bydd datganiadau a ofynnwyd amdanynt ar gael i’w gweld a’u lawrlwytho am 10 diwrnod yn unig. Ar ôl 10 diwrnod, bydd y ffeiliau a ofynnwyd amdanynt yn cael eu dileu, ac mae’n bosibl y bydd angen i chi wneud cais amdanynt eto.
+cf.historic.document.request.confirmation.body-text2.C79Certificate=Bydd tystysgrifau a ofynnwyd amdanynt ar gael i’w gweld a’u lawrlwytho am 10 diwrnod yn unig. Ar ôl 10 diwrnod, bydd y ffeiliau a ofynnwyd amdanynt yn cael eu dileu, ac mae’n bosibl y bydd angen i chi wneud cais amdanynt eto.
+cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Bydd datganiadau a ofynnwyd amdanynt ar gael i’w gweld a’u lawrlwytho am 10 diwrnod yn unig. Ar ôl 10 diwrnod, bydd y ffeiliau a ofynnwyd amdanynt yn cael eu dileu, ac mae’n bosibl y bydd angen i chi wneud cais amdanynt eto.
+cf.historic.document.request.confirmation.body-text2.SecurityStatement=Bydd datganiadau a ofynnwyd amdanynt ar gael i’w gweld a’u lawrlwytho am 10 diwrnod yn unig. Ar ôl 10 diwrnod, bydd y ffeiliau a ofynnwyd amdanynt yn cael eu dileu, ac mae’n bosibl y bydd angen i chi wneud cais amdanynt eto.
 
 cf.historic.document.request.confirmation.subheader-text.help=Helpu ni i wella’r gwasanaeth hwn
 cf.historic.document.request.confirmation.body-text.help=Mae eich adborth yn werthfawr i ni. 

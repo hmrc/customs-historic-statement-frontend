@@ -53,7 +53,7 @@ class ConfirmationPageViewSpec extends SpecBase {
 
       "email confirmation should display correctly" in new Setup {
         view.getElementById("email-confirmation").text() mustBe messages(
-          "cf.historic.document.request.confirmation.body-text.request",
+          "cf.historic.document.request.confirmation.body-text.request.C79Certificate",
           email.value
         )
       }
