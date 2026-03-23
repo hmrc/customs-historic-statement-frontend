@@ -126,11 +126,15 @@ cf.historic.document.request.confirmation.body-text.SecurityStatement=We will se
 cf.historic.document.request.confirmation.back-to-dashboard.link-text=Back to Manage import duties and VAT accounts homepage
 
 cf.historic.document.request.confirmation.subheader-text.next=What happens next
-cf.historic.document.request.confirmation.body-text.request=We''ll send an email within 48 hours to {0} when your request is processed.
-cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=You''ll be able to download your statements from the duty deferment statements page.
-cf.historic.document.request.confirmation.body-text2.C79Certificate=You''ll be able to download your certificates from the import VAT certificates (C79) page.
-cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=You''ll be able to download your statements from the postponed import VAT statements page.
-cf.historic.document.request.confirmation.body-text2.SecurityStatement=You''ll be able to download your statements from the notification of adjustment statements page.
+cf.historic.document.request.confirmation.body-text.request.DutyDefermentStatement=We will send an email to {0} when your statements are ready to download from the duty deferment account statements page.
+cf.historic.document.request.confirmation.body-text.request.C79Certificate=We will send an email to {0} when your certificates are ready to download from the import VAT certificates (C79) page.
+cf.historic.document.request.confirmation.body-text.request.SecurityStatement=We will send an email to {0} when your statements are ready to download from the notification of adjustment statements page.
+cf.historic.document.request.confirmation.body-text.request.PostponedVATStatement=We will send an email to {0} when your statements are ready to download from the postponed import VAT statements page.
+
+cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=Requested statements will only be available to view and download for 10 days. After 10 days, the requested files will be deleted and you may need to request them again.
+cf.historic.document.request.confirmation.body-text2.C79Certificate=Requested certificates will only be available to view and download for 10 days. After 10 days, the requested files will be deleted and you may need to request them again.
+cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Requested statements will only be available to view and download for 10 days. After 10 days, the requested files will be deleted and you may need to request them again.
+cf.historic.document.request.confirmation.body-text2.SecurityStatement=Requested statements will only be available to view and download for 10 days. After 10 days, the requested files will be deleted and you may need to request them again.
 
 cf.historic.document.request.confirmation.subheader-text.help=Help us improve the service
 cf.historic.document.request.confirmation.body-text.help=Your feedback is valuable to us.

@@ -53,7 +53,7 @@ class ConfirmationPageViewSpec extends SpecBase {
 
       "email confirmation should display correctly" in new Setup {
         view.getElementById("email-confirmation").text() mustBe messages(
-          "cf.historic.document.request.confirmation.body-text.request",
+          "We will send an email to some@email.com when your certificates are ready to download from the import VAT certificates (C79) page.",
           email.value
         )
       }
