@@ -70,7 +70,11 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         s"""<div id=requested-statements-list-0-$currentYear-$currentMonth-row-0 class=govuk-summary-list__row>"""
       )
       statementsString must include(
-        s"""<dt id=requested-statements-list-0-$currentYear-$currentMonth-row-0-date-cell class=govuk-summary-list__value>Duty deferment 1720</dt>"""
+        s"""<dt id=requested-statements-list-0-$currentYear-$currentMonth-row-0-type-cell class=govuk-summary-list__value>Duty deferment 1720</dt>"""
+      )
+
+      statementsString must include(
+        s"""<dd id=requested-statements-list-0-$currentYear-$currentMonth-row-0-date-cell class=govuk-summary-list__value></dd>"""
       )
     }
 
@@ -111,12 +115,14 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         year2,
         month,
         day,
+        1,
         Pdf,
         DutyDefermentStatement,
         DutyDeferment,
         Some(true),
         Some("BACS"),
-        "12345678"
+        "12345678",
+        available = true
       )
     )
 
@@ -131,12 +137,14 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         year2,
         month,
         day,
+        1,
         UnknownFileFormat,
         DutyDefermentStatement,
         Supplementary,
         Some(true),
         Some("BACS"),
-        "12345678"
+        "12345678",
+        available = true
       )
     )
 
@@ -151,12 +159,14 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         year2,
         month,
         day,
+        1,
         Pdf,
         DutyDefermentStatement,
         DutyDeferment,
         Some(true),
         Some("BACS"),
-        "12345678"
+        "12345678",
+        available = true
       )
     )
 
@@ -171,21 +181,25 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         year2,
         month,
         day,
+        1,
         Pdf,
         DutyDefermentStatement,
         ExciseDeferment,
         Some(true),
         Some("BACS"),
-        "12345678"
+        "12345678",
+        available = true
       )
     )
 
     val ddStatementPeriod: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       DutyDeferment,
+      1,
       currentDate,
       currentDate.minusDays(offset),
       currentDate,
+      true,
       Seq(ddFile1, ddFile2, ddFile3, ddFile4)
     )
 
@@ -207,13 +221,15 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
           periodEndYear,
           periodEndMonth,
           periodEndDay,
+          1,
           Pdf,
           DutyDefermentStatement,
           Weekly,
           Some(true),
           Some(dutyPaymentType),
           accountNumber,
-          someRequestId
+          someRequestId,
+          available = true
         )
       )
 
@@ -228,13 +244,15 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         periodEndYear,
         periodEndMonth2,
         periodEndDay,
+        2,
         Pdf,
         DutyDefermentStatement,
         Supplementary,
         Some(true),
         Some(dutyPaymentType),
         accountNumber,
-        someRequestId
+        someRequestId,
+        available = true
       )
     )
 

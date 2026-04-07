@@ -260,6 +260,7 @@ class SdesConnectorSpec extends SpecBase {
             MetadataItem("PeriodEndYear", "2018"),
             MetadataItem("PeriodEndMonth", "3"),
             MetadataItem("PeriodEndDay", "23"),
+            MetadataItem("PeriodIssueNumber", "01"),
             MetadataItem("FileType", "PDF"),
             MetadataItem("FileRole", "DutyDefermentStatement"),
             MetadataItem("DefermentStatementType", "Weekly"),
@@ -281,6 +282,7 @@ class SdesConnectorSpec extends SpecBase {
             MetadataItem("PeriodEndYear", "2018"),
             MetadataItem("PeriodEndMonth", "2"),
             MetadataItem("PeriodEndDay", "23"),
+            MetadataItem("PeriodIssueNumber", "02"),
             MetadataItem("FileType", "PDF"),
             MetadataItem("FileRole", "DutyDefermentStatement"),
             MetadataItem("DefermentStatementType", "Weekly"),
@@ -304,12 +306,14 @@ class SdesConnectorSpec extends SpecBase {
           year,
           month,
           minute,
+          1,
           Pdf,
           DutyDefermentStatement,
           Weekly,
           Some(true),
           Some("BACS"),
-          dan
+          dan,
+          available = true
         )
       ),
       DutyDefermentStatementFile(
@@ -323,12 +327,14 @@ class SdesConnectorSpec extends SpecBase {
           year,
           hour,
           minute,
+          2,
           Pdf,
           DutyDefermentStatement,
           Weekly,
           Some(false),
           Some("BACS"),
-          dan
+          dan,
+          available = true
         )
       )
     )
@@ -349,6 +355,7 @@ class SdesConnectorSpec extends SpecBase {
             MetadataItem("PeriodEndYear", "2018"),
             MetadataItem("PeriodEndMonth", "3"),
             MetadataItem("PeriodEndDay", "23"),
+            MetadataItem("PeriodIssueNumber", "01"),
             MetadataItem("FileType", "pdf"),
             MetadataItem("FileRole", "SecurityStatement"),
             MetadataItem("eoriNumber", eori),
@@ -370,6 +377,7 @@ class SdesConnectorSpec extends SpecBase {
             MetadataItem("PeriodEndYear", "2018"),
             MetadataItem("PeriodEndMonth", "3"),
             MetadataItem("PeriodEndDay", "23"),
+            MetadataItem("PeriodIssueNumber", "02"),
             MetadataItem("FileType", "pdf"),
             MetadataItem("FileRole", "SecurityStatement"),
             MetadataItem("eoriNumber", eori),
@@ -394,6 +402,7 @@ class SdesConnectorSpec extends SpecBase {
               MetadataItem("PeriodEndYear", "2018"),
               MetadataItem("PeriodEndMonth", "3"),
               MetadataItem("PeriodEndDay", "23"),
+              MetadataItem("PeriodIssueNumber", "01"),
               MetadataItem("FileType", "foo"),
               MetadataItem("FileRole", "SecurityStatement"),
               MetadataItem("eoriNumber", eori),
@@ -419,6 +428,7 @@ class SdesConnectorSpec extends SpecBase {
                 MetadataItem("PeriodEndYear", "2018"),
                 MetadataItem("PeriodEndMonth", "3"),
                 MetadataItem("PeriodEndDay", "23"),
+                MetadataItem("PeriodIssueNumber", "02"),
                 MetadataItem("FileType", "bar"),
                 MetadataItem("FileRole", "SecurityStatement"),
                 MetadataItem("eoriNumber", eori),

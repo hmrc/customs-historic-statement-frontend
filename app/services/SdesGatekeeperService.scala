@@ -119,13 +119,15 @@ class SdesGatekeeperService() {
         metadata("PeriodEndYear").toInt,
         metadata("PeriodEndMonth").toInt,
         metadata("PeriodEndDay").toInt,
+        metadata("PeriodIssueNumber").toInt,
         FileFormat(metadata("FileType")),
         mapFileRole(metadata("FileRole")),
         DDStatementType(metadata("DefermentStatementType")),
         Some(mapDutyOverLimit(metadata.getOrElse("DutyOverLimit", "false"))),
         Some(metadata.getOrElse("DutyPaymentType", "Unknown")),
         metadata.getOrElse("DAN", "Unknown"),
-        metadata.get("statementRequestID")
+        metadata.get("statementRequestID"),
+        true
       )
     )
   }

@@ -234,7 +234,10 @@ cf.account.detail.requested.deferment-account-secondary-heading.NiAccount=(Gogle
 cf.account.detail.requested.deferment-account-heading=Datganiadau gohirio tollau y gofynnwyd amdanynt
 cf.account.detail.requested.deferment-account-statements-available.text=Mae datganiadau y gofynnwyd amdanynt ar gael i’w gweld am 10 diwrnod. Gallwn ond darparu’r rhain ar ffurf PDF.
 
-cf.account.detail.period-group={0} i {1} {2}
+cf.account.detail.no-statement=Dim Datganiad
+cf.account.detail.unavailable=Nid yw ar gael
+cf.account.detail.row.period-group={0} i {1} {2}
+cf.account.detail.row.period-group.info=Wythnos {0}
 cf.account.detail.row.supplementary.info=Manylion diwedd mis atodol
 cf.account.details.row.excise.info=Crynodeb o’r ecséis
 cf.account.details.row.duty-deferment.info = Gohiriad tollau 1720

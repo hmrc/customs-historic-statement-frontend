@@ -35,9 +35,11 @@ case class DutyDefermentStatementsForEori(
         DutyDefermentStatementPeriod(
           periodFiles.head.metadata.fileRole,
           periodFiles.head.metadata.defermentStatementType,
+          periodFiles.head.metadata.periodIssueNumber,
           periodFiles.head.monthAndYear,
           periodFiles.head.startDate,
           periodFiles.head.endDate,
+          periodFiles.head.metadata.available,
           periodFiles.sorted
         )
       }
@@ -52,6 +54,7 @@ case class DutyDefermentStatementsForEori(
         monthAndYear,
         statementPeriods
           .sortWith(_.startDate > _.startDate)
+          .sortWith(_.periodIssueNumber < _.periodIssueNumber)
           .sortWith(_.defermentStatementType < _.defermentStatementType)
       )
     }
