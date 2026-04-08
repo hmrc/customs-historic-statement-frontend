@@ -127,7 +127,7 @@ class SdesGatekeeperService() {
         Some(metadata.getOrElse("DutyPaymentType", "Unknown")),
         metadata.getOrElse("DAN", "Unknown"),
         metadata.get("statementRequestID"),
-        true
+        available = true
       )
     )
   }
