@@ -108,9 +108,9 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody(
           "start.month" -> "10",
-          "start.year"  -> "2019",
+          "start.year"  -> "2024",
           "end.month"   -> "10",
-          "end.year"    -> "2019"
+          "end.year"    -> "2024"
         )
 
       running(app) {
@@ -131,9 +131,9 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, DutyDefermentStatement).url)
           .withFormUrlEncodedBody(
             "start.month" -> "10",
-            "start.year"  -> "2019",
+            "start.year"  -> "2024",
             "end.month"   -> "11",
-            "end.year"    -> "2019"
+            "end.year"    -> "2024"
           )
 
       running(app) {

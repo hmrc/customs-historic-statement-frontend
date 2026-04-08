@@ -231,7 +231,10 @@ cf.account.detail.requested.deferment-account-secondary-heading.NiAccount=(North
 cf.account.detail.requested.deferment-account-heading=Requested duty deferment statements
 cf.account.detail.requested.deferment-account-statements-available.text=Requested statements are available to view for 10 days. We can only provide these in PDF format.
 
-cf.account.detail.period-group={0} to {1} {2}
+cf.account.detail.no-statement=No statement
+cf.account.detail.unavailable=Unavailable
+cf.account.detail.row.period-group={0} to {1} {2}
+cf.account.detail.row.period-group.info=Week {0}
 cf.account.detail.row.supplementary.info=Supplementary end of month
 cf.account.details.row.excise.info=Excise summary
 cf.account.details.row.duty-deferment.info = Duty deferment 1720
