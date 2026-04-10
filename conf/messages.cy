@@ -14,7 +14,6 @@ footer.privacy         = Polisi preifatrwydd
 footer.termsConditions = Telerau ac amodau
 footer.govukHelp       = Help wrth ddefnyddio GOV.UK
 
-
 date.month = Mis
 date.year = Blwyddyn
 
@@ -124,18 +123,15 @@ cf.historic.document.request.confirmation.SecurityStatement.link-text=Yn ôl i �
 cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Yn ôl i ddatganiadau TAW mewnforio ohiriedig
 cf.historic.document.request.confirmation.body-text.SecurityStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod. Gallwch ddod o hyd iddyn nhw o’r dudalen datganiadau, fel arfer cyn pen 48 awr.
 cf.historic.document.request.confirmation.back-to-dashboard.link-text=Yn ôl i hafan ‘Rheoli tollau mewnforio a chyfrifon TAW’
-
 cf.historic.document.request.confirmation.subheader-text.next=Yr hyn sy’n digwydd nesaf
 cf.historic.document.request.confirmation.body-text.request.DutyDefermentStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod i’w lawrlwytho o dudalen datganiadau cyfrif gohirio tollau.
 cf.historic.document.request.confirmation.body-text.request.C79Certificate=Byddwn yn anfon e-bost at {0} pan fydd eich tystysgrifau yn barod i’w lawrlwytho o’r dudalen tystysgrifau TAW mewnforio (C79).
 cf.historic.document.request.confirmation.body-text.request.SecurityStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau ar gael i’w lawrlwytho o dudalen hysbysiadau addasiad.
 cf.historic.document.request.confirmation.body-text.request.PostponedVATStatement=Byddwn yn anfon e-bost at {0} pan fydd eich datganiadau yn barod i’w lawrlwytho o’r dudalen datganiadau TAW mewnforio ohiriedig.
-
 cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=Bydd datganiadau a ofynnwyd amdanynt ar gael i’w gweld a’u lawrlwytho am 10 diwrnod yn unig. Ar ôl 10 diwrnod, bydd y ffeiliau a ofynnwyd amdanynt yn cael eu dileu, ac mae’n bosibl y bydd angen i chi wneud cais amdanynt eto.
 cf.historic.document.request.confirmation.body-text2.C79Certificate=Bydd tystysgrifau a ofynnwyd amdanynt ar gael i’w gweld a’u lawrlwytho am 10 diwrnod yn unig. Ar ôl 10 diwrnod, bydd y ffeiliau a ofynnwyd amdanynt yn cael eu dileu, ac mae’n bosibl y bydd angen i chi wneud cais amdanynt eto.
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Bydd datganiadau a ofynnwyd amdanynt ar gael i’w gweld a’u lawrlwytho am 10 diwrnod yn unig. Ar ôl 10 diwrnod, bydd y ffeiliau a ofynnwyd amdanynt yn cael eu dileu, ac mae’n bosibl y bydd angen i chi wneud cais amdanynt eto.
 cf.historic.document.request.confirmation.body-text2.SecurityStatement=Bydd datganiadau a ofynnwyd amdanynt ar gael i’w gweld a’u lawrlwytho am 10 diwrnod yn unig. Ar ôl 10 diwrnod, bydd y ffeiliau a ofynnwyd amdanynt yn cael eu dileu, ac mae’n bosibl y bydd angen i chi wneud cais amdanynt eto.
-
 cf.historic.document.request.confirmation.subheader-text.help=Helpu ni i wella’r gwasanaeth hwn
 cf.historic.document.request.confirmation.body-text.help=Mae eich adborth yn werthfawr i ni. 
 cf.historic.document.request.confirmation.link.help=Cofrestrwch i gymryd rhan mewn ymchwil defnyddwyr (yn agor tab newydd)
@@ -145,18 +141,15 @@ cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn a
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ionawr 2021
 cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=Ni allwch nodi dyddiad cyn mis Medi 2019
-
-
 cf.historic.document.request.form.error.date-range-too-wide=Gallwch ond gofyn am hyd at 6 mis o ddatganiadau ym mhob cais
-cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am ddatganiadau sy’n hŷn na 6 mis
-cf.historic.document.request.form.error.date-earlier-than-system-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Medi 2019
-
 cf.historic.document.request.form.error.date-range-too-wide.c79=Gallwch ofyn am hyd at 6 mis o dystysgrifau yn unig ym mhob cais
-cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79=Gallwch ofyn am dystysgrifau a anfonwyd ers mis Hydref 2019 yn unig
-cf.historic.document.request.form.error.date-too-recent.c79=Gallwch ofyn am dystysgrifau sy’n hŷn na 6 mis yn unig
 
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.dd=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Medi 2019
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Hydref 2019
+cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79=Gallwch ofyn am dystysgrifau a anfonwyd ers mis Hydref 2019 yn unig
+
+cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am ddatganiadau sy’n hŷn na 6 mis
+cf.historic.document.request.form.error.date-too-recent.c79=Gallwch ofyn am dystysgrifau sy’n hŷn na 6 mis yn unig
 cf.historic.document.request.form.error.start.month.invalid=Nodwch fis rhwng 1 a 12 ar gyfer y dyddiad dechrau
 cf.historic.document.request.form.error.end.month.invalid=Nodwch fis rhwng 1 a 12 ar gyfer y dyddiad dod i ben
 cf.historic.document.request.form.error.start.year.invalid=Nodwch flwyddyn go iawn ar gyfer y dyddiad dechrau
@@ -244,7 +237,6 @@ cf.account.details.row.duty-deferment.info = Gohiriad tollau 1720
 cf.account.details.row.excise-deferment.info = Gohiriad ecséis 1920
 cf.account.details.previous-eori=EORI: {0}
 
-#
 cf.account.vat.download-link=Lawrlwytho {0} o {1} ({2})
 cf.account.vat.missing-file=Nid yw ar gael
 cf.account.vat.missing-file-hidden-text=Nid yw {0} ar gyfer {1} ar gael
@@ -267,7 +259,6 @@ session_expired.action = Dechrau eto
 checkYourAnswers.period.change = cyfnod y datganiad
 
 # Page Not Found Error
-
 cf.error.not-found.title=Heb ddod o hyd i’r dudalen
 cf.error.not-found.heading=Heb ddod o hyd i’r dudalen
 cf.error.not-found.message.address-typed-wrong=Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gywir.
@@ -294,6 +285,7 @@ cf.account.detail.missing-file-type-duty-deferment=Nid yw gohiriad tollau 1720 a
 cf.account.detail.missing-file-type=Nid yw {0} ar gyfer {1} i {2} ar gael
 cf.account.detail.unavailable=Nid yw ar gael
 
+# Months
 month.1 = Ionawr
 month.2 = Chwefror
 month.3 = Mawrth

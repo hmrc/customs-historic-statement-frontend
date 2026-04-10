@@ -14,7 +14,6 @@ footer.privacy         = Privacy policy
 footer.termsConditions = Terms and conditions
 footer.govukHelp       = Help using GOV.UK
 
-
 date.month = Month
 date.year = Year
 
@@ -124,18 +123,15 @@ cf.historic.document.request.confirmation.SecurityStatement.link-text=Back to no
 cf.historic.document.request.confirmation.PostponedVATStatement.link-text=Back to postponed import VAT statements
 cf.historic.document.request.confirmation.body-text.SecurityStatement=We will send an email to {0} when your statements are ready. You can access them from the statements page, usually within 48 hours.
 cf.historic.document.request.confirmation.back-to-dashboard.link-text=Back to Manage import duties and VAT accounts homepage
-
 cf.historic.document.request.confirmation.subheader-text.next=What happens next
 cf.historic.document.request.confirmation.body-text.request.DutyDefermentStatement=We will send an email to {0} when your statements are ready to download from the duty deferment account statements page.
 cf.historic.document.request.confirmation.body-text.request.C79Certificate=We will send an email to {0} when your certificates are ready to download from the import VAT certificates (C79) page.
 cf.historic.document.request.confirmation.body-text.request.SecurityStatement=We will send an email to {0} when your statements are ready to download from the notification of adjustment statements page.
 cf.historic.document.request.confirmation.body-text.request.PostponedVATStatement=We will send an email to {0} when your statements are ready to download from the postponed import VAT statements page.
-
 cf.historic.document.request.confirmation.body-text2.DutyDefermentStatement=Requested statements will only be available to view and download for 10 days. After 10 days, the requested files will be deleted and you may need to request them again.
 cf.historic.document.request.confirmation.body-text2.C79Certificate=Requested certificates will only be available to view and download for 10 days. After 10 days, the requested files will be deleted and you may need to request them again.
 cf.historic.document.request.confirmation.body-text2.PostponedVATStatement=Requested statements will only be available to view and download for 10 days. After 10 days, the requested files will be deleted and you may need to request them again.
 cf.historic.document.request.confirmation.body-text2.SecurityStatement=Requested statements will only be available to view and download for 10 days. After 10 days, the requested files will be deleted and you may need to request them again.
-
 cf.historic.document.request.confirmation.subheader-text.help=Help us improve the service
 cf.historic.document.request.confirmation.body-text.help=Your feedback is valuable to us.
 cf.historic.document.request.confirmation.link.help=Sign up to take part in user research (opens in new tab)
@@ -143,15 +139,15 @@ cf.historic.document.request.confirmation.link.help=Sign up to take part in user
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=You can only request statements from after the {0} to {1} tax year.
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=The to date must be on or after the from date
-
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=You can only request statements issued since January 2021
 cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=You cannot enter a date before September 2019
-
 cf.historic.document.request.form.error.date-range-too-wide=You can only ask for up to 6 months of statements in each request
 cf.historic.document.request.form.error.date-range-too-wide.c79=You can only ask for up to 6 months of certificates in each request
+
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.dd=You can only request statements issued since September 2019
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities=You can only request statements issued since October 2019
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79=You can only request certificates issued since October 2019
+
 cf.historic.document.request.form.error.date-too-recent=You can only request statements older than 6 months
 cf.historic.document.request.form.error.date-too-recent.c79=You can only request certificates older than 6 months
 cf.historic.document.request.form.error.start.month.invalid=Enter a month between 1 and 12 for the start date
@@ -247,7 +243,6 @@ cf.account.vat.missing-file-hidden-text={0} for {1} unavailable
 
 #ImportPostponedVatRequestedStatements
 cf.account.postponed-vat.download-link=Download {0} statement as {1}, {2} ({3})
-
 cf.account.postponed-vat.missing-file=Unavailable
 cf.account.postponed-vat.missing-file-hidden-text={0} for {1} unavailable
 cf.account.postponed-vat.missing-file-type=No {0} statements available.
@@ -264,7 +259,6 @@ session_expired.action = Start again
 checkYourAnswers.period.change = statement period
 
 # Page Not Found Error
-
 cf.error.not-found.title=Page not found
 cf.error.not-found.heading=Page not found
 cf.error.not-found.message.address-typed-wrong=If you typed the web address, check it is correct.
@@ -291,6 +285,7 @@ cf.account.detail.missing-file-type-duty-deferment=Duty deferment 1720 {0} for {
 cf.account.detail.missing-file-type={0} for {1} to {2} unavailable
 cf.account.detail.unavailable=Unavailable
 
+# Months
 month.1 = January
 month.2 = February
 month.3 = March
