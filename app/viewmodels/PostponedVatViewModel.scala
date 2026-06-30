@@ -38,7 +38,7 @@ case class StatementDisplayData(
   monthYear: String,
   monthYearId: String,
   formattedMonth: String,
-  sources: Seq[SourceDisplay],
+  source: SourceDisplay,
   index: Int,
   dateHeader: HtmlFormat.Appendable,
   statementItem: HtmlFormat.Appendable
@@ -90,11 +90,10 @@ object PostponedVatViewModel {
     statementsByMonth: PostponedVatStatementsByMonth,
     index: Int
   )(implicit messages: Messages): StatementDisplayData = {
-    val sources: Seq[String] = Seq("CDS", "CHIEF")
+    val source: String = "CDS"
 
-    val sourceDisplay = sources.map(source =>
-      SourceDisplay(source, groupStatementsBySource(statementsByMonth).getOrElse(source, Seq.empty))
-    )
+    val sourceDisplay = SourceDisplay(source, groupStatementsBySource(statementsByMonth).getOrElse(source, Seq.empty))
+    
 
     val dateHeader =
       generateDateHeaderHtml(statementsByMonth.formattedMonthYear, statementsByMonth.formattedMonthYearAsId)
@@ -107,7 +106,7 @@ object PostponedVatViewModel {
       monthYear = statementsByMonth.formattedMonthYear,
       monthYearId = statementsByMonth.formattedMonthYearAsId,
       formattedMonth = statementsByMonth.formattedMonth,
-      sources = sourceDisplay,
+      source = sourceDisplay,
       index = index,
       dateHeader = dateHeader,
       statementItem = statementItem
@@ -120,15 +119,14 @@ object PostponedVatViewModel {
     statementsByMonth.files.groupBy(_.metadata.source)
 
   private def generateStatementItemHtml(
-    sourceDisplays: Seq[SourceDisplay],
+    sourceDisplay: SourceDisplay,
     historyIndex: Int,
     index: Int,
     date: String
   )(implicit messages: Messages): HtmlFormat.Appendable = {
-    val items = sourceDisplays.map { sourceDisplay =>
+    val items: String =
       s"<li>${generateSourceItemHtml(sourceDisplay, historyIndex, index, date).body}</li>"
-    }.mkString
-
+    
     HtmlFormat
       .raw(s"""<ul class="govuk-list" id="requested-statements-list-$historyIndex-row-$index">$items</ul>""")
   }

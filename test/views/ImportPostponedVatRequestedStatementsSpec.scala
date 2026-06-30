@@ -46,9 +46,9 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     }
 
     "correctly group statements by source" in new Setup {
-      val cdsSource: SourceDisplay = statementData.sources.find(_.source == "CDS").get
+      val cdsSource: SourceDisplay = statementData.source
 
-      statementData.sources.length mustBe 2
+      statementData.source.source mustBe "CDS"
       cdsSource.files.length mustBe 1
       cdsSource.files.head mustBe postponedVatStatementFile_2
     }
@@ -68,8 +68,7 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     result.head.monthYear.equalsIgnoreCase("March 2018") mustBe true
     result.head.monthYearId.equalsIgnoreCase("March-2018") mustBe true
     result.head.formattedMonth mustBe "March"
-    result.head.sources.length mustBe 2
-    result.head.sources.head.source mustBe "CDS"
+    result.head.source.source mustBe "CDS"
     result.head.index mustBe 0
   }
 
