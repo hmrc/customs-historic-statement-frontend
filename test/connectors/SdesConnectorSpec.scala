@@ -513,7 +513,7 @@ class SdesConnectorSpec extends SpecBase {
             MetadataItem("PeriodStartMonth", "4"),
             MetadataItem("FileType", "pdf"),
             MetadataItem("FileRole", "PostponedVATStatement"),
-            MetadataItem("DutyPaymentMethod", "Chief")
+            MetadataItem("DutyPaymentMethod", "CDS")
           )
         )
       ),

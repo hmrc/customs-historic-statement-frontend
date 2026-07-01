@@ -211,7 +211,7 @@ class HistoricStatementsControllerSpec extends SpecBase {
       "statementfile_00",
       "download_url_00",
       ninetynine,
-      PostponedVatStatementFileMetadata(year17, eleven, Pdf, PostponedVATStatement, "Chief", Some("a request id"))
+      PostponedVatStatementFileMetadata(year17, eleven, Pdf, PostponedVATStatement, "CDS", Some("a request id"))
     )
     val postponedVatStatementFiles = Seq(postponedVatStatement, postponedVatStatement_2)
 

@@ -59,7 +59,7 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     }
 
     "correctly handle missing files" in new Setup {
-      val emptyMonth    = PostponedVatStatementsByMonth(LocalDate.of(year, month, day), Seq.empty)
+      val emptyMonth     = PostponedVatStatementsByMonth(LocalDate.of(year, month, day), Seq.empty)
       val emptyEoriStmts = PostponedVatStatementsForEori(eoriHistory, Seq.empty, Seq(emptyMonth))
       val emptyViewModel = PostponedVatViewModel(Seq(emptyEoriStmts))
       emptyViewModel.statementDisplayData.head.statementItem.body must include(
