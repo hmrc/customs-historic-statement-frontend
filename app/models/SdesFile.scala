@@ -18,7 +18,7 @@ package models
 
 import helpers.Formatters
 import play.api.Logging
-import play.api.libs.json._
+import play.api.libs.json.*
 import utils.Utils.emptyString
 
 import java.time.LocalDate
@@ -79,11 +79,11 @@ sealed abstract class DDStatementType(val name: String) extends Ordered[DDStatem
 object DDStatementType extends Logging {
 
   case object ExciseDeferment extends DDStatementType("DD1920") {
-    val order = 1
+    val order = 5
   }
 
   case object DutyDeferment extends DDStatementType("DD1720") {
-    val order = 2
+    val order = 4
   }
 
   case object Excise extends DDStatementType("Excise") {
@@ -91,11 +91,11 @@ object DDStatementType extends Logging {
   }
 
   case object Supplementary extends DDStatementType(name = "Supplementary") {
-    val order = 4
+    val order = 2
   }
 
   case object Weekly extends DDStatementType("Weekly") {
-    val order = 5
+    val order = 1
   }
 
   case object UnknownStatementType extends DDStatementType("UNKNOWN STATEMENT TYPE") {
@@ -156,13 +156,15 @@ case class DutyDefermentStatementFileMetadata(
   periodEndYear: Int,
   periodEndMonth: Int,
   periodEndDay: Int,
+  periodIssueNumber: Int,
   fileFormat: FileFormat,
   fileRole: FileRole,
   defermentStatementType: DDStatementType,
   dutyOverLimit: Option[Boolean],
   dutyPaymentType: Option[String],
   dan: String,
-  statementRequestId: Option[String] = None
+  statementRequestId: Option[String] = None,
+  available: Boolean
 ) extends SdesFileMetadata
 
 case class SecurityStatementFile(

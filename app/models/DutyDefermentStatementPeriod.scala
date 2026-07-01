@@ -26,9 +26,11 @@ import java.time.LocalDate
 case class DutyDefermentStatementPeriod(
   fileRole: FileRole,
   defermentStatementType: DDStatementType,
+  periodIssueNumber: Int,
   monthAndYear: LocalDate,
   startDate: LocalDate,
   endDate: LocalDate,
+  available: Boolean,
   statementFiles: Seq[DutyDefermentStatementFile] = Seq.empty
 ) extends Ordered[DutyDefermentStatementPeriod] {
 

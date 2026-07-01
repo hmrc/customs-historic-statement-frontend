@@ -381,13 +381,15 @@ class SortStatementsServiceSpec extends SpecBase {
           periodEndYear,
           periodEndMonth,
           periodEndDay,
+          1,
           Pdf,
           DutyDefermentStatement,
           Weekly,
           Some(true),
           Some("BACS"),
           dan,
-          someRequestId
+          someRequestId,
+          true
         )
       )
 
@@ -403,13 +405,15 @@ class SortStatementsServiceSpec extends SpecBase {
           periodEndYear,
           periodEndMonth,
           periodEndDay,
+          2,
           Pdf,
           DutyDefermentStatement,
           Weekly,
           Some(true),
           Some("BACS"),
           dan,
-          None
+          None,
+          true
         )
       )
 
@@ -425,13 +429,15 @@ class SortStatementsServiceSpec extends SpecBase {
           periodEndYear,
           periodStartMonth_2,
           periodEndDay,
+          3,
           Pdf,
           DutyDefermentStatement,
           Excise,
           Some(true),
           Some("BACS"),
           dan,
-          someRequestId
+          someRequestId,
+          true
         )
       )
 
@@ -447,13 +453,15 @@ class SortStatementsServiceSpec extends SpecBase {
           periodEndYear,
           periodStartMonth_2,
           periodEndDay,
+          4,
           Pdf,
           DutyDefermentStatement,
           Excise,
           Some(true),
           Some("BACS"),
           dan,
-          None
+          None,
+          true
         )
       )
 
@@ -471,13 +479,15 @@ class SortStatementsServiceSpec extends SpecBase {
           periodEndYear,
           periodStartMonth,
           periodEndDay,
+          1,
           Pdf,
           DutyDefermentStatement,
           Weekly,
           Some(true),
           Some("BACS"),
           "1234",
-          someRequestId
+          someRequestId,
+          true
         )
       ),
       DutyDefermentStatementFile(
@@ -491,13 +501,15 @@ class SortStatementsServiceSpec extends SpecBase {
           periodEndYear,
           periodStartMonth_2,
           periodEndDay,
+          3,
           Pdf,
           DutyDefermentStatement,
           Excise,
           Some(true),
           Some("BACS"),
           "1234",
-          someRequestId
+          someRequestId,
+          true
         )
       )
     )

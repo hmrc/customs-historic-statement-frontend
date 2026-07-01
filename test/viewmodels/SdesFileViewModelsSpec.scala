@@ -66,12 +66,14 @@ class SdesFileViewModelsSpec extends SpecBase {
         year2,
         month,
         day,
+        1,
         Pdf,
         DutyDefermentStatement,
         defermentStatementType,
         Some(true),
         Some("BACS"),
-        "12345678"
+        "12345678",
+        available = true
       )
 
     lazy val excise: DutyDefermentStatementFile =

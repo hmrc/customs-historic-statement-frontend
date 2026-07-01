@@ -26,7 +26,7 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
   "compare" should {
 
     "order correctly" in new Setup {
-      dutyDefermentStatementPeriodExcise compare dutyDefermentStatementPeriodSupplementary mustBe -1
+      dutyDefermentStatementPeriodExcise compare dutyDefermentStatementPeriodSupplementary mustBe 1
       dutyDefermentStatementPeriodExcise compare dutyDefermentStatementPeriodExcise2 mustBe 0
     }
   }
@@ -97,12 +97,14 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
         year2,
         month,
         day,
+        1,
         Pdf,
         DutyDefermentStatement,
         Excise,
         Some(true),
         Some("BACS"),
-        "12345678"
+        "12345678",
+        available = true
       )
     )
 
@@ -117,75 +119,91 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
         year2,
         month,
         day,
+        2,
         UnknownFileFormat,
         DutyDefermentStatement,
         Supplementary,
         Some(true),
         Some("BACS"),
-        "12345678"
+        "12345678",
+        available = true
       )
     )
 
     val dutyDefermentStatementPeriodExcise: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       Excise,
+      1,
       currentDate,
       currentDate.minusDays(offset),
       currentDate,
+      true,
       Seq(ddFile1, ddFile2)
     )
 
     val dutyDefermentStatementPeriodExcise2: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       Excise,
+      1,
       currentDate,
       currentDate.minusDays(offset),
       currentDate,
+      true,
       Seq(ddFile1, ddFile2)
     )
 
     val dutyDefermentStatementPeriodExcise3: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       Excise,
+      1,
       currentDate,
       currentDate.minusDays(offset),
       currentDate,
+      true,
       Seq(ddFile1, ddFile2)
     )
 
     val dutyDefermentStatementPeriodSupplementary: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       Supplementary,
+      1,
       currentDate,
       currentDate.minusDays(offset),
       endDate,
+      true,
       Seq(ddFile1, ddFile2)
     )
 
     val dutyDefermentStatementPeriodUnknown: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       UnknownStatementType,
+      1,
       currentDate,
       currentDate.minusDays(offset),
       currentDate,
+      true,
       Seq(ddFile1, ddFile2)
     )
 
     val dutyDefermentStatementPeriodExciseDeferment: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       ExciseDeferment,
+      1,
       currentDate,
       currentDate.minusDays(offset),
       endDate,
+      true,
       Seq(ddFile1, ddFile2)
     )
 
     val dutyDefermentStatementPeriodDutyDeferment: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       DutyDefermentStatement,
       DutyDeferment,
+      1,
       currentDate,
       currentDate.minusDays(offset),
       endDate,
+      true,
       Seq(ddFile1, ddFile2)
     )
   }

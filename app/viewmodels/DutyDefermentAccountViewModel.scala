@@ -17,12 +17,15 @@
 package viewmodels
 
 import helpers.Formatters
-import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary}
+import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary, UnknownStatementType, Weekly}
 import models.FileFormat.Pdf
-import models.{DutyDefermentStatementPeriod, DutyDefermentStatementPeriodsByMonth, DutyDefermentStatementsForEori}
+import models.{
+  DDStatementType, DutyDefermentStatement, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata,
+  DutyDefermentStatementPeriod, DutyDefermentStatementPeriodsByMonth, DutyDefermentStatementsForEori
+}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
-import utils.Utils._
+import utils.Utils.*
 import views.html.components.duty_deferment_file
 
 case class DutyDefermentAccountRowContent(
@@ -61,8 +64,9 @@ object DutyDefermentAccountViewModel {
     implicit messages: Messages
   ): DutyDefermentAccountViewModel = {
 
-    val statementsData = createStatements(statementsForAllEoris, isNiAccount, accountNumber)
-    val components     = DutyDefermentAccountComponent(statementsData.head)
+    val filledStatementData = addEmptyStatements(statementsForAllEoris)
+    val statementsData      = createStatements(filledStatementData, isNiAccount, accountNumber)
+    val components          = DutyDefermentAccountComponent(statementsData.head)
 
     DutyDefermentAccountViewModel(
       statementsForAllEoris,
@@ -87,6 +91,92 @@ object DutyDefermentAccountViewModel {
       group.periods.reverse.zipWithIndex,
       isNiAccount,
       accountNumber
+    )
+
+  private def addEmptyStatements(
+    statementList: Seq[DutyDefermentStatementsForEori]
+  ): Seq[DutyDefermentStatementsForEori] =
+    statementList.map { statementForEori =>
+
+      val grouped = statementForEori.requestedStatements
+        .groupBy(statement => (statement.metadata.periodStartYear, statement.metadata.periodStartMonth))
+        .map { case ((year, month), items) =>
+          val filled = fillMissingStatements(items, year, month)
+          (year, month) -> filled
+        }
+
+      statementForEori.copy(requestedStatements = grouped.values.flatten.toSeq)
+    }
+
+  private def fillMissingStatements(
+    inner: Seq[DutyDefermentStatementFile],
+    startYear: Int,
+    startMonth: Int
+  ): Seq[DutyDefermentStatementFile] = {
+
+    val (weeklyPeriods, nonWeeklyPeriods) = inner.partition { statementFile =>
+      statementFile.metadata.defermentStatementType == Weekly
+    }
+
+    val weeklyPeriodsBySeq = weeklyPeriods.map(r => r.metadata.periodIssueNumber -> r).toMap
+
+    val completedWeekly = (1 to 4).map { seq =>
+      weeklyPeriodsBySeq.getOrElse(
+        seq,
+        createNewEmptyStatementFile(seq, startYear, startMonth, Weekly)
+      )
+    }
+
+    val expectedWeeklyTypes = Seq(Supplementary, Excise, DutyDeferment, ExciseDeferment)
+
+    val nonWeeklyByType =
+      nonWeeklyPeriods.map(period => period.metadata.defermentStatementType -> period).toMap
+
+    val completeNonWeekly = expectedWeeklyTypes.map { statementType =>
+      nonWeeklyByType.getOrElse(
+        statementType,
+        createNewEmptyStatementFile(statementType.order, startYear, startMonth, statementType)
+      )
+    }
+
+    completedWeekly ++ completeNonWeekly
+  }
+
+  private def createNewEmptyStatementFile(
+    sequence: Int,
+    startYear: Int,
+    startMonth: Int,
+    statementType: DDStatementType
+  ): DutyDefermentStatementFile =
+    DutyDefermentStatementFile(
+      filename = "",
+      downloadURL = "",
+      size = 0,
+      createNewEmptyStatement(sequence, startYear, startMonth, statementType)
+    )
+
+  private def createNewEmptyStatement(
+    sequence: Int,
+    startYear: Int,
+    startMonth: Int,
+    statementType: DDStatementType
+  ): DutyDefermentStatementFileMetadata =
+    DutyDefermentStatementFileMetadata(
+      periodStartYear = startYear,
+      periodStartMonth = startMonth,
+      periodStartDay = sequence,
+      periodEndYear = startYear,
+      periodEndMonth = startMonth,
+      periodEndDay = sequence,
+      periodIssueNumber = sequence,
+      fileFormat = Pdf,
+      fileRole = DutyDefermentStatement,
+      defermentStatementType = statementType,
+      dutyOverLimit = None,
+      dutyPaymentType = None,
+      dan = "",
+      statementRequestId = None,
+      available = false
     )
 }
 
@@ -163,7 +253,7 @@ object DutyDefermentAccountComponent {
 
   private def statementRow(data: DutyDefermentAccountRowContent)(implicit messages: Messages): HtmlFormat.Appendable =
     divComponent(
-      content = HtmlFormat.fill(List(periodDetails(data), dutyDefermentFile(data))),
+      content = HtmlFormat.fill(List(statementTypes(data), periodDetails(data), dutyDefermentFile(data))),
       classes = Some("govuk-summary-list__row"),
       id = Some(
         s"requested-statements-list-" +
@@ -173,13 +263,24 @@ object DutyDefermentAccountComponent {
     )
 
   private def periodDetails(data: DutyDefermentAccountRowContent)(implicit messages: Messages): HtmlFormat.Appendable =
-    dtComponent(
+    ddComponent(
       content = preparePeriodDetails(data.period),
       classes = Some("govuk-summary-list__value"),
       id = Some(
         s"requested-statements-list-" +
           s"${data.statement.historyIndex}-${data.statement.group.year}-" +
           s"${data.statement.group.month}-row-${data.index}-date-cell"
+      )
+    )
+
+  private def statementTypes(data: DutyDefermentAccountRowContent)(implicit messages: Messages): HtmlFormat.Appendable =
+    dtComponent(
+      content = prepareStatementTypeDetails(data.period),
+      classes = Some("govuk-summary-list__value"),
+      id = Some(
+        s"requested-statements-list-" +
+          s"${data.statement.historyIndex}-${data.statement.group.year}-" +
+          s"${data.statement.group.month}-row-${data.index}-type-cell"
       )
     )
 
@@ -196,35 +297,65 @@ object DutyDefermentAccountComponent {
       )
     )
 
-  private def preparePeriodDetails(
-    period: DutyDefermentStatementPeriod
-  )(implicit messages: Messages): HtmlFormat.Appendable = {
+  private def prepareStatementTypeDetails(period: DutyDefermentStatementPeriod)(implicit
+    messages: Messages
+  ): HtmlFormat.Appendable = {
+
     val msgKey = period.defermentStatementType match {
       case Supplementary   => "cf.account.detail.row.supplementary.info"
       case Excise          => "cf.account.details.row.excise.info"
       case DutyDeferment   => "cf.account.details.row.duty-deferment.info"
       case ExciseDeferment => "cf.account.details.row.excise-deferment.info"
-      case _               => "cf.account.detail.period-group"
+      case _               => "cf.account.detail.row.period-group.info"
     }
 
     HtmlFormat.raw(
       messages(
         msgKey,
-        Formatters.dateAsDay(period.startDate),
-        Formatters.dateAsDay(period.endDate),
-        Formatters.dateAsMonth(period.endDate)
+        period.periodIssueNumber
       )
     )
   }
 
+  private def preparePeriodDetails(
+    period: DutyDefermentStatementPeriod
+  )(implicit messages: Messages): HtmlFormat.Appendable =
+    period.defermentStatementType match {
+      case Weekly if period.available =>
+        HtmlFormat.raw(
+          messages(
+            "cf.account.detail.row.period-group",
+            Formatters.dateAsDay(period.startDate),
+            Formatters.dateAsDay(period.endDate),
+            Formatters.dateAsMonth(period.endDate)
+          )
+        )
+      case _ if !period.available     =>
+        HtmlFormat.raw(
+          messages(
+            "cf.account.detail.no-statement"
+          )
+        )
+      case _                          => HtmlFormat.raw("")
+
+    }
+
   private def prepareDutyDefermentFile(data: DutyDefermentAccountRowContent)(implicit
     messages: Messages
   ): HtmlFormat.Appendable =
-    new duty_deferment_file().apply(
-      period = data.period,
-      fileFormat = Pdf,
-      idPrefix = s"requested-statements-list-" +
-        s"${data.statement.historyIndex}-${data.statement.group.year}-" +
-        s"${data.statement.group.month}-row-${data.index}"
-    )
+    if (data.period.available) {
+      new duty_deferment_file().apply(
+        period = data.period,
+        fileFormat = Pdf,
+        idPrefix = s"requested-statements-list-" +
+          s"${data.statement.historyIndex}-${data.statement.group.year}-" +
+          s"${data.statement.group.month}-row-${data.index}"
+      )
+    } else {
+      HtmlFormat.raw(
+        messages(
+          "cf.account.detail.unavailable"
+        )
+      )
+    }
 }

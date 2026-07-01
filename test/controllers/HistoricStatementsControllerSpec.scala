@@ -243,13 +243,15 @@ class HistoricStatementsControllerSpec extends SpecBase {
         year,
         three,
         minute,
+        1,
         Pdf,
         DutyDefermentStatement,
         Weekly,
         Some(true),
         Some("BACS"),
         dan,
-        someRequestId
+        someRequestId,
+        true
       )
     )
 
@@ -264,13 +266,15 @@ class HistoricStatementsControllerSpec extends SpecBase {
         year,
         two,
         minute,
+        2,
         Pdf,
         DutyDefermentStatement,
         Supplementary,
         Some(true),
         Some("BACS"),
         dan,
-        someRequestId
+        someRequestId,
+        true
       )
     )
 
@@ -285,13 +289,15 @@ class HistoricStatementsControllerSpec extends SpecBase {
         year,
         one,
         minute,
+        3,
         Pdf,
         DutyDefermentStatement,
         Excise,
         Some(true),
         Some("BACS"),
         dan,
-        someRequestId
+        someRequestId,
+        true
       )
     )
 
@@ -306,13 +312,15 @@ class HistoricStatementsControllerSpec extends SpecBase {
         year,
         one,
         minute,
+        4,
         Pdf,
         DutyDefermentStatement,
         Weekly,
         Some(true),
         Some("BACS"),
         dan,
-        someRequestId
+        someRequestId,
+        true
       )
     )
 

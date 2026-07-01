@@ -17,9 +17,9 @@
 package views
 
 import helpers.Formatters
-import models.DDStatementType.{Excise, Supplementary, Weekly}
+import models.DDStatementType.{Excise, ExciseDeferment, Weekly}
 import models.FileFormat.Pdf
-import models._
+import models.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
@@ -120,39 +120,98 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
 
       "calling renderStatements component" in new Setup {
 
-        val result: HtmlFormat.Appendable     = viewModel.component.statements
-        val expectedPeriodDetailsHtml: String = statementRowContent.period.defermentStatementType match {
-          case Supplementary => messages("cf.account.detail.row.supplementary.info")
-          case Excise        => messages("cf.account.details.row.excise.info")
-          case _             => messages("cf.account.detail.period-group")
+        val result: HtmlFormat.Appendable = viewModel.component.statements
+        def getRowId(index: Int): String  =
+          s"${statement.historyIndex}-${statement.group.year}-${statement.group.month}-row-$index"
+
+        val expectedPeriodDetailsHtml: String       = statementRowContent.period.defermentStatementType match {
+          case ExciseDeferment => messages("cf.account.details.row.excise-deferment.info")
+          case Excise          => messages("cf.account.details.row.excise.info")
+          case _               => messages("cf.account.detail.row.period-group.info")
+        }
+        val expectedPeriodData: String              = statementRowContent.period.defermentStatementType match {
+          case Weekly if statementRowContent.period.available => messages("cf.account.detail.row.period-group")
+          case _ if !statementRowContent.period.available     => messages("cf.account.detail.no-statement")
+          case _                                              => ""
+        }
+        val expectedFileData: HtmlFormat.Appendable = statementRowContent.period.available match {
+          case true  =>
+            new duty_deferment_file().apply(statementPeriod, Pdf, s"requested-statements-list-${getRowId(0)}")
+          case false =>
+            HtmlFormat.raw(
+              messages(
+                "cf.account.detail.unavailable"
+              )
+            )
         }
 
-        val rowId = s"${statement.historyIndex}-${statement.group.year}-${statement.group.month}-row-$statementIndex"
-
-        val expectedHtml: String = dlComponent(
-          content = HtmlFormat.raw(
-            divComponent(
-              content = HtmlFormat.fill(
-                List(
-                  dtComponent(
-                    content = HtmlFormat.raw(expectedPeriodDetailsHtml),
-                    classes = Some("govuk-summary-list__value"),
-                    id = Some(s"requested-statements-list-$rowId-date-cell")
-                  ),
-                  ddComponent(
-                    content =
-                      new duty_deferment_file().apply(statementPeriod, Pdf, s"requested-statements-list-$rowId"),
-                    classes = Some("govuk-summary-list__actions"),
-                    id = Some(s"requested-statements-list-$rowId-link-cell")
-                  )
+        def expectedEmptyRow(key: String, issuePeriodNumber: Int = 0, index: Int): HtmlFormat.Appendable =
+          divComponent(
+            content = HtmlFormat.fill(
+              List(
+                dtComponent(
+                  content = key match {
+                    case "detail.row.period-group" =>
+                      HtmlFormat.raw(messages(s"cf.account.$key.info", issuePeriodNumber))
+                    case _                         => HtmlFormat.raw(messages(s"cf.account.$key.info"))
+                  },
+                  classes = Some("govuk-summary-list__value"),
+                  id = Some(s"requested-statements-list-${getRowId(index)}-type-cell")
+                ),
+                ddComponent(
+                  content = HtmlFormat.raw(messages("cf.account.detail.no-statement")),
+                  Some("govuk-summary-list__value"),
+                  id = Some(s"requested-statements-list-${getRowId(index)}-date-cell")
+                ),
+                ddComponent(
+                  content = HtmlFormat.raw(messages("cf.account.detail.unavailable")),
+                  classes = Some("govuk-summary-list__actions"),
+                  id = Some(s"requested-statements-list-${getRowId(index)}-link-cell")
                 )
-              ),
-              classes = Some("govuk-summary-list__row"),
-              id = Some(s"requested-statements-list-$rowId")
-            ).toString()
-          ),
-          classes = Some("govuk-summary-list")
-        ).toString()
+              )
+            ),
+            classes = Some("govuk-summary-list__row"),
+            id = Some(s"requested-statements-list-${getRowId(index)}")
+          )
+
+        val expectedHtml: String =
+          dlComponent(
+            content = HtmlFormat.fill(
+              List(
+                divComponent(
+                  content = HtmlFormat.fill(
+                    List(
+                      dtComponent(
+                        content = HtmlFormat.raw(expectedPeriodDetailsHtml),
+                        classes = Some("govuk-summary-list__value"),
+                        id = Some(s"requested-statements-list-${getRowId(0)}-type-cell")
+                      ),
+                      ddComponent(
+                        content = HtmlFormat.raw(expectedPeriodData),
+                        Some("govuk-summary-list__value"),
+                        id = Some(s"requested-statements-list-${getRowId(0)}-date-cell")
+                      ),
+                      ddComponent(
+                        content = expectedFileData,
+                        classes = Some("govuk-summary-list__actions"),
+                        id = Some(s"requested-statements-list-${getRowId(0)}-link-cell")
+                      )
+                    )
+                  ),
+                  classes = Some("govuk-summary-list__row"),
+                  id = Some(s"requested-statements-list-${getRowId(0)}")
+                ),
+                expectedEmptyRow("details.row.duty-deferment", index = 1),
+                expectedEmptyRow("details.row.excise", index = 2),
+                expectedEmptyRow("detail.row.supplementary", index = 3),
+                expectedEmptyRow("detail.row.period-group", 4, index = 4),
+                expectedEmptyRow("detail.row.period-group", 3, index = 5),
+                expectedEmptyRow("detail.row.period-group", 2, index = 6),
+                expectedEmptyRow("detail.row.period-group", 1, index = 7)
+              )
+            ),
+            classes = Some("govuk-summary-list")
+          ).toString()
 
         result.toString mustEqual expectedHtml
       }
@@ -215,13 +274,15 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
           periodEndYear,
           periodEndMonth,
           periodEndDay,
+          1,
           Pdf,
           DutyDefermentStatement,
           Weekly,
           Some(true),
           Some(dutyPaymentType),
           dan,
-          someRequestId
+          None,
+          available = true
         )
       )
 
@@ -236,13 +297,15 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
         periodEndYear,
         periodEndMonth_2,
         periodEndDay,
+        0,
         Pdf,
         DutyDefermentStatement,
-        Supplementary,
+        ExciseDeferment,
         Some(true),
         Some(dutyPaymentType),
         dan,
-        someRequestId
+        someRequestId,
+        available = true
       )
     )
 
@@ -268,9 +331,11 @@ class DutyDefermentRequestedStatementsSpec extends ViewTestHelper {
     protected val basePeriod: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       fileRole = DutyDefermentStatement,
       defermentStatementType = Weekly,
+      periodIssueNumber = 1,
       monthAndYear = monthAndYear,
       startDate = monthAndYear,
       endDate = monthAndYear,
+      available = true,
       statementFiles = Seq.empty
     )
 

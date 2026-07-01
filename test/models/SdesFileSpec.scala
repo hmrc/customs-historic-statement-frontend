@@ -54,11 +54,11 @@ class SdesFileSpec extends SpecBase with Matchers {
     "order the different types in correct order" in {
 
       List(UnknownStatementType, Weekly, Excise, ExciseDeferment, DutyDeferment, Supplementary).sorted mustBe List(
-        ExciseDeferment,
-        DutyDeferment,
-        Excise,
-        Supplementary,
         Weekly,
+        Supplementary,
+        Excise,
+        DutyDeferment,
+        ExciseDeferment,
         UnknownStatementType
       )
     }
@@ -133,8 +133,7 @@ class SdesFileSpec extends SpecBase with Matchers {
         SecurityStatement,
         "12345678912",
         fileSize,
-        "BACS",
-        None
+        "BACS"
       )
     )
 
@@ -153,8 +152,7 @@ class SdesFileSpec extends SpecBase with Matchers {
         SecurityStatement,
         "12345678912",
         fileSize,
-        "BACS",
-        None
+        "BACS"
       )
     )
 
@@ -241,12 +239,14 @@ class SdesFileSpec extends SpecBase with Matchers {
         year,
         month,
         day,
+        1,
         UnknownFileFormat,
         DutyDefermentStatement,
         Weekly,
         Some(true),
         Some("BACS"),
-        "12345678"
+        "12345678",
+        available = true
       )
     )
 
@@ -261,12 +261,14 @@ class SdesFileSpec extends SpecBase with Matchers {
         year5,
         month,
         day,
+        1,
         Pdf,
         DutyDefermentStatement,
         Excise,
         Some(true),
         Some("BACS"),
-        "12345678"
+        "12345678",
+        available = true
       )
     )
 
@@ -281,12 +283,14 @@ class SdesFileSpec extends SpecBase with Matchers {
         year5,
         month,
         day,
+        1,
         Pdf,
         DutyDefermentStatement,
         Supplementary,
         Some(true),
         Some("BACS"),
-        "12345678"
+        "12345678",
+        available = true
       )
     )
   }
