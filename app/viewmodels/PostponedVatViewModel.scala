@@ -93,7 +93,6 @@ object PostponedVatViewModel {
     val source: String = "CDS"
 
     val sourceDisplay = SourceDisplay(source, groupStatementsBySource(statementsByMonth).getOrElse(source, Seq.empty))
-    
 
     val dateHeader =
       generateDateHeaderHtml(statementsByMonth.formattedMonthYear, statementsByMonth.formattedMonthYearAsId)
@@ -126,7 +125,7 @@ object PostponedVatViewModel {
   )(implicit messages: Messages): HtmlFormat.Appendable = {
     val items: String =
       s"<li>${generateSourceItemHtml(sourceDisplay, historyIndex, index, date).body}</li>"
-    
+
     HtmlFormat
       .raw(s"""<ul class="govuk-list" id="requested-statements-list-$historyIndex-row-$index">$items</ul>""")
   }
