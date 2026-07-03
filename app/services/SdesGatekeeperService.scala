@@ -75,7 +75,7 @@ class SdesGatekeeperService() {
         metadata("PeriodStartMonth").toInt,
         FileFormat(metadata("FileType")),
         mapFileRole(metadata("FileRole")),
-        mapDutyPaymentMethod(metadata("DutyPaymentMethod")),
+        "CDS",
         metadata.get("statementRequestID")
       )
     )
@@ -143,12 +143,6 @@ class SdesGatekeeperService() {
       case "PostponedVATStatement"  => PostponedVATStatement
       case "CDSCashAccount"         => CDSCashAccount
       case _                        => throw new Exception(s"Unknown file role: $role")
-    }
-
-  private def mapDutyPaymentMethod(dutyPaymentMethod: String): String =
-    dutyPaymentMethod match {
-      case "Chief" => "CHIEF"
-      case _       => "CDS"
     }
 
   private def mapDutyOverLimit(MDGDutyOverLimitResponse: String): Boolean =

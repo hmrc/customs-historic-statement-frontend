@@ -513,7 +513,7 @@ class SdesConnectorSpec extends SpecBase {
             MetadataItem("PeriodStartMonth", "4"),
             MetadataItem("FileType", "pdf"),
             MetadataItem("FileRole", "PostponedVATStatement"),
-            MetadataItem("DutyPaymentMethod", "Chief")
+            MetadataItem("DutyPaymentMethod", "CDS")
           )
         )
       ),
@@ -595,7 +595,7 @@ class SdesConnectorSpec extends SpecBase {
         "name_04",
         "download_url_04",
         size3,
-        PostponedVatStatementFileMetadata(year, startMonth4, Pdf, PostponedVATStatement, "CHIEF", None)
+        PostponedVatStatementFileMetadata(year, startMonth4, Pdf, PostponedVATStatement, "CDS", None)
       ),
       PostponedVatStatementFile(
         "name_03",

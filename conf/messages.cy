@@ -197,7 +197,6 @@ cf.security-statements.no-statements=Nid oes datganiadau ar gael i’w gweld.
 
 #missing_documents_guidance
 cf.common.missing-documents-guidance.heading=Methu gweld y {0} yr ydych yn edrych amdano?
-cf.common.missing-documents-guidance.text1=Nid yw {0} ar gyfer datganiad mewnforio a wnaed yn CHIEF ar gael yn y gwasanaeth hwn.
 cf.common.missing-documents-guidance.text2=Cynhyrchir {0} dim ond ar gyfer cyfnodau y gwnaethoch fewnforio nwyddau ynddynt.
 
 # Import VAT requested statements view

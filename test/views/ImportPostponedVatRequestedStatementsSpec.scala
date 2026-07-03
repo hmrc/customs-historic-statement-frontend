@@ -46,9 +46,9 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     }
 
     "correctly group statements by source" in new Setup {
-      val cdsSource: SourceDisplay = statementData.sources.find(_.source == "CDS").get
+      val cdsSource: SourceDisplay = statementData.source
 
-      statementData.sources.length mustBe 2
+      statementData.source.source mustBe "CDS"
       cdsSource.files.length mustBe 1
       cdsSource.files.head mustBe postponedVatStatementFile_2
     }
@@ -59,7 +59,12 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     }
 
     "correctly handle missing files" in new Setup {
-      statementData.statementItem.body must include(messages("cf.account.postponed-vat.missing-file-type", "CHIEF"))
+      val emptyMonth     = PostponedVatStatementsByMonth(LocalDate.of(year, month, day), Seq.empty)
+      val emptyEoriStmts = PostponedVatStatementsForEori(eoriHistory, Seq.empty, Seq(emptyMonth))
+      val emptyViewModel = PostponedVatViewModel(Seq(emptyEoriStmts))
+      emptyViewModel.statementDisplayData.head.statementItem.body must include(
+        messages("cf.account.postponed-vat.missing-file-type", "CDS")
+      )
     }
   }
 
@@ -68,8 +73,7 @@ class ImportPostponedVatRequestedStatementsSpec extends ViewTestHelper {
     result.head.monthYear.equalsIgnoreCase("March 2018") mustBe true
     result.head.monthYearId.equalsIgnoreCase("March-2018") mustBe true
     result.head.formattedMonth mustBe "March"
-    result.head.sources.length mustBe 2
-    result.head.sources.head.source mustBe "CDS"
+    result.head.source.source mustBe "CDS"
     result.head.index mustBe 0
   }
 

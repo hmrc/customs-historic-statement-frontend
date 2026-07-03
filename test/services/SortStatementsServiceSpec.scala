@@ -306,7 +306,7 @@ class SortStatementsServiceSpec extends SpecBase {
           periodStartMonth_2,
           Pdf,
           PostponedVATStatement,
-          "Chief",
+          "CDS",
           someRequestId
         )
       )
@@ -360,7 +360,7 @@ class SortStatementsServiceSpec extends SpecBase {
               periodStartMonth_2,
               Pdf,
               PostponedVATStatement,
-              "Chief",
+              "CDS",
               someRequestId
             ),
             emptyString
