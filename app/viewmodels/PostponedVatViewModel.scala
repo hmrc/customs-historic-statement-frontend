@@ -123,11 +123,11 @@ object PostponedVatViewModel {
     index: Int,
     date: String
   )(implicit messages: Messages): HtmlFormat.Appendable = {
-    val items: String =
+    val item: String =
       s"<li>${generateSourceItemHtml(sourceDisplay, historyIndex, index, date).body}</li>"
 
     HtmlFormat
-      .raw(s"""<ul class="govuk-list" id="requested-statements-list-$historyIndex-row-$index">$items</ul>""")
+      .raw(s"""<ul class="govuk-list" id="requested-statements-list-$historyIndex-row-$index">$item</ul>""")
   }
 
   private def generateSourceItemHtml(sourceDisplay: SourceDisplay, historyIndex: Int, index: Int, date: String)(implicit
