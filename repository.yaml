@@ -3,3 +3,4 @@ digital-service: CDS Financials
 test-repositories:
   - customs-historic-statement-acceptance-tests
   - customs-historic-statement-performance-tests
+serviceNowMapping: SNSVC0019202
