@@ -18,7 +18,7 @@ package forms.mappings
 
 import base.SpecBase
 import forms.HistoricDateRequestPageFormProvider
-import models.{C79Certificate, HistoricDates, PostponedVATStatement}
+import models.{C79Certificate, HistoricDates, PostponedVATStatement, SecurityStatement}
 import play.api.data.{Form, FormError}
 import utils.Utils.{emptyString, period}
 
@@ -43,8 +43,25 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
       formAfterBinding.hasErrors mustBe false
     }
 
-    "throw error when file role is C79Certificate and start date is before 2019-10-1" in new Setup {
+    "not apply the system start date constraint when file role is C79Certificate" in new Setup {
       val form: Form[HistoricDates] = histDateReqPageForm(C79Certificate)
+
+      val formAfterBinding: Form[HistoricDates] = form.bind(
+        Map(
+          "start.year"  -> s"$year2019",
+          "start.month" -> s"$month3",
+          "start.day"   -> s"$day1",
+          "end.year"    -> s"$year2019",
+          "end.month"   -> s"$month10",
+          "end.day"     -> s"$day12"
+        )
+      )
+
+      formAfterBinding.hasErrors mustBe false
+    }
+
+    "throw error when file role is SecurityStatement and start date is before 2019-10-1" in new Setup {
+      val form: Form[HistoricDates] = histDateReqPageForm(SecurityStatement)
 
       val formAfterBinding: Form[HistoricDates] = form.bind(
         Map(
@@ -63,7 +80,7 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
         FormError(
           "start",
           List(
-            "cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79"
+            "cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities"
           ),
           List()
         )

@@ -25,7 +25,8 @@
         button: components.button,
         errorSummary: components.errorSummary,
         h1: components.h1,
-        p: components.p
+        p: components.p,
+        inset: components.inset
 )
 
 @(
@@ -35,7 +36,8 @@
     returnUrl: String,
     dateMessages: DateMessages,
     maybeDan: Option[String],
-    niIndicator: Option[Boolean]
+    niIndicator: Option[Boolean],
+    earliestRequestableYear: Int
 )(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some(title(form, messages(s"cf.historic.document.request.${fileRole}.title"))),
@@ -59,6 +61,13 @@
         @errorSummary(form.errors, errorFieldName = None)
 
             @h1(s"cf.historic.document.request.heading.$fileRole")
+
+            @if(fileRole == C79Certificate) {
+                @inset(
+                    messages("cf.historic.document.request.form.error.date-too-far-in-past", earliestRequestableYear.toString),
+                    id = Some("earliest-requestable-year")
+                )
+            }
 
             @p(Html(messages(s"cf.historic.document.request.info-text.$fileRole")))
 

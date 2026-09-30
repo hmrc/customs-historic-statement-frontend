@@ -49,6 +49,18 @@ class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
           viewDoc.text().contains(messages(s"cf.historic.document.request.info-text.$fileRole")) mustBe true
         }
 
+        "earliest requestable year inset text is displayed only for C79" in {
+          val inset: Option[Element] = Option(viewDoc.getElementById("earliest-requestable-year"))
+
+          if (fileRole == C79Certificate) {
+            inset.map(_.text()) mustBe Some(
+              messages("cf.historic.document.request.form.error.date-too-far-in-past", earliestRequestableYear.toString)
+            )
+          } else {
+            inset mustBe None
+          }
+        }
+
         "statement start date text and hint text is displayed" in {
           viewDoc.text().contains(startDateText) mustBe true
           viewDoc.getElementById("start-hint").text() mustBe startDateHint(fileRole)
@@ -88,7 +100,8 @@ class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
 }
 
 trait SetUpWithSpecBase extends SpecBase {
-  val returnUrl = "http://localhost:9398/customs/documents/adjustments"
+  val returnUrl               = "http://localhost:9398/customs/documents/adjustments"
+  val earliestRequestableYear = 2020
 
   private def form(fileRole: FileRole): Form[HistoricDates] = new HistoricDateRequestPageFormProvider().apply(fileRole)
 
@@ -105,7 +118,8 @@ trait SetUpWithSpecBase extends SpecBase {
           returnUrl,
           DateMessages(fileRole),
           Some("accountNumber"),
-          Some(false)
+          Some(false),
+          earliestRequestableYear
         )
         .body
     )

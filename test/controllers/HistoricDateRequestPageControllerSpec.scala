@@ -206,13 +206,75 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
-    "return BAD_REQUEST when the start date is earlier than system start date for C79" in new Setup {
+    "return BAD_REQUEST with the CY-6 error when the start date is before April of CY-6 for C79" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
       val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
         .withFormUrlEncodedBody("start.month" -> "9", "start.year" -> "2019", "end.month" -> "10", "end.year" -> "2019")
 
       running(app) {
         val result = route(app, request).value
         status(result) mustBe BAD_REQUEST
+
+        val body = contentAsString(result)
+        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past", "2020"))
+        body must not include "October 2019"
+        body must not include "tax year"
+      }
+    }
+
+    "display the CY-6 inset text with the earliest requestable year for C79" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request =
+        fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, C79Certificate).url)
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe OK
+
+        Jsoup.parse(contentAsString(result)).getElementById("earliest-requestable-year").text() mustBe
+          messages("cf.historic.document.request.form.error.date-too-far-in-past", "2020")
+      }
+    }
+
+    "recalculate the earliest requestable year across the 6 April tax year boundary" in new Setup {
+      val expectations: Seq[(String, String)] = Seq(
+        "2026-03-31T00:00:00.000" -> "2019",
+        "2026-04-05T00:00:00.000" -> "2019",
+        "2026-04-06T00:00:00.000" -> "2020",
+        "2027-04-05T00:00:00.000" -> "2020",
+        "2027-04-06T00:00:00.000" -> "2021"
+      )
+
+      expectations.foreach { case (systemDate, expectedYear) =>
+        val application: Application = appWithFixedDate(systemDate)
+
+        val request =
+          fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, C79Certificate).url)
+
+        running(application) {
+          val result = route(application, request).value
+          status(result) mustBe OK
+
+          withClue(s"system date $systemDate: ") {
+            Jsoup.parse(contentAsString(result)).getElementById("earliest-requestable-year").text() mustBe
+              messages("cf.historic.document.request.form.error.date-too-far-in-past", expectedYear)
+          }
+        }
+      }
+    }
+
+    "return SEE_OTHER when the start date is April of the CY-6 year for C79" in new Setup {
+      when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "4", "start.year" -> "2020", "end.month" -> "5", "end.year" -> "2020")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
       }
     }
 
@@ -523,5 +585,18 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         inject.bind[FrontendAppConfig].toInstance(mockAppConfig)
       )
       .build()
+
+    def appWithFixedDate(isoDateTime: String): Application = {
+      val fixedInstant: Instant = LocalDateTime.parse(isoDateTime).toInstant(ZoneOffset.UTC)
+      val stubClock: Clock      = Clock.fixed(fixedInstant, ZoneId.systemDefault)
+
+      applicationBuilder(Some(populatedUserAnswers))
+        .overrides(
+          inject.bind[SessionRepository].toInstance(mockSessionRepository),
+          inject.bind[FrontendAppConfig].toInstance(mockAppConfig),
+          inject.bind[Clock].toInstance(stubClock)
+        )
+        .build()
+    }
   }
 }

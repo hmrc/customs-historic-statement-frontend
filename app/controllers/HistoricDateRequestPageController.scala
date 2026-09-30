@@ -76,7 +76,8 @@ class HistoricDateRequestPageController @Inject() (
           backLink,
           DateMessages(fileRole),
           request.userAnswers.get(AccountNumber),
-          request.userAnswers.get(IsNiAccount)
+          request.userAnswers.get(IsNiAccount),
+          minTaxYear.startYear
         )
       )
   }
@@ -100,7 +101,8 @@ class HistoricDateRequestPageController @Inject() (
                   backLink,
                   DateMessages(fileRole),
                   request.userAnswers.get(AccountNumber),
-                  request.userAnswers.get(IsNiAccount)
+                  request.userAnswers.get(IsNiAccount),
+                  minTaxYear.startYear
                 )
               )
             )
@@ -119,7 +121,8 @@ class HistoricDateRequestPageController @Inject() (
                       backLink,
                       DateMessages(fileRole),
                       request.userAnswers.get(AccountNumber),
-                      request.userAnswers.get(IsNiAccount)
+                      request.userAnswers.get(IsNiAccount),
+                      minTaxYear.startYear
                     )
                   )
                 )
@@ -171,8 +174,7 @@ class HistoricDateRequestPageController @Inject() (
           formWithError(
             messages(
               "cf.historic.document.request.form.error.date-too-far-in-past",
-              minTaxYear.startYear.toString,
-              minTaxYear.finishYear.toString
+              minTaxYear.startYear.toString
             )
           )
         )

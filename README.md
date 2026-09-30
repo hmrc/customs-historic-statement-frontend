@@ -34,7 +34,7 @@ The easiest way to get started with these is via the service manager CLI - you c
 | --------                                         | ------- |
 | `sm2 --start CUSTOMS_FINANCIALS_ALL`             | Runs all dependencies |
 | `sm2 -s`                                         | Shows running services |
-| `sm2 --stop CUSTOMS_HISTORIC_STATEMENT` | Stop the micro service  |
+| `sm2 --stop CUSTOMS_HISTORIC_STATEMENT_FRONTEND` | Stop the micro service |
 | `sbt run`                                        | (from root dir) to compile the current service with your changes |
 
 
@@ -56,7 +56,10 @@ The easiest way to get started with these is via the service manager CLI - you c
 
 The service can be accessed by using below enrolments and with below sample EORI numbers, via http://localhost:9949/auth-login-stub/gg-sign-in (on local) or https://<host:port>/auth-login-stub/gg-sign-in on DEV/QA/STAGING
 
-Redirect URL - `/customs/payment-records`
+| Environment | Redirect URL | Description |
+| -------- | ------- | ------- |
+| Local | `http://localhost:9876/customs/payment-records` | Customs Financials home page |
+| DEV/QA/STAGING | `/customs/payment-records` | Customs Financials home page |
 
 | Enrolment Key	| Identifier Name | Identifier Value |
 | -------- | ------- | ------- |
