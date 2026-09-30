@@ -63,7 +63,9 @@ trait Constraints {
     }
 
     Constraint {
-      case request if request.isBefore(etmpStatementsDate) && fileRole == SecurityStatement =>
+      case request
+          if request.isBefore(etmpStatementsDate) && fileRole != PostponedVATStatement &&
+            fileRole != DutyDefermentStatement && fileRole != C79Certificate =>
         Invalid(ValidationError(messageKey))
 
       case _ => Valid

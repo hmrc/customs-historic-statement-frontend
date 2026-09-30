@@ -27,6 +27,8 @@ import org.jsoup.nodes.{Document, Element}
 import play.api.data.Form
 import views.html.HistoricDateRequestPageView
 
+import java.time.LocalDate
+
 class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
 
   "view" should {
@@ -54,7 +56,10 @@ class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
 
           if (fileRole == C79Certificate) {
             inset.map(_.text()) mustBe Some(
-              messages("cf.historic.document.request.form.error.date-too-far-in-past", earliestRequestableYear.toString)
+              messages(
+                "cf.historic.document.request.form.error.date-too-far-in-past.c79",
+                earliestRequestableYear.toString
+              )
             )
           } else {
             inset mustBe None
@@ -68,7 +73,7 @@ class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
 
         "statement end date text and hint text is displayed" in {
           viewDoc.text().contains(endDateText) mustBe true
-          viewDoc.getElementById("end-hint").text() mustBe endDateHint
+          viewDoc.getElementById("end-hint").text() mustBe endDateHint(fileRole)
         }
 
         "start date check box month and year is displayed" in {
@@ -102,6 +107,7 @@ class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
 trait SetUpWithSpecBase extends SpecBase {
   val returnUrl               = "http://localhost:9398/customs/documents/adjustments"
   val earliestRequestableYear = 2020
+  val hintExampleDate         = LocalDate.of(2025, 9, 1)
 
   private def form(fileRole: FileRole): Form[HistoricDates] = new HistoricDateRequestPageFormProvider().apply(fileRole)
 
@@ -119,7 +125,8 @@ trait SetUpWithSpecBase extends SpecBase {
           DateMessages(fileRole),
           Some("accountNumber"),
           Some(false),
-          earliestRequestableYear
+          earliestRequestableYear,
+          hintExampleDate
         )
         .body
     )
@@ -128,13 +135,17 @@ trait SetUpWithSpecBase extends SpecBase {
 
   protected def startDateHint(fileRole: FileRole): String =
     fileRole match {
-      case C79Certificate         => messages("cf.historic.document.request.date.C79Certificate.hint")
+      case C79Certificate         => messages("cf.historic.document.request.date.C79Certificate.hint", "9", "2025")
       case PostponedVATStatement  => messages("cf.historic.document.request.date.PostponedVATStatement.hint")
       case DutyDefermentStatement => messages("cf.historic.document.request.date.DutyDefermentStatement.hint")
       case SecurityStatement      => messages("cf.historic.document.request.date.SecurityStatement.hint")
       case CDSCashAccount         => messages("cf.historic.document.request.date.CashStatement.hint")
     }
 
-  val endDateText: String = messages("cf.historic.document.request.to")
-  val endDateHint: String = messages("cf.historic.document.request.endDate.hint")
+  val endDateText: String                               = messages("cf.historic.document.request.to")
+  protected def endDateHint(fileRole: FileRole): String =
+    fileRole match {
+      case C79Certificate => messages("cf.historic.document.request.endDate.C79Certificate.hint", "9", "2025")
+      case _              => messages("cf.historic.document.request.endDate.hint")
+    }
 }

@@ -217,7 +217,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         status(result) mustBe BAD_REQUEST
 
         val body = contentAsString(result)
-        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past", "2020"))
+        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020"))
         body must not include "October 2019"
         body must not include "tax year"
       }
@@ -234,7 +234,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         status(result) mustBe OK
 
         Jsoup.parse(contentAsString(result)).getElementById("earliest-requestable-year").text() mustBe
-          messages("cf.historic.document.request.form.error.date-too-far-in-past", "2020")
+          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
       }
     }
 
@@ -257,11 +257,80 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
           val result = route(application, request).value
           status(result) mustBe OK
 
-          withClue(s"system date $systemDate: ") {
-            Jsoup.parse(contentAsString(result)).getElementById("earliest-requestable-year").text() mustBe
-              messages("cf.historic.document.request.form.error.date-too-far-in-past", expectedYear)
+          Jsoup.parse(contentAsString(result)).getElementById("earliest-requestable-year").text() mustBe
+            messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", expectedYear)
+        }
+      }
+    }
+
+    "display C79 start and end date hint examples as the current month one year ago" in new Setup {
+      val expectations: Seq[(String, String, String)] = Seq(
+        ("2026-09-29T00:00:00.000", "9", "2025"),
+        ("2026-01-01T00:00:00.000", "1", "2025"),
+        ("2027-04-06T00:00:00.000", "4", "2026")
+      )
+
+      expectations.foreach { case (systemDate, month, year) =>
+        val application: Application = appWithFixedDate(systemDate)
+
+        val request =
+          fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, C79Certificate).url)
+
+        running(application) {
+          val result = route(application, request).value
+          status(result) mustBe OK
+
+          val doc = Jsoup.parse(contentAsString(result))
+
+          doc.getElementById("start-hint").text() mustBe
+            messages("cf.historic.document.request.date.C79Certificate.hint", month, year)
+          doc.getElementById("end-hint").text() mustBe
+            messages("cf.historic.document.request.endDate.C79Certificate.hint", month, year)
+        }
+      }
+    }
+
+    "keep the static hint examples and no inset for non-C79 journeys" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-29T00:00:00.000")
+
+      running(app) {
+        Seq(PostponedVATStatement, SecurityStatement, DutyDefermentStatement).foreach { fileRole =>
+          val request =
+            fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url)
+
+          val result = route(app, request).value
+          status(result) mustBe OK
+
+          val doc = Jsoup.parse(contentAsString(result))
+
+          withClue(s"$fileRole: ") {
+            doc.getElementById("start-hint").text() mustBe messages(DateMessages(fileRole).startDate.hintMsgKey)
+            doc.getElementById("end-hint").text() mustBe messages("cf.historic.document.request.endDate.hint")
+            Option(doc.getElementById("earliest-requestable-year")) mustBe None
           }
         }
+      }
+    }
+
+    "return BAD_REQUEST with the tax year error when the start date is before CY-6 for non-C79 journeys" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request =
+        fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, SecurityStatement).url)
+          .withFormUrlEncodedBody(
+            "start.month" -> "1",
+            "start.year"  -> "2020",
+            "end.month"   -> "2",
+            "end.year"    -> "2020"
+          )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val body = contentAsString(result)
+        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past", "2020", "2021"))
+        body must not include messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
       }
     }
 

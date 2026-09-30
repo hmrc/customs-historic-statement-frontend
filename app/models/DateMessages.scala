@@ -35,7 +35,8 @@ object DateMessages {
         DateMessages(
           startDate =
             DateMessage("cf.historic.document.request.from", "cf.historic.document.request.date.C79Certificate.hint"),
-          endDate = DateMessage("cf.historic.document.request.to", "cf.historic.document.request.endDate.hint")
+          endDate =
+            DateMessage("cf.historic.document.request.to", "cf.historic.document.request.endDate.C79Certificate.hint")
         )
 
       case PostponedVATStatement =>

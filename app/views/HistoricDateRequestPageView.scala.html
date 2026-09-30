@@ -37,7 +37,8 @@
     dateMessages: DateMessages,
     maybeDan: Option[String],
     niIndicator: Option[Boolean],
-    earliestRequestableYear: Int
+    earliestRequestableYear: Int,
+    hintExampleDate: java.time.LocalDate
 )(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some(title(form, messages(s"cf.historic.document.request.${fileRole}.title"))),
@@ -64,7 +65,7 @@
 
             @if(fileRole == C79Certificate) {
                 @inset(
-                    messages("cf.historic.document.request.form.error.date-too-far-in-past", earliestRequestableYear.toString),
+                    messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", earliestRequestableYear.toString),
                     id = Some("earliest-requestable-year")
                 )
             }
@@ -75,7 +76,7 @@
                 @inputDate(
                     form,
                     messages(date.labelMsgKey),
-                    hintText = Some(messages(date.hintMsgKey)),
+                    hintText = Some(messages(date.hintMsgKey, hintExampleDate.getMonthValue.toString, hintExampleDate.getYear.toString)),
                     id = "start",
                     legendAsPageHeading = false,
                 )
@@ -85,7 +86,7 @@
                 @inputDate(
                     form,
                     messages(date.labelMsgKey),
-                    hintText = Some(messages(date.hintMsgKey)),
+                    hintText = Some(messages(date.hintMsgKey, hintExampleDate.getMonthValue.toString, hintExampleDate.getYear.toString)),
                     id = "end",
                     legendAsPageHeading = false,
                 )

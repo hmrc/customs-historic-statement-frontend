@@ -77,7 +77,8 @@ class HistoricDateRequestPageController @Inject() (
           DateMessages(fileRole),
           request.userAnswers.get(AccountNumber),
           request.userAnswers.get(IsNiAccount),
-          minTaxYear.startYear
+          minTaxYear.startYear,
+          hintExampleDate
         )
       )
   }
@@ -102,7 +103,8 @@ class HistoricDateRequestPageController @Inject() (
                   DateMessages(fileRole),
                   request.userAnswers.get(AccountNumber),
                   request.userAnswers.get(IsNiAccount),
-                  minTaxYear.startYear
+                  minTaxYear.startYear,
+                  hintExampleDate
                 )
               )
             )
@@ -122,7 +124,8 @@ class HistoricDateRequestPageController @Inject() (
                       DateMessages(fileRole),
                       request.userAnswers.get(AccountNumber),
                       request.userAnswers.get(IsNiAccount),
-                      minTaxYear.startYear
+                      minTaxYear.startYear,
+                      hintExampleDate
                     )
                   )
                 )
@@ -172,10 +175,18 @@ class HistoricDateRequestPageController @Inject() (
       case (HistoricDates(start, end), _) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
         Some(
           formWithError(
-            messages(
-              "cf.historic.document.request.form.error.date-too-far-in-past",
-              minTaxYear.startYear.toString
-            )
+            if (fileRole == C79Certificate) {
+              messages(
+                "cf.historic.document.request.form.error.date-too-far-in-past.c79",
+                minTaxYear.startYear.toString
+              )
+            } else {
+              messages(
+                "cf.historic.document.request.form.error.date-too-far-in-past",
+                minTaxYear.startYear.toString,
+                minTaxYear.finishYear.toString
+              )
+            }
           )
         )
 
@@ -188,6 +199,8 @@ class HistoricDateRequestPageController @Inject() (
     val maximumNumberOfYears        = 6
     taxYearFor(currentDate).back(maximumNumberOfYears)
   }
+
+  private def hintExampleDate: LocalDate = LocalDateTime.now(clock).toLocalDate.minusYears(1)
 
   private def isDateMoreThanSixTaxYearsOld(requestedDate: LocalDate): Boolean = {
     val dayOfMonthThatTaxYearStartsOn = 6
