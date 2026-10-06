@@ -88,7 +88,7 @@ cf.historic.document.request.whichStartDate.C79Certificate=ar gyfer pa ddyddiad 
 cf.historic.document.request.whichStartDate.PostponedVATStatement=ar gyfer pa ddyddiad dechrau y mae angen tystysgrifau TAW o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichStartDate.SecurityStatement=ar gyfer pa ddyddiad dechrau y mae angen hysbysiad o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichStartDate.DutyDefermentStatement=Ar gyfer pa ddyddiad dechrau y mae angen datganiadau gohirio tollau arnoch?
-cf.historic.document.request.date.C79Certificate.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2019. Er enghraifft, 3 2021.
+cf.historic.document.request.date.C79Certificate.hint = Er enghraifft, {0} {1}.
 cf.historic.document.request.date.CashStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2019. Er enghraifft, 3 2021.
 cf.historic.document.request.date.PostponedVATStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Ionawr 2021. Er enghraifft, 3 2021.
 cf.historic.document.request.date.DutyDefermentStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Ionawr 2021. Er enghraifft, 3 2021.
@@ -101,6 +101,7 @@ cf.historic.document.request.whichEndDate.PostponedVATStatement=ar gyfer pa ddyd
 cf.historic.document.request.whichEndDate.SecurityStatement=ar gyfer pa ddyddiad dod i ben y mae angen hysbysiad o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement=ar gyfer pa ddyddiad dod i ben y mae angen datganiadau gohirio tollau arnoch?
 cf.historic.document.request.endDate.hint = Er enghraifft, 3 2021.
+cf.historic.document.request.endDate.C79Certificate.hint = Er enghraifft, {0} {1}.
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?
 cf.historic.document.request.whichStartDate.C79Certificate.hidden = pa ddyddiad dechrau sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?
@@ -137,6 +138,7 @@ cf.historic.document.request.confirmation.link.help=Cofrestrwch i gymryd rhan me
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau o ar ôl blwyddyn dreth {0} i {1}.
+cf.historic.document.request.form.error.date-too-far-in-past.c79=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ebrill {0}
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ionawr 2021
 cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=Ni allwch nodi dyddiad cyn mis Medi 2019
@@ -145,7 +147,6 @@ cf.historic.document.request.form.error.date-range-too-wide.c79=Gallwch ofyn am 
 
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.dd=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Medi 2019
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Hydref 2019
-cf.historic.document.request.form.error.date-earlier-than-system-start-date.c79=Gallwch ofyn am dystysgrifau a anfonwyd ers mis Hydref 2019 yn unig
 
 cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am ddatganiadau sy’n hŷn na 6 mis
 cf.historic.document.request.form.error.date-too-recent.c79=Gallwch ofyn am dystysgrifau sy’n hŷn na 6 mis yn unig

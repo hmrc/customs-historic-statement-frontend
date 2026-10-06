@@ -48,7 +48,7 @@ class DateMessagesSpec extends SpecBase {
 
         actual.endDate mustBe DateMessage(
           labelMsgKey = "cf.historic.document.request.to",
-          hintMsgKey = "cf.historic.document.request.endDate.hint"
+          hintMsgKey = "cf.historic.document.request.endDate.C79Certificate.hint"
         )
       }
 
