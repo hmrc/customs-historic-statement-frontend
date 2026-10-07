@@ -217,12 +217,12 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         status(result) mustBe BAD_REQUEST
 
         val body = contentAsString(result)
-        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020"))
+        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020"))
         body must not include "October 2019"
         body must not include "tax year"
 
         val doc      = Jsoup.parse(body)
-        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
 
         doc.getElementById("start-error").text() must include(cy6Error)
         doc.getElementById("end-error").text()   must include(cy6Error)
@@ -242,7 +242,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc = Jsoup.parse(contentAsString(result))
 
         doc.getElementById("start-error").text() must include(
-          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
         )
         Option(doc.getElementById("end-error")) mustBe None
       }
@@ -278,7 +278,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         status(result) mustBe OK
 
         Jsoup.parse(contentAsString(result)).getElementById("earliest-requestable-year").text() mustBe
-          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
       }
     }
 
@@ -302,7 +302,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
           status(result) mustBe OK
 
           Jsoup.parse(contentAsString(result)).getElementById("earliest-requestable-year").text() mustBe
-            messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", expectedYear)
+            messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", expectedYear)
         }
       }
     }
@@ -348,7 +348,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc  = Jsoup.parse(body)
 
         doc.getElementById("earliest-requestable-year").text() mustBe
-          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
         doc.getElementById("start-hint").text() mustBe
           messages("cf.historic.document.request.date.SecurityStatement.hint", "9", "2025")
         doc.getElementById("end-hint").text() mustBe
@@ -371,35 +371,12 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc  = Jsoup.parse(body)
 
         doc.getElementById("earliest-requestable-year").text() mustBe
-          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
         doc.getElementById("start-hint").text() mustBe
           messages("cf.historic.document.request.date.DutyDefermentStatement.hint", "9", "2025")
         doc.getElementById("end-hint").text() mustBe
           messages("cf.historic.document.request.endDate.hint", "9", "2025")
         body must not include "September 2019"
-      }
-    }
-
-    "keep the static start date hint and no inset for journeys not yet using CY-6" in new Setup {
-      override val app: Application = appWithFixedDate("2026-09-29T00:00:00.000")
-
-      running(app) {
-        Seq(PostponedVATStatement).foreach { fileRole =>
-          val request =
-            fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url)
-
-          val result = route(app, request).value
-          status(result) mustBe OK
-
-          val doc = Jsoup.parse(contentAsString(result))
-
-          withClue(s"$fileRole: ") {
-            doc.getElementById("start-hint").text() mustBe messages(DateMessages(fileRole).startDate.hintMsgKey)
-            doc.getElementById("end-hint").text() mustBe
-              messages("cf.historic.document.request.endDate.hint", "9", "2025")
-            Option(doc.getElementById("earliest-requestable-year")) mustBe None
-          }
-        }
       }
     }
 
@@ -421,7 +398,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
 
         val body     = contentAsString(result)
         val doc      = Jsoup.parse(body)
-        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
 
         doc.getElementById("start-error").text() must include(cy6Error)
         doc.getElementById("end-error").text()   must include(cy6Error)
@@ -449,7 +426,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc = Jsoup.parse(contentAsString(result))
 
         doc.getElementById("start-error").text() must include(
-          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
         )
         Option(doc.getElementById("end-error")) mustBe None
       }
@@ -492,7 +469,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
 
         val body     = contentAsString(result)
         val doc      = Jsoup.parse(body)
-        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
 
         doc.getElementById("start-error").text() must include(cy6Error)
         doc.getElementById("end-error").text()   must include(cy6Error)
@@ -520,7 +497,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc = Jsoup.parse(contentAsString(result))
 
         doc.getElementById("start-error").text() must include(
-          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
         )
         Option(doc.getElementById("end-error")) mustBe None
       }
@@ -545,16 +522,132 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
-    "return BAD_REQUEST with the tax year error when the start date is before CY-6 for journeys not yet using CY-6" in new Setup {
-      override val app: Application = appWithFixedDate("2028-09-25T00:00:00.000")
+    "display the earliest requestable date inset text and dynamic hint examples for postponed import VAT statements" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-29T00:00:00.000")
+
+      val request =
+        fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, PostponedVATStatement).url)
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe OK
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("earliest-requestable-year").text() mustBe
+          messages("cf.historic.document.request.form.error.date-too-far-in-past", "January", "2021")
+        doc.getElementById("start-hint").text() mustBe
+          messages("cf.historic.document.request.date.PostponedVATStatement.hint", "9", "2025")
+        doc.getElementById("end-hint").text() mustBe
+          messages("cf.historic.document.request.endDate.hint", "9", "2025")
+      }
+    }
+
+    "show January 2021 until CY-6 overtakes it on 6 April 2027 for postponed import VAT statements" in new Setup {
+      val expectations: Seq[(String, String, String)] = Seq(
+        ("2026-03-31T00:00:00.000", "January", "2021"),
+        ("2026-04-06T00:00:00.000", "January", "2021"),
+        ("2027-04-05T00:00:00.000", "January", "2021"),
+        ("2027-04-06T00:00:00.000", "April", "2021"),
+        ("2028-04-06T00:00:00.000", "April", "2022")
+      )
+
+      expectations.foreach { case (systemDate, month, year) =>
+        val application: Application = appWithFixedDate(systemDate)
+
+        val request =
+          fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, PostponedVATStatement).url)
+
+        running(application) {
+          val result = route(application, request).value
+          status(result) mustBe OK
+
+          withClue(s"$systemDate: ") {
+            Jsoup.parse(contentAsString(result)).getElementById("earliest-requestable-year").text() mustBe
+              messages("cf.historic.document.request.form.error.date-too-far-in-past", month, year)
+          }
+        }
+      }
+    }
+
+    "return BAD_REQUEST with the January 2021 error on both dates when both are before January 2021 for postponed import VAT statements" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request =
+        fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
+          .withFormUrlEncodedBody(
+            "start.month" -> "11",
+            "start.year"  -> "2020",
+            "end.month"   -> "12",
+            "end.year"    -> "2020"
+          )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val doc       = Jsoup.parse(contentAsString(result))
+        val pvatError = messages("cf.historic.document.request.form.error.date-too-far-in-past", "January", "2021")
+
+        doc.getElementById("start-error").text() must include(pvatError)
+        doc.getElementById("end-error").text()   must include(pvatError)
+      }
+    }
+
+    "show the January 2021 error only on the start date when only the start date is before January 2021 for postponed import VAT statements" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request =
+        fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
+          .withFormUrlEncodedBody(
+            "start.month" -> "12",
+            "start.year"  -> "2020",
+            "end.month"   -> "2",
+            "end.year"    -> "2021"
+          )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("start-error").text() must include(
+          messages("cf.historic.document.request.form.error.date-too-far-in-past", "January", "2021")
+        )
+        Option(doc.getElementById("end-error")) mustBe None
+      }
+    }
+
+    "return SEE_OTHER when the start date is January 2021 for postponed import VAT statements" in new Setup {
+      when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
 
       val request =
         fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
           .withFormUrlEncodedBody(
             "start.month" -> "1",
-            "start.year"  -> "2022",
+            "start.year"  -> "2021",
             "end.month"   -> "2",
-            "end.year"    -> "2022"
+            "end.year"    -> "2021"
+          )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
+      }
+    }
+
+    "return BAD_REQUEST with the April CY-6 error once CY-6 has overtaken January 2021 for postponed import VAT statements" in new Setup {
+      override val app: Application = appWithFixedDate("2027-04-06T00:00:00.000")
+
+      val request =
+        fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
+          .withFormUrlEncodedBody(
+            "start.month" -> "2",
+            "start.year"  -> "2021",
+            "end.month"   -> "3",
+            "end.year"    -> "2021"
           )
 
       running(app) {
@@ -562,8 +655,27 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         status(result) mustBe BAD_REQUEST
 
         val body = contentAsString(result)
-        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past", "2022", "2023"))
-        body must not include messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2022")
+        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2021"))
+        body must not include "January 2021"
+      }
+    }
+
+    "return SEE_OTHER for February 2021 on 5 April 2027, before CY-6 overtakes January 2021, for postponed import VAT statements" in new Setup {
+      when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
+      override val app: Application = appWithFixedDate("2027-04-05T00:00:00.000")
+
+      val request =
+        fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
+          .withFormUrlEncodedBody(
+            "start.month" -> "2",
+            "start.year"  -> "2021",
+            "end.month"   -> "3",
+            "end.year"    -> "2021"
+          )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
       }
     }
 

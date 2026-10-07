@@ -37,7 +37,7 @@
     dateMessages: DateMessages,
     maybeDan: Option[String],
     niIndicator: Option[Boolean],
-    earliestDateMessage: Option[String],
+    earliestDateMessage: String,
     hintExampleDate: java.time.LocalDate
 )(implicit request: Request[_], messages: Messages)
 
@@ -63,9 +63,7 @@
 
             @h1(s"cf.historic.document.request.heading.$fileRole")
 
-            @earliestDateMessage.map { message =>
-                @inset(message, id = Some("earliest-requestable-year"))
-            }
+            @inset(earliestDateMessage, id = Some("earliest-requestable-year"))
 
             @p(Html(messages(s"cf.historic.document.request.info-text.$fileRole")))
 

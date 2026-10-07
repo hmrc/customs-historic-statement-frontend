@@ -16,20 +16,16 @@
 
 package forms.mappings
 
-import models.{C79Certificate, FileRole, PostponedVATStatement}
+import models.{C79Certificate, FileRole}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 import java.time.{LocalDate, LocalDateTime, Period}
 
 trait Constraints {
 
-  val offset                     = 6
-  private val dayOne             = 1
-  private val pvatStatementMonth = 1
-  private val pvatStatementYear  = 2021
-
-  private lazy val pvatStatementsDate: LocalDate = LocalDate.of(pvatStatementYear, pvatStatementMonth, dayOne)
-  private val olderThan                          = Period.ofMonths(offset)
+  val offset            = 6
+  private val oneMonth  = 1
+  private val olderThan = Period.ofMonths(offset)
 
   def currentDate: LocalDate = LocalDateTime.now().toLocalDate
 
@@ -37,7 +33,7 @@ trait Constraints {
     Constraint {
       case request
           if Period
-            .between(request, currentDate.minusMonths(pvatStatementMonth))
+            .between(request, currentDate.minusMonths(oneMonth))
             .toTotalMonths < olderThan.toTotalMonths =>
         if (fileRole == C79Certificate) {
           Invalid(ValidationError("cf.historic.document.request.form.error.date-too-recent.c79"))
@@ -46,11 +42,4 @@ trait Constraints {
         }
       case _ => Valid
     }
-
-  def earlierThanPVATStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if request.isBefore(pvatStatementsDate) && fileRole == PostponedVATStatement =>
-      Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"))
-
-    case _ => Valid
-  }
 }

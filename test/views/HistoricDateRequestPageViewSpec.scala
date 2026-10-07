@@ -51,10 +51,10 @@ class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
           viewDoc.text().contains(messages(s"cf.historic.document.request.info-text.$fileRole")) mustBe true
         }
 
-        "earliest requestable date inset text is displayed only when a message is provided" in {
-          val inset: Option[Element] = Option(viewDoc.getElementById("earliest-requestable-year"))
+        "earliest requestable date inset text is displayed below the heading" in {
+          viewDoc.getElementById("earliest-requestable-year").text() mustBe earliestDateMessage
 
-          inset.map(_.text()) mustBe earliestDateMessage(fileRole)
+          viewDoc.select("h1 + #earliest-requestable-year").size() mustBe 1
         }
 
         "statement start date text and hint text is displayed" in {
@@ -96,21 +96,11 @@ class HistoricDateRequestPageViewSpec extends SetUpWithSpecBase {
 }
 
 trait SetUpWithSpecBase extends SpecBase {
-  val returnUrl               = "http://localhost:9398/customs/documents/adjustments"
-  val earliestRequestableYear = 2020
-  val hintExampleDate         = LocalDate.of(2025, 9, 1)
+  val returnUrl       = "http://localhost:9398/customs/documents/adjustments"
+  val hintExampleDate = LocalDate.of(2025, 9, 1)
 
-  protected def earliestDateMessage(fileRole: FileRole): Option[String] =
-    fileRole match {
-      case C79Certificate | SecurityStatement | DutyDefermentStatement =>
-        Some(
-          messages(
-            "cf.historic.document.request.form.error.date-too-far-in-past.c79",
-            earliestRequestableYear.toString
-          )
-        )
-      case _                                                           => None
-    }
+  lazy val earliestDateMessage: String =
+    messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
 
   private def form(fileRole: FileRole): Form[HistoricDates] = new HistoricDateRequestPageFormProvider().apply(fileRole)
 
@@ -128,7 +118,7 @@ trait SetUpWithSpecBase extends SpecBase {
           DateMessages(fileRole),
           Some("accountNumber"),
           Some(false),
-          earliestDateMessage(fileRole),
+          earliestDateMessage,
           hintExampleDate
         )
         .body
@@ -139,7 +129,8 @@ trait SetUpWithSpecBase extends SpecBase {
   protected def startDateHint(fileRole: FileRole): String =
     fileRole match {
       case C79Certificate         => messages("cf.historic.document.request.date.C79Certificate.hint", "9", "2025")
-      case PostponedVATStatement  => messages("cf.historic.document.request.date.PostponedVATStatement.hint")
+      case PostponedVATStatement  =>
+        messages("cf.historic.document.request.date.PostponedVATStatement.hint", "9", "2025")
       case DutyDefermentStatement =>
         messages("cf.historic.document.request.date.DutyDefermentStatement.hint", "9", "2025")
       case SecurityStatement      => messages("cf.historic.document.request.date.SecurityStatement.hint", "9", "2025")

@@ -90,7 +90,7 @@ cf.historic.document.request.whichStartDate.SecurityStatement=ar gyfer pa ddyddi
 cf.historic.document.request.whichStartDate.DutyDefermentStatement=Ar gyfer pa ddyddiad dechrau y mae angen datganiadau gohirio tollau arnoch?
 cf.historic.document.request.date.C79Certificate.hint = Er enghraifft, {0} {1}.
 cf.historic.document.request.date.CashStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2019. Er enghraifft, 3 2021.
-cf.historic.document.request.date.PostponedVATStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Ionawr 2021. Er enghraifft, 3 2021.
+cf.historic.document.request.date.PostponedVATStatement.hint = Er enghraifft, {0} {1}.
 cf.historic.document.request.date.DutyDefermentStatement.hint = Er enghraifft, {0} {1}.
 cf.historic.document.request.date.SecurityStatement.hint = Er enghraifft, {0} {1}.
 
@@ -137,10 +137,8 @@ cf.historic.document.request.confirmation.body-text.help=Mae eich adborth yn wer
 cf.historic.document.request.confirmation.link.help=Cofrestrwch i gymryd rhan mewn ymchwil defnyddwyr (yn agor tab newydd)
 
 #HistoricDataRequestPageView
-cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau o ar ôl blwyddyn dreth {0} i {1}.
-cf.historic.document.request.form.error.date-too-far-in-past.c79=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ebrill {0}
+cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis {0} {1}
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’
-cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ionawr 2021
 cf.historic.document.request.form.error.date-range-too-wide=Gallwch ond gofyn am hyd at 6 mis o ddatganiadau ym mhob cais
 cf.historic.document.request.form.error.date-range-too-wide.c79=Gallwch ofyn am hyd at 6 mis o dystysgrifau yn unig ym mhob cais
 
