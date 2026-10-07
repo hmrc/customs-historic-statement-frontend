@@ -91,7 +91,7 @@ cf.historic.document.request.whichStartDate.DutyDefermentStatement=Ar gyfer pa d
 cf.historic.document.request.date.C79Certificate.hint = Er enghraifft, {0} {1}.
 cf.historic.document.request.date.CashStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2019. Er enghraifft, 3 2021.
 cf.historic.document.request.date.PostponedVATStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Ionawr 2021. Er enghraifft, 3 2021.
-cf.historic.document.request.date.DutyDefermentStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Ionawr 2021. Er enghraifft, 3 2021.
+cf.historic.document.request.date.DutyDefermentStatement.hint = Er enghraifft, {0} {1}.
 cf.historic.document.request.date.SecurityStatement.hint = Er enghraifft, {0} {1}.
 
 cf.historic.document.request.to=Dyddiad dod i ben
@@ -141,11 +141,9 @@ cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn a
 cf.historic.document.request.form.error.date-too-far-in-past.c79=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ebrill {0}
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ionawr 2021
-cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=Ni allwch nodi dyddiad cyn mis Medi 2019
 cf.historic.document.request.form.error.date-range-too-wide=Gallwch ond gofyn am hyd at 6 mis o ddatganiadau ym mhob cais
 cf.historic.document.request.form.error.date-range-too-wide.c79=Gallwch ofyn am hyd at 6 mis o dystysgrifau yn unig ym mhob cais
 
-cf.historic.document.request.form.error.date-earlier-than-system-start-date.dd=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Medi 2019
 
 cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am ddatganiadau sy’n hŷn na 6 mis
 cf.historic.document.request.form.error.date-too-recent.c79=Gallwch ofyn am dystysgrifau sy’n hŷn na 6 mis yn unig

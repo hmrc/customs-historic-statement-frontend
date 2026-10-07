@@ -357,11 +357,34 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
+    "display the CY-6 inset text and dynamic hint examples for duty deferment statements" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-29T00:00:00.000")
+
+      val request =
+        fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, DutyDefermentStatement).url)
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe OK
+
+        val body = contentAsString(result)
+        val doc  = Jsoup.parse(body)
+
+        doc.getElementById("earliest-requestable-year").text() mustBe
+          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+        doc.getElementById("start-hint").text() mustBe
+          messages("cf.historic.document.request.date.DutyDefermentStatement.hint", "9", "2025")
+        doc.getElementById("end-hint").text() mustBe
+          messages("cf.historic.document.request.endDate.hint", "9", "2025")
+        body must not include "September 2019"
+      }
+    }
+
     "keep the static start date hint and no inset for journeys not yet using CY-6" in new Setup {
       override val app: Application = appWithFixedDate("2026-09-29T00:00:00.000")
 
       running(app) {
-        Seq(PostponedVATStatement, DutyDefermentStatement).foreach { fileRole =>
+        Seq(PostponedVATStatement).foreach { fileRole =>
           val request =
             fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url)
 
@@ -451,15 +474,42 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
-    "return BAD_REQUEST with the tax year error when the start date is before CY-6 for journeys not yet using CY-6" in new Setup {
+    "return BAD_REQUEST with the CY-6 error on both dates when both are before April of CY-6 for duty deferment statements" in new Setup {
       override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
 
       val request =
         fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, DutyDefermentStatement).url)
           .withFormUrlEncodedBody(
-            "start.month" -> "1",
+            "start.month" -> "7",
+            "start.year"  -> "2019",
+            "end.month"   -> "8",
+            "end.year"    -> "2019"
+          )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val body     = contentAsString(result)
+        val doc      = Jsoup.parse(body)
+        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+
+        doc.getElementById("start-error").text() must include(cy6Error)
+        doc.getElementById("end-error").text()   must include(cy6Error)
+        body                                     must not include "September 2019"
+        body                                     must not include "tax year"
+      }
+    }
+
+    "show the CY-6 error only on the start date when only the start date is before April of CY-6 for duty deferment statements" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request =
+        fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, DutyDefermentStatement).url)
+          .withFormUrlEncodedBody(
+            "start.month" -> "3",
             "start.year"  -> "2020",
-            "end.month"   -> "2",
+            "end.month"   -> "5",
             "end.year"    -> "2020"
           )
 
@@ -467,9 +517,53 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val result = route(app, request).value
         status(result) mustBe BAD_REQUEST
 
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("start-error").text() must include(
+          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+        )
+        Option(doc.getElementById("end-error")) mustBe None
+      }
+    }
+
+    "return SEE_OTHER when the start date is April of the CY-6 year for duty deferment statements" in new Setup {
+      when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request =
+        fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, DutyDefermentStatement).url)
+          .withFormUrlEncodedBody(
+            "start.month" -> "4",
+            "start.year"  -> "2020",
+            "end.month"   -> "5",
+            "end.year"    -> "2020"
+          )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
+      }
+    }
+
+    "return BAD_REQUEST with the tax year error when the start date is before CY-6 for journeys not yet using CY-6" in new Setup {
+      override val app: Application = appWithFixedDate("2028-09-25T00:00:00.000")
+
+      val request =
+        fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, PostponedVATStatement).url)
+          .withFormUrlEncodedBody(
+            "start.month" -> "1",
+            "start.year"  -> "2022",
+            "end.month"   -> "2",
+            "end.year"    -> "2022"
+          )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
         val body = contentAsString(result)
-        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past", "2020", "2021"))
-        body must not include messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past", "2022", "2023"))
+        body must not include messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2022")
       }
     }
 
@@ -580,7 +674,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
-    "return BAD_REQUEST when the start date is earlier than duty deferment date" in new Setup {
+    "return BAD_REQUEST when the start date is before April of CY-6 for duty deferment statement" in new Setup {
 
       val userAnswers: UserAnswers = populatedUserAnswers.set(RequestedLinkId, "someId").success.value
 

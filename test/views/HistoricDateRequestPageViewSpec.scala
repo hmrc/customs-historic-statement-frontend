@@ -102,14 +102,14 @@ trait SetUpWithSpecBase extends SpecBase {
 
   protected def earliestDateMessage(fileRole: FileRole): Option[String] =
     fileRole match {
-      case C79Certificate | SecurityStatement =>
+      case C79Certificate | SecurityStatement | DutyDefermentStatement =>
         Some(
           messages(
             "cf.historic.document.request.form.error.date-too-far-in-past.c79",
             earliestRequestableYear.toString
           )
         )
-      case _                                  => None
+      case _                                                           => None
     }
 
   private def form(fileRole: FileRole): Form[HistoricDates] = new HistoricDateRequestPageFormProvider().apply(fileRole)
@@ -140,7 +140,8 @@ trait SetUpWithSpecBase extends SpecBase {
     fileRole match {
       case C79Certificate         => messages("cf.historic.document.request.date.C79Certificate.hint", "9", "2025")
       case PostponedVATStatement  => messages("cf.historic.document.request.date.PostponedVATStatement.hint")
-      case DutyDefermentStatement => messages("cf.historic.document.request.date.DutyDefermentStatement.hint")
+      case DutyDefermentStatement =>
+        messages("cf.historic.document.request.date.DutyDefermentStatement.hint", "9", "2025")
       case SecurityStatement      => messages("cf.historic.document.request.date.SecurityStatement.hint", "9", "2025")
       case CDSCashAccount         => messages("cf.historic.document.request.date.CashStatement.hint")
     }

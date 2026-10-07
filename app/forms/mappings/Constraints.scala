@@ -16,24 +16,20 @@
 
 package forms.mappings
 
-import models.{C79Certificate, DutyDefermentStatement, FileRole, PostponedVATStatement}
+import models.{C79Certificate, FileRole, PostponedVATStatement}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 import java.time.{LocalDate, LocalDateTime, Period}
 
 trait Constraints {
 
-  val offset                         = 6
-  private val dayOne                 = 1
-  private val pvatStatementMonth     = 1
-  private val ddStatementMonth       = 9
-  private val etmpAndDDStatementYear = 2019
-  private val pvatStatementYear      = 2021
+  val offset                     = 6
+  private val dayOne             = 1
+  private val pvatStatementMonth = 1
+  private val pvatStatementYear  = 2021
 
-  private lazy val pvatStatementsDate: LocalDate          = LocalDate.of(pvatStatementYear, pvatStatementMonth, dayOne)
-  private lazy val dutyDefermentStatementsDate: LocalDate =
-    LocalDate.of(etmpAndDDStatementYear, ddStatementMonth, dayOne)
-  private val olderThan                                   = Period.ofMonths(offset)
+  private lazy val pvatStatementsDate: LocalDate = LocalDate.of(pvatStatementYear, pvatStatementMonth, dayOne)
+  private val olderThan                          = Period.ofMonths(offset)
 
   def currentDate: LocalDate = LocalDateTime.now().toLocalDate
 
@@ -54,15 +50,6 @@ trait Constraints {
   def earlierThanPVATStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
     case request if request.isBefore(pvatStatementsDate) && fileRole == PostponedVATStatement =>
       Invalid(ValidationError("cf.historic.document.request.form.error.date-earlier-than-pvat-start-date"))
-
-    case _ => Valid
-  }
-
-  def earlierThanDDStatementStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
-    case request if request.isBefore(dutyDefermentStatementsDate) && fileRole == DutyDefermentStatement =>
-      Invalid(
-        ValidationError("cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date")
-      )
 
     case _ => Valid
   }

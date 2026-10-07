@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions.*
 import forms.HistoricDateRequestPageFormProvider
-import models.{C79Certificate, DateMessages, FileRole, HistoricDates, Mode, SecurityStatement}
+import models.{C79Certificate, DateMessages, DutyDefermentStatement, FileRole, HistoricDates, Mode, SecurityStatement}
 import navigation.Navigator
 import pages.{AccountNumber, HistoricDateRequestPage, IsNiAccount}
 import play.api.Logger
@@ -206,11 +206,11 @@ class HistoricDateRequestPageController @Inject() (
 
   private def earliestDateMessage(fileRole: FileRole)(implicit messages: Messages): Option[String] =
     fileRole match {
-      case C79Certificate | SecurityStatement =>
+      case C79Certificate | SecurityStatement | DutyDefermentStatement =>
         Some(
           messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", minTaxYear.startYear.toString)
         )
-      case _                                  => None
+      case _                                                           => None
     }
 
   private def hintExampleDate: LocalDate = LocalDateTime.now(clock).toLocalDate.minusYears(1)

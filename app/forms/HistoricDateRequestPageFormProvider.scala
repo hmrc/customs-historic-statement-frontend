@@ -37,8 +37,7 @@ class HistoricDateRequestPageFormProvider @Inject() extends Mappings {
           invalidMonth = "cf.historic.document.request.form.error.start.month.invalid",
           invalidYear = "cf.historic.document.request.form.error.start.year.invalid",
           invalidDate = "cf.historic.document.request.form.error.start.date.invalid"
-        ).verifying(earlierThanPVATStartDate(fileRole))
-          .verifying(earlierThanDDStatementStartDate(fileRole)),
+        ).verifying(earlierThanPVATStartDate(fileRole)),
         "end"   -> localDate(
           emptyStartMonth = s"cf.historic.document.request.form.error.start.month.date-number-invalid.$fileRole",
           emptyStartYear = s"cf.historic.document.request.form.error.start.year.date-number-invalid.$fileRole",
