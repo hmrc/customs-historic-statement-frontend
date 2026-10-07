@@ -220,6 +220,50 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020"))
         body must not include "October 2019"
         body must not include "tax year"
+
+        val doc      = Jsoup.parse(body)
+        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+
+        doc.getElementById("start-error").text() must include(cy6Error)
+        doc.getElementById("end-error").text()   must include(cy6Error)
+      }
+    }
+
+    "show the CY-6 error only on the start date when only the start date is before April of CY-6 for C79" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "3", "start.year" -> "2020", "end.month" -> "5", "end.year" -> "2020")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("start-error").text() must include(
+          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+        )
+        Option(doc.getElementById("end-error")) mustBe None
+      }
+    }
+
+    "show the to-date-must-be-later-than-from-date error on the end date when only the end date is before April of CY-6 for C79" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "5", "start.year" -> "2020", "end.month" -> "3", "end.year" -> "2020")
+
+      running(app) {
+        val result = route(app, request).value
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("end-error").text() must include(
+          messages("cf.historic.document.request.form.error.to-date-must-be-later-than-from-date")
+        )
+
+        Option(doc.getElementById("start-error")) mustBe None
       }
     }
 
