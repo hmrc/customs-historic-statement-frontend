@@ -248,6 +248,25 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
+    "show the to-date-must-be-later-than-from-date error on the end date when only the end date is before April of CY-6 for C79" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "5", "start.year" -> "2020", "end.month" -> "3", "end.year" -> "2020")
+
+      running(app) {
+        val result = route(app, request).value
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("end-error").text() must include(
+          messages("cf.historic.document.request.form.error.to-date-must-be-later-than-from-date")
+        )
+
+        Option(doc.getElementById("start-error")) mustBe None
+      }
+    }
+
     "display the CY-6 inset text with the earliest requestable year for C79" in new Setup {
       override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
 
