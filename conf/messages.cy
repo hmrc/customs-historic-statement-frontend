@@ -92,7 +92,7 @@ cf.historic.document.request.date.C79Certificate.hint = Er enghraifft, {0} {1}.
 cf.historic.document.request.date.CashStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2019. Er enghraifft, 3 2021.
 cf.historic.document.request.date.PostponedVATStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Ionawr 2021. Er enghraifft, 3 2021.
 cf.historic.document.request.date.DutyDefermentStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Ionawr 2021. Er enghraifft, 3 2021.
-cf.historic.document.request.date.SecurityStatement.hint = Mae’n rhaid i’r dyddiad dechrau fod ar ôl Hydref 2019. Er enghraifft, 3 2021.
+cf.historic.document.request.date.SecurityStatement.hint = Er enghraifft, {0} {1}.
 
 cf.historic.document.request.to=Dyddiad dod i ben
 cf.historic.document.request.to.statements=I ba ddyddiad dod i ben y mae angen datganiadau arnoch?
@@ -100,7 +100,7 @@ cf.historic.document.request.whichEndDate.C79Certificate=ar gyfer pa ddyddiad do
 cf.historic.document.request.whichEndDate.PostponedVATStatement=ar gyfer pa ddyddiad dod i ben y mae angen tystysgrifau TAW o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.SecurityStatement=ar gyfer pa ddyddiad dod i ben y mae angen hysbysiad o ddatganiadau addasu arnoch?
 cf.historic.document.request.whichEndDate.DutyDefermentStatement=ar gyfer pa ddyddiad dod i ben y mae angen datganiadau gohirio tollau arnoch?
-cf.historic.document.request.endDate.hint = Er enghraifft, 3 2021.
+cf.historic.document.request.endDate.hint = Er enghraifft, {0} {1}.
 cf.historic.document.request.endDate.C79Certificate.hint = Er enghraifft, {0} {1}.
 
 cf.historic.document.request.whichEndDate.C79Certificate.hidden = pa ddyddiad dod i ben sydd ei angen arnoch ar gyfer Tystysgrifau TAW mewnforio?
@@ -146,7 +146,6 @@ cf.historic.document.request.form.error.date-range-too-wide=Gallwch ond gofyn am
 cf.historic.document.request.form.error.date-range-too-wide.c79=Gallwch ofyn am hyd at 6 mis o dystysgrifau yn unig ym mhob cais
 
 cf.historic.document.request.form.error.date-earlier-than-system-start-date.dd=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Medi 2019
-cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Hydref 2019
 
 cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am ddatganiadau sy’n hŷn na 6 mis
 cf.historic.document.request.form.error.date-too-recent.c79=Gallwch ofyn am dystysgrifau sy’n hŷn na 6 mis yn unig

@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions.*
 import forms.HistoricDateRequestPageFormProvider
-import models.{C79Certificate, DateMessages, FileRole, HistoricDates, Mode}
+import models.{C79Certificate, DateMessages, FileRole, HistoricDates, Mode, SecurityStatement}
 import navigation.Navigator
 import pages.{AccountNumber, HistoricDateRequestPage, IsNiAccount}
 import play.api.Logger
@@ -77,7 +77,7 @@ class HistoricDateRequestPageController @Inject() (
           DateMessages(fileRole),
           request.userAnswers.get(AccountNumber),
           request.userAnswers.get(IsNiAccount),
-          minTaxYear.startYear,
+          earliestDateMessage(fileRole),
           hintExampleDate
         )
       )
@@ -103,7 +103,7 @@ class HistoricDateRequestPageController @Inject() (
                   DateMessages(fileRole),
                   request.userAnswers.get(AccountNumber),
                   request.userAnswers.get(IsNiAccount),
-                  minTaxYear.startYear,
+                  earliestDateMessage(fileRole),
                   hintExampleDate
                 )
               )
@@ -124,7 +124,7 @@ class HistoricDateRequestPageController @Inject() (
                       DateMessages(fileRole),
                       request.userAnswers.get(AccountNumber),
                       request.userAnswers.get(IsNiAccount),
-                      minTaxYear.startYear,
+                      earliestDateMessage(fileRole),
                       hintExampleDate
                     )
                   )
@@ -150,16 +150,12 @@ class HistoricDateRequestPageController @Inject() (
         .withError("end", message)
         .fill(dates)
 
-    def validateTaxYear(end: LocalDate): Option[Form[HistoricDates]] = {
-      val message =
-        messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", minTaxYear.startYear.toString)
-
+    def validateTaxYear(end: LocalDate, message: String): Option[Form[HistoricDates]] =
       if (isDateMoreThanSixTaxYearsOld(end)) {
         Some(formWithError(message))
       } else {
         Some(form.withError("start", message).fill(dates))
       }
-    }
 
     (dates, fileRole) match {
       case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths < 0 =>
@@ -184,18 +180,18 @@ class HistoricDateRequestPageController @Inject() (
         )
 
       case (HistoricDates(start, end), _) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
-        if (fileRole == C79Certificate) {
-          validateTaxYear(end)
-        } else {
-          Some(
-            formWithError(
-              messages(
-                "cf.historic.document.request.form.error.date-too-far-in-past",
-                minTaxYear.startYear.toString,
-                minTaxYear.finishYear.toString
+        earliestDateMessage(fileRole) match {
+          case Some(message) => validateTaxYear(end, message)
+          case None          =>
+            Some(
+              formWithError(
+                messages(
+                  "cf.historic.document.request.form.error.date-too-far-in-past",
+                  minTaxYear.startYear.toString,
+                  minTaxYear.finishYear.toString
+                )
               )
             )
-          )
         }
 
       case _ => None
@@ -207,6 +203,15 @@ class HistoricDateRequestPageController @Inject() (
     val maximumNumberOfYears        = 6
     taxYearFor(currentDate).back(maximumNumberOfYears)
   }
+
+  private def earliestDateMessage(fileRole: FileRole)(implicit messages: Messages): Option[String] =
+    fileRole match {
+      case C79Certificate | SecurityStatement =>
+        Some(
+          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", minTaxYear.startYear.toString)
+        )
+      case _                                  => None
+    }
 
   private def hintExampleDate: LocalDate = LocalDateTime.now(clock).toLocalDate.minusYears(1)
 

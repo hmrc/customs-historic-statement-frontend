@@ -16,9 +16,8 @@
 
 package forms.mappings
 
-import models.{C79Certificate, DutyDefermentStatement, FileRole, PostponedVATStatement, SecurityStatement}
+import models.{C79Certificate, DutyDefermentStatement, FileRole, PostponedVATStatement}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
-import utils.Utils.emptyString
 
 import java.time.{LocalDate, LocalDateTime, Period}
 
@@ -27,12 +26,10 @@ trait Constraints {
   val offset                         = 6
   private val dayOne                 = 1
   private val pvatStatementMonth     = 1
-  private val etmpStatementMonth     = 10
   private val ddStatementMonth       = 9
   private val etmpAndDDStatementYear = 2019
   private val pvatStatementYear      = 2021
 
-  private lazy val etmpStatementsDate: LocalDate          = LocalDate.of(etmpAndDDStatementYear, etmpStatementMonth, dayOne)
   private lazy val pvatStatementsDate: LocalDate          = LocalDate.of(pvatStatementYear, pvatStatementMonth, dayOne)
   private lazy val dutyDefermentStatementsDate: LocalDate =
     LocalDate.of(etmpAndDDStatementYear, ddStatementMonth, dayOne)
@@ -53,24 +50,6 @@ trait Constraints {
         }
       case _ => Valid
     }
-
-  def earlierThanSystemStartDate(fileRole: FileRole): Constraint[LocalDate] = {
-    val messageKey = fileRole match {
-      case SecurityStatement =>
-        "cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities"
-
-      case _ => emptyString
-    }
-
-    Constraint {
-      case request
-          if request.isBefore(etmpStatementsDate) && fileRole != PostponedVATStatement &&
-            fileRole != DutyDefermentStatement && fileRole != C79Certificate =>
-        Invalid(ValidationError(messageKey))
-
-      case _ => Valid
-    }
-  }
 
   def earlierThanPVATStartDate(fileRole: FileRole): Constraint[LocalDate] = Constraint {
     case request if request.isBefore(pvatStatementsDate) && fileRole == PostponedVATStatement =>

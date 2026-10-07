@@ -334,11 +334,34 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
-    "keep the static hint examples and no inset for non-C79 journeys" in new Setup {
+    "display the CY-6 inset text and dynamic hint examples for notification of adjustment statements" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-29T00:00:00.000")
+
+      val request =
+        fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, SecurityStatement).url)
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe OK
+
+        val body = contentAsString(result)
+        val doc  = Jsoup.parse(body)
+
+        doc.getElementById("earliest-requestable-year").text() mustBe
+          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+        doc.getElementById("start-hint").text() mustBe
+          messages("cf.historic.document.request.date.SecurityStatement.hint", "9", "2025")
+        doc.getElementById("end-hint").text() mustBe
+          messages("cf.historic.document.request.endDate.hint", "9", "2025")
+        body must not include "October 2019"
+      }
+    }
+
+    "keep the static start date hint and no inset for journeys not yet using CY-6" in new Setup {
       override val app: Application = appWithFixedDate("2026-09-29T00:00:00.000")
 
       running(app) {
-        Seq(PostponedVATStatement, SecurityStatement, DutyDefermentStatement).foreach { fileRole =>
+        Seq(PostponedVATStatement, DutyDefermentStatement).foreach { fileRole =>
           val request =
             fakeRequest(GET, routes.HistoricDateRequestPageController.onPageLoad(NormalMode, fileRole).url)
 
@@ -349,18 +372,90 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
 
           withClue(s"$fileRole: ") {
             doc.getElementById("start-hint").text() mustBe messages(DateMessages(fileRole).startDate.hintMsgKey)
-            doc.getElementById("end-hint").text() mustBe messages("cf.historic.document.request.endDate.hint")
+            doc.getElementById("end-hint").text() mustBe
+              messages("cf.historic.document.request.endDate.hint", "9", "2025")
             Option(doc.getElementById("earliest-requestable-year")) mustBe None
           }
         }
       }
     }
 
-    "return BAD_REQUEST with the tax year error when the start date is before CY-6 for non-C79 journeys" in new Setup {
+    "return BAD_REQUEST with the CY-6 error on both dates when both are before April of CY-6 for notification of adjustment statements" in new Setup {
       override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
 
       val request =
         fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, SecurityStatement).url)
+          .withFormUrlEncodedBody(
+            "start.month" -> "8",
+            "start.year"  -> "2019",
+            "end.month"   -> "9",
+            "end.year"    -> "2019"
+          )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val body     = contentAsString(result)
+        val doc      = Jsoup.parse(body)
+        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+
+        doc.getElementById("start-error").text() must include(cy6Error)
+        doc.getElementById("end-error").text()   must include(cy6Error)
+        body                                     must not include "October 2019"
+        body                                     must not include "tax year"
+      }
+    }
+
+    "show the CY-6 error only on the start date when only the start date is before April of CY-6 for notification of adjustment statements" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request =
+        fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, SecurityStatement).url)
+          .withFormUrlEncodedBody(
+            "start.month" -> "3",
+            "start.year"  -> "2020",
+            "end.month"   -> "5",
+            "end.year"    -> "2020"
+          )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("start-error").text() must include(
+          messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", "2020")
+        )
+        Option(doc.getElementById("end-error")) mustBe None
+      }
+    }
+
+    "return SEE_OTHER when the start date is April of the CY-6 year for notification of adjustment statements" in new Setup {
+      when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request =
+        fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, SecurityStatement).url)
+          .withFormUrlEncodedBody(
+            "start.month" -> "4",
+            "start.year"  -> "2020",
+            "end.month"   -> "5",
+            "end.year"    -> "2020"
+          )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
+      }
+    }
+
+    "return BAD_REQUEST with the tax year error when the start date is before CY-6 for journeys not yet using CY-6" in new Setup {
+      override val app: Application = appWithFixedDate("2026-09-25T00:00:00.000")
+
+      val request =
+        fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, DutyDefermentStatement).url)
           .withFormUrlEncodedBody(
             "start.month" -> "1",
             "start.year"  -> "2020",
@@ -391,7 +486,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
-    "return BAD_REQUEST when the start date is earlier than system start date for securities statement" in new Setup {
+    "return BAD_REQUEST when the start date is before April of CY-6 for securities statement" in new Setup {
       val request = fakeRequest(
         POST,
         routes.HistoricDateRequestPageController.onSubmit(NormalMode, SecurityStatement).url
