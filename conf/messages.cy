@@ -138,7 +138,7 @@ cf.historic.document.request.confirmation.link.help=Cofrestrwch i gymryd rhan me
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau o ar ôl blwyddyn dreth {0} i {1}.
-cf.historic.document.request.form.error.date-too-far-in-past.c79=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ebrill {0}
+cf.historic.document.request.form.error.date-too-far-in-past.c79=Gallwch ofyn am dystysgrifau a anfonwyd ers mis Ebrill {0} yn unig
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis Ionawr 2021
 cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=Ni allwch nodi dyddiad cyn mis Medi 2019

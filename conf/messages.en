@@ -138,7 +138,7 @@ cf.historic.document.request.confirmation.link.help=Sign up to take part in user
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=You can only request statements from after the {0} to {1} tax year.
-cf.historic.document.request.form.error.date-too-far-in-past.c79=You can only request statements issued since April {0}
+cf.historic.document.request.form.error.date-too-far-in-past.c79=You can only request certificates issued since April {0}
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=The to date must be on or after the from date
 cf.historic.document.request.form.error.date-earlier-than-pvat-start-date=You can only request statements issued since January 2021
 cf.historic.document.request.form.error.date-earlier-than-dutydefermentstatement-start-date=You cannot enter a date before September 2019

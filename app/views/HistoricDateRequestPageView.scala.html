@@ -65,7 +65,7 @@
 
             @if(fileRole == C79Certificate) {
                 @inset(
-                    messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", earliestRequestableYear.toString),
+                    s"""${messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", earliestRequestableYear.toString)}.""",
                     id = Some("earliest-requestable-year")
                 )
             }
