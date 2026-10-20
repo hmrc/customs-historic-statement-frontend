@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions.*
 import forms.HistoricDateRequestPageFormProvider
-import models.{C79Certificate, DateMessages, FileRole, HistoricDates, Mode}
+import models.{C79Certificate, DateMessages, FileRole, HistoricDates, Mode, PostponedVATStatement}
 import navigation.Navigator
 import pages.{AccountNumber, HistoricDateRequestPage, IsNiAccount}
 import play.api.Logger
@@ -55,6 +55,8 @@ class HistoricDateRequestPageController @Inject() (
 
   private val log = Logger(this.getClass)
 
+  private val pvatStartDate: LocalDate = LocalDate.of(2021, 1, 1)
+
   def onPageLoad(mode: Mode, fileRole: FileRole): Action[AnyContent] = (identify andThen getData andThen requireData) {
 
     implicit request =>
@@ -77,7 +79,7 @@ class HistoricDateRequestPageController @Inject() (
           DateMessages(fileRole),
           request.userAnswers.get(AccountNumber),
           request.userAnswers.get(IsNiAccount),
-          minTaxYear.startYear,
+          earliestDateMessage(fileRole),
           hintExampleDate
         )
       )
@@ -103,7 +105,7 @@ class HistoricDateRequestPageController @Inject() (
                   DateMessages(fileRole),
                   request.userAnswers.get(AccountNumber),
                   request.userAnswers.get(IsNiAccount),
-                  minTaxYear.startYear,
+                  earliestDateMessage(fileRole),
                   hintExampleDate
                 )
               )
@@ -124,7 +126,7 @@ class HistoricDateRequestPageController @Inject() (
                       DateMessages(fileRole),
                       request.userAnswers.get(AccountNumber),
                       request.userAnswers.get(IsNiAccount),
-                      minTaxYear.startYear,
+                      earliestDateMessage(fileRole),
                       hintExampleDate
                     )
                   )
@@ -150,16 +152,12 @@ class HistoricDateRequestPageController @Inject() (
         .withError("end", message)
         .fill(dates)
 
-    def validateTaxYear(end: LocalDate): Option[Form[HistoricDates]] = {
-      val message =
-        messages("cf.historic.document.request.form.error.date-too-far-in-past.c79", minTaxYear.startYear.toString)
-
-      if (isDateMoreThanSixTaxYearsOld(end)) {
+    def validateTaxYear(end: LocalDate, message: String): Option[Form[HistoricDates]] =
+      if (isBeforeEarliestDate(end, fileRole)) {
         Some(formWithError(message))
       } else {
         Some(form.withError("start", message).fill(dates))
       }
-    }
 
     (dates, fileRole) match {
       case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths < 0 =>
@@ -183,20 +181,9 @@ class HistoricDateRequestPageController @Inject() (
             .fill(dates)
         )
 
-      case (HistoricDates(start, end), _) if isDateMoreThanSixTaxYearsOld(start) || isDateMoreThanSixTaxYearsOld(end) =>
-        if (fileRole == C79Certificate) {
-          validateTaxYear(end)
-        } else {
-          Some(
-            formWithError(
-              messages(
-                "cf.historic.document.request.form.error.date-too-far-in-past",
-                minTaxYear.startYear.toString,
-                minTaxYear.finishYear.toString
-              )
-            )
-          )
-        }
+      case (HistoricDates(start, end), _)
+          if isBeforeEarliestDate(start, fileRole) || isBeforeEarliestDate(end, fileRole) =>
+        validateTaxYear(end, earliestDateMessage(fileRole))
 
       case _ => None
     }
@@ -208,12 +195,29 @@ class HistoricDateRequestPageController @Inject() (
     taxYearFor(currentDate).back(maximumNumberOfYears)
   }
 
+  private def earliestDate(fileRole: FileRole): LocalDate = {
+    val cy6StartDate = minTaxYear.starts.withDayOfMonth(1)
+
+    fileRole match {
+      case PostponedVATStatement if pvatStartDate.isAfter(cy6StartDate) => pvatStartDate
+      case _                                                            => cy6StartDate
+    }
+  }
+
+  private def earliestDateMessage(fileRole: FileRole)(implicit messages: Messages): String = {
+    val date = earliestDate(fileRole)
+
+    messages(
+      "cf.historic.document.request.form.error.date-too-far-in-past",
+      messages(s"month.${date.getMonthValue}"),
+      date.getYear.toString
+    )
+  }
+
   private def hintExampleDate: LocalDate = LocalDateTime.now(clock).toLocalDate.minusYears(1)
 
-  private def isDateMoreThanSixTaxYearsOld(requestedDate: LocalDate): Boolean = {
-    val dayOfMonthThatTaxYearStartsOn = 6
-    minTaxYear.starts.isAfter(requestedDate.withDayOfMonth(dayOfMonthThatTaxYearStartsOn))
-  }
+  private def isBeforeEarliestDate(requestedDate: LocalDate, fileRole: FileRole): Boolean =
+    requestedDate.withDayOfMonth(1).isBefore(earliestDate(fileRole))
 
   private def logMessageForAnalytics(fileRole: FileRole, eori: String, formWithErrors: Form[HistoricDates])(implicit
     messages: Messages

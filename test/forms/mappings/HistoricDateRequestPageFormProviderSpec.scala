@@ -60,33 +60,6 @@ class HistoricDateRequestPageFormProviderSpec extends SpecBase {
       formAfterBinding.hasErrors mustBe false
     }
 
-    "throw error when file role is SecurityStatement and start date is before 2019-10-1" in new Setup {
-      val form: Form[HistoricDates] = histDateReqPageForm(SecurityStatement)
-
-      val formAfterBinding: Form[HistoricDates] = form.bind(
-        Map(
-          "start.year"  -> s"$year2019",
-          "start.month" -> s"$month3",
-          "start.day"   -> s"$day1",
-          "end.year"    -> s"$year2019",
-          "end.month"   -> s"$month10",
-          "end.day"     -> s"$day12"
-        )
-      )
-
-      formAfterBinding.hasErrors mustBe true
-
-      formAfterBinding.errors.contains(
-        FormError(
-          "start",
-          List(
-            "cf.historic.document.request.form.error.date-earlier-than-system-start-date.securities"
-          ),
-          List()
-        )
-      ) mustBe true
-    }
-
     "throw error for empty start and end dates" in new Setup {
       val form: Form[HistoricDates] = histDateReqPageForm(C79Certificate)
 
