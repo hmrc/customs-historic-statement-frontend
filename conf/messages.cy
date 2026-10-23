@@ -138,13 +138,18 @@ cf.historic.document.request.confirmation.link.help=Cofrestrwch i gymryd rhan me
 
 #HistoricDataRequestPageView
 cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis {0} {1}
+# TODO Welsh translation required
+cf.historic.document.request.form.error.start.date-too-far-in-past=Start date must be after {0} {1}
+cf.historic.document.request.form.error.end.date-too-far-in-past=End date must be after {0} {1}
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’
 cf.historic.document.request.form.error.date-range-too-wide=Gallwch ond gofyn am hyd at 6 mis o ddatganiadau ym mhob cais
-cf.historic.document.request.form.error.date-range-too-wide.c79=Gallwch ofyn am hyd at 6 mis o dystysgrifau yn unig ym mhob cais
 
 
-cf.historic.document.request.form.error.date-too-recent=Gallwch ond gofyn am ddatganiadau sy’n hŷn na 6 mis
-cf.historic.document.request.form.error.date-too-recent.c79=Gallwch ofyn am dystysgrifau sy’n hŷn na 6 mis yn unig
+# TODO Welsh translation required
+cf.historic.document.request.form.error.start.date-in-future=Start date must be in the past
+cf.historic.document.request.form.error.end.date-in-future=End date must be in the past
+cf.historic.document.request.form.error.start.date-too-recent=Start date must be more than 6 months ago
+cf.historic.document.request.form.error.end.date-too-recent=End date must be more than 6 months ago
 cf.historic.document.request.form.error.start.month.invalid=Nodwch fis rhwng 1 a 12 ar gyfer y dyddiad dechrau
 cf.historic.document.request.form.error.end.month.invalid=Nodwch fis rhwng 1 a 12 ar gyfer y dyddiad dod i ben
 cf.historic.document.request.form.error.start.year.invalid=Nodwch flwyddyn go iawn ar gyfer y dyddiad dechrau

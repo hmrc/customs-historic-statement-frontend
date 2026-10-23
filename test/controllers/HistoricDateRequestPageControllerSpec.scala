@@ -217,15 +217,20 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         status(result) mustBe BAD_REQUEST
 
         val body = contentAsString(result)
-        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020"))
+        body must include(
+          messages("cf.historic.document.request.form.error.start.date-too-far-in-past", "April", "2020")
+        )
         body must not include "October 2019"
         body must not include "tax year"
 
-        val doc      = Jsoup.parse(body)
-        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
+        val doc           = Jsoup.parse(body)
+        val cy6StartError =
+          messages("cf.historic.document.request.form.error.start.date-too-far-in-past", "April", "2020")
+        val cy6EndError   =
+          messages("cf.historic.document.request.form.error.end.date-too-far-in-past", "April", "2020")
 
-        doc.getElementById("start-error").text() must include(cy6Error)
-        doc.getElementById("end-error").text()   must include(cy6Error)
+        doc.getElementById("start-error").text() must include(cy6StartError)
+        doc.getElementById("end-error").text()   must include(cy6EndError)
       }
     }
 
@@ -242,7 +247,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc = Jsoup.parse(contentAsString(result))
 
         doc.getElementById("start-error").text() must include(
-          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
+          messages("cf.historic.document.request.form.error.start.date-too-far-in-past", "April", "2020")
         )
         Option(doc.getElementById("end-error")) mustBe None
       }
@@ -396,12 +401,15 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val result = route(app, request).value
         status(result) mustBe BAD_REQUEST
 
-        val body     = contentAsString(result)
-        val doc      = Jsoup.parse(body)
-        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
+        val body          = contentAsString(result)
+        val doc           = Jsoup.parse(body)
+        val cy6StartError =
+          messages("cf.historic.document.request.form.error.start.date-too-far-in-past", "April", "2020")
+        val cy6EndError   =
+          messages("cf.historic.document.request.form.error.end.date-too-far-in-past", "April", "2020")
 
-        doc.getElementById("start-error").text() must include(cy6Error)
-        doc.getElementById("end-error").text()   must include(cy6Error)
+        doc.getElementById("start-error").text() must include(cy6StartError)
+        doc.getElementById("end-error").text()   must include(cy6EndError)
         body                                     must not include "October 2019"
         body                                     must not include "tax year"
       }
@@ -426,7 +434,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc = Jsoup.parse(contentAsString(result))
 
         doc.getElementById("start-error").text() must include(
-          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
+          messages("cf.historic.document.request.form.error.start.date-too-far-in-past", "April", "2020")
         )
         Option(doc.getElementById("end-error")) mustBe None
       }
@@ -467,12 +475,15 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val result = route(app, request).value
         status(result) mustBe BAD_REQUEST
 
-        val body     = contentAsString(result)
-        val doc      = Jsoup.parse(body)
-        val cy6Error = messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
+        val body          = contentAsString(result)
+        val doc           = Jsoup.parse(body)
+        val cy6StartError =
+          messages("cf.historic.document.request.form.error.start.date-too-far-in-past", "April", "2020")
+        val cy6EndError   =
+          messages("cf.historic.document.request.form.error.end.date-too-far-in-past", "April", "2020")
 
-        doc.getElementById("start-error").text() must include(cy6Error)
-        doc.getElementById("end-error").text()   must include(cy6Error)
+        doc.getElementById("start-error").text() must include(cy6StartError)
+        doc.getElementById("end-error").text()   must include(cy6EndError)
         body                                     must not include "September 2019"
         body                                     must not include "tax year"
       }
@@ -497,7 +508,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc = Jsoup.parse(contentAsString(result))
 
         doc.getElementById("start-error").text() must include(
-          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
+          messages("cf.historic.document.request.form.error.start.date-too-far-in-past", "April", "2020")
         )
         Option(doc.getElementById("end-error")) mustBe None
       }
@@ -586,11 +597,14 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val result = route(app, request).value
         status(result) mustBe BAD_REQUEST
 
-        val doc       = Jsoup.parse(contentAsString(result))
-        val pvatError = messages("cf.historic.document.request.form.error.date-too-far-in-past", "January", "2021")
+        val doc            = Jsoup.parse(contentAsString(result))
+        val pvatStartError =
+          messages("cf.historic.document.request.form.error.start.date-too-far-in-past", "January", "2021")
+        val pvatEndError   =
+          messages("cf.historic.document.request.form.error.end.date-too-far-in-past", "January", "2021")
 
-        doc.getElementById("start-error").text() must include(pvatError)
-        doc.getElementById("end-error").text()   must include(pvatError)
+        doc.getElementById("start-error").text() must include(pvatStartError)
+        doc.getElementById("end-error").text()   must include(pvatEndError)
       }
     }
 
@@ -613,7 +627,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc = Jsoup.parse(contentAsString(result))
 
         doc.getElementById("start-error").text() must include(
-          messages("cf.historic.document.request.form.error.date-too-far-in-past", "January", "2021")
+          messages("cf.historic.document.request.form.error.start.date-too-far-in-past", "January", "2021")
         )
         Option(doc.getElementById("end-error")) mustBe None
       }
@@ -655,7 +669,9 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         status(result) mustBe BAD_REQUEST
 
         val body = contentAsString(result)
-        body must include(messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2021"))
+        body must include(
+          messages("cf.historic.document.request.form.error.start.date-too-far-in-past", "April", "2021")
+        )
         body must not include "January 2021"
       }
     }
@@ -845,6 +861,161 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
       }
     }
 
+    "show the in-the-past error on the end date when only the end date is in the future" in new Setup {
+      override val app: Application = appWithFixedDate("2026-10-14T00:00:00.000")
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "3", "start.year" -> "2026", "end.month" -> "11", "end.year" -> "2026")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("end-error").text() must include(
+          messages("cf.historic.document.request.form.error.end.date-in-future")
+        )
+        Option(doc.getElementById("start-error")) mustBe None
+      }
+    }
+
+    "show the in-the-past error on both dates when both are in the future" in new Setup {
+      override val app: Application = appWithFixedDate("2026-10-14T00:00:00.000")
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody(
+          "start.month" -> "11",
+          "start.year"  -> "2026",
+          "end.month"   -> "12",
+          "end.year"    -> "2026"
+        )
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("start-error").text() must include(
+          messages("cf.historic.document.request.form.error.start.date-in-future")
+        )
+        doc.getElementById("end-error").text()   must include(
+          messages("cf.historic.document.request.form.error.end.date-in-future")
+        )
+      }
+    }
+
+    "show the too-recent error on the end date when only the end date is less than 6 months old" in new Setup {
+      override val app: Application = appWithFixedDate("2026-10-14T00:00:00.000")
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "3", "start.year" -> "2026", "end.month" -> "8", "end.year" -> "2026")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("end-error").text() must include(
+          messages("cf.historic.document.request.form.error.end.date-too-recent")
+        )
+        Option(doc.getElementById("start-error")) mustBe None
+      }
+    }
+
+    "show the too-recent error on both dates when both are less than 6 months old" in new Setup {
+      override val app: Application = appWithFixedDate("2026-10-14T00:00:00.000")
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "6", "start.year" -> "2026", "end.month" -> "8", "end.year" -> "2026")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("start-error").text() must include(
+          messages("cf.historic.document.request.form.error.start.date-too-recent")
+        )
+        doc.getElementById("end-error").text()   must include(
+          messages("cf.historic.document.request.form.error.end.date-too-recent")
+        )
+      }
+    }
+
+    "show only the in-the-past error on the end date when the end date is in the future and the start date is too recent" in new Setup {
+      override val app: Application = appWithFixedDate("2026-10-14T00:00:00.000")
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "4", "start.year" -> "2026", "end.month" -> "11", "end.year" -> "2026")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("end-error").text() must include(
+          messages("cf.historic.document.request.form.error.end.date-in-future")
+        )
+        Option(doc.getElementById("start-error")) mustBe None
+      }
+    }
+
+    "show only the in-the-past error on the start date when the start date is in the future and after the end date" in new Setup {
+      override val app: Application = appWithFixedDate("2026-10-14T00:00:00.000")
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "11", "start.year" -> "2026", "end.month" -> "9", "end.year" -> "2026")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("start-error").text() must include(
+          messages("cf.historic.document.request.form.error.start.date-in-future")
+        )
+        Option(doc.getElementById("end-error")) mustBe None
+      }
+    }
+
+    "show the range-too-wide error on the end date when the range is more than 6 months" in new Setup {
+      override val app: Application = appWithFixedDate("2026-10-14T00:00:00.000")
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "1", "start.year" -> "2025", "end.month" -> "7", "end.year" -> "2025")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe BAD_REQUEST
+
+        val doc = Jsoup.parse(contentAsString(result))
+
+        doc.getElementById("end-error").text() must include(
+          messages("cf.historic.document.request.form.error.date-range-too-wide")
+        )
+        Option(doc.getElementById("start-error")) mustBe None
+      }
+    }
+
+    "return SEE_OTHER when the end date is exactly 6 months old" in new Setup {
+      override val app: Application = appWithFixedDate("2026-10-14T00:00:00.000")
+      when(mockSessionRepository.set(any)).thenReturn(Future.successful(true))
+
+      val request = fakeRequest(POST, routes.HistoricDateRequestPageController.onSubmit(NormalMode, C79Certificate).url)
+        .withFormUrlEncodedBody("start.month" -> "1", "start.year" -> "2026", "end.month" -> "3", "end.year" -> "2026")
+
+      running(app) {
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
+      }
+    }
+
     "return BAD_REQUEST when the requested data exceeds 6 years in the past" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
       val fixedInstant: Instant                    = LocalDateTime.parse("2060-01-01T00:00:00.000").toInstant(ZoneOffset.UTC)
@@ -968,13 +1139,9 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
 
             status(result) mustBe BAD_REQUEST
 
-            val errorMsg = if (fileRole == C79Certificate) {
-              messages("cf.historic.document.request.form.error.date-range-too-wide.c79")
-            } else {
+            contentAsString(result) must include(
               messages("cf.historic.document.request.form.error.date-range-too-wide")
-            }
-
-            contentAsString(result).contains(errorMsg) mustBe true
+            )
           }
         }
       }

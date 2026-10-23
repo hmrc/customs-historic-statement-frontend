@@ -67,9 +67,8 @@ object TestData {
   val fiveHundread = 500L
   val ninetynine   = 99L
 
-  val offset     = 10
-  val size       = 1024L
-  val yearLength = 4
+  val offset = 10
+  val size   = 1024L
 
   val eori                              = "GB11111"
   val emailId                           = "test@test.com"
