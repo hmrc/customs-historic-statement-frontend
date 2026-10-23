@@ -19,11 +19,11 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions.*
 import forms.HistoricDateRequestPageFormProvider
-import models.{C79Certificate, DateMessages, FileRole, HistoricDates, Mode, PostponedVATStatement}
+import models.{DateMessages, FileRole, HistoricDates, Mode, PostponedVATStatement}
 import navigation.Navigator
 import pages.{AccountNumber, HistoricDateRequestPage, IsNiAccount}
 import play.api.Logger
-import play.api.data.Form
+import play.api.data.{Form, FormError}
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -141,58 +141,81 @@ class HistoricDateRequestPageController @Inject() (
         )
     }
 
+  private val errorKeyPrefix = "cf.historic.document.request.form.error."
+
   private def customValidation(dates: HistoricDates, form: Form[HistoricDates], fileRole: FileRole)(implicit
     messages: Messages
   ): Option[Form[HistoricDates]] = {
-    val maximumNumberOfMonths = 6
+    val HistoricDates(start, end) = dates
 
-    def formWithError(message: String): Form[HistoricDates] =
-      form
-        .withError("start", message)
-        .withError("end", message)
-        .fill(dates)
+    val futureDateErrors   = Seq(futureDateError("start", start), futureDateError("end", end)).flatten
+    val tooRecentErrors    = Seq(tooRecentError("start", start), tooRecentError("end", end)).flatten
+    val tooFarInPastErrors =
+      Seq(tooFarInPastError("start", start, fileRole), tooFarInPastError("end", end, fileRole)).flatten
 
-    def validateTaxYear(end: LocalDate, message: String): Option[Form[HistoricDates]] =
-      if (isBeforeEarliestDate(end, fileRole)) {
-        Some(formWithError(message))
+    val errors: Seq[FormError] =
+      if (futureDateErrors.nonEmpty) {
+        futureDateErrors
+      } else if (end.isBefore(start)) {
+        Seq(FormError("end", errorKeyPrefix + "to-date-must-be-later-than-from-date"))
+      } else if (tooRecentErrors.nonEmpty) {
+        tooRecentErrors
+      } else if (isRangeTooWide(start, end)) {
+        Seq(FormError("end", errorKeyPrefix + "date-range-too-wide"))
       } else {
-        Some(form.withError("start", message).fill(dates))
+        tooFarInPastErrors
       }
 
-    (dates, fileRole) match {
-      case (HistoricDates(start, end), _) if Period.between(start, end).toTotalMonths < 0 =>
-        Some(
-          form
-            .withError("end", "cf.historic.document.request.form.error.to-date-must-be-later-than-from-date")
-            .fill(dates)
-        )
+    if (errors.isEmpty) None else Some(errors.foldLeft(form)(_.withError(_)).fill(dates))
+  }
 
-      case (HistoricDates(start, end), v) if Period.between(start, end).toTotalMonths >= maximumNumberOfMonths =>
-        Some(
-          form
-            .withError(
-              "end",
-              if (v == C79Certificate) {
-                "cf.historic.document.request.form.error.date-range-too-wide.c79"
-              } else {
-                "cf.historic.document.request.form.error.date-range-too-wide"
-              }
-            )
-            .fill(dates)
-        )
+  private def isRangeTooWide(start: LocalDate, end: LocalDate): Boolean = {
+    val maximumNumberOfMonths = 6
+    Period.between(start, end).toTotalMonths >= maximumNumberOfMonths
+  }
 
-      case (HistoricDates(start, end), _)
-          if isBeforeEarliestDate(start, fileRole) || isBeforeEarliestDate(end, fileRole) =>
-        validateTaxYear(end, earliestDateMessage(fileRole))
+  private def futureDateError(field: String, date: LocalDate): Option[FormError] =
+    if (date.isAfter(today)) {
+      Some(FormError(field, s"$errorKeyPrefix$field.date-in-future"))
+    } else {
+      None
+    }
 
-      case _ => None
+  private def tooRecentError(field: String, date: LocalDate): Option[FormError] = {
+    val minimumAgeInMonths = 6
+
+    if (Period.between(date, today.minusMonths(1)).toTotalMonths < minimumAgeInMonths) {
+      Some(FormError(field, s"$errorKeyPrefix$field.date-too-recent"))
+    } else {
+      None
     }
   }
 
+  private def tooFarInPastError(field: String, date: LocalDate, fileRole: FileRole)(implicit
+    messages: Messages
+  ): Option[FormError] =
+    if (isBeforeEarliestDate(date, fileRole)) {
+      val earliest = earliestDate(fileRole)
+
+      Some(
+        FormError(
+          field,
+          messages(
+            s"$errorKeyPrefix$field.date-too-far-in-past",
+            messages(s"month.${earliest.getMonthValue}"),
+            earliest.getYear.toString
+          )
+        )
+      )
+    } else {
+      None
+    }
+
+  private def today: LocalDate = LocalDateTime.now(clock).toLocalDate
+
   private def minTaxYear: TaxYear = {
-    lazy val currentDate: LocalDate = LocalDateTime.now(clock).toLocalDate
-    val maximumNumberOfYears        = 6
-    taxYearFor(currentDate).back(maximumNumberOfYears)
+    val maximumNumberOfYears = 6
+    taxYearFor(today).back(maximumNumberOfYears)
   }
 
   private def earliestDate(fileRole: FileRole): LocalDate = {
@@ -208,13 +231,13 @@ class HistoricDateRequestPageController @Inject() (
     val date = earliestDate(fileRole)
 
     messages(
-      "cf.historic.document.request.form.error.date-too-far-in-past",
+      s"cf.historic.document.request.inset.earliest-date.$fileRole",
       messages(s"month.${date.getMonthValue}"),
       date.getYear.toString
     )
   }
 
-  private def hintExampleDate: LocalDate = LocalDateTime.now(clock).toLocalDate.minusYears(1)
+  private def hintExampleDate: LocalDate = today.minusYears(1)
 
   private def isBeforeEarliestDate(requestedDate: LocalDate, fileRole: FileRole): Boolean =
     requestedDate.withDayOfMonth(1).isBefore(earliestDate(fileRole))
