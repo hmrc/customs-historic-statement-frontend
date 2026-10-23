@@ -137,57 +137,58 @@ cf.historic.document.request.confirmation.body-text.help=Mae eich adborth yn wer
 cf.historic.document.request.confirmation.link.help=Cofrestrwch i gymryd rhan mewn ymchwil defnyddwyr (yn agor tab newydd)
 
 #HistoricDataRequestPageView
-cf.historic.document.request.form.error.date-too-far-in-past=Gallwch ond gofyn am ddatganiadau a anfonwyd ers mis {0} {1}
-# TODO Welsh translation required
-cf.historic.document.request.form.error.start.date-too-far-in-past=Start date must be after {0} {1}
-cf.historic.document.request.form.error.end.date-too-far-in-past=End date must be after {0} {1}
-cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad ‘hyd at’ fod ar neu ar ôl y dyddiad ‘o’
-cf.historic.document.request.form.error.date-range-too-wide=Gallwch ond gofyn am hyd at 6 mis o ddatganiadau ym mhob cais
+cf.historic.document.request.inset.earliest-date.C79Certificate=Gallwch ond gofyn am dystysgrifau a gyhoeddwyd ers mis {0} {1}
+cf.historic.document.request.inset.earliest-date.PostponedVATStatement=Gallwch ond gofyn am ddatganiadau a gyhoeddwyd ers mis {0} {1}
+cf.historic.document.request.inset.earliest-date.SecurityStatement=Gallwch ond gofyn am ddatganiadau a gyhoeddwyd ers mis {0} {1}
+cf.historic.document.request.inset.earliest-date.DutyDefermentStatement=Gallwch ond gofyn am ddatganiadau a gyhoeddwyd ers mis {0} {1}
+cf.historic.document.request.form.error.start.date-too-far-in-past=Mae’n rhaid i’r dyddiad dechrau fod ar ôl mis {0} {1}
+cf.historic.document.request.form.error.end.date-too-far-in-past=Mae’n rhaid i’r dyddiad dod i ben fod ar ôl mis {0} {1}
+cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad dod i ben fod naill ai ar neu ar ôl y dyddiad dechrau
+cf.historic.document.request.form.error.date-range-too-wide=Mae’n rhaid i’r dyddiad dod i ben fod o fewn 6 mis i’r dyddiad dechrau
 
 
-# TODO Welsh translation required
-cf.historic.document.request.form.error.start.date-in-future=Start date must be in the past
-cf.historic.document.request.form.error.end.date-in-future=End date must be in the past
-cf.historic.document.request.form.error.start.date-too-recent=Start date must be more than 6 months ago
-cf.historic.document.request.form.error.end.date-too-recent=End date must be more than 6 months ago
-cf.historic.document.request.form.error.start.month.invalid=Nodwch fis rhwng 1 a 12 ar gyfer y dyddiad dechrau
-cf.historic.document.request.form.error.end.month.invalid=Nodwch fis rhwng 1 a 12 ar gyfer y dyddiad dod i ben
+cf.historic.document.request.form.error.start.date-in-future=Mae’n rhaid i’r dyddiad dechrau fod yn y gorffennol
+cf.historic.document.request.form.error.end.date-in-future=Mae’n rhaid i’r dyddiad dod i ben fod yn y gorffennol
+cf.historic.document.request.form.error.start.date-too-recent=Mae’n rhaid i’r dyddiad dechrau fod yn fwy na 6 mis yn ôl
+cf.historic.document.request.form.error.end.date-too-recent=Mae’n rhaid i’r dyddiad dod i ben fod yn fwy na 6 mis yn ôl
+cf.historic.document.request.form.error.start.month.invalid=Mae’n rhaid i fis y dyddiad dechrau fod yn rhif rhwng 1 a 12
+cf.historic.document.request.form.error.end.month.invalid=Mae’n rhaid i fis y dyddiad dod i ben fod yn rhif rhwng 1 a 12
 cf.historic.document.request.form.error.start.year.invalid=Nodwch flwyddyn go iawn ar gyfer y dyddiad dechrau
 cf.historic.document.request.form.error.end.year.invalid=Nodwch flwyddyn go iawn ar gyfer y dyddiad dod i ben
-cf.historic.document.request.form.error.start.date.invalid=Nodwch ddyddiad go iawn ar gyfer y dyddiad dechrau
-cf.historic.document.request.form.error.end.date.invalid=Nodwch ddyddiad go iawn ar gyfer y dyddiad dod i ben
+cf.historic.document.request.form.error.start.date.invalid=Mae’n rhaid i fis y dyddiad dechrau fod yn rhif rhwng 1 a 12, ac mae’n rhaid i’r flwyddyn fod yn flwyddyn go iawn
+cf.historic.document.request.form.error.end.date.invalid=Mae’n rhaid i fis y dyddiad dod i ben fod yn rhif rhwng 1 a 12, ac mae’n rhaid i’r flwyddyn fod yn flwyddyn go iawn
 
 # Duty Deferment Statement Error Messages
-cf.historic.document.request.form.error.start.date-missing.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch o ba ddyddiad yr hoffech ddechrau eu cael
-cf.historic.document.request.form.error.end.date-missing.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba ddyddiad yr hoffech eu cael
-cf.historic.document.request.form.error.start.year.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch o ba flwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.end.year.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba flwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.start.month.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch o ba fis yr hoffech eu cael
-cf.historic.document.request.form.error.end.month.date-number-invalid.DutyDefermentStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis yr hoffech eu cael
+cf.historic.document.request.form.error.start.date-missing.DutyDefermentStatement=Nodwch fis a blwyddyn dechrau
+cf.historic.document.request.form.error.end.date-missing.DutyDefermentStatement=Nodwch fis a blwyddyn dod i ben
+cf.historic.document.request.form.error.start.year.date-number-invalid.DutyDefermentStatement=Mae’n rhaid i’r dyddiad dechrau gynnwys blwyddyn
+cf.historic.document.request.form.error.end.year.date-number-invalid.DutyDefermentStatement=Mae’n rhaid i’r dyddiad dod i ben gynnwys blwyddyn
+cf.historic.document.request.form.error.start.month.date-number-invalid.DutyDefermentStatement=Mae’n rhaid i’r dyddiad dechrau gynnwys mis
+cf.historic.document.request.form.error.end.month.date-number-invalid.DutyDefermentStatement=Mae’n rhaid i’r dyddiad dod i ben gynnwys mis
 
 # Postponed VAT Statement Error Messages
-cf.historic.document.request.form.error.start.date-missing.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch o ba ddyddiad yr hoffech ddechrau eu cael
-cf.historic.document.request.form.error.end.date-missing.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba ddyddiad yr hoffech eu cael
-cf.historic.document.request.form.error.start.year.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch o ba flwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.end.year.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba flwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.start.month.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch o ba fis yr hoffech eu cael
-cf.historic.document.request.form.error.end.month.date-number-invalid.PostponedVATStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis yr hoffech eu cael
+cf.historic.document.request.form.error.start.date-missing.PostponedVATStatement=Nodwch fis a blwyddyn dechrau
+cf.historic.document.request.form.error.end.date-missing.PostponedVATStatement=Nodwch fis a blwyddyn dod i ben
+cf.historic.document.request.form.error.start.year.date-number-invalid.PostponedVATStatement=Mae’n rhaid i’r dyddiad dechrau gynnwys blwyddyn
+cf.historic.document.request.form.error.end.year.date-number-invalid.PostponedVATStatement=Mae’n rhaid i’r dyddiad dod i ben gynnwys blwyddyn
+cf.historic.document.request.form.error.start.month.date-number-invalid.PostponedVATStatement=Mae’n rhaid i’r dyddiad dechrau gynnwys mis
+cf.historic.document.request.form.error.end.month.date-number-invalid.PostponedVATStatement=Mae’n rhaid i’r dyddiad dod i ben gynnwys mis
 
 # Security Statement Error Messages
-cf.historic.document.request.form.error.start.date-missing.SecurityStatement=Yn eich cais am ddatganiadau, nodwch o ba ddyddiad yr hoffech ddechrau eu cael
-cf.historic.document.request.form.error.end.date-missing.SecurityStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba ddyddiad yr hoffech eu cael
-cf.historic.document.request.form.error.start.year.date-number-invalid.SecurityStatement=Yn eich cais am ddatganiadau, nodwch o ba flwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.end.year.date-number-invalid.SecurityStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba flwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.start.month.date-number-invalid.SecurityStatement=Yn eich cais am ddatganiadau, nodwch o ba fis yr hoffech eu cael
-cf.historic.document.request.form.error.end.month.date-number-invalid.SecurityStatement=Yn eich cais am ddatganiadau, nodwch hyd at ba fis yr hoffech eu cael
+cf.historic.document.request.form.error.start.date-missing.SecurityStatement=Nodwch fis a blwyddyn dechrau
+cf.historic.document.request.form.error.end.date-missing.SecurityStatement=Nodwch fis a blwyddyn dod i ben
+cf.historic.document.request.form.error.start.year.date-number-invalid.SecurityStatement=Mae’n rhaid i’r dyddiad dechrau gynnwys blwyddyn
+cf.historic.document.request.form.error.end.year.date-number-invalid.SecurityStatement=Mae’n rhaid i’r dyddiad dod i ben gynnwys blwyddyn
+cf.historic.document.request.form.error.start.month.date-number-invalid.SecurityStatement=Mae’n rhaid i’r dyddiad dechrau gynnwys mis
+cf.historic.document.request.form.error.end.month.date-number-invalid.SecurityStatement=Mae’n rhaid i’r dyddiad dod i ben gynnwys mis
 
 # C79 Certificate Statement Error Messages
-cf.historic.document.request.form.error.start.date-missing.C79Certificate=Yn eich cais am dystysgrifau, nodwch o ba ddyddiad yr hoffech ddechrau eu cael
-cf.historic.document.request.form.error.end.date-missing.C79Certificate=Yn eich cais am dystysgrifau, nodwch hyd at ba ddyddiad yr hoffech eu cael
-cf.historic.document.request.form.error.start.year.date-number-invalid.C79Certificate=Yn eich cais am dystysgrifau, nodwch o ba flwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.end.year.date-number-invalid.C79Certificate=Yn eich cais am dystysgrifau, nodwch hyd at ba flwyddyn yr hoffech eu cael
-cf.historic.document.request.form.error.start.month.date-number-invalid.C79Certificate=Yn eich cais am dystysgrifau, nodwch o ba fis yr hoffech eu cael
-cf.historic.document.request.form.error.end.month.date-number-invalid.C79Certificate=Yn eich cais am dystysgrifau, nodwch hyd at ba fis yr hoffech eu cael
+cf.historic.document.request.form.error.start.date-missing.C79Certificate=Nodwch fis a blwyddyn dechrau
+cf.historic.document.request.form.error.end.date-missing.C79Certificate=Nodwch fis a blwyddyn dod i ben
+cf.historic.document.request.form.error.start.year.date-number-invalid.C79Certificate=Mae’n rhaid i’r dyddiad dechrau gynnwys blwyddyn
+cf.historic.document.request.form.error.end.year.date-number-invalid.C79Certificate=Mae’n rhaid i’r dyddiad dod i ben gynnwys blwyddyn
+cf.historic.document.request.form.error.start.month.date-number-invalid.C79Certificate=Mae’n rhaid i’r dyddiad dechrau gynnwys mis
+cf.historic.document.request.form.error.end.month.date-number-invalid.C79Certificate=Mae’n rhaid i’r dyddiad dod i ben gynnwys mis
 
 # Security Statements requested view
 cf.security-statements.requested.title=Hysbysiad o ddatganiadau addasu y gofynnwyd amdanynt

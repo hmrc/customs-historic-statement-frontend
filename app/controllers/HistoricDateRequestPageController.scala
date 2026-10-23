@@ -231,7 +231,7 @@ class HistoricDateRequestPageController @Inject() (
     val date = earliestDate(fileRole)
 
     messages(
-      "cf.historic.document.request.form.error.date-too-far-in-past",
+      s"cf.historic.document.request.inset.earliest-date.$fileRole",
       messages(s"month.${date.getMonthValue}"),
       date.getYear.toString
     )

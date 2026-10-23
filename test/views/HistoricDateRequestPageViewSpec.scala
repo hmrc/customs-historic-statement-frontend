@@ -100,7 +100,7 @@ trait SetUpWithSpecBase extends SpecBase {
   val hintExampleDate = LocalDate.of(2025, 9, 1)
 
   lazy val earliestDateMessage: String =
-    messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
+    messages("cf.historic.document.request.inset.earliest-date.C79Certificate", "April", "2020")
 
   private def form(fileRole: FileRole): Form[HistoricDates] = new HistoricDateRequestPageFormProvider().apply(fileRole)
 

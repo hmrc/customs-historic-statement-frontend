@@ -283,7 +283,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         status(result) mustBe OK
 
         Jsoup.parse(contentAsString(result)).getElementById("earliest-requestable-year").text() mustBe
-          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
+          messages("cf.historic.document.request.inset.earliest-date.C79Certificate", "April", "2020")
       }
     }
 
@@ -307,7 +307,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
           status(result) mustBe OK
 
           Jsoup.parse(contentAsString(result)).getElementById("earliest-requestable-year").text() mustBe
-            messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", expectedYear)
+            messages("cf.historic.document.request.inset.earliest-date.C79Certificate", "April", expectedYear)
         }
       }
     }
@@ -353,7 +353,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc  = Jsoup.parse(body)
 
         doc.getElementById("earliest-requestable-year").text() mustBe
-          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
+          messages("cf.historic.document.request.inset.earliest-date.SecurityStatement", "April", "2020")
         doc.getElementById("start-hint").text() mustBe
           messages("cf.historic.document.request.date.SecurityStatement.hint", "9", "2025")
         doc.getElementById("end-hint").text() mustBe
@@ -376,7 +376,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc  = Jsoup.parse(body)
 
         doc.getElementById("earliest-requestable-year").text() mustBe
-          messages("cf.historic.document.request.form.error.date-too-far-in-past", "April", "2020")
+          messages("cf.historic.document.request.inset.earliest-date.DutyDefermentStatement", "April", "2020")
         doc.getElementById("start-hint").text() mustBe
           messages("cf.historic.document.request.date.DutyDefermentStatement.hint", "9", "2025")
         doc.getElementById("end-hint").text() mustBe
@@ -546,7 +546,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
         val doc = Jsoup.parse(contentAsString(result))
 
         doc.getElementById("earliest-requestable-year").text() mustBe
-          messages("cf.historic.document.request.form.error.date-too-far-in-past", "January", "2021")
+          messages("cf.historic.document.request.inset.earliest-date.PostponedVATStatement", "January", "2021")
         doc.getElementById("start-hint").text() mustBe
           messages("cf.historic.document.request.date.PostponedVATStatement.hint", "9", "2025")
         doc.getElementById("end-hint").text() mustBe
@@ -575,7 +575,7 @@ class HistoricDateRequestPageControllerSpec extends SpecBase {
 
           withClue(s"$systemDate: ") {
             Jsoup.parse(contentAsString(result)).getElementById("earliest-requestable-year").text() mustBe
-              messages("cf.historic.document.request.form.error.date-too-far-in-past", month, year)
+              messages("cf.historic.document.request.inset.earliest-date.PostponedVATStatement", month, year)
           }
         }
       }
