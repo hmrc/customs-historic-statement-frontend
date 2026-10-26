@@ -21,7 +21,7 @@ import play.api.data.Forms.of
 
 import java.time.LocalDate
 
-trait Mappings extends Constraints {
+trait Mappings {
 
   protected def localDate(
     emptyStartMonth: String,
