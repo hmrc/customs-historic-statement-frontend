@@ -137,10 +137,10 @@ cf.historic.document.request.confirmation.body-text.help=Your feedback is valuab
 cf.historic.document.request.confirmation.link.help=Sign up to take part in user research (opens in new tab)
 
 #HistoricDataRequestPageView
-cf.historic.document.request.inset.earliest-date.C79Certificate=You can only request certificates issued since {0} {1}
-cf.historic.document.request.inset.earliest-date.PostponedVATStatement=You can only request statements issued since {0} {1}
-cf.historic.document.request.inset.earliest-date.SecurityStatement=You can only request statements issued since {0} {1}
-cf.historic.document.request.inset.earliest-date.DutyDefermentStatement=You can only request statements issued since {0} {1}
+cf.historic.document.request.inset.earliest-date.C79Certificate=You can only request certificates issued since {0} {1}.
+cf.historic.document.request.inset.earliest-date.PostponedVATStatement=You can only request statements issued since {0} {1}.
+cf.historic.document.request.inset.earliest-date.SecurityStatement=You can only request statements issued since {0} {1}.
+cf.historic.document.request.inset.earliest-date.DutyDefermentStatement=You can only request statements issued since {0} {1}.
 cf.historic.document.request.form.error.start.date-too-far-in-past=Start date must be after {0} {1}
 cf.historic.document.request.form.error.end.date-too-far-in-past=End date must be after {0} {1}
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=End date must be on or after the start date

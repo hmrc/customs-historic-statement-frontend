@@ -137,10 +137,10 @@ cf.historic.document.request.confirmation.body-text.help=Mae eich adborth yn wer
 cf.historic.document.request.confirmation.link.help=Cofrestrwch i gymryd rhan mewn ymchwil defnyddwyr (yn agor tab newydd)
 
 #HistoricDataRequestPageView
-cf.historic.document.request.inset.earliest-date.C79Certificate=Gallwch ond gofyn am dystysgrifau a gyhoeddwyd ers mis {0} {1}
-cf.historic.document.request.inset.earliest-date.PostponedVATStatement=Gallwch ond gofyn am ddatganiadau a gyhoeddwyd ers mis {0} {1}
-cf.historic.document.request.inset.earliest-date.SecurityStatement=Gallwch ond gofyn am ddatganiadau a gyhoeddwyd ers mis {0} {1}
-cf.historic.document.request.inset.earliest-date.DutyDefermentStatement=Gallwch ond gofyn am ddatganiadau a gyhoeddwyd ers mis {0} {1}
+cf.historic.document.request.inset.earliest-date.C79Certificate=Gallwch ond gofyn am dystysgrifau a gyhoeddwyd ers mis {0} {1}.
+cf.historic.document.request.inset.earliest-date.PostponedVATStatement=Gallwch ond gofyn am ddatganiadau a gyhoeddwyd ers mis {0} {1}.
+cf.historic.document.request.inset.earliest-date.SecurityStatement=Gallwch ond gofyn am ddatganiadau a gyhoeddwyd ers mis {0} {1}.
+cf.historic.document.request.inset.earliest-date.DutyDefermentStatement=Gallwch ond gofyn am ddatganiadau a gyhoeddwyd ers mis {0} {1}.
 cf.historic.document.request.form.error.start.date-too-far-in-past=Mae’n rhaid i’r dyddiad dechrau fod ar ôl mis {0} {1}
 cf.historic.document.request.form.error.end.date-too-far-in-past=Mae’n rhaid i’r dyddiad dod i ben fod ar ôl mis {0} {1}
 cf.historic.document.request.form.error.to-date-must-be-later-than-from-date=Mae’n rhaid i’r dyddiad dod i ben fod naill ai ar neu ar ôl y dyddiad dechrau
