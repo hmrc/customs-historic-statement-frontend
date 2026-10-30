@@ -84,11 +84,9 @@ After the successful [deployment pipeline](https://build.tax.service.gov.uk/job/
 - Front End Build and Deployment Pipeline
     -  [Build pipeline](https://build.tax.service.gov.uk/job/BordersAndTradeLiveServices/job/CDSFinancials/job/customs-historic-statement-frontend/)
     -  [Deployment pipeline](https://build.tax.service.gov.uk/job/BordersAndTradeLiveServices/job/CDSFinancials/job/customs-historic-statement-frontend-pipeline/)
-- The acceptance test Jenkins jobs (smoke and regression) are listed in the [exports-ui-acceptance-tests README](https://github.com/hmrc/customs-historic-statement-acceptance-tests#jenkins-builds).
-- The performance test Jenkins jobs are listed in the [exports-declarations-performance-tests README](https://github.com/hmrc/customs-historic-statement-performance-tests#jenkins-builds).
+- The acceptance test Jenkins jobs (smoke and regression) are listed in the [customs-historic-statement-acceptance-tests README](https://github.com/hmrc/customs-historic-statement-acceptance-tests#jenkins-builds).
+- The performance test Jenkins jobs are listed in the [customs-historic-statement-performance-tests README](https://github.com/hmrc/customs-historic-statement-performance-tests#jenkins-builds).
 
-
-## Service Manager Profiles
 
 ## Service Manager Profiles
 These profiles are defined in [service-manager-config](https://github.com/hmrc/service-manager-config).
